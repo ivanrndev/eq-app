@@ -8,7 +8,8 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import {NativeRouter} from 'react-router-native';
 
 // store
-import {StoreContext} from 'redux-react-hook';
+// import {StoreContext} from 'redux-react-hook';
+import { Provider } from 'react-redux';
 import {store} from './store';
 
 // components
@@ -29,7 +30,7 @@ const Drawer = createDrawerNavigator();
 
 const App = () => {
   return (
-    <StoreContext.Provider value={store}>
+    <Provider store={store}>
       <NavigationContainer>
         <NativeRouter>
           <PaperProvider theme={theme}>
@@ -41,7 +42,7 @@ const App = () => {
           </PaperProvider>
         </NativeRouter>
       </NavigationContainer>
-    </StoreContext.Provider>
+    </Provider>
   );
 };
 

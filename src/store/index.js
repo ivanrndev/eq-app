@@ -1,15 +1,10 @@
-import { createStore, applyMiddleware } from 'redux'
-import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly'
+import {createStore, applyMiddleware, compose} from 'redux';
+import reduxThunk from 'redux-thunk';
+import reducer from './reducers/index';
 
-import createSagaMiddleware from 'redux-saga'
-
-import reducer from './reducers/index'
-
-import sagas from './sagas'
-
-const sagaMiddleware = createSagaMiddleware()
-
-export const store = createStore(reducer, composeWithDevTools(applyMiddleware(sagaMiddleware)))
-
-
-sagaMiddleware.run(sagas)
+export const store = createStore(
+  reducer,
+  (window.__REDUX_DEVTOOLS_EXTENSION__ &&
+    window.__REDUX_DEVTOOLS_EXTENSION__()) ||
+    compose(applyMiddleware(reduxThunk)),
+);

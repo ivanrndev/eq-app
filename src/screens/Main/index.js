@@ -1,57 +1,67 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'redux-react-hook';
-import { SafeAreaView, Dimensions, ScrollView, Linking, TouchableOpacity, StyleSheet, Text, View, Button, RefreshControl } from 'react-native';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
-
-// components
-import AppbarCustom from '../../сomponents/Appbar';
-import Scanner from '../../сomponents/Scanner';
+import React, {useState} from 'react';
+import {useDispatch}  from 'react-redux';
+import {
+  SafeAreaView,
+  Dimensions,
+  ScrollView,
+  Linking,
+  TouchableOpacity,
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  RefreshControl,
+} from 'react-native';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
+import Appbar from '../../components/Appbar';
 
 const normalCoordinates = [
   {
     x: [120, 300],
-    y: [600, 700]
+    y: [600, 700],
   },
   {
     x: [60, 100],
-    y: [600, 700]
+    y: [600, 700],
   },
   {
     x: [60, 100],
-    y: [450, 500]
-  }
+    y: [450, 500],
+  },
 ];
 
 const isInBounds = (coordinate, bounds) => {
-  if(coordinate >= bounds[0] && coordinate <= bounds[1]) {
-    return true
+  if (coordinate >= bounds[0] && coordinate <= bounds[1]) {
+    return true;
   }
   return false;
-}
+};
 
 const Main = props => {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
   const [refreshing, setRefreshing] = React.useState(false);
   const [scannedItems, setScanned] = React.useState([]);
   const dispatch = useDispatch();
 
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    dispatch({
-      type: "GET_AUTH"
-    });
-    setTimeout(() => {
-     setRefreshing(false)
-    }, 2000);
-  }, [refreshing]);
+  // const onRefresh = React.useCallback(() => {
+  //   setRefreshing(true);
+  //   dispatch({
+  //     type: 'GET_AUTH',
+  //   });
+  //   setTimeout(() => {
+  //     setRefreshing(false);
+  //   }, 2000);
+  // }, [dispatch]);
 
-  const onScan = (e) => {
+  const onScan = e => {
     console.log(e);
-    const {bounds: {origin}} = e;
-    for(let i in origin) {
+    const {
+      bounds: {origin},
+    } = e;
+    for (let i in origin) {
       const coordinate = origin[i];
       const inBounds = isInBounds(coordinate, normalCoordinates[i]);
-      if(!inBounds) {
+      if (!inBounds) {
         return;
       }
     }
@@ -64,30 +74,32 @@ const Main = props => {
 
   return (
     <>
-      <AppbarCustom navigation={props.navigation} closed={open}/>
+    <Appbar navigation={props.navigation} closed={open}/>
       <SafeAreaView>
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}
-          refreshControl={ <RefreshControl refreshing={refreshing} onRefresh={onRefresh} /> }
-        >
-        {/* {open && 
-          <Scanner 
-            onScan={onScan} 
-            close={() => setOpen(false)} 
+          refreshControl={
+            // <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            <RefreshControl refreshing={refreshing} />
+          }>
+          {/* {open &&
+          <Scanner
+            onScan={onScan}
+            close={() => setOpen(false)}
             indicator={scannedItems}/>
         }
         {!open && <View>
-          <Button 
-            style={styles.button} 
-            title='Сканер' 
+          <Button
+            style={styles.button}
+            title='Сканер'
             onPress={() => setOpen(!open)}/>
           <Text>{scannedItems.join(',')}</Text>
         </View>} */}
         </ScrollView>
       </SafeAreaView>
     </>
-  )
+  );
 };
 
 const styles = StyleSheet.create({
@@ -102,7 +114,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: Dimensions.get('window').width / 2.5,
     marginTop: 50,
-    borderRadius: 5
+    borderRadius: 5,
   },
   textBold: {
     fontWeight: '500',
@@ -154,5 +166,3 @@ const styles = StyleSheet.create({
 });
 
 export default Main;
-
-

@@ -10,7 +10,7 @@ const AppbarCustom = props => {
     !closed && <Appbar.Header>
       <Appbar.Action icon="menu" onPress={() => props.navigation.openDrawer()}/>
       <Appbar.Content
-        title="EcMan"
+        title="Menu"
       />
 
       {/* <Menu
