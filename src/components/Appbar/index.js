@@ -1,42 +1,24 @@
-import React, { useState } from 'react';
-import { Appbar, Menu } from 'react-native-paper';
-import { StyleSheet } from 'react-native';
-import { withRouter } from 'react-router-native';
+import React from 'react';
+import {Appbar} from 'react-native-paper';
+import {withRouter} from 'react-router-native';
+import {useDispatch} from 'react-redux';
+import {allowNewScan} from '../../actions/actions.js';
 
 const AppbarCustom = props => {
-  const {closed} = props;
-  // const [visible, setVisible] = useState(false);
+  const dispatch = useDispatch();
+  const icon = props.arrow ? 'arrow-left' : 'menu';
   return (
-    !closed && <Appbar.Header>
-      <Appbar.Action icon="menu" onPress={() => props.navigation.openDrawer()}/>
-      <Appbar.Content
-        title="Menu"
+    <Appbar.Header>
+      <Appbar.Action
+        icon={icon}
+        onPress={() => {
+          props.navigation.navigate(props.goTo);
+          dispatch(allowNewScan(true));
+        }}
       />
-
-      {/* <Menu
-        visible={visible}
-        onDismiss={() => {setVisible(false)}}
-        anchor={
-          <Appbar.Action icon="dots-vertical" color='#fff' onPress={() => setVisible(true)}/>
-        }
-      >
-        <Menu.Item onPress={() => {}} title="Item 1" />
-      </Menu> */}
+      <Appbar.Content title={props.title} />
     </Appbar.Header>
   );
-}
-
-const styles = StyleSheet.create({
-  bottom: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    zIndex: 100
-  },
-  icon: {
-    color: "#fff"
-  },
-});
+};
 
 export default withRouter(AppbarCustom);

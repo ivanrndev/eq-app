@@ -22,7 +22,7 @@ const Auth = props => {
   useEffect(() => {
     // AsyncStorage.setItem('token', '');
     AsyncStorage.getItem('token').then(token => {
-      if (!!token || store.isLogin) {
+      if (!isEmpty(token) || store.isLogin) {
         props.navigation.navigate('Home');
       }
     });
@@ -61,7 +61,12 @@ const Auth = props => {
         />
         <Text style={styles.text}>Забыли пароль?</Text>
         {store.isLoad && (
-          <ActivityIndicator size={'large'} animating={true} color={'white'} />
+          <ActivityIndicator
+            style={styles.load}
+            size={'large'}
+            animating={true}
+            color={'white'}
+          />
         )}
         {!store.isLoad && (
           <Button
@@ -113,9 +118,11 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width / 1.3,
   },
   button: {
-    marginTop: 30,
+    marginTop: 25,
   },
-  snackbar: {},
+  load: {
+    marginTop: 15,
+  },
 });
 
 export default Auth;

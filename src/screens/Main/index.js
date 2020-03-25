@@ -1,167 +1,96 @@
-import React, {useState} from 'react';
-import {useDispatch}  from 'react-redux';
-import {
-  SafeAreaView,
-  Dimensions,
-  ScrollView,
-  Linking,
-  TouchableOpacity,
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  RefreshControl,
-} from 'react-native';
+import React from 'react';
+import {SafeAreaView, Dimensions, StyleSheet, View} from 'react-native';
+import {Button} from 'react-native-paper';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Appbar from '../../components/Appbar';
 
-const normalCoordinates = [
-  {
-    x: [120, 300],
-    y: [600, 700],
-  },
-  {
-    x: [60, 100],
-    y: [600, 700],
-  },
-  {
-    x: [60, 100],
-    y: [450, 500],
-  },
-];
-
-const isInBounds = (coordinate, bounds) => {
-  if (coordinate >= bounds[0] && coordinate <= bounds[1]) {
-    return true;
-  }
-  return false;
-};
-
 const Main = props => {
-  const [open, setOpen] = useState(false);
-  const [refreshing, setRefreshing] = React.useState(false);
-  const [scannedItems, setScanned] = React.useState([]);
-  const dispatch = useDispatch();
-
-  // const onRefresh = React.useCallback(() => {
-  //   setRefreshing(true);
-  //   dispatch({
-  //     type: 'GET_AUTH',
-  //   });
-  //   setTimeout(() => {
-  //     setRefreshing(false);
-  //   }, 2000);
-  // }, [dispatch]);
-
-  const onScan = e => {
-    console.log(e);
-    const {
-      bounds: {origin},
-    } = e;
-    for (let i in origin) {
-      const coordinate = origin[i];
-      const inBounds = isInBounds(coordinate, normalCoordinates[i]);
-      if (!inBounds) {
-        return;
-      }
-    }
-    const newData = [...scannedItems, e.data].filter((value, index, self) => {
-      return self.indexOf(value) === index;
-    });
-    setScanned(newData);
-    console.log(scannedItems);
-  };
-
   return (
     <>
-    <Appbar navigation={props.navigation} closed={open}/>
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}
-          refreshControl={
-            // <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            <RefreshControl refreshing={refreshing} />
-          }>
-          {/* {open &&
-          <Scanner
-            onScan={onScan}
-            close={() => setOpen(false)}
-            indicator={scannedItems}/>
-        }
-        {!open && <View>
-          <Button
-            style={styles.button}
-            title='Сканер'
-            onPress={() => setOpen(!open)}/>
-          <Text>{scannedItems.join(',')}</Text>
-        </View>} */}
-        </ScrollView>
-      </SafeAreaView>
+      <Appbar
+        navigation={props.navigation}
+        arrow={false}
+        goTo={'Home'}
+        title={'Меню'}
+      />
+      <View style={styles.body}>
+        <SafeAreaView />
+        <Button
+          style={styles.button}
+          icon="help"
+          mode="contained"
+          color="#3a6fdb"
+          onPress={() => props.navigation.navigate('Ident')}>
+          Идентификация
+        </Button>
+        <Button
+          style={styles.button}
+          icon="qrcode"
+          mode="contained"
+          color="gray"
+          onPress={() => alert('Маркировка')}>
+          Маркировка
+        </Button>
+        <Button
+          style={styles.button}
+          icon="checkbook"
+          mode="contained"
+          color="gray"
+          onPress={() => alert('Инвентаризация')}>
+          Инвентаризация
+        </Button>
+        <Button
+          style={styles.button}
+          icon="briefcase"
+          mode="contained"
+          color="gray"
+          onPress={() => alert('Принять / Выдать ТМЦ')}>
+          Принять / Выдать ТМЦ
+        </Button>
+        <Button
+          style={styles.button}
+          icon="hammer"
+          mode="contained"
+          color="#3a6fdb"
+          onPress={() => props.navigation.navigate('Service')}>
+          Отправка в сервис
+        </Button>
+        <Button
+          style={styles.button}
+          icon="cup"
+          mode="contained"
+          color="#3a6fdb"
+          onPress={() => props.navigation.navigate('WriteOff')}>
+          Списать
+        </Button>
+        <Button
+          style={styles.button}
+          icon="account"
+          mode="contained"
+          color="gray"
+          onPress={() => alert('Что на мне?')}>
+          Что на мне?
+        </Button>
+      </View>
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  centerText: {
-    flex: 1,
-    fontSize: 18,
-    padding: 32,
-    color: '#777',
+  body: {
+    alignSelf: 'center',
   },
   button: {
     display: 'flex',
     alignItems: 'center',
-    width: Dimensions.get('window').width / 2.5,
-    marginTop: 50,
+    justifyContent: 'center',
+    width: Dimensions.get('window').width / 1.1,
+    marginTop: Dimensions.get('window').height / 22,
     borderRadius: 5,
-  },
-  textBold: {
-    fontWeight: '500',
-    color: '#000',
-  },
-  buttonText: {
-    fontSize: 21,
-    color: 'rgb(0,122,255)',
-  },
-  buttonTouchable: {
-    padding: 16,
+    height: Dimensions.get('window').height / 13,
   },
   scrollView: {
     backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
   },
 });
 

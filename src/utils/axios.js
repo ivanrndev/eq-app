@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {API_URL} from '../constants/auth';
-import {AsyncStorage} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const BASE_URL = API_URL;
 
@@ -22,7 +22,6 @@ apiClient.interceptors.response.use(
   function(error) {
     const data = error.response;
     if (data.status === 401 || data.status === 403) {
-      console.log(data);
     }
     return Promise.reject(error);
   },
