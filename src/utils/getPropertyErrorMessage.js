@@ -16,6 +16,12 @@ export const getProperError = error => {
     case 'AccessDenied':
       errorMessage = 'AccessDenied';
       break;
+    case 'ValidationError':
+      errorMessage = 'ValidationError';
+      break;
+    case 'QRCodeUnavailable':
+      errorMessage = 'QRCodeUnavailable';
+      break;
     default:
       break;
   }
@@ -40,25 +46,14 @@ export const getProperErrorMessage = error => {
     case 'AccessDenied':
       errorMessage = 'В доступе отказано';
       break;
+    case 'ValidationError':
+      errorMessage = 'Ошибка валидации';
+      break;
+    case 'QRCodeUnavailable':
+      errorMessage = 'Этот Qr-код сейчас недоступен для вашей компании';
+      break;
     default:
       break;
   }
   return errorMessage;
 };
-
-// Global Errors
-// LinkIsUnavailable
-// RequiredField
-// AccessDenied
-// NotFound
-// LimitExceeded
-
-// Auth Errors
-// EmailMustBeUnique
-// UserNotFound
-// EmailUnApproved
-// PasswordIncorrect
-
-// Mark ERRORS
-// QRCodeUnavailable
-// QRCodeUsed

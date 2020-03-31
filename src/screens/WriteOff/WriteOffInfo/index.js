@@ -37,28 +37,32 @@ export const WriteOffInfo = props => {
           {!store.scanInfoError && (
             <View style={styles.info}>
               <Title style={styles.title}>Списать?</Title>
-              <Text style={styles.text}>
-                Бренд: {show ? metaData.brand : null}
-              </Text>
-              <Text style={styles.text}>
-                Модель: {show ? metaData.model : null}
-              </Text>
-              <Text style={styles.text}>
-                Мощность: {show ? metaData.capacity : null}
-              </Text>
-              <Text style={styles.text}>
-                Серия: {show ? metaData.serial : null}
-              </Text>
-              <Text style={styles.text}>
-                Модель: {show ? metaData.model : null}
-              </Text>
-              <Text style={styles.text}>
-                Тип: {show ? metaData.type : null}
-              </Text>
-              <Text style={styles.text}>
-                Закреплен на:{' '}
-                {show ? store.scanInfo.responsible.firstName : null}
-              </Text>
+              {show && (
+                <View style={styles.info}>
+                  {metaData.brand && (
+                    <Text style={styles.text}>Бренд: {metaData.brand}</Text>
+                  )}
+                  {metaData.model && (
+                    <Text style={styles.text}>Модель: {metaData.model}</Text>
+                  )}
+                  {metaData.capacity && (
+                    <Text style={styles.text}>
+                      Мощность: {metaData.capacity}
+                    </Text>
+                  )}
+                  {metaData.serial && (
+                    <Text style={styles.text}>Серия: {metaData.serial}</Text>
+                  )}
+                  {metaData.type && (
+                    <Text style={styles.text}>Тип: {metaData.type}</Text>
+                  )}
+                  {store.scanInfo.responsible.firstName && (
+                    <Text style={styles.text}>
+                      Закреплен на: {store.scanInfo.responsible.firstName}
+                    </Text>
+                  )}
+                </View>
+              )}
             </View>
           )}
         </View>
@@ -92,6 +96,7 @@ const styles = StyleSheet.create({
   info: {
     display: 'flex',
     alignItems: 'center',
+    paddingBottom: Dimensions.get('window').height / 40,
   },
   title: {
     color: 'black',
@@ -106,14 +111,12 @@ const styles = StyleSheet.create({
   button: {
     display: 'flex',
     textAlign: 'center',
-    top: Dimensions.get('window').height / 4,
     justifyContent: 'center',
     height: Dimensions.get('window').height / 15,
     alignSelf: 'center',
     marginTop: 10,
     width: Dimensions.get('window').width / 1.5,
   },
-  snackbar: {},
 });
 
 export default WriteOffInfo;

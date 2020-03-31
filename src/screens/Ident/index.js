@@ -24,7 +24,7 @@ const Ident = props => {
       />
       <SafeAreaView />
       <View style={styles.body}>
-        {scaner && <Scanner nav={props.navigation} page={'IdentInfo'} />}
+        {scaner && <Scanner nav={props.navigation} page={'IdentInfo'} info={true} />}
       </View>
     </>
   );

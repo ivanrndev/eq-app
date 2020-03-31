@@ -27,8 +27,8 @@ const Main = props => {
           style={styles.button}
           icon="qrcode"
           mode="contained"
-          color="gray"
-          onPress={() => alert('Маркировка')}>
+          color="#3a6fdb"
+          onPress={() => props.navigation.navigate('Marking')}>
           Маркировка
         </Button>
         <Button
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: Dimensions.get('window').width / 1.1,
-    marginTop: Dimensions.get('window').height / 22,
+    marginTop: Dimensions.get('window').height / 23,
     borderRadius: 5,
     height: Dimensions.get('window').height / 13,
   },

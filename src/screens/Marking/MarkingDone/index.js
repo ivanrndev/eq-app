@@ -6,41 +6,44 @@ import Appbar from '../../../components/Appbar';
 import {getProperErrorMessage} from '../../../utils/getPropertyErrorMessage.js';
 // redux and actions
 import {useDispatch, useSelector} from 'react-redux';
-import {allowNewScan} from '../../../actions/actions.js';
+import {allowNewScan, getMarkingList} from '../../../actions/actions.js';
 
-export const ServiceFinish = props => {
+export const MarkingDone = props => {
   const dispatch = useDispatch();
-  const services = useSelector(state => state.services);
-  let error = getProperErrorMessage(services.inServicesError);
+  const marking = useSelector(state => state.marking);
+  let error = getProperErrorMessage(marking.markingErrorDone);
+
+  const backToList = () => {
+    // props.navigation.navigate('MarkingList');
+    console.log('marking status', marking.marking);
+    dispatch(allowNewScan(true));
+    dispatch(getMarkingList(marking.marking, props.navigation));
+  };
+
   return (
     <>
       <Appbar
         navigation={props.navigation}
         arrow={true}
         goTo={'Home'}
-        title={'Отправка в сервис'}
+        title={'Подтвержденние'}
       />
       <SafeAreaView />
       <View style={styles.body}>
         <View style={styles.info}>
-          <View style={styles.info}>
-            {!services.inServicesError && (
-              <Title style={styles.title}>Инструмент отправлен в сервис</Title>
-            )}
-            {services.inServicesError && (
-              <Title style={styles.title}>{error}</Title>
-            )}
-          </View>
+          {!marking.markingErrorDone ? (
+            <Title style={styles.title}>Успешно!</Title>
+          ) : null}
+          {marking.markingErrorDone ? (
+            <Title style={styles.title}>{error}</Title>
+          ) : null}
         </View>
         <Button
           style={styles.button}
           mode="contained"
           color="#3a6fdb"
-          onPress={() => {
-            props.navigation.navigate('Home');
-            dispatch(allowNewScan(true));
-          }}>
-          Меню
+          onPress={backToList}>
+          Вернуться к Списку
         </Button>
       </View>
     </>
@@ -78,4 +81,4 @@ const styles = StyleSheet.create({
   snackbar: {},
 });
 
-export default ServiceFinish;
+export default MarkingDone;

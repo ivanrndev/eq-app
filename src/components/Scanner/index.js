@@ -14,33 +14,25 @@ const Scanner = props => {
   const store = useSelector(state => state.scan);
   const [isFlash, setFlashMode] = useState(false);
   const [customId, setCustomId] = useState('');
-
+  
   const findScan = () => {
     if (isEmpty(customId)) {
       setCustomId('');
     } else {
-      dispatch(currentScan(customId, props.nav, props.page));
+      dispatch(currentScan(customId, props.nav, props.page, props.info));
     }
   };
 
   const onSuccess = e => {
-    for (let code of e.barcodes) {
-      const {size, origin} = code.bounds;
-      if (
-        parseInt(origin.y + size.height) <= maxY &&
-        parseInt(origin.x + size.width) <= maxX &&
-        origin.y >= minY &&
-        origin.x >= minX &&
-        store.isNewScan
-      ) {
-        dispatch(currentScan(code.data, props.nav, props.page));
-      }
+    if (store.isNewScan) {
+      dispatch(currentScan(e.data, props.nav, props.page, props.info));
     }
   };
 
   return (
     <>
       <QRCodeScanner
+        onRead={onSuccess}
         showMarker
         vibrate={false}
         cameraStyle={styles.preview}
@@ -52,7 +44,6 @@ const Scanner = props => {
             ? RNCamera.Constants.FlashMode.torch
             : RNCamera.Constants.FlashMode.off,
           ratio: '16:9',
-          onGoogleVisionBarcodesDetected: onSuccess,
         }}
         bottomContent={
           <View style={styles.actions}>
@@ -63,7 +54,7 @@ const Scanner = props => {
                 <Dialog.Title>Введитее идентификатор</Dialog.Title>
                 <Dialog.Content>
                   <TextInput
-                    onChangeText={e => setCustomId(e.trim())}
+                    onChangeText={e => setCustomId(e.trim().toLowerCase())}
                     style={styles.input}
                     label="ТМЦ"
                     mode="flat"
@@ -103,8 +94,11 @@ const styles = StyleSheet.create({
   input: {
     marginBottom: 10,
     marginTop: 10,
-    width: Dimensions.get('window').width / 1.3,
+    width: Dimensions.get('window').width / 1.4,
     backgroundColor: '#fff',
+  },
+  buttons: {
+    bottom: 0,
   },
   button: {
     display: 'flex',
@@ -149,16 +143,11 @@ const styles = StyleSheet.create({
   },
   actions: {
     position: 'absolute',
-    top: 600,
+    top: Dimensions.get('window').height / 1.7,
     height:
       Dimensions.get('window').height - Dimensions.get('window').height / 7.5,
-    left: 0,
-    right: 0,
     marginLeft: 20,
     marginRight: 20,
-  },
-  buttons: {
-    bottom: Dimensions.get('window').height / 10,
   },
   capture: {
     flex: 0,

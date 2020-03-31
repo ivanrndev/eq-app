@@ -35,25 +35,30 @@ export const IdentInfo = props => {
         )}
         {!store.scanInfoError && (
           <View style={styles.info}>
-            <Text style={styles.text}>
-              Бренд: {show ? metaData.brand : null}
-            </Text>
-            <Text style={styles.text}>
-              Модель: {show ? metaData.model : null}
-            </Text>
-            <Text style={styles.text}>
-              Мощность: {show ? metaData.capacity : null}
-            </Text>
-            <Text style={styles.text}>
-              Серия: {show ? metaData.serial : null}
-            </Text>
-            <Text style={styles.text}>
-              Модель: {show ? metaData.model : null}
-            </Text>
-            <Text style={styles.text}>Тип: {show ? metaData.type : null}</Text>
-            <Text style={styles.text}>
-              Закреплен на: {show ? store.scanInfo.responsible.firstName : null}
-            </Text>
+            {show && (
+              <View style={styles.info}>
+                {metaData.brand && (
+                  <Text style={styles.text}>Бренд: {metaData.brand}</Text>
+                )}
+                {metaData.model && (
+                  <Text style={styles.text}>Модель: {metaData.model}</Text>
+                )}
+                {metaData.capacity && (
+                  <Text style={styles.text}>Мощность: {metaData.capacity}</Text>
+                )}
+                {metaData.serial && (
+                  <Text style={styles.text}>Серия: {metaData.serial}</Text>
+                )}
+                {metaData.type && (
+                  <Text style={styles.text}>Тип: {metaData.type}</Text>
+                )}
+                {store.scanInfo.responsible.firstName && (
+                  <Text style={styles.text}>
+                    Закреплен на: {store.scanInfo.responsible.firstName}
+                  </Text>
+                )}
+              </View>
+            )}
           </View>
         )}
         <Button
@@ -85,6 +90,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     paddingTop: 20,
+    paddingBottom: Dimensions.get('window').height / 15,
   },
   title: {
     color: 'black',
@@ -100,7 +106,6 @@ const styles = StyleSheet.create({
   button: {
     display: 'flex',
     textAlign: 'center',
-    top: Dimensions.get('window').height / 3,
     justifyContent: 'center',
     height: Dimensions.get('window').height / 15,
     alignSelf: 'center',

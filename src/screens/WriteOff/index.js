@@ -24,7 +24,7 @@ const WriteOff = props => {
       />
       <SafeAreaView />
       <View style={styles.body}>
-        {scaner && <Scanner nav={props.navigation} page={'WriteOffInfo'} />}
+        {scaner && <Scanner nav={props.navigation} page={'WriteOffInfo'} info={true} />}
       </View>
     </>
   );

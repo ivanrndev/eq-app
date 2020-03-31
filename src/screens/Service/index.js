@@ -24,7 +24,7 @@ const Service = props => {
       />
       <SafeAreaView />
       <View style={styles.body}>
-        {scaner && <Scanner nav={props.navigation} page={'ServiceInfo'} />}
+        {scaner && <Scanner nav={props.navigation} page={'ServiceInfo'} info={true} />}
       </View>
     </>
   );

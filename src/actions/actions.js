@@ -16,6 +16,13 @@ import {
   ERROR_SEND_SERVICES,
   SUCCES_WRITE_OFF,
   ERROR_WRITE_OFF,
+  MARKING,
+  MARKING_ERROR,
+  MARKING_ERROR_DONE,
+  MARKING_CURRENT_ID,
+  MARKING_SEARCH,
+  SHOW_BUTTON_LOAD,
+  CHANGE_STATUS_LOAD_MORE,
 } from '../actions/actionsType.js';
 
 // Auth actions
@@ -64,12 +71,17 @@ export const statusLoad = status => dispatch => {
 };
 
 // Scan actions
-export const currentScan = (id, nav, page) => dispatch => {
+export const currentScan = (id, nav, page, info) => dispatch => {
   dispatch({
     type: SAVE_CURRENT_SCAN,
     payload: {currentScan: id, isNewScan: false},
   });
-  dispatch(scanInfo(id, nav, page));
+  if (info) {
+    dispatch(scanInfo(id, nav, page));
+  } else {
+    dispatch(dialogInput(false));
+    nav.navigate(page);
+  }
 };
 
 export const dialogInput = status => dispatch => {
@@ -123,7 +135,6 @@ export const allowNewScan = status => dispatch => {
       isNewScan: status,
       scanInfo: {},
       isInfoOpen: false,
-      isInfoOpenServices: false,
     },
   });
 };
@@ -150,10 +161,11 @@ export const sendToServices = (id, description, place, nav) => dispatch => {
       })
       .catch(e => {
         if (!e.response.data.success) {
+          let error = getProperError(e.response.data.message.name);
           dispatch({
             type: ERROR_SEND_SERVICES,
             payload: {
-              inServicesError: true,
+              inServicesError: error,
             },
           });
           nav.navigate('ServiceFinish');
@@ -191,5 +203,135 @@ export const sendToWriteOff = (id, nav) => dispatch => {
           nav.navigate('WriteOffFinish');
         }
       });
+  });
+};
+
+// Marking actions
+export const getMarkingList = (status, nav) => dispatch => {
+  AsyncStorage.getItem('company').then(company => {
+    return axios
+      .get(`${API_URL}/company/${company}/item/`, {
+        params: {marked: status, limit: 6, offSet: 0},
+      })
+      .then(resp => {
+        if (resp.status === 200) {
+          dispatch({
+            type: MARKING,
+            payload: {
+              marking: status,
+              loadMore: false,
+              offSet: 6,
+              markingList: resp.data.data,
+              markingError: false,
+            },
+          });
+          nav.navigate('MarkingList');
+        }
+      })
+      .catch(e => {
+        if (!e.response.data.success) {
+          let error = getProperError(e.response.data.message.name);
+          dispatch({
+            type: MARKING_ERROR,
+            payload: {
+              markingError: error,
+              loadMore: false,
+            },
+          });
+          nav.navigate('MarkingList');
+        }
+      });
+  });
+};
+
+export const saveCurrentItemMark = (id, nav) => dispatch => {
+  dispatch({
+    type: MARKING_CURRENT_ID,
+    payload: {
+      currentItemMark: id,
+    },
+  });
+  nav.navigate('MarkingScaner');
+};
+
+export const makeMarking = (id, code, nav) => dispatch => {
+  AsyncStorage.getItem('company').then(company => {
+    return axios
+      .put(`${API_URL}/company/${company}/item/${id}/mark`, {code})
+      .then(resp => {
+        if (resp.status === 200) {
+          dispatch({
+            type: MARKING_ERROR_DONE,
+            payload: {
+              markingErrorDone: false,
+            },
+          });
+          nav.navigate('MarkingDone');
+        }
+      })
+      .catch(e => {
+        if (!e.response.data.success) {
+          let error = getProperError(e.response.data.message.name);
+          dispatch({
+            type: MARKING_ERROR_DONE,
+            payload: {
+              markingErrorDone: error,
+            },
+          });
+          nav.navigate('MarkingDone');
+        }
+      });
+  });
+};
+
+// Search Action
+export const searchItem = (status, query, offset, isNew) => dispatch => {
+  AsyncStorage.getItem('company').then(company => {
+    return axios
+      .get(`${API_URL}/company/${company}/item/`, {
+        params: {marked: status, search: query, limit: 6, offset: offset},
+      })
+      .then(resp => {
+        if (resp.status === 200) {
+          if (isNew) {
+            dispatch({
+              type: MARKING,
+              payload: {
+                offSet: 6,
+                loadMore: false,
+                markingList: resp.data.data,
+              },
+            });
+          } else {
+            dispatch({
+              type: MARKING_SEARCH,
+              payload: {
+                offSet: 6,
+                loadMore: false,
+                markingList: resp.data.data,
+              },
+            });
+          }
+        }
+      })
+      .catch(e => {
+        if (!e.response.data.success) {
+          let error = getProperError(e.response.data.message.name);
+          dispatch({
+            type: MARKING_ERROR,
+            payload: {
+              markingError: error,
+              loadMore: false,
+            },
+          });
+        }
+      });
+  });
+};
+
+export const loadMore = status => dispatch => {
+  dispatch({
+    type: CHANGE_STATUS_LOAD_MORE,
+    payload: {loadMore: status},
   });
 };

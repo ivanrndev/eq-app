@@ -23,6 +23,11 @@ import ServiceFinish from './screens/Service/ServiceFinish';
 import WriteOff from './screens/WriteOff/';
 import WriteOffInfo from './screens/WriteOff/WriteOffInfo';
 import WriteOffFinish from './screens/WriteOff/WriteOffFinish';
+import Marking from './screens/Marking/';
+import MarkingList from './screens/Marking/MarkingList';
+import MarkingScaner from './screens/Marking/MarkingScaner';
+import MarkingFinish from './screens/Marking/MarkingFinish';
+import MarkingDone from './screens/Marking/MarkingDone';
 
 const theme = {
   ...DefaultTheme,
@@ -54,6 +59,11 @@ const App = () => {
               <Drawer.Screen name="WriteOff" component={WriteOff} />
               <Drawer.Screen name="WriteOffInfo" component={WriteOffInfo} />
               <Drawer.Screen name="WriteOffFinish" component={WriteOffFinish} />
+              <Drawer.Screen name="Marking" component={Marking} />
+              <Drawer.Screen name="MarkingList" component={MarkingList} />
+              <Drawer.Screen name="MarkingScaner" component={MarkingScaner} />
+              <Drawer.Screen name="MarkingFinish" component={MarkingFinish} />
+              <Drawer.Screen name="MarkingDone" component={MarkingDone} />
             </Drawer.Navigator>
           </PaperProvider>
         </NativeRouter>
