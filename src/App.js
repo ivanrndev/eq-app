@@ -27,7 +27,16 @@ import Marking from './screens/Marking/';
 import MarkingList from './screens/Marking/MarkingList';
 import MarkingScaner from './screens/Marking/MarkingScaner';
 import MarkingFinish from './screens/Marking/MarkingFinish';
-import MarkingDone from './screens/Marking/MarkingDone';
+import OnMe from './screens/OnMe/';
+import OnMeInfo from './screens/OnMe/OnMeInfo';
+import Transactions from './screens/Transactions';
+import AcceptGive from './screens/AcceptGive';
+import GiveList from './screens/AcceptGive/Give/GiveList/';
+import GiveScaner from './screens/AcceptGive/Give/GiveScaner';
+import GiveListCheck from './screens/AcceptGive/Give/GiveListCheck';
+import GiveFinish from './screens/AcceptGive/Give/GiveFinish';
+import Transfers from './screens/Transfers';
+import TransferInfo from './screens/Transfers/TransferInfo';
 
 const theme = {
   ...DefaultTheme,
@@ -63,7 +72,16 @@ const App = () => {
               <Drawer.Screen name="MarkingList" component={MarkingList} />
               <Drawer.Screen name="MarkingScaner" component={MarkingScaner} />
               <Drawer.Screen name="MarkingFinish" component={MarkingFinish} />
-              <Drawer.Screen name="MarkingDone" component={MarkingDone} />
+              <Drawer.Screen name="OnMe" component={OnMe} />
+              <Drawer.Screen name="OnMeInfo" component={OnMeInfo} />
+              <Drawer.Screen name="Transactions" component={Transactions} />
+              <Drawer.Screen name="AcceptGive" component={AcceptGive} />
+              <Drawer.Screen name="GiveList" component={GiveList} />
+              <Drawer.Screen name="GiveScaner" component={GiveScaner} />
+              <Drawer.Screen name="GiveListCheck" component={GiveListCheck} />
+              <Drawer.Screen name="GiveFinish" component={GiveFinish} />
+              <Drawer.Screen name="Transfers" component={Transfers} />
+              <Drawer.Screen name="TransferInfo" component={TransferInfo} />
             </Drawer.Navigator>
           </PaperProvider>
         </NativeRouter>

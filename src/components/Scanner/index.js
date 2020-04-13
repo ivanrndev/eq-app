@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import {isEmpty} from 'lodash';
 import {View, StyleSheet, Dimensions} from 'react-native';
 import {RNCamera} from 'react-native-camera';
 import QRCodeScanner from 'react-native-qrcode-scanner';
@@ -14,18 +13,10 @@ const Scanner = props => {
   const store = useSelector(state => state.scan);
   const [isFlash, setFlashMode] = useState(false);
   const [customId, setCustomId] = useState('');
-  
-  const findScan = () => {
-    if (isEmpty(customId)) {
-      setCustomId('');
-    } else {
-      dispatch(currentScan(customId, props.nav, props.page, props.info));
-    }
-  };
 
   const onSuccess = e => {
     if (store.isNewScan) {
-      dispatch(currentScan(e.data, props.nav, props.page, props.info));
+      dispatch(currentScan(e.data, props.nav, props.page, props.saveItems));
     }
   };
 
@@ -61,13 +52,26 @@ const Scanner = props => {
                   />
                 </Dialog.Content>
                 <Dialog.Actions>
-                  <Button onPress={findScan}>Найти</Button>
+                  <Button
+                    onPress={() =>
+                      dispatch(
+                        currentScan(
+                          customId,
+                          props.nav,
+                          props.page,
+                          props.saveItems,
+                        ),
+                      )
+                    }>
+                    Найти
+                  </Button>
                 </Dialog.Actions>
               </Dialog>
             </Portal>
             <View style={styles.buttons}>
               <Button
                 style={styles.button}
+                contentStyle={styles.buttonStyle}
                 mode="contained"
                 color="#3a6fdb"
                 onPress={() => dispatch(dialogInput(!store.dialogInput))}>
@@ -75,6 +79,7 @@ const Scanner = props => {
               </Button>
               <Button
                 style={styles.button}
+                contentStyle={styles.buttonStyle}
                 mode="contained"
                 color="#3a6fdb"
                 onPress={() => setFlashMode(!isFlash)}>
@@ -108,6 +113,10 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 10,
     width: Dimensions.get('window').width / 1.5,
+  },
+  buttonStyle: {
+    width: Dimensions.get('window').width / 1.5,
+    height: Dimensions.get('window').height / 15,
   },
   preview: {
     height: Dimensions.get('window').height + 47,

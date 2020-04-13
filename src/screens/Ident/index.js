@@ -18,13 +18,20 @@ const Ident = props => {
     <>
       <Appbar
         navigation={props.navigation}
+        newScan={true}
         arrow={true}
         goTo={'Home'}
         title={'Идентификация'}
       />
       <SafeAreaView />
       <View style={styles.body}>
-        {scaner && <Scanner nav={props.navigation} page={'IdentInfo'} info={true} />}
+        {scaner && (
+          <Scanner
+            nav={props.navigation}
+            page={'IdentInfo'}
+            saveItems={false}
+          />
+        )}
       </View>
     </>
   );

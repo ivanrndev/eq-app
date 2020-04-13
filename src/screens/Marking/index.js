@@ -14,6 +14,7 @@ const Marking = props => {
       <Appbar
         navigation={props.navigation}
         arrow={true}
+        newScan={true}
         goTo={'Home'}
         title={'Маркировка'}
       />
@@ -21,6 +22,7 @@ const Marking = props => {
       <View style={styles.buttons}>
         <Button
           style={styles.button}
+          contentStyle={styles.buttonStyle}
           mode="contained"
           color="#3a6fdb"
           onPress={() => dispatch(getMarkingList(false, props.navigation))}>
@@ -28,6 +30,7 @@ const Marking = props => {
         </Button>
         <Button
           style={styles.button}
+          contentStyle={styles.buttonStyle}
           mode="contained"
           color="#3a6fdb"
           onPress={() => dispatch(getMarkingList(true, props.navigation))}>
@@ -46,10 +49,12 @@ const styles = StyleSheet.create({
     display: 'flex',
     textAlign: 'center',
     justifyContent: 'center',
-    height: Dimensions.get('window').height / 15,
     alignSelf: 'center',
     marginBottom: 10,
+  },
+  buttonStyle: {
     width: Dimensions.get('window').width / 1.5,
+    height: Dimensions.get('window').height / 15,
   },
   buttons: {
     top: Dimensions.get('window').height / 3,

@@ -16,7 +16,7 @@ import {
 } from 'react-native-paper';
 // components
 import Appbar from '../../../components/Appbar';
-import {getProperErrorMessage} from '../../../utils/getPropertyErrorMessage.js';
+import {getProperErrorMessage} from '../../../utils/helpers.js';
 // redux and actions
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -42,11 +42,17 @@ const MarkingList = props => {
     dispatch(searchItem(marking.marking, search, marking.offSet, false));
   };
 
+  let showEmptyError = false;
+  if (!marking.marking && marking.markingList.length === 0) {
+    showEmptyError = true;
+  }
+
   return (
     <>
       <Appbar
         navigation={props.navigation}
         arrow={true}
+        newScan={true}
         goTo={'Marking'}
         title={'Список'}
       />
@@ -62,6 +68,11 @@ const MarkingList = props => {
         {!error && (
           <>
             <ScrollView>
+              {showEmptyError && (
+                <Paragraph style={styles.text}>
+                  На данный момент нет доступных к маркировке ТМЦ
+                </Paragraph>
+              )}
               {!error &&
                 marking.markingList.map(item => (
                   <Card
@@ -142,12 +153,13 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 10,
+    marginBottom: 10,
   },
   text: {
-    fontSize: 13,
-    color: '#fff',
-    textAlign: 'right',
-    width: Dimensions.get('window').width / 1.3,
+    fontSize: 15,
+    textAlign: 'center',
+    paddingBottom: 20,
+    width: Dimensions.get('window').width / 1.2,
   },
 });
 

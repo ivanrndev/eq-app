@@ -19,12 +19,19 @@ const Service = props => {
       <Appbar
         navigation={props.navigation}
         arrow={true}
+        newScan={true}
         goTo={'Home'}
         title={'Отправка в сервис'}
       />
       <SafeAreaView />
       <View style={styles.body}>
-        {scaner && <Scanner nav={props.navigation} page={'ServiceInfo'} info={true} />}
+        {scaner && (
+          <Scanner
+            nav={props.navigation}
+            page={'ServiceInfo'}
+            saveItems={false}
+          />
+        )}
       </View>
     </>
   );

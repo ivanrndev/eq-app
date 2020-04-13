@@ -1,6 +1,7 @@
 import {
   SUCCES_IN_SERVICES,
   ERROR_SEND_SERVICES,
+  PUT_ERROR_SEND_SERVICES,
 } from '../../../actions/actionsType.js';
 
 const initialState = {
@@ -16,6 +17,11 @@ const servicesReducer = (state = initialState, action) => {
         ...action.payload,
       };
     case ERROR_SEND_SERVICES:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case PUT_ERROR_SEND_SERVICES:
       return {
         ...state,
         ...action.payload,

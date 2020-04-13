@@ -19,14 +19,13 @@ const MarkingScaner = props => {
       <Appbar
         navigation={props.navigation}
         arrow={true}
+        newScan={true}
         goTo={'MarkingList'}
         title={'Отсканируйте код'}
       />
       <SafeAreaView />
       <View style={styles.body}>
-        {scaner && (
-          <Scanner nav={props.navigation} page={'MarkingFinish'} info={false} />
-        )}
+        {scaner && <Scanner nav={props.navigation} page={'MarkingFinish'} />}
       </View>
     </>
   );

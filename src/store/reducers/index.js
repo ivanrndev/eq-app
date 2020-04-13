@@ -4,6 +4,10 @@ import scanReducer from './Scan/scan';
 import servicesReducer from './Services/services';
 import writeoffReducer from './WriteOff/writeoff';
 import markingReducer from './Marking/marking';
+import onMeReducer from './OnMe/onme';
+import transactionsReducer from './Transactions/transactions';
+import giveReducer from './Give/give';
+import transfersReducer from './Transfers/transfers';
 
 export default combineReducers({
   auth: authReducer,
@@ -11,4 +15,8 @@ export default combineReducers({
   services: servicesReducer,
   writeoff: writeoffReducer,
   marking: markingReducer,
+  onMe: onMeReducer,
+  transactions: transactionsReducer,
+  give: giveReducer,
+  transfers: transfersReducer,
 });

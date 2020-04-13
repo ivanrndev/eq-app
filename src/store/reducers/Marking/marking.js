@@ -4,15 +4,16 @@ import {
   MARKING_CURRENT_ID,
   MARKING_ERROR_DONE,
   MARKING_SEARCH,
-  OFF_SET,
   CHANGE_STATUS_LOAD_MORE,
+  MAKE_MARKING_ERROR_DEFAULT,
 } from '../../../actions/actionsType.js';
 
 const initialState = {
   marking: true,
   markingList: [],
-  markingError: '',
+  markingSuccess: false,
   markingErrorDone: '',
+  markingError: false,
   currentItemMark: '',
   offSet: 0,
   loadMore: false,
@@ -38,17 +39,17 @@ const markingReducer = (state = initialState, action) => {
         ...state,
         ...action.payload,
       };
+    case MAKE_MARKING_ERROR_DEFAULT:
+      return {
+        ...state,
+        ...action.payload,
+      };
     case MARKING_CURRENT_ID:
       return {
         ...state,
         ...action.payload,
       };
     case MARKING_ERROR_DONE:
-      return {
-        ...state,
-        ...action.payload,
-      };
-    case OFF_SET:
       return {
         ...state,
         ...action.payload,

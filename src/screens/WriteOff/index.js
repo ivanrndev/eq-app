@@ -10,7 +10,9 @@ const WriteOff = props => {
   useFocusEffect(
     useCallback(() => {
       setScaner(true);
-      return () => setScaner(false);
+      return () => {
+        setScaner(false);
+      };
     }, []),
   );
 
@@ -18,13 +20,20 @@ const WriteOff = props => {
     <>
       <Appbar
         navigation={props.navigation}
+        newScan={true}
         arrow={true}
         goTo={'Home'}
         title={'Списание'}
       />
       <SafeAreaView />
       <View style={styles.body}>
-        {scaner && <Scanner nav={props.navigation} page={'WriteOffInfo'} info={true} />}
+        {scaner && (
+          <Scanner
+            nav={props.navigation}
+            page={'WriteOffInfo'}
+            saveItems={false}
+          />
+        )}
       </View>
     </>
   );

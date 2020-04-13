@@ -1,6 +1,7 @@
 import {
   SUCCES_WRITE_OFF,
   ERROR_WRITE_OFF,
+  PUT_ERROR_WRITE_OFF,
 } from '../../../actions/actionsType.js';
 
 const initialState = {
@@ -16,6 +17,11 @@ const writeoffReducer = (state = initialState, action) => {
         ...action.payload,
       };
     case ERROR_WRITE_OFF:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case PUT_ERROR_WRITE_OFF:
       return {
         ...state,
         ...action.payload,

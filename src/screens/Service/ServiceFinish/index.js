@@ -3,7 +3,7 @@ import {StyleSheet, View, Dimensions, SafeAreaView} from 'react-native';
 import {Button, Title} from 'react-native-paper';
 // components
 import Appbar from '../../../components/Appbar';
-import {getProperErrorMessage} from '../../../utils/getPropertyErrorMessage.js';
+import {getProperErrorMessage} from '../../../utils/helpers.js';
 // redux and actions
 import {useDispatch, useSelector} from 'react-redux';
 import {allowNewScan} from '../../../actions/actions.js';
@@ -11,13 +11,18 @@ import {allowNewScan} from '../../../actions/actions.js';
 export const ServiceFinish = props => {
   const dispatch = useDispatch();
   const services = useSelector(state => state.services);
-  let error = getProperErrorMessage(services.inServicesError);
+  const store = useSelector(state => state.scan);
+  const error = getProperErrorMessage(
+    services.inServicesError,
+    store.currentScan,
+  );
   return (
     <>
       <Appbar
         navigation={props.navigation}
+        newScan={true}
         arrow={true}
-        goTo={'Home'}
+        goTo={'Service'}
         title={'Отправка в сервис'}
       />
       <SafeAreaView />
@@ -34,10 +39,11 @@ export const ServiceFinish = props => {
         </View>
         <Button
           style={styles.button}
+          contentStyle={styles.buttonStyle}
           mode="contained"
           color="#3a6fdb"
           onPress={() => {
-            props.navigation.navigate('Home');
+            props.navigation.navigate('Service');
             dispatch(allowNewScan(true));
           }}>
           Меню
@@ -70,12 +76,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     top: Dimensions.get('window').height / 3,
     justifyContent: 'center',
-    height: Dimensions.get('window').height / 15,
     alignSelf: 'center',
     marginTop: 10,
-    width: Dimensions.get('window').width / 1.5,
   },
-  snackbar: {},
+  buttonStyle: {
+    width: Dimensions.get('window').width / 1.5,
+    height: Dimensions.get('window').height / 15,
+  },
 });
 
 export default ServiceFinish;
