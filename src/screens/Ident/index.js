@@ -21,7 +21,7 @@ const Ident = props => {
         newScan={true}
         arrow={true}
         goTo={'Home'}
-        title={'Идентификация'}
+        title={'Отсканируйте QR-код'}
       />
       <SafeAreaView />
       <View style={styles.body}>

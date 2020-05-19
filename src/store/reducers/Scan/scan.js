@@ -20,6 +20,7 @@ const initialState = {
   scanInfoError: false,
   dialogInput: false,
   isInfoOpen: false,
+  scanLoader: false,
 };
 
 const scanReducer = (state = initialState, action) => {

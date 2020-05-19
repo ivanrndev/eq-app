@@ -20,7 +20,7 @@ const Service = props => {
         navigation={props.navigation}
         arrow={true}
         newScan={true}
-        goTo={'Home'}
+        goTo={'ServiceMenu'}
         title={'Отправка в сервис'}
       />
       <SafeAreaView />

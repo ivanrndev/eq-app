@@ -23,7 +23,7 @@ const WriteOff = props => {
         newScan={true}
         arrow={true}
         goTo={'Home'}
-        title={'Списание'}
+        title={'Отсканируйте QR-код'}
       />
       <SafeAreaView />
       <View style={styles.body}>

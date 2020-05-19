@@ -1,47 +1,80 @@
 import React from 'react';
 import {StyleSheet, View, Dimensions, SafeAreaView} from 'react-native';
-import {Button} from 'react-native-paper';
 // components
 import Appbar from '../../components/Appbar';
+import DarkButton from '../../components/Buttons/DarkButton';
+import TransparentButton from '../../components/Buttons/TransparentButton';
+import {Portal, ActivityIndicator} from 'react-native-paper';
+
 // redux and actions
-import {useDispatch} from 'react-redux';
-import {getMarkingList} from '../../actions/actions.js';
+import {useDispatch, useSelector} from 'react-redux';
+import {getMarkingList, loader} from '../../actions/actions.js';
 
 const Marking = props => {
   const dispatch = useDispatch();
+  const settings = useSelector(state => state.settings);
+
+  const getMarking = () => {
+    dispatch(loader(true));
+    dispatch(getMarkingList(false, props.navigation));
+  };
+
+  const getReMarking = () => {
+    dispatch(loader(true));
+    dispatch(getMarkingList(true, props.navigation));
+  };
+
   return (
     <>
       <Appbar
         navigation={props.navigation}
         arrow={true}
         newScan={true}
+        clearMarking={true}
         goTo={'Home'}
         title={'Маркировка'}
       />
       <SafeAreaView />
-      <View style={styles.buttons}>
-        <Button
-          style={styles.button}
-          contentStyle={styles.buttonStyle}
-          mode="contained"
-          color="#3a6fdb"
-          onPress={() => dispatch(getMarkingList(false, props.navigation))}>
-          Маркировать
-        </Button>
-        <Button
-          style={styles.button}
-          contentStyle={styles.buttonStyle}
-          mode="contained"
-          color="#3a6fdb"
-          onPress={() => dispatch(getMarkingList(true, props.navigation))}>
-          Перемаркировать
-        </Button>
+      <Portal>
+        {settings.loader && (
+          <View style={styles.loader}>
+            <ActivityIndicator
+              style={styles.load}
+              size={80}
+              animating={true}
+              color={'#EDF6FF'}
+            />
+          </View>
+        )}
+      </Portal>
+      <View style={styles.body}>
+        <View style={styles.buttons}>
+          <View style={styles.buttonBlock}>
+            <DarkButton text={'Маркировать'} onPress={getMarking} />
+            <TransparentButton
+              text={'Перемаркировать'}
+              onPress={getReMarking}
+            />
+          </View>
+        </View>
       </View>
     </>
   );
 };
 
 const styles = StyleSheet.create({
+  body: {
+    marginTop: -10,
+    display: 'flex',
+    paddingTop: 30,
+    alignItems: 'center',
+    backgroundColor: '#D3E3F2',
+    height: Dimensions.get('window').height,
+  },
+  buttonBlock: {
+    width: Dimensions.get('window').height / 3.3,
+    textAlign: 'center',
+  },
   title: {
     color: '#fff',
   },
@@ -52,12 +85,18 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginBottom: 10,
   },
-  buttonStyle: {
-    width: Dimensions.get('window').width / 1.5,
-    height: Dimensions.get('window').height / 15,
-  },
   buttons: {
     top: Dimensions.get('window').height / 3,
+  },
+  loader: {
+    backgroundColor: 'rgba(52, 52, 52, 0.8)',
+    display: 'flex',
+    textAlign: 'center',
+    justifyContent: 'center',
+    marginTop: Dimensions.get('window').height / 9,
+    zIndex: 99,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
   },
 });
 

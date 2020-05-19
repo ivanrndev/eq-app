@@ -1,5 +1,6 @@
 import {
   MARKING,
+  CLEAR_MARKING,
   MARKING_ERROR,
   MARKING_CURRENT_ID,
   MARKING_ERROR_DONE,
@@ -23,6 +24,11 @@ const initialState = {
 const markingReducer = (state = initialState, action) => {
   switch (action.type) {
     case MARKING:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case CLEAR_MARKING:
       return {
         ...state,
         ...action.payload,

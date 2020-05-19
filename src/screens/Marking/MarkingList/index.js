@@ -54,57 +54,80 @@ const MarkingList = props => {
         arrow={true}
         newScan={true}
         goTo={'Marking'}
-        title={'Список'}
+        title={marking.marking ? 'Перемаркировка' : 'Маркировка'}
       />
       <SafeAreaView />
-      {!error && (
-        <Searchbar
-          placeholder="Поиск"
-          onChangeText={query => itemSearch(query)}
-          value={search}
-        />
-      )}
-      <View style={styles.container}>
+      <View style={styles.body}>
+        {!error && (
+          <Searchbar
+            placeholder="Поиск"
+            onChangeText={query => itemSearch(query)}
+            value={search}
+            style={styles.search}
+          />
+        )}
         {!error && (
           <>
-            <ScrollView>
-              {showEmptyError && (
-                <Paragraph style={styles.text}>
-                  На данный момент нет доступных к маркировке ТМЦ
-                </Paragraph>
-              )}
-              {!error &&
-                marking.markingList.map(item => (
-                  <Card
-                    style={styles.card}
-                    key={item._id}
-                    onPress={() =>
-                      dispatch(saveCurrentItemMark(item._id, props.navigation))
-                    }>
-                    <Card.Content>
-                      <Title style={styles.cardTitle}>
-                        {item.metadata.type} {item.code && '/ ' + item.code}
-                      </Title>
-                      <Paragraph style={styles.paragraph}>
-                        {item.metadata.brand}
-                      </Paragraph>
-                      <Paragraph style={styles.paragraph}>
-                        {item.metadata.model}
-                      </Paragraph>
-                      <Paragraph style={styles.paragraph}>
-                        {item.metadata.serial}
-                      </Paragraph>
-                    </Card.Content>
-                  </Card>
-                ))}
-            </ScrollView>
+            <View style={styles.container}>
+              <ScrollView style={styles.scroll}>
+                {showEmptyError && (
+                  <Paragraph style={styles.text}>
+                    На данный момент нет доступных к маркировке ТМЦ
+                  </Paragraph>
+                )}
+                {!error &&
+                  marking.markingList.map((item, index) => (
+                    <Card
+                      style={styles.card}
+                      key={index}
+                      onPress={() =>
+                        dispatch(
+                          saveCurrentItemMark(item._id, props.navigation),
+                        )
+                      }>
+                      <Card.Content>
+                        {item.metadata.title ? (
+                          <Title style={styles.cardTitle}>
+                            {item.metadata.title}
+                          </Title>
+                        ) : (
+                          <Title style={styles.cardTitle}>
+                            {item.metadata.type} {item.metadata.brand}{' '}
+                            {item.metadata.model} {item.metadata.serial}
+                          </Title>
+                        )}
+                        {item.metadata.type && (
+                          <Paragraph style={styles.paragraph}>
+                            {item.metadata.type} {item.code && '/ ' + item.code}
+                          </Paragraph>
+                        )}
+                        {item.metadata.brand && (
+                          <Paragraph style={styles.paragraph}>
+                            {item.metadata.brand}
+                          </Paragraph>
+                        )}
+                        {item.metadata.model && (
+                          <Paragraph style={styles.paragraph}>
+                            {item.metadata.model}
+                          </Paragraph>
+                        )}
+                        {item.metadata.serial && (
+                          <Paragraph style={styles.paragraph}>
+                            {item.metadata.serial}
+                          </Paragraph>
+                        )}
+                      </Card.Content>
+                    </Card>
+                  ))}
+              </ScrollView>
+            </View>
             {marking.markingList.length > 5 && (
               <>
                 {!marking.loadMore && (
                   <Button
                     style={styles.button}
-                    mode="contained"
-                    color="#3a6fdb"
+                    mode="Text"
+                    color="#22215B"
                     onPress={getMoreItems}>
                      Загрузить еще
                   </Button>
@@ -114,7 +137,7 @@ const MarkingList = props => {
                     style={styles.load}
                     size={'large'}
                     animating={true}
-                    color={'#3a6fdb'}
+                    color={'#EDF6FF'}
                   />
                 )}
               </>
@@ -128,11 +151,21 @@ const MarkingList = props => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  body: {
+    marginTop: -10,
     display: 'flex',
-    paddingTop: 20,
+    paddingTop: 25,
     alignItems: 'center',
-    height: Dimensions.get('window').height / 1.3,
+    backgroundColor: '#D3E3F2',
+    height: Dimensions.get('window').height,
+  },
+  container: {
+    height: Dimensions.get('window').height / 1.5,
+  },
+  search: {
+    backgroundColor: '#EDF6FF',
+    width: Dimensions.get('window').width / 1.1,
+    marginBottom: 20,
   },
   load: {
     marginTop: 10,
@@ -142,14 +175,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: Dimensions.get('window').width / 1.1,
     marginBottom: 15,
+    backgroundColor: '#EDF6FF',
   },
   cardTitle: {
-    fontSize: 14,
+    fontSize: 13,
     textTransform: 'uppercase',
+    color: '#22215B',
   },
   paragraph: {
     fontSize: 12,
     lineHeight: 15,
+    color: '#22215B',
   },
   button: {
     marginTop: 10,

@@ -1,5 +1,6 @@
 import {
   LOGIN_USER,
+  LOGUT,
   LOGIN_USER_ERROR,
   CHANGE_STATUS_ERROR,
   CHANGE_STATUS_LOAD,
@@ -10,11 +11,17 @@ const initialState = {
   isLogin: false,
   isError: false,
   isLoad: false,
+  isLogOut: false,
 };
 
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOGIN_USER:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case LOGUT:
       return {
         ...state,
         ...action.payload,

@@ -40,10 +40,14 @@ target 'EcMan' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
-  target 'EcManTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
+  pod 'RNSVG', :path => '../node_modules/react-native-svg'
+
+pod 'react-native-netinfo', :path => '../node_modules/@react-native-community/netinfo'
+
+#  target 'EcManTests' do
+#    inherit! :search_paths
+#    # Pods for testing
+#  end
 
   use_native_modules!
 end

@@ -3,12 +3,14 @@ import axios from '../utils/axios';
 import {API_URL, LOGIN_URL} from '../constants/auth.js';
 import {getProperError, actionCheckError} from '../utils/helpers.js';
 import {
+  LOGUT,
   LOGIN_USER,
   LOGIN_USER_ERROR,
   CHANGE_STATUS_ERROR,
   CHANGE_STATUS_LOAD,
   SAVE_CURRENT_SCAN,
   ALLOW_NEW_SCAN,
+  LOADER,
   SAVE_CURRENT_SCAN_INFO,
   SAVE_CURRENT_SCAN_INFO_LIST,
   CLEAR_SCAN_GIVE_LIST,
@@ -22,9 +24,9 @@ import {
   ERROR_WRITE_OFF,
   PUT_ERROR_WRITE_OFF,
   MARKING,
+  CLEAR_MARKING,
   MARKING_ERROR,
   MARKING_ERROR_DONE,
-  MAKE_MARKING_ERROR_DEFAULT,
   MARKING_CURRENT_ID,
   MARKING_SEARCH,
   CHANGE_STATUS_LOAD_MORE,
@@ -36,6 +38,7 @@ import {
   TRANSACTIONS_LIST,
   TRANSACTIONS_ERROR,
   GET_USERS,
+  CLEAR_USER_LIST,
   GET_USERS_ERROR,
   USER_CURRENT_ID,
   TRANSFER,
@@ -47,7 +50,33 @@ import {
   CLEAR_TRANSFERS_LIST,
   CLEAR_TRANSACTIONS_LIST,
   TRANSFERS_ID,
+  GET_BID_LIST,
+  GET_BID_LIST_ERROR,
+  LOAD_MORE_STATUS,
+  CLEAR_BID_LIST,
+  SAVE_USER_ACCEPT_BID,
+  ALREADY_SCANNED_BIDS,
+  MAKE_ACCEPT,
+  MAKE_ACCEPT_ERROR,
+  SAVE_CURRENT_INVENTORY_USER,
+  SAVE_INVENTORY_SCANS,
+  MAKE_STOCKTAKING,
+  MAKE_STOCKTAKING_ERROR,
+  GET_COMMENTS,
+  GET_COMMENTS_ERROR,
+  CHANGE_STATUS_LOAD_MORE_COMMENTS,
+  CLEAR_COMMENTS,
+  SEND_COMMENT,
+  SEND_COMMENT_ERROR,
 } from '../actions/actionsType.js';
+
+// Settings Loader
+export const loader = status => dispatch => {
+  dispatch({
+    type: LOADER,
+    payload: {loader: status},
+  });
+};
 
 // Auth actions
 export const userPostFetch = ({email, password}) => dispatch => {
@@ -59,24 +88,66 @@ export const userPostFetch = ({email, password}) => dispatch => {
         AsyncStorage.setItem('role', resp.data.role);
         dispatch({
           type: LOGIN_USER,
-          payload: {isLogin: true, isLoad: false},
+          payload: {
+            isLogin: true,
+            isLoad: false,
+            isLogOut: false,
+          },
         });
         dispatch(currentUser());
       }
     })
-    .catch(() => {
-      dispatch({
-        type: LOGIN_USER_ERROR,
-        payload: {isError: true, isLoad: false},
-      });
+    .catch(e => {
+      if (!e.response.data.success) {
+        dispatch({
+          type: LOGIN_USER_ERROR,
+          payload: {
+            isError: e.response.data.message.name,
+            isLoad: false,
+          },
+        });
+      }
     });
+};
+
+export const logOut = (nav, ifNav = true) => dispatch => {
+  AsyncStorage.removeItem('token');
+  AsyncStorage.removeItem('role');
+  AsyncStorage.removeItem('userId');
+  AsyncStorage.removeItem('company');
+  AsyncStorage.removeItem('email');
+  AsyncStorage.removeItem('firstName');
+  AsyncStorage.removeItem('lastName');
+  dispatch({
+    type: LOGUT,
+    payload: {
+      isLogOut: true,
+      isLogin: false,
+    },
+  });
+  if (ifNav) {
+    nav.navigate('Auth');
+  }
 };
 
 export const currentUser = () => dispatch => {
   return axios.get('/users/me').then(resp => {
     if (resp.status === 200) {
-      AsyncStorage.setItem('company', resp.data.company);
-      AsyncStorage.setItem('userId', resp.data._id);
+      if (resp.data.email) {
+        AsyncStorage.setItem('email', resp.data.email);
+      }
+      if (resp.data.firstName) {
+        AsyncStorage.setItem('firstName', resp.data.firstName);
+      }
+      if (resp.data.lastName) {
+        AsyncStorage.setItem('lastName', resp.data.lastName);
+      }
+      if (resp.data.company) {
+        AsyncStorage.setItem('company', resp.data.company);
+      }
+      if (resp.data.company) {
+        AsyncStorage.setItem('userId', resp.data._id);
+      }
     }
   });
 };
@@ -124,8 +195,10 @@ export const scanInfo = (id, nav, page, saveItems) => dispatch => {
                 type: ERROR_CURRENT_SCAN_INFO,
                 payload: {
                   scanInfoError: checkErrors,
+                  selectGiveId: resp.data._id,
                 },
               });
+              dispatch(loader(false));
             } else {
               let role = resp.data.person ? resp.data.person.role : 'none';
               dispatch({
@@ -137,6 +210,7 @@ export const scanInfo = (id, nav, page, saveItems) => dispatch => {
                   scanInfoError: false,
                 },
               });
+              dispatch(loader(false));
             }
           } else {
             dispatch({
@@ -144,27 +218,29 @@ export const scanInfo = (id, nav, page, saveItems) => dispatch => {
               payload: {
                 scanInfo: resp.data,
                 scanInfoError: false,
+                selectGiveId: resp.data._id,
                 isInfoOpen: true,
               },
             });
+            dispatch(loader(false));
           }
           dispatch(dialogInput(false));
+          dispatch(loader(false));
           nav.navigate(page);
         }
       })
       .catch(e => {
-        if (!e.response.data.success) {
-          dispatch({
-            type: ERROR_CURRENT_SCAN_INFO,
-            payload: {
-              scanInfoError: e.response.data.message.name,
-              scanInfo: {},
-              isInfoOpen: true,
-            },
-          });
-          dispatch(dialogInput(false));
-          nav.navigate(page);
-        }
+        dispatch({
+          type: ERROR_CURRENT_SCAN_INFO,
+          payload: {
+            scanInfoError: e.response.data.message.name,
+            scanInfo: {},
+            isInfoOpen: true,
+          },
+        });
+        dispatch(loader(false));
+        dispatch(dialogInput(false));
+        nav.navigate(page);
       });
   });
 };
@@ -182,16 +258,21 @@ export const allowNewScan = status => dispatch => {
       selectGiveId: '',
     },
   });
+  dispatch(loader(false));
 };
 
 // Service actions
 export const sendToServices = (id, description, place, nav) => dispatch => {
-  AsyncStorage.getItem('company').then(company => {
-    return axios
-      .put(`${API_URL}/company/${company}/item/${id}/repair`, {
+  const isFullFilled = !!description && !!place;
+  const data = isFullFilled
+    ? {
         description,
         place,
-      })
+      }
+    : {};
+  AsyncStorage.getItem('company').then(company => {
+    return axios
+      .put(`${API_URL}/company/${company}/item/${id}/repair`, data)
       .then(resp => {
         if (resp.status === 200) {
           dispatch({
@@ -202,6 +283,7 @@ export const sendToServices = (id, description, place, nav) => dispatch => {
             },
           });
           nav.navigate('ServiceFinish');
+          dispatch(loader(false));
         }
       })
       .catch(e => {
@@ -214,6 +296,46 @@ export const sendToServices = (id, description, place, nav) => dispatch => {
             },
           });
           nav.navigate('ServiceFinish');
+          dispatch(loader(false));
+        }
+      });
+  });
+};
+
+export const backFromServices = (id, nav) => dispatch => {
+  AsyncStorage.getItem('company').then(company => {
+    return axios
+      .put(`${API_URL}/company/${company}/item/repair/back`, {
+        item_ids: id,
+      })
+      .then(resp => {
+        if (resp.status === 200) {
+          let errorBack = resp.data.errors[0]
+            ? resp.data.errors[0].type
+            : false;
+          dispatch({
+            type: SUCCES_IN_SERVICES,
+            payload: {
+              inServices: !!resp.data.repair,
+              inServicesError: errorBack,
+            },
+          });
+          nav.navigate('BackFinish');
+          dispatch(loader(false));
+        }
+      })
+      .catch(e => {
+        if (!e.response.data.success) {
+          console.log('e.response.data', e.response.data);
+          let error = getProperError(e.response.data.message.name);
+          dispatch({
+            type: ERROR_SEND_SERVICES,
+            payload: {
+              inServicesError: error,
+            },
+          });
+          nav.navigate('BackFinish');
+          dispatch(loader(false));
         }
       });
   });
@@ -241,6 +363,7 @@ export const sendToWriteOff = (id, nav) => dispatch => {
             },
           });
           nav.navigate('WriteOffFinish');
+          dispatch(loader(false));
         }
       })
       .catch(e => {
@@ -253,6 +376,7 @@ export const sendToWriteOff = (id, nav) => dispatch => {
             },
           });
           nav.navigate('WriteOffFinish');
+          dispatch(loader(false));
         }
       });
   });
@@ -285,6 +409,7 @@ export const getMarkingList = (status, nav) => dispatch => {
             },
           });
           nav.navigate('MarkingList');
+          dispatch(loader(false));
         }
       })
       .catch(e => {
@@ -298,6 +423,7 @@ export const getMarkingList = (status, nav) => dispatch => {
             },
           });
           nav.navigate('MarkingList');
+          dispatch(loader(false));
         }
       });
   });
@@ -313,17 +439,7 @@ export const saveCurrentItemMark = (id, nav) => dispatch => {
   nav.navigate('MarkingScaner');
 };
 
-export const makeMarkingErrorDefault = () => dispatch => {
-  dispatch({
-    type: MAKE_MARKING_ERROR_DEFAULT,
-    payload: {
-      markingSuccess: false,
-    },
-  });
-};
-
 export const makeMarking = (id, code) => dispatch => {
-  dispatch(makeMarkingErrorDefault());
   AsyncStorage.getItem('company').then(company => {
     return axios
       .put(`${API_URL}/company/${company}/item/${id}/mark`, {code})
@@ -350,6 +466,15 @@ export const makeMarking = (id, code) => dispatch => {
           });
         }
       });
+  });
+};
+export const clearMarking = () => dispatch => {
+  dispatch({
+    type: CLEAR_MARKING,
+    payload: {
+      markingList: [],
+      markingErrorDone: false,
+    },
   });
 };
 
@@ -424,6 +549,7 @@ export const getItemsOnMe = nav => dispatch => {
             },
           });
           nav.navigate('OnMe');
+          dispatch(loader(false));
         }
       })
       .catch(e => {
@@ -437,6 +563,7 @@ export const getItemsOnMe = nav => dispatch => {
             },
           });
           nav.navigate('OnMe');
+          dispatch(loader(false));
         }
       });
   });
@@ -450,13 +577,14 @@ export const searchMyItem = (query, offset, isNew) => dispatch => {
       })
       .then(resp => {
         if (resp.status === 200) {
+          let data = resp.data.data ? resp.data.data : resp.data;
           if (isNew) {
             dispatch({
               type: GET_MY_ITEMS,
               payload: {
                 offSet: 6,
                 myloadMore: false,
-                myList: resp.data,
+                myList: data,
               },
             });
           } else {
@@ -465,7 +593,7 @@ export const searchMyItem = (query, offset, isNew) => dispatch => {
               payload: {
                 offSet: 6,
                 myloadMore: false,
-                myList: resp.data,
+                myList: data,
               },
             });
           }
@@ -524,6 +652,7 @@ export const getTransactions = (id, nav, offset) => dispatch => {
             },
           });
           nav.navigate('Transactions');
+          dispatch(loader(false));
         }
       })
       .catch(e => {
@@ -539,6 +668,7 @@ export const getTransactions = (id, nav, offset) => dispatch => {
             },
           });
           nav.navigate('Transactions');
+          dispatch(loader(false));
         }
       });
   });
@@ -582,6 +712,7 @@ export const getUserList = (nav, search, page = '') => dispatch => {
           });
           if (page !== '') {
             nav.navigate(page);
+            dispatch(loader(false));
           }
         }
       })
@@ -596,9 +727,19 @@ export const getUserList = (nav, search, page = '') => dispatch => {
           });
           if (page !== '') {
             nav.navigate(page);
+            dispatch(loader(false));
           }
         }
       });
+  });
+};
+
+export const clearUserList = () => dispatch => {
+  dispatch({
+    type: CLEAR_USER_LIST,
+    payload: {
+      userList: [],
+    },
   });
 };
 
@@ -658,6 +799,7 @@ export const makeTransfer = (nav, list, user) => dispatch => {
             },
           });
           nav.navigate('GiveFinish');
+          dispatch(loader(false));
         }
       })
       .catch(e => {
@@ -671,6 +813,7 @@ export const makeTransfer = (nav, list, user) => dispatch => {
             },
           });
           nav.navigate('GiveFinish');
+          dispatch(loader(false));
         }
       });
   });
@@ -695,6 +838,7 @@ export const getTransfers = (nav, user_id, offset) => dispatch => {
             },
           });
           nav.navigate('Transfers');
+          dispatch(loader(false));
         }
       })
       .catch(e => {
@@ -708,6 +852,7 @@ export const getTransfers = (nav, user_id, offset) => dispatch => {
             },
           });
           nav.navigate('Transfers');
+          dispatch(loader(false));
         }
       });
   });
@@ -739,4 +884,285 @@ export const saveCurrenTransferId = (nav, id) => dispatch => {
     payload: {transferId: id},
   });
   nav.navigate('TransferInfo');
+};
+
+// Accept actions
+export const getBidList = (nav, id, offset) => dispatch => {
+  AsyncStorage.getItem('company').then(company => {
+    return axios
+      .get(`${API_URL}/company/${company}/user/${id}/transfers/receive`, {
+        params: {limit: 6, offset},
+      })
+      .then(resp => {
+        if (resp.status === 200) {
+          let data = resp.data.data ? resp.data.data : resp.data;
+          dispatch({
+            type: GET_BID_LIST,
+            payload: {
+              acceptList: data,
+              userAcceptId: id,
+              acceptError: false,
+              acceptloadMore: false,
+              offSet: 6,
+            },
+          });
+          nav.navigate('Accept');
+          dispatch(loader(false));
+        }
+      })
+      .catch(e => {
+        if (!e.response.data.success) {
+          let error = getProperError(e.response.data.message.name);
+          dispatch({
+            type: GET_BID_LIST_ERROR,
+            payload: {
+              acceptError: error,
+              userAcceptId: id,
+              acceptloadMore: false,
+              offSet: 6,
+            },
+          });
+          nav.navigate('Accept');
+          dispatch(loader(false));
+        }
+      });
+  });
+};
+
+export const acceptloadMoreStatus = status => dispatch => {
+  dispatch({
+    type: LOAD_MORE_STATUS,
+    payload: {acceptloadMore: status},
+  });
+};
+
+export const clearBidList = () => dispatch => {
+  dispatch({
+    type: CLEAR_BID_LIST,
+    payload: {
+      acceptList: [],
+      alreadyScannedBids: [],
+      acceptloadMore: false,
+      offSet: 0,
+      acceptError: false,
+      userAcceptId: '',
+      userAcceptBid: '',
+    },
+  });
+};
+
+export const userAcceptBid = (nav, id) => dispatch => {
+  dispatch({
+    type: SAVE_USER_ACCEPT_BID,
+    payload: {
+      userAcceptBid: id,
+    },
+  });
+  nav.navigate('AcceptList');
+};
+
+export const clearUserAcceptBid = () => dispatch => {
+  dispatch({
+    type: SAVE_USER_ACCEPT_BID,
+    payload: {
+      userAcceptBid: '',
+    },
+  });
+};
+
+export const alreadyScannedBids = arr => dispatch => {
+  dispatch({
+    type: ALREADY_SCANNED_BIDS,
+    payload: {
+      alreadyScannedBids: arr,
+    },
+  });
+};
+
+export const makeAccept = (accept_id, reject, nav) => dispatch => {
+  AsyncStorage.getItem('company').then(company => {
+    return axios
+      .post(`${API_URL}/transfer/${accept_id}/complete/`, {
+        reject,
+        company_id: company,
+      })
+      .then(resp => {
+        if (resp.status === 200) {
+          dispatch({
+            type: MAKE_ACCEPT,
+            payload: {
+              acceptList: [],
+              alreadyScannedBids: [],
+              acceptError: false,
+              showButtons: false,
+            },
+          });
+          nav.navigate('AcceptFinish');
+          dispatch(loader(false));
+        }
+      })
+      .catch(e => {
+        if (!e.response.data.success) {
+          let error = getProperError(e.response.data.message.name);
+          dispatch({
+            type: MAKE_ACCEPT_ERROR,
+            payload: {
+              acceptError: error,
+              showButtons: false,
+            },
+          });
+          nav.navigate('AcceptFinish');
+          dispatch(loader(false));
+        }
+      });
+  });
+};
+
+// inventory actions
+export const saveCurrentUserInventory = (id, nav) => dispatch => {
+  dispatch({
+    type: SAVE_CURRENT_INVENTORY_USER,
+    payload: {
+      currentInventoryUser: id,
+    },
+  });
+  nav.navigate('InventoryScaner');
+};
+
+export const alreadyScanned = arr => dispatch => {
+  dispatch({
+    type: SAVE_INVENTORY_SCANS,
+    payload: {
+      inventoryScanList: arr,
+    },
+  });
+};
+
+export const makeStocktaking = (array, userId, nav) => dispatch => {
+  AsyncStorage.getItem('company').then(company => {
+    return axios
+      .post(`${API_URL}/company/${company}/stocktaking/`, {
+        item_ids: array,
+        target: userId,
+      })
+      .then(resp => {
+        if (resp.status === 200) {
+          dispatch({
+            type: MAKE_STOCKTAKING,
+            payload: {
+              makeStocktaking: true,
+              inventoryError: false,
+              inventoryScanList: [],
+            },
+          });
+          nav.navigate('InventoryDone');
+          dispatch(loader(false));
+        }
+      })
+      .catch(e => {
+        if (!e.response.data.success) {
+          let error = getProperError(e.response.data.message.name);
+          dispatch({
+            type: MAKE_STOCKTAKING_ERROR,
+            payload: {
+              inventoryError: error,
+            },
+          });
+          nav.navigate('InventoryDone');
+          dispatch(loader(false));
+        }
+      });
+  });
+};
+
+// comments
+export const getComments = (nav, itemId, offset) => dispatch => {
+  AsyncStorage.getItem('company').then(company => {
+    return axios
+      .get(`${API_URL}/company/${company}/item/${itemId}/comments/`, {
+        params: {limit: 0, offset: offset},
+      })
+      .then(resp => {
+        if (resp.status === 200) {
+          dispatch({
+            type: GET_COMMENTS,
+            payload: {
+              itemId: itemId,
+              commentsList: resp.data.data.reverse(),
+              offSet: 6,
+              commentsloadMore: false,
+              commentsError: false,
+              isInfoOpen: true,
+            },
+          });
+          nav.navigate('Comments');
+          dispatch(loader(false));
+        }
+      })
+      .catch(e => {
+        if (!e.response.data.success) {
+          let error = getProperError(e.response.data.message.name);
+          dispatch({
+            type: GET_COMMENTS_ERROR,
+            payload: {
+              commentsError: error,
+              commentsloadMore: false,
+            },
+          });
+          nav.navigate('Comments');
+          dispatch(loader(false));
+        }
+      });
+  });
+};
+
+export const loadMoreComments = status => dispatch => {
+  dispatch({
+    type: CHANGE_STATUS_LOAD_MORE_COMMENTS,
+    payload: {commentsloadMore: status},
+  });
+};
+
+export const clearComments = () => dispatch => {
+  dispatch({
+    type: CLEAR_COMMENTS,
+    payload: {
+      commentsList: [],
+      commentsloadMore: false,
+      offSet: 0,
+      isInfoOpen: false,
+      commentsError: false,
+      addNewComment: false,
+      addNewCommentError: '',
+    },
+  });
+};
+
+export const sendComments = (itemId, message) => dispatch => {
+  AsyncStorage.getItem('company').then(company => {
+    return axios
+      .post(`${API_URL}/company/${company}/item/${itemId}/comments/`, {message})
+      .then(resp => {
+        if (resp.status === 200) {
+          dispatch({
+            type: SEND_COMMENT,
+            payload: {
+              addNewComment: true,
+            },
+          });
+        }
+      })
+      .catch(e => {
+        if (!e.response.data.success) {
+          let error = getProperError(e.response.data.message.name);
+          dispatch({
+            type: SEND_COMMENT_ERROR,
+            payload: {
+              addNewComment: false,
+              addNewCommentError: error,
+            },
+          });
+        }
+      });
+  });
 };

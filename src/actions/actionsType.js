@@ -1,4 +1,9 @@
+/* eslint-disable prettier/prettier */
+// settings
+export const LOADER = 'LOADER';
+
 // auth
+export const LOGUT = 'LOGUT';
 export const LOGIN_USER = 'LOGIN_USER';
 export const LOGIN_USER_ERROR = 'LOGIN_USER_ERROR';
 export const CHANGE_STATUS_LOAD = 'CHANGE_STATUS_LOAD';
@@ -27,6 +32,7 @@ export const PUT_ERROR_WRITE_OFF = 'PUT_ERROR_WRITE_OFF';
 
 // marking
 export const MARKING = 'MARKING';
+export const CLEAR_MARKING = 'CLEAR_MARKING';
 export const MARKING_ERROR = 'MARKING_ERROR';
 export const MARKING_ERROR_DONE = 'MARKING_ERROR_DONE';
 export const MAKE_MARKING_ERROR_DEFAULT = 'MAKE_MARKING_ERROR_DEFAULT';
@@ -49,6 +55,7 @@ export const CLEAR_TRANSACTIONS_LIST = 'CLEAR_TRANSACTIONS_LIST';
 
 // give
 export const GET_USERS = 'GET_USERS';
+export const CLEAR_USER_LIST = 'CLEAR_USER_LIST';
 export const GET_USERS_ERROR = 'GET_USERS_ERROR';
 export const USER_CURRENT_ID = 'USER_CURRENT_ID';
 export const TRANSFER = 'TRANSFER';
@@ -60,3 +67,30 @@ export const TRANSFERS_ERROR = 'TRANSFERS_ERROR';
 export const LOAD_MORE_TRANSFERS = 'LOAD_MORE_TRANSFERS';
 export const CLEAR_TRANSFERS_LIST = 'CLEAR_TRANSFERS_LIST';
 export const TRANSFERS_ID = 'TRANSFERS_ID';
+
+// accept
+export const GET_BID_LIST = 'GET_BID_LIST';
+export const GET_BID_LIST_ERROR = 'GET_BID_LIST_ERROR';
+export const LOAD_MORE_STATUS = 'LOAD_MORE_STATUS';
+export const CLEAR_BID_LIST = 'CLEAR_BID_LIST';
+export const SAVE_USER_ACCEPT_BID = 'SAVE_USER_ACCEPT_BID';
+export const ALREADY_SCANNED_BIDS = 'ALREADY_SCANNED_BIDS';
+export const MAKE_ACCEPT = 'MAKE_ACCEPT';
+export const MAKE_ACCEPT_ERROR = 'MAKE_ACCEPT_ERROR';
+export const SHOW_BUTTON_STATUS = 'SHOW_BUTTON_STATUS';
+
+// inventory
+export const SAVE_INVENTORY_SCANS = 'SAVE_INVENTORY_SCANS';
+export const SAVE_CURRENT_INVENTORY_USER = 'SAVE_CURRENT_INVENTORY_USER';
+
+// stocktaking
+export const MAKE_STOCKTAKING = 'MAKE_STOCKTAKING';
+export const MAKE_STOCKTAKING_ERROR = 'MAKE_STOCKTAKING_ERROR';
+
+// comments
+export const GET_COMMENTS = 'GET_COMMENTS';
+export const GET_COMMENTS_ERROR = 'GET_COMMENTS_ERROR';
+export const CHANGE_STATUS_LOAD_MORE_COMMENTS = 'CHANGE_STATUS_LOAD_MORE_COMMENTS';
+export const CLEAR_COMMENTS = 'CLEAR_COMMENTS';
+export const SEND_COMMENT = 'SEND_COMMENT';
+export const SEND_COMMENT_ERROR = 'SEND_COMMENT_ERROR';

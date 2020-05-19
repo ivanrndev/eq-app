@@ -1,87 +1,100 @@
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useEffect, useState} from 'react';
+import AsyncStorage from '@react-native-community/async-storage';
 import {SafeAreaView, Dimensions, StyleSheet, View} from 'react-native';
-import {Button} from 'react-native-paper';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Appbar from '../../components/Appbar';
-import {useDispatch} from 'react-redux';
-import {getItemsOnMe} from '../../actions/actions.js';
+import {useSelector} from 'react-redux';
+import {isEmpty} from 'lodash';
+import {Portal, ActivityIndicator} from 'react-native-paper';
+import Button from '../../components/Buttons/Menu';
 
 const Main = props => {
-  const dispatch = useDispatch();
+  const store = useSelector(state => state.auth);
+  const settings = useSelector(state => state.settings);
+  const [myRole, setMyRole] = useState();
+
+  useEffect(() => {
+    AsyncStorage.getItem('token').then(token => {
+      if (isEmpty(token)) {
+        props.navigation.navigate('Auth');
+      }
+    });
+    AsyncStorage.getItem('role').then(role => setMyRole(role));
+  }, [store.isLogOut]);
+
   return (
     <>
-      <Appbar
-        navigation={props.navigation}
-        arrow={false}
-        newScan={false}
-        goTo={'Home'}
-        title={'Меню'}
-      />
-      <View style={styles.body}>
-        <SafeAreaView />
-        <Button
-          style={styles.button}
-          contentStyle={styles.buttonStyle}
-          icon="help"
-          mode="contained"
-          color="#3a6fdb"
-          onPress={() => props.navigation.navigate('Ident')}>
-          Идентификация
-        </Button>
-        <Button
-          style={styles.button}
-          contentStyle={styles.buttonStyle}
-          icon="qrcode"
-          mode="contained"
-          color="#3a6fdb"
-          onPress={() => props.navigation.navigate('Marking')}>
-          Маркировка
-        </Button>
-        <Button
-          style={styles.button}
-          contentStyle={styles.buttonStyle}
-          icon="checkbook"
-          mode="contained"
-          color="gray"
-          onPress={() => alert('Инвентаризация')}>
-          Инвентаризация
-        </Button>
-        <Button
-          style={styles.button}
-          contentStyle={styles.buttonStyle}
-          icon="briefcase"
-          mode="contained"
-          color="#3a6fdb"
-          onPress={() => props.navigation.navigate('AcceptGive')}>
-          Принять / Выдать ТМЦ
-        </Button>
-        <Button
-          style={styles.button}
-          contentStyle={styles.buttonStyle}
-          icon="hammer"
-          mode="contained"
-          color="#3a6fdb"
-          onPress={() => props.navigation.navigate('Service')}>
-          Отправка в сервис
-        </Button>
-        <Button
-          style={styles.button}
-          contentStyle={styles.buttonStyle}
-          icon="cup"
-          mode="contained"
-          color="#3a6fdb"
-          onPress={() => props.navigation.navigate('WriteOff')}>
-          Списать
-        </Button>
-        <Button
-          style={styles.button}
-          contentStyle={styles.buttonStyle}
-          icon="account"
-          mode="contained"
-          color="#3a6fdb"
-          onPress={() => dispatch(getItemsOnMe(props.navigation))}>
-          Что на мне?
-        </Button>
+      <View style={styles.background}>
+        <Appbar
+          navigation={props.navigation}
+          arrow={false}
+          newScan={false}
+          menu={true}
+          goTo={'Home'}
+          title={'EqMan'}
+        />
+        <View style={styles.body}>
+          <SafeAreaView />
+          <Portal>
+            {settings.loader && (
+              <View style={styles.loader}>
+                <ActivityIndicator
+                  style={styles.load}
+                  size={80}
+                  animating={true}
+                  color={'#EDF6FF'}
+                />
+              </View>
+            )}
+          </Portal>
+          <Button
+            nav={props.navigation}
+            text={'Идентификация'}
+            route={'Ident'}
+            svg={'ident'}
+          />
+          <Button
+            nav={props.navigation}
+            text={'Маркировка'}
+            route={'Marking'}
+            svg={'marking'}
+          />
+          <Button
+            nav={props.navigation}
+            text={'Инвентаризация'}
+            getUserList={true}
+            svg={'inventory'}
+          />
+          <Button
+            nav={props.navigation}
+            text={'Принять / Выдать ТМЦ'}
+            route={'AcceptGive'}
+            svg={'acceptGive'}
+          />
+          {myRole !== 'worker' && (
+            <>
+              <Button
+                nav={props.navigation}
+                text={'Отправка/возврат из сервиса'}
+                route={'ServiceMenu'}
+                svg={'services'}
+              />
+              <Button
+                nav={props.navigation}
+                text={'Списание'}
+                route={'WriteOff'}
+                svg={'writeOff'}
+              />
+            </>
+          )}
+          <Button
+            nav={props.navigation}
+            text={'Мой подотчет'}
+            getItemsOnMe={true}
+            loader={true}
+            svg={'my'}
+          />
+        </View>
       </View>
     </>
   );
@@ -90,20 +103,22 @@ const Main = props => {
 const styles = StyleSheet.create({
   body: {
     alignSelf: 'center',
+    backgroundColor: '#D3E3F2',
+    paddingTop: Dimensions.get('window').height / 70,
+    height: Dimensions.get('window').height,
   },
-  button: {
+  background: {
+    backgroundColor: '#D3E3F2',
+  },
+  loader: {
+    backgroundColor: 'rgba(52, 52, 52, 0.8)',
     display: 'flex',
-    alignItems: 'center',
+    textAlign: 'center',
     justifyContent: 'center',
-    marginTop: Dimensions.get('window').height / 23,
-    borderRadius: 5,
-  },
-  buttonStyle: {
-    width: Dimensions.get('window').width / 1.1,
-    height: Dimensions.get('window').height / 13,
-  },
-  scrollView: {
-    backgroundColor: Colors.lighter,
+    marginTop: Dimensions.get('window').height / 9,
+    zIndex: 99,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
   },
 });
 

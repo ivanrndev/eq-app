@@ -21,11 +21,17 @@ const MarkingScaner = props => {
         arrow={true}
         newScan={true}
         goTo={'MarkingList'}
-        title={'Отсканируйте код'}
+        title={'Отсканируйте QR-код'}
       />
       <SafeAreaView />
       <View style={styles.body}>
-        {scaner && <Scanner nav={props.navigation} page={'MarkingFinish'} />}
+        {scaner && (
+          <Scanner
+            nav={props.navigation}
+            page={'MarkingFinish'}
+            text={'Введите новый идентификатор ТМЦ'}
+          />
+        )}
       </View>
     </>
   );

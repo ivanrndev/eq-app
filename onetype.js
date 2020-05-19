@@ -1,12 +1,12 @@
-const fs = require("fs");
-const path = require("path");
-const opentype = require("opentype.js");
+const fs = require('fs');
+const path = require('path');
+const opentype = require('opentype.js');
 
-const fontFormats = [".ttf", ".otf"];
-const fontsPath = path.join(__dirname, "src", "assets", "fonts", "Montserrat");
+const fontFormats = ['.ttf', '.otf'];
+const fontsPath = path.join(__dirname, 'src', 'assets', 'fonts', 'Montserrat');
 const filenames = fs.readdirSync(fontsPath);
 
-filenames.forEach((filename) => {
+filenames.forEach(filename => {
   const extension = path.extname(filename);
 
   if (!fontFormats.includes(extension)) {

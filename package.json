@@ -13,6 +13,7 @@
   "dependencies": {
     "@react-native-community/async-storage": "github:react-native-community/async-storage",
     "@react-native-community/masked-view": "^0.1.7",
+    "@react-native-community/netinfo": "^5.8.1",
     "@react-navigation/drawer": "^5.0.3",
     "@react-navigation/native": "^5.0.3",
     "axios": "^0.19.2",
@@ -34,6 +35,10 @@
     "react-native-reanimated": "^1.7.0",
     "react-native-safe-area-context": "^0.7.3",
     "react-native-screens": "^2.0.0-beta.2",
+    "react-native-svg": "^12.1.0",
+    "react-native-svg-icon": "^0.8.1",
+    "react-native-svg-transformer": "^0.14.3",
+    "react-native-svg-uri": "^1.2.3",
     "react-native-vector-icons": "^6.6.0",
     "react-navigation": "^4.3.3",
     "react-navigation-stack": "^2.3.6",
