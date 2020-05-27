@@ -1,6 +1,7 @@
 import React, {useCallback, useState} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
 import {StyleSheet, View, Dimensions, SafeAreaView} from 'react-native';
+import T from '../../../../i18n';
 // components
 import Appbar from '../../../../components/Appbar';
 import Scanner from '../../../../components/Scanner';
@@ -21,7 +22,7 @@ const BackScanner = props => {
         arrow={true}
         newScan={true}
         goTo={'ServiceMenu'}
-        title={'Вернуть из сервиса'}
+        title={T.t('back_service')}
       />
       <SafeAreaView />
       <View style={styles.body}>

@@ -12,6 +12,7 @@ import {
   allowNewScan,
   clearMarking,
 } from '../../../actions/actions.js';
+import T from '../../../i18n';
 import {getProperErrorMessage} from '../../../utils/helpers.js';
 import DarkButton from '../../../components/Buttons/DarkButton';
 
@@ -73,7 +74,7 @@ const MarkingFinish = props => {
         newScan={true}
         clearMarking={true}
         goTo={'Marking'}
-        title={marking.marking ? 'Перемаркировка' : 'Маркировка'}
+        title={marking.marking ? T.t('title_remark') : T.t('title_mark')}
       />
       <SafeAreaView />
       <View style={styles.body}>
@@ -83,20 +84,22 @@ const MarkingFinish = props => {
             {marking.markingSuccess && (
               <Title style={styles.title}>
                 {showMarking
-                  ? `Вы успешно перемаркировали "${title}" ${oldId} на ${currentScan}.`
-                  : `Вы успешно добавили ${currentScan}`}
+                  ? `${T.t(
+                      'format_added_success_id',
+                    )} "${title}" ${oldId} ${T.t('on')} ${currentScan}.`
+                  : `${T.t('format_added_success_id_re')} ${currentScan}`}
               </Title>
             )}
           </View>
           <View style={styles.buttons}>
             {marking.markingSuccess && (
               <View style={styles.buttonBlock}>
-                <DarkButton text={'К списку'} onPress={toListButton} />
+                <DarkButton text={T.t('to_list')} onPress={toListButton} />
               </View>
             )}
             {!!error && (
               <View style={styles.buttonBlock}>
-                <DarkButton text={'Отмена'} onPress={cancelButton} />
+                <DarkButton text={T.t('cancel')} onPress={cancelButton} />
               </View>
             )}
           </View>

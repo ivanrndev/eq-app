@@ -2,6 +2,7 @@ import React from 'react';
 import {StyleSheet, View, Dimensions, SafeAreaView} from 'react-native';
 import {Title} from 'react-native-paper';
 // components
+import T from '../../../i18n';
 import Appbar from '../../../components/Appbar';
 import {getProperErrorMessage} from '../../../utils/helpers.js';
 import DarkButton from '../../../components/Buttons/DarkButton';
@@ -18,8 +19,8 @@ export const ServiceFinish = props => {
     store.currentScan,
   );
 
-  const againSend = () => {
-    props.navigation.navigate('Service');
+  const goMenu = () => {
+    props.navigation.navigate('Home');
     dispatch(allowNewScan(true));
   };
 
@@ -30,7 +31,7 @@ export const ServiceFinish = props => {
         newScan={true}
         arrow={true}
         goTo={'Service'}
-        title={'Отправка в сервис'}
+        title={T.t('send_service')}
       />
       <SafeAreaView />
       <View style={styles.body}>
@@ -38,9 +39,7 @@ export const ServiceFinish = props => {
           <View style={styles.info}>
             <View style={styles.info}>
               {!services.inServicesError && (
-                <Title style={styles.title}>
-                  Инструмент отправлен в сервис
-                </Title>
+                <Title style={styles.title}>{T.t('send_service_finish')}</Title>
               )}
               {!!services.inServicesError && (
                 <Title style={styles.titleError}>{error}</Title>
@@ -49,7 +48,7 @@ export const ServiceFinish = props => {
           </View>
           <View style={styles.buttons}>
             <View style={styles.buttonBlock}>
-              <DarkButton text={'Еще раз'} onPress={againSend} />
+              <DarkButton text={T.t('menu')} onPress={goMenu} />
             </View>
           </View>
         </View>

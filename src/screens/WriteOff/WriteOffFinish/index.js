@@ -1,6 +1,7 @@
 import React from 'react';
 import {StyleSheet, View, Dimensions, SafeAreaView} from 'react-native';
 import {Title} from 'react-native-paper';
+import T from '../../../i18n';
 // components
 import Appbar from '../../../components/Appbar';
 import {getProperErrorMessage} from '../../../utils/helpers.js';
@@ -30,7 +31,7 @@ export const WriteOffFinish = props => {
         newScan={true}
         arrow={true}
         goTo={'WriteOff'}
-        title={'Списание'}
+        title={T.t('ban')}
       />
       <SafeAreaView />
       <View style={styles.body}>
@@ -38,7 +39,7 @@ export const WriteOffFinish = props => {
           <View style={styles.info}>
             <View style={styles.info}>
               {!writeoff.inWriteOffError && (
-                <Title style={styles.title}>Инструмент успешно списан</Title>
+                <Title style={styles.title}>{T.t('title_ban_done')}</Title>
               )}
               {!!writeoff.inWriteOffError && (
                 <Title style={styles.titleError}>{error}</Title>
@@ -47,7 +48,10 @@ export const WriteOffFinish = props => {
           </View>
           <View style={styles.buttons}>
             <View style={styles.buttonBlock}>
-              <DarkButton text={'Еще раз'} onPress={againSend} />
+              <DarkButton
+                text={T.t('title_inventorization_question')}
+                onPress={againSend}
+              />
             </View>
           </View>
         </View>

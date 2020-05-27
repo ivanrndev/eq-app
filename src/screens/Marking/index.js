@@ -1,5 +1,6 @@
 import React from 'react';
 import {StyleSheet, View, Dimensions, SafeAreaView} from 'react-native';
+import T from '../../i18n';
 // components
 import Appbar from '../../components/Appbar';
 import DarkButton from '../../components/Buttons/DarkButton';
@@ -32,7 +33,7 @@ const Marking = props => {
         newScan={true}
         clearMarking={true}
         goTo={'Home'}
-        title={'Маркировка'}
+        title={T.t('mark')}
       />
       <SafeAreaView />
       <Portal>
@@ -50,9 +51,9 @@ const Marking = props => {
       <View style={styles.body}>
         <View style={styles.buttons}>
           <View style={styles.buttonBlock}>
-            <DarkButton text={'Маркировать'} onPress={getMarking} />
+            <DarkButton text={T.t('title_to_mark')} onPress={getMarking} />
             <TransparentButton
-              text={'Перемаркировать'}
+              text={T.t('title_to_remark')}
               onPress={getReMarking}
             />
           </View>

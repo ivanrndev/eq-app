@@ -5,6 +5,8 @@ import {SafeAreaView, Dimensions, StyleSheet, View} from 'react-native';
 import Appbar from '../../components/Appbar';
 import {useSelector} from 'react-redux';
 import {isEmpty} from 'lodash';
+import T from '../../i18n';
+import I18n from '../../i18n';
 import {Portal, ActivityIndicator} from 'react-native-paper';
 import Button from '../../components/Buttons/Menu';
 
@@ -12,6 +14,7 @@ const Main = props => {
   const store = useSelector(state => state.auth);
   const settings = useSelector(state => state.settings);
   const [myRole, setMyRole] = useState();
+  const [lang, setLang] = useState();
 
   useEffect(() => {
     AsyncStorage.getItem('token').then(token => {
@@ -21,6 +24,13 @@ const Main = props => {
     });
     AsyncStorage.getItem('role').then(role => setMyRole(role));
   }, [store.isLogOut]);
+
+  useEffect(() => {
+    AsyncStorage.getItem('language').then(language => {
+      I18n.locale = language;
+      setLang(language);
+    });
+  }, [lang]);
 
   return (
     <>
@@ -49,25 +59,25 @@ const Main = props => {
           </Portal>
           <Button
             nav={props.navigation}
-            text={'Идентификация'}
+            text={T.t('identification')}
             route={'Ident'}
             svg={'ident'}
           />
           <Button
             nav={props.navigation}
-            text={'Маркировка'}
+            text={T.t('mark')}
             route={'Marking'}
             svg={'marking'}
           />
           <Button
             nav={props.navigation}
-            text={'Инвентаризация'}
+            text={T.t('inventorization')}
             getUserList={true}
             svg={'inventory'}
           />
           <Button
             nav={props.navigation}
-            text={'Принять / Выдать ТМЦ'}
+            text={T.t('give_accept')}
             route={'AcceptGive'}
             svg={'acceptGive'}
           />
@@ -75,13 +85,13 @@ const Main = props => {
             <>
               <Button
                 nav={props.navigation}
-                text={'Отправка/возврат из сервиса'}
+                text={T.t('service')}
                 route={'ServiceMenu'}
                 svg={'services'}
               />
               <Button
                 nav={props.navigation}
-                text={'Списание'}
+                text={T.t('ban')}
                 route={'WriteOff'}
                 svg={'writeOff'}
               />
@@ -89,7 +99,7 @@ const Main = props => {
           )}
           <Button
             nav={props.navigation}
-            text={'Мой подотчет'}
+            text={T.t('who_i')}
             getItemsOnMe={true}
             loader={true}
             svg={'my'}

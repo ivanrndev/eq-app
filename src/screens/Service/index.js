@@ -2,6 +2,7 @@ import React, {useCallback, useState} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
 import {StyleSheet, View, Dimensions, SafeAreaView} from 'react-native';
 // components
+import T from '../../i18n';
 import Appbar from '../../components/Appbar';
 import Scanner from '../../components/Scanner';
 
@@ -21,7 +22,7 @@ const Service = props => {
         arrow={true}
         newScan={true}
         goTo={'ServiceMenu'}
-        title={'Отправка в сервис'}
+        title={T.t('send_service')}
       />
       <SafeAreaView />
       <View style={styles.body}>

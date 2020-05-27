@@ -10,6 +10,7 @@ import {
   getComments,
   loader,
 } from '../../../actions/actions.js';
+import T from '../../../i18n';
 import {getStatus, getProperErrorMessage} from '../../../utils/helpers.js';
 import AsyncStorage from '@react-native-community/async-storage';
 import DarkButton from '../../../components/Buttons/DarkButton';
@@ -62,7 +63,7 @@ export const IdentInfo = props => {
         newScan={true}
         arrow={true}
         goTo={'Ident'}
-        title={'Детальная информация'}
+        title={T.t('detail_info')}
       />
       <SafeAreaView />
       <View style={styles.body}>
@@ -78,28 +79,39 @@ export const IdentInfo = props => {
                 <View style={styles.info}>
                   {store.scanInfo && (
                     <Text style={styles.text}>
-                      Статус: {getStatus(store.scanInfo, role)}
+                      {T.t('transfer_status')}:{' '}
+                      {getStatus(store.scanInfo, role)}
                     </Text>
                   )}
                   {metaData && (
-                    <Text style={styles.text}>Название: {nameOfProduct}</Text>
+                    <Text style={styles.text}>
+                      {T.t('detail_title')}: {nameOfProduct}
+                    </Text>
                   )}
                   {metaData.brand && (
-                    <Text style={styles.text}>Бренд: {metaData.brand}</Text>
+                    <Text style={styles.text}>
+                      {T.t('detail_brand')}: {metaData.brand}
+                    </Text>
                   )}
                   {metaData.model && (
-                    <Text style={styles.text}>Модель: {metaData.model}</Text>
+                    <Text style={styles.text}>
+                      {T.t('detail_model')}: {metaData.model}
+                    </Text>
                   )}
                   {metaData.capacity && (
                     <Text style={styles.text}>
-                      Мощность: {metaData.capacity}
+                      {T.t('detail_capacity')}: {metaData.capacity}
                     </Text>
                   )}
                   {metaData.serial && (
-                    <Text style={styles.text}>Серия: {metaData.serial}</Text>
+                    <Text style={styles.text}>
+                      {T.t('detail_serial')}: {metaData.serial}
+                    </Text>
                   )}
                   {metaData.type && (
-                    <Text style={styles.text}>Тип: {metaData.type}</Text>
+                    <Text style={styles.text}>
+                      {T.t('detail_type')}: {metaData.type}
+                    </Text>
                   )}
                   {store.scanInfo.customFields &&
                     store.scanInfo.customFields.map((item, index) => {
@@ -111,7 +123,7 @@ export const IdentInfo = props => {
                     })}
                   {store.scanInfo.person && (
                     <Text style={styles.text}>
-                      Закреплен на: {store.scanInfo.person.firstName}{' '}
+                      {T.t('detail_person')}: {store.scanInfo.person.firstName}{' '}
                       {store.scanInfo.person.lastName}
                     </Text>
                   )}
@@ -123,9 +135,12 @@ export const IdentInfo = props => {
             <>
               <View style={styles.buttonsBlock}>
                 <View style={styles.buttonBlock}>
-                  <DarkButton text={'Комментарии'} onPress={getAllComments} />
                   <DarkButton
-                    text={'История транзакций'}
+                    text={T.t('title_comments')}
+                    onPress={getAllComments}
+                  />
+                  <DarkButton
+                    text={T.t('title_history_of_transaction')}
                     onPress={handleTransactions}
                   />
                 </View>

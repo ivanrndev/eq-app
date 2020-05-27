@@ -52,6 +52,7 @@ import InventoryFinish from './screens/Inventory/InventoryFinish';
 import InventoryDone from './screens/Inventory/InventoryDone';
 import Comments from './screens/Сomments/';
 import CustomDrawer from './components/Drawer';
+import Settings from './screens/Settings';
 
 const theme = {
   ...DefaultTheme,
@@ -112,6 +113,7 @@ const App = () => {
               <Drawer.Screen name="InventoryFinish" component={InventoryFinish} />
               <Drawer.Screen name="InventoryDone" component={InventoryDone} />
               <Drawer.Screen name="Comments" component={Comments} />
+              <Drawer.Screen name="Settings" component={Settings} />
             </Drawer.Navigator>
           </PaperProvider>
         </NativeRouter>

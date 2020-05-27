@@ -1,6 +1,7 @@
 import React from 'react';
 import {StyleSheet, View, Dimensions, SafeAreaView} from 'react-native';
 import {Title} from 'react-native-paper';
+import T from '../../../../i18n';
 // components
 import Appbar from '../../../../components/Appbar';
 import DarkButton from '../../../../components/Buttons/DarkButton';
@@ -15,7 +16,9 @@ export const BackFinish = props => {
   let error = '';
 
   if (services.inServicesError) {
-    error = `Идентификатор ${store.currentScan} не находиться в сервисе`;
+    error = `${T.t('service_identifier_first')} ${store.currentScan} ${T.t(
+      'service_identifier_second',
+    )}`;
   }
 
   const againSend = () => {
@@ -31,7 +34,7 @@ export const BackFinish = props => {
         newScan={true}
         arrow={true}
         goTo={'ServiceMenu'}
-        title={'Вернуть из сервиса'}
+        title={T.t('back_service')}
       />
       <SafeAreaView />
       <View style={styles.body}>
@@ -39,9 +42,7 @@ export const BackFinish = props => {
           <View style={styles.info}>
             <View style={styles.info}>
               {!services.inServicesError && (
-                <Title style={styles.title}>
-                  Инструмент возвращен из сервиса
-                </Title>
+                <Title style={styles.title}>{T.t('service_back_done')}</Title>
               )}
               {!!services.inServicesError && (
                 <Title style={styles.titleError}>{error}</Title>
@@ -50,7 +51,10 @@ export const BackFinish = props => {
           </View>
           <View style={styles.buttons}>
             <View style={styles.buttonBlock}>
-              <DarkButton text={'Еще раз'} onPress={againSend} />
+              <DarkButton
+                text={T.t('title_inventorization_question')}
+                onPress={againSend}
+              />
             </View>
           </View>
         </View>

@@ -1,6 +1,7 @@
 import React, {useState, useCallback} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
 import {StyleSheet, View, Dimensions, SafeAreaView} from 'react-native';
+import T from '../../../../i18n';
 // components
 import Appbar from '../../../../components/Appbar';
 import Scanner from '../../../../components/Scanner';
@@ -21,7 +22,7 @@ const GiveScaner = props => {
         arrow={true}
         newScan={true}
         goTo={'GiveListCheck'}
-        title={'Отсканируйте QR-код'}
+        title={T.t('title_scan')}
       />
       <SafeAreaView />
       <View style={styles.body}>

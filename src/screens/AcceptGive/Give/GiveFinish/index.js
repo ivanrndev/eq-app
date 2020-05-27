@@ -7,7 +7,8 @@ import {
   SafeAreaView,
   ScrollView,
 } from 'react-native';
-import {Title, Button} from 'react-native-paper';
+import {Title} from 'react-native-paper';
+import T from '../../../../i18n';
 // components
 import Appbar from '../../../../components/Appbar';
 import DarkButton from '../../../../components/Buttons/DarkButton';
@@ -54,7 +55,7 @@ const GiveFinish = props => {
         arrow={true}
         newScan={true}
         goTo={'GiveListCheck'}
-        title={'Статут заявки'}
+        title={T.t('status_request')}
       />
       <SafeAreaView />
       <View style={styles.body}>
@@ -76,13 +77,13 @@ const GiveFinish = props => {
           <View style={styles.buttons}>
             {showButton ? (
               <View style={styles.buttonBlock}>
-                <DarkButton text={'Меню'} onPress={goMenu} />
+                <DarkButton text={T.t('menu')} onPress={goMenu} />
               </View>
             ) : null}
             {!showButton ? (
               <View style={styles.buttonBlock}>
                 <DarkButton
-                  text={'Назад'}
+                  text={T.t('back')}
                   onPress={() => props.navigation.navigate('GiveListCheck')}
                 />
               </View>

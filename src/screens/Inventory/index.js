@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import {Card, Title, Paragraph, Checkbox} from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
+import T from '../../i18n';
 // components
 import Appbar from '../../components/Appbar';
 import {getProperErrorMessage} from '../../utils/helpers.js';
@@ -49,7 +50,7 @@ const Inventory = props => {
         clearUserList={true}
         newScan={true}
         goTo={'Home'}
-        title={'Выберите пользователя'}
+        title={T.t('select_user')}
       />
       <SafeAreaView />
       <View style={styles.body}>
@@ -57,9 +58,7 @@ const Inventory = props => {
           <>
             <ScrollView>
               {showEmptyError && (
-                <Paragraph style={styles.text}>
-                  На данный момент нет пользователей нет
-                </Paragraph>
+                <Paragraph style={styles.text}>{T.t('no_users')}</Paragraph>
               )}
               {/* {showText && (
                 <>

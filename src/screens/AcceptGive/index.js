@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {StyleSheet, View, Dimensions, SafeAreaView} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
+import T from '../../i18n';
 // components
 import Appbar from '../../components/Appbar';
 import DarkButton from '../../components/Buttons/DarkButton';
@@ -50,7 +51,7 @@ const AcceptGive = props => {
         arrow={true}
         newScan={true}
         goTo={'Home'}
-        title={'Принять / Выдать ТМЦ'}
+        title={T.t('give_accept')}
       />
       <SafeAreaView />
       <Portal>
@@ -68,14 +69,14 @@ const AcceptGive = props => {
       <View style={styles.body}>
         <View style={styles.buttons}>
           <View style={styles.buttonBlock}>
-            <DarkButton text={'Принять'} onPress={bidList} />
-            <DarkButton text={'Выдать'} onPress={userList} />
+            <DarkButton text={T.t('accept')} onPress={bidList} />
+            <DarkButton text={T.t('give')} onPress={userList} />
           </View>
         </View>
         <View style={styles.BottomButton}>
           <View style={styles.buttonBlock}>
             <TransparentButton
-              text={'История звявок'}
+              text={T.t('history_of_transfer')}
               onPress={() => transfers()}
             />
           </View>

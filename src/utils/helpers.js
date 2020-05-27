@@ -1,53 +1,56 @@
+/* eslint-disable prettier/prettier */
+import T from '../i18n';
+
 export const getDescription = (tx, role) => {
   switch (+tx.type) {
     case 0:
-      return 'Создано ТМЦ';
+      return T.t('transaction_add');
     case 1:
-      return `ТМЦ Маркировано QR-кодом ${tx.data.code}`;
+      return `${T.t('transaction_mark')} ${tx.data.code}`;
     case 2:
       if (tx.data.sender.role === role) {
-        return `${tx.data.sender.firstName} выдал ${tx.item.code} ${
-          tx.data.recipient.firstName
-        }`;
+        return `${tx.data.sender.firstName} ${T.t('transaction_gave')} ${
+          tx.item.code
+        } ${T.t('transaction_gave_to')} ${tx.data.recipient.firstName}`;
       } else {
-        return `${tx.data.recipient.firstName} принял ${tx.item.code} от ${
-          tx.data.sender.firstName
-        }`;
+        return `${tx.data.recipient.firstName} ${T.t('transaction_accepted')} ${
+          tx.item.code
+        } ${T.t('transaction_from')} ${tx.data.sender.firstName}`;
       }
     case 3:
-      return `ТМЦ ${tx.item.code} отправленно в сервис по причине "${
+      return `${T.t('item')} ${tx.item.code} ${T.t('sent_to_services')} "${
         tx.data.description
-      }", местоположение сервиса "${tx.data.place}"`;
+      }", ${T.t('service_location')} "${tx.data.place}"`;
     case 4:
-      return `ТМЦ ${tx.item.code} было списано`;
+      return `${T.t('item')} ${tx.item.code} ${T.t('was_write_off')}`;
     case 5:
-      return `ТМЦ ${tx.item.code} было возвращено из сервиса`;
+      return `${T.t('item')} ${tx.item.code} ${T.t('was_back_services')}`;
     default:
-      return 'Неизвестная операция';
+      return T.t('unknown_operation');
   }
 };
 
 export const getStatus = (item, role) => {
   if (item.is_ban) {
-    return 'Списано';
+    return T.t('ban');
   }
   if (item.repair) {
-    return 'Отправлено в сервис';
+    return T.t('status_services');
   }
   if (item.transfer) {
-    return 'В процессе передачи';
+    return T.t('during_transfer');
   }
   if (item.person) {
     if (item.person.role === role) {
-      return 'У кладовщика';
+      return T.t('status_storekeeper');
     } else {
-      return 'Передано МОЛ';
+      return T.t('status_person');
     }
   }
   if (item.is_marked) {
-    return 'Маркировано';
+    return T.t('status_marked');
   }
-  return 'Не распределено';
+  return T.t('status_undefined');
 };
 
 export const getProperError = error => {
@@ -114,55 +117,55 @@ export const getProperErrorMessage = (error, id) => {
   let errorMessage = '';
   switch (error) {
     case 'NotFound':
-      errorMessage = `Введенный идентификатор "${id}" не найден в базе`;
+      errorMessage = `${T.t('error_code_incorrect')} "${id}" ${T.t('error_not_found')}`;
       break;
     case 'NotMarked':
-      errorMessage = 'ТМЦ не промаркировано';
+      errorMessage = T.t('error_not_marked');
       break;
     case 'IsBan':
-      errorMessage = `Данное ТМЦ ${id} уже была списано с производства ранее`;
+      errorMessage = `${T.t('item')} ${id} ${T.t('error_write_off')}`;
       break;
     case 'InRepair':
-      errorMessage = `Введенный идентификатор ${id} уже отправлен в сервис`;
+      errorMessage = `${T.t('error_code_incorrect')} ${id} ${T.t('error_services')}`;
       break;
     case 'InTransfer':
-      errorMessage = `Введенный идентификатор ${id} включен в заявку на передачу ТМЦ `;
+      errorMessage = `${T.t('error_code_incorrect')} ${id} ${T.t('error_already_in')}`;
       break;
     case 'AccessError':
-      errorMessage = 'У Вас нет доступа к этой ТМЦ';
+      errorMessage = T.t('error_forbidden');
       break;
     case 'AccessDenied':
-      errorMessage = `Вы не являетесь Владелецем ТМЦ ${id}. Для осуществления операции вначале получите данное ТМЦ `;
+      errorMessage = `${T.t('error_owner')} ${id}. ${T.t('error_owner_text')} `;
       break;
     case 'ValidationError':
-      errorMessage = 'ValidationError текст';
+      errorMessage = 'Validation Error';
       break;
     case 'QRCodeUnavailable':
-      errorMessage = `Введенный идентификатор ${id} использован, или не пренадлежит этой компании`;
+      errorMessage = `${T.t('error_code_incorrect')} ${id} использован, или не пренадлежит этой компании`;
       break;
     case 'QRCodeUsed':
-      errorMessage = `Введенный идентификатор ${id} уже закреплен за другим ТМЦ`;
+      errorMessage = `${T.t('error_code_incorrect')} ${id} уже закреплен за другим ТМЦ`;
       break;
     case 'LinkIsUnavailable':
-      errorMessage = 'Ссылка недоступна';
+      errorMessage = T.t('error_link');
       break;
     case 'LimitExceeded':
-      errorMessage = 'Превышен лимит вашего текущего плана';
+      errorMessage = T.t('error_limit_exceeded');
       break;
     case 'EmailMustBeUnique':
-      errorMessage = 'Email должен быть уникальным';
+      errorMessage = T.t('error_email_must_be_unique');
       break;
     case 'UserNotFound':
-      errorMessage = 'Пользователь не найден';
+      errorMessage = T.t('error_user_not_found');
       break;
     case 'EmailUnApproved':
-      errorMessage = 'Email не подтвержден';
+      errorMessage = T.t('error_email_un_approved');
       break;
     case 'PasswordIncorrect':
-      errorMessage = 'Неверный пароль';
+      errorMessage = T.t('error_password_incorrect');
       break;
     case 'Forbidden':
-      errorMessage = `Вы не являетесь Владелецем ${id}. Для осуществления операции вначале получите данное ТМЦ `;
+      errorMessage = `${T.t('error_owner')} ${id}. ${T.t('error_owner_text')} `;
       break;
     default:
       break;
@@ -174,19 +177,19 @@ export const getProperTransferStatus = error => {
   let errorMessage = '';
   switch (error) {
     case 'true':
-      errorMessage = 'Заявка создана';
+      errorMessage = T.t('title_request_created');
       break;
     case 'complete':
-      errorMessage = 'Завершено';
+      errorMessage = T.t('status_transfer_complete');
       break;
     case 'pending':
-      errorMessage = 'В ожидании подтверждения';
+      errorMessage = T.t('status_transfer_pending');
       break;
     case 'rejected':
-      errorMessage = 'Заявка отклонена';
+      errorMessage = T.t('status_application_rejected');
       break;
     case 'error':
-      errorMessage = 'Не удалось';
+      errorMessage = T.t('status_transfer_failed');
       break;
     default:
       break;
@@ -198,38 +201,36 @@ export const getProperErrorTransfer = (error, id) => {
   let errorMessage = '';
   switch (error) {
     case 'IsBan':
-      errorMessage = `ТМЦ "${id}" уже была списано с производства ранее.`;
+      errorMessage = `${T.t('item')} "${id}" ${T.t('error_write_off')}`;
       break;
     case 'InRepair':
-      errorMessage = `ТМЦ "${id}" находится в сервисе.`;
+      errorMessage = `${T.t('item')} "${id}" ${T.t('error_services')}`;
       break;
     case 'InTransfer':
-      errorMessage = `ТМЦ "${id}" включен в другую заявку на передачу ТМЦ.`;
+      errorMessage = `${T.t('item')} "${id}" ${T.t('error_another')}.`;
       break;
     case 'AccessDenied':
-      errorMessage = `Вы не являетесь Владелецем "${id}". Для осуществления операции вначале получите данное ТМЦ.`;
+      errorMessage = `${T.t('error_owner')} "${id}". ${T.t('error_owner_text')}`;
       break;
     case 'NotFound':
-      errorMessage = `Введенный идентификатор "${id}" не найден в базе.`;
+      errorMessage = `${T.t('error_code_incorrect')} "${id}" ${T.t('error_not_found')}`;
       break;
     case 'RecipientIsHolder':
-      errorMessage = `ТМЦ "${id}" уже у выбранного МОЛ.`;
+      errorMessage = `${T.t('item')} "${id}" ${T.t('error_already_mol')}`;
       break;
     case 'Copy':
-      errorMessage = `Введенный идентификатор "${id}" уже добавлен в лист передачи ТМЦ`;
+      errorMessage = `${T.t('error_code_incorrect')} "${id}" ${T.t('error_already_added')}`;
       break;
     case 'Forbidden':
-      errorMessage = `Вы не являетесь Владелецем ${id}. Для осуществления операции вначале получите данное ТМЦ `;
+      errorMessage = `${T.t('error_owner')} ${id}. ${T.t('error_get_item')} `;
       break;
     default:
-      return 'Неизвестная операция';
+      return T.t('unknown_operation');
   }
   return errorMessage;
 };
 
 export const actionCheckError = item => {
-  // пустая заявка
-  // NotFound
   if (item.is_ban) {
     return 'IsBan';
   }
@@ -246,16 +247,16 @@ export const actionCheckError = item => {
 
 export const getInventoryMesageError = (error, id) => {
   if (error === 'IsBan') {
-    return `ТМЦ "${id}" уже была списано с производства ранее.`;
+    return `${T.t('item')} "${id}" ${T.t('error_write_off')}`;
   }
   if (error === 'InRepair') {
-    return `ТМЦ "${id}" находится в сервисе.`;
+    return `${T.t('item')}  "${id}" ${T.t('error_services')}`;
   }
   if (error === 'NotFound') {
-    return `Введенный идентификатор "${id}" не найден в базе.`;
+    return `${T.t('error_code_incorrect')} "${id}" ${T.t('error_not_found')}`;
   }
   if (error === 'Duplicate') {
-    return `Введенный идентификатор "${id}" уже был добавлен в инвентаризационную ведомость`;
+    return `${T.t('error_code_incorrect')} "${id}" ${T.t('error_was_added')}`;
   }
 };
 

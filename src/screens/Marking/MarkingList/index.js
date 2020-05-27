@@ -14,6 +14,7 @@ import {
   Button,
   ActivityIndicator,
 } from 'react-native-paper';
+import T from '../../../i18n';
 // components
 import Appbar from '../../../components/Appbar';
 import {getProperErrorMessage} from '../../../utils/helpers.js';
@@ -54,13 +55,13 @@ const MarkingList = props => {
         arrow={true}
         newScan={true}
         goTo={'Marking'}
-        title={marking.marking ? 'Перемаркировка' : 'Маркировка'}
+        title={marking.marking ? T.t('title_remark') : T.t('title_mark')}
       />
       <SafeAreaView />
       <View style={styles.body}>
         {!error && (
           <Searchbar
-            placeholder="Поиск"
+            placeholder={T.t('search')}
             onChangeText={query => itemSearch(query)}
             value={search}
             style={styles.search}
@@ -72,7 +73,7 @@ const MarkingList = props => {
               <ScrollView style={styles.scroll}>
                 {showEmptyError && (
                   <Paragraph style={styles.text}>
-                    На данный момент нет доступных к маркировке ТМЦ
+                    {T.t('no_available')}
                   </Paragraph>
                 )}
                 {!error &&
@@ -129,7 +130,7 @@ const MarkingList = props => {
                     mode="Text"
                     color="#22215B"
                     onPress={getMoreItems}>
-                     Загрузить еще
+                     {T.t('load_more')}
                   </Button>
                 )}
                 {marking.loadMore && (

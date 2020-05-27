@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1130"
+   LastUpgradeVersion = "1140"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -73,6 +73,26 @@
                BlueprintIdentifier = "FEAB4D382424F2F00066DD91"
                BuildableName = "EcManTests.xctest"
                BlueprintName = "EcManTests"
+               ReferencedContainer = "container:EcMan.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "FE26B74D24752CF200236F6E"
+               BuildableName = "EqManUITests.xctest"
+               BlueprintName = "EqManUITests"
+               ReferencedContainer = "container:EcMan.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "FE39190F247530E80041D986"
+               BuildableName = "EcManUITests.xctest"
+               BlueprintName = "EcManUITests"
                ReferencedContainer = "container:EcMan.xcodeproj">
             </BuildableReference>
          </TestableReference>

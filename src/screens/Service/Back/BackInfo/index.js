@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, Dimensions, SafeAreaView, Text} from 'react-native';
 import {Title, Portal, ActivityIndicator} from 'react-native-paper';
+import T from '../../../../i18n';
 // components
 import Appbar from '../../../../components/Appbar';
 import DarkButton from '../../../../components/Buttons/DarkButton';
@@ -62,7 +63,7 @@ export const BackInfo = props => {
         newScan={true}
         arrow={true}
         goTo={'BackScanner'}
-        title={'Вернуть из сервиса'}
+        title={T.t('back_service')}
       />
       <SafeAreaView />
       <Portal>
@@ -87,37 +88,49 @@ export const BackInfo = props => {
             )}
             {!store.scanInfoError && (
               <View style={styles.info}>
-                <Title style={styles.title}>Вернуть из сервиса?</Title>
+                <Title style={styles.title}>{T.t('back_service')}?</Title>
                 {show && (
                   <View style={styles.info}>
                     {store.scanInfo && (
                       <Text style={styles.text}>
-                        Статус: {getStatus(store.scanInfo, role)}
+                        {T.t('transfer_status')}:{' '}
+                        {getStatus(store.scanInfo, role)}
                       </Text>
                     )}
                     {metaData && (
-                      <Text style={styles.text}>Название: {nameOfProduct}</Text>
+                      <Text style={styles.text}>
+                        {T.t('detail_title')}: {nameOfProduct}
+                      </Text>
                     )}
                     {metaData.brand && (
-                      <Text style={styles.text}>Бренд: {metaData.brand}</Text>
+                      <Text style={styles.text}>
+                        {T.t('detail_brand')}: {metaData.brand}
+                      </Text>
                     )}
                     {metaData.model && (
-                      <Text style={styles.text}>Модель: {metaData.model}</Text>
+                      <Text style={styles.text}>
+                        {T.t('detail_model')}: {metaData.model}
+                      </Text>
                     )}
                     {metaData.capacity && (
                       <Text style={styles.text}>
-                        Мощность: {metaData.capacity}
+                        {T.t('detail_capacity')}: {metaData.capacity}
                       </Text>
                     )}
                     {metaData.serial && (
-                      <Text style={styles.text}>Серия: {metaData.serial}</Text>
+                      <Text style={styles.text}>
+                        {T.t('detail_serial')}: {metaData.serial}
+                      </Text>
                     )}
                     {metaData.type && (
-                      <Text style={styles.text}>Тип: {metaData.type}</Text>
+                      <Text style={styles.text}>
+                        {T.t('detail_type')}: {metaData.type}
+                      </Text>
                     )}
                     {store.scanInfo.person && (
                       <Text style={styles.text}>
-                        Закреплен на: {store.scanInfo.person.firstName}{' '}
+                        {T.t('detail_person')}:{' '}
+                        {store.scanInfo.person.firstName}{' '}
                         {store.scanInfo.person.lastName}
                       </Text>
                     )}
@@ -130,12 +143,19 @@ export const BackInfo = props => {
             {!store.scanInfoError && (
               <>
                 <View style={styles.buttonBlock}>
-                  <DarkButton text={'Вернуть'} onPress={backService} />
+                  <DarkButton
+                    text={T.t('back_service_btn')}
+                    onPress={backService}
+                  />
                 </View>
               </>
             )}
             <View style={styles.buttonBlock}>
-              <DarkButton text={'Отмена'} comments={true} onPress={againScan} />
+              <DarkButton
+                text={T.t('cancel')}
+                comments={true}
+                onPress={againScan}
+              />
             </View>
           </View>
         </View>

@@ -2,6 +2,7 @@ import React from 'react';
 import {isEmpty} from 'lodash';
 import {StyleSheet, View, Dimensions, SafeAreaView, Text} from 'react-native';
 import {Title, Portal, ActivityIndicator} from 'react-native-paper';
+import T from '../../../i18n';
 // components
 import DarkButton from '../../../components/Buttons/DarkButton';
 import Appbar from '../../../components/Appbar';
@@ -41,7 +42,7 @@ export const OnMeInfo = props => {
         newScan={true}
         arrow={true}
         goTo={'OnMe'}
-        title={'Детальная информация'}
+        title={T.t('detail_info')}
       />
       <SafeAreaView />
       <Portal>
@@ -68,22 +69,34 @@ export const OnMeInfo = props => {
               {show && (
                 <View style={styles.info}>
                   {!!info && (
-                    <Text style={styles.text}>Название: {nameOfProduct}</Text>
+                    <Text style={styles.text}>
+                      {T.t('detail_title')}: {nameOfProduct}
+                    </Text>
                   )}
                   {!!info.brand && (
-                    <Text style={styles.text}>Бренд: {info.brand}</Text>
+                    <Text style={styles.text}>
+                      {T.t('detail_brand')}: {info.brand}
+                    </Text>
                   )}
                   {!!info.model && (
-                    <Text style={styles.text}>Модель: {info.model}</Text>
+                    <Text style={styles.text}>
+                      {T.t('detail_model')}: {info.model}
+                    </Text>
                   )}
                   {!!info.capacity && (
-                    <Text style={styles.text}>Мощность: {info.capacity}</Text>
+                    <Text style={styles.text}>
+                      {T.t('detail_capacity')}: {info.capacity}
+                    </Text>
                   )}
                   {!!info.serial && (
-                    <Text style={styles.text}>Серия: {info.serial}</Text>
+                    <Text style={styles.text}>
+                      {T.t('detail_serial')}: {info.serial}
+                    </Text>
                   )}
                   {!!info.type && (
-                    <Text style={styles.text}>Тип: {info.type}</Text>
+                    <Text style={styles.text}>
+                      {T.t('detail_type')}: {info.type}
+                    </Text>
                   )}
                   {show
                     ? metaData.customFields.map((item, index) => {
@@ -95,7 +108,9 @@ export const OnMeInfo = props => {
                       })
                     : null}
                   {show ? (
-                    <Text style={styles.text}>QR код: {metaData.code}</Text>
+                    <Text style={styles.text}>
+                      {T.t('qr_code')}: {metaData.code}
+                    </Text>
                   ) : null}
                 </View>
               )}
@@ -104,7 +119,7 @@ export const OnMeInfo = props => {
           {!store.myError ? (
             <View style={styles.buttons}>
               <DarkButton
-                text={'История транзакций'}
+                text={T.t('title_history_of_transaction')}
                 onPress={handleTransactions}
               />
             </View>

@@ -11,6 +11,7 @@ import {
   SAVE_CURRENT_SCAN,
   ALLOW_NEW_SCAN,
   LOADER,
+  LANG,
   SAVE_CURRENT_SCAN_INFO,
   SAVE_CURRENT_SCAN_INFO_LIST,
   CLEAR_SCAN_GIVE_LIST,
@@ -70,11 +71,18 @@ import {
   SEND_COMMENT_ERROR,
 } from '../actions/actionsType.js';
 
-// Settings Loader
+// Settings
 export const loader = status => dispatch => {
   dispatch({
     type: LOADER,
     payload: {loader: status},
+  });
+};
+
+export const lang = language => dispatch => {
+  dispatch({
+    type: LANG,
+    payload: {lang: language},
   });
 };
 
@@ -148,6 +156,7 @@ export const currentUser = () => dispatch => {
       if (resp.data.company) {
         AsyncStorage.setItem('userId', resp.data._id);
       }
+      AsyncStorage.setItem('language', 'en');
     }
   });
 };

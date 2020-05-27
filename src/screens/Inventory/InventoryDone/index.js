@@ -1,6 +1,7 @@
 import React from 'react';
 import {StyleSheet, View, Dimensions, SafeAreaView} from 'react-native';
 import {Title} from 'react-native-paper';
+import T from '../../../i18n';
 // components
 import Appbar from '../../../components/Appbar';
 import DarkButton from '../../../components/Buttons/DarkButton';
@@ -32,17 +33,19 @@ export const InventoryDone = props => {
         newScan={true}
         arrow={true}
         goTo={'Inventory'}
-        title={'Инвентаризация'}
+        title={T.t('inventorization')}
         alreadyScannedBids={true}
         clearBidList={true}
       />
       <SafeAreaView />
       <View style={styles.body}>
         <View style={styles.container}>
-          <Title style={styles.title}>Инвентаризация завершена</Title>
-          {!!error && <Title style={styles.title}>Ошибка инвентаризации</Title>}
+          <Title style={styles.title}>{T.t('inventorization_finished')}</Title>
+          {!!error && (
+            <Title style={styles.title}>{T.t('inventorization_error')}</Title>
+          )}
           <View style={styles.buttonBlock}>
-            <DarkButton text={'Меню'} onPress={endInventory} />
+            <DarkButton text={T.t('menu')} onPress={endInventory} />
           </View>
         </View>
       </View>

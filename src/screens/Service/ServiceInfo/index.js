@@ -7,6 +7,7 @@ import {
   Text,
   KeyboardAvoidingView,
 } from 'react-native';
+import T from '../../../i18n';
 import {Title, TextInput, Portal, ActivityIndicator} from 'react-native-paper';
 // components
 import Appbar from '../../../components/Appbar';
@@ -49,7 +50,6 @@ export const ServiceInfo = props => {
 
   const sendSercive = () => {
     dispatch(loader(true));
-    console.log(reason, stockroom);
     dispatch(
       sendToServices(store.scanInfo._id, reason, stockroom, props.navigation),
     );
@@ -76,7 +76,7 @@ export const ServiceInfo = props => {
         newScan={true}
         arrow={true}
         goTo={'ServiceMenu'}
-        title={'Отправка в сервис'}
+        title={T.t('send_service')}
       />
       <SafeAreaView />
       <Portal>
@@ -104,43 +104,49 @@ export const ServiceInfo = props => {
               )}
               {!store.scanInfoError && (
                 <View style={styles.info}>
-                  <Title style={styles.title}>Отправить в сервис?</Title>
+                  <Title style={styles.title}>{T.t('send_service')}</Title>
                   {show && (
                     <View style={styles.info}>
                       {store.scanInfo && (
                         <Text style={styles.text}>
-                          Статус: {getStatus(store.scanInfo, role)}
+                          {T.t('transfer_status')}:{' '}
+                          {getStatus(store.scanInfo, role)}
                         </Text>
                       )}
                       {metaData && (
                         <Text style={styles.text}>
-                          Название: {nameOfProduct}
+                          {T.t('detail_title')}: {nameOfProduct}
                         </Text>
                       )}
                       {metaData.brand && (
-                        <Text style={styles.text}>Бренд: {metaData.brand}</Text>
+                        <Text style={styles.text}>
+                          {T.t('detail_brand')}: {metaData.brand}
+                        </Text>
                       )}
                       {metaData.model && (
                         <Text style={styles.text}>
-                          Модель: {metaData.model}
+                          {T.t('detail_model')}: {metaData.model}
                         </Text>
                       )}
                       {metaData.capacity && (
                         <Text style={styles.text}>
-                          Мощность: {metaData.capacity}
+                          {T.t('detail_capacity')}: {metaData.capacity}
                         </Text>
                       )}
                       {metaData.serial && (
                         <Text style={styles.text}>
-                          Серия: {metaData.serial}
+                          {T.t('detail_serial')}: {metaData.serial}
                         </Text>
                       )}
                       {metaData.type && (
-                        <Text style={styles.text}>Тип: {metaData.type}</Text>
+                        <Text style={styles.text}>
+                          {T.t('detail_type')}: {metaData.type}
+                        </Text>
                       )}
                       {store.scanInfo.person && (
                         <Text style={styles.text}>
-                          Закреплен на: {store.scanInfo.person.firstName}{' '}
+                          {T.t('detail_person')}:{' '}
+                          {store.scanInfo.person.firstName}{' '}
                           {store.scanInfo.person.lastName}
                         </Text>
                       )}
@@ -155,26 +161,26 @@ export const ServiceInfo = props => {
                   <TextInput
                     style={styles.textInput}
                     mode="outlined"
-                    label="Причина"
+                    label={T.t('title_service_reason')}
                     value={reason}
                     onChangeText={text => setReason(text)}
                   />
                   <TextInput
                     style={styles.textInput}
                     mode="outlined"
-                    label="Место"
+                    label={T.t('title_service_place')}
                     value={stockroom}
                     onChangeText={text => setStockroom(text)}
                   />
                   <View style={styles.buttonsBlock}>
                     <View style={styles.buttonBlock}>
-                      <DarkButton text={'Отправить'} onPress={sendSercive} />
+                      <DarkButton text={T.t('send')} onPress={sendSercive} />
                     </View>
                   </View>
                 </>
               )}
               <View style={styles.buttonBlock}>
-                <DarkButton text={'Отмена'} onPress={againScan} />
+                <DarkButton text={T.t('cancel')} onPress={againScan} />
               </View>
             </View>
           </View>

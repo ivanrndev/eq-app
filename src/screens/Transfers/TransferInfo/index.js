@@ -7,6 +7,7 @@ import {
   ScrollView,
 } from 'react-native';
 import {Card, IconButton} from 'react-native-paper';
+import T from '../../../i18n';
 // components
 import Appbar from '../../../components/Appbar';
 import DarkButton from '../../../components/Buttons/DarkButton';
@@ -32,7 +33,7 @@ const TransferInfo = props => {
         arrow={true}
         newScan={true}
         goTo={'Transfers'}
-        title={'Информация о заявке'}
+        title={T.t('detail_info')}
       />
       <SafeAreaView />
       <View style={styles.body}>
@@ -52,7 +53,7 @@ const TransferInfo = props => {
           <View style={styles.button}>
             <View style={styles.buttonBlock}>
               <DarkButton
-                text={'К списку'}
+                text={T.t('to_list')}
                 onPress={() => props.navigation.navigate('Transfers')}
               />
             </View>

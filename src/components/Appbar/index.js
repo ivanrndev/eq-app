@@ -4,6 +4,7 @@ import {withRouter} from 'react-router-native';
 import {useDispatch} from 'react-redux';
 import {StyleSheet, View} from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
+import T from '../../i18n';
 
 import {
   allowNewScan,
@@ -90,7 +91,7 @@ const AppbarCustom = props => {
           visible={isConnection}
           onDismiss={() => {}}
           action={() => {}}>
-          Ошибка соединения. Проверьте интернет
+          {T.t('error_internet')}
         </Snackbar>
       </Portal>
     </>

@@ -9,6 +9,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
 } from 'react-native';
+import T from '../../i18n';
 import {Card, Title, Paragraph, TextInput, Button} from 'react-native-paper';
 // components
 import Appbar from '../../components/Appbar';
@@ -41,11 +42,6 @@ const Comments = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [comments.addNewComment]);
 
-  //   const getMoreComments = () => {
-  //     dispatch(loadMoreComments(true));
-  //     dispatch(getComments(props.navigation, comments.itemId, comments.offSet));
-  //   };
-
   return (
     <>
       <Appbar
@@ -54,7 +50,7 @@ const Comments = props => {
         clearComments={true}
         newScan={false}
         goTo={'IdentInfo'}
-        title={'Комментарии'}
+        title={T.t('title_comments')}
       />
       <SafeAreaView />
       <View style={styles.body}>
@@ -70,7 +66,8 @@ const Comments = props => {
                 }}>
                 {showEmptyError && (
                   <Paragraph style={styles.text}>
-                    По ТМЦ {scan.currentScan} комментарии отсутствуют
+                    {T.t('format_comments_empty_first')} {scan.currentScan}{' '}
+                    {T.t('format_comments_empty_second')}
                   </Paragraph>
                 )}
                 {!error
@@ -81,14 +78,15 @@ const Comments = props => {
                         onPress={() => {}}>
                         <Card.Content>
                           <Paragraph style={styles.paragraph}>
-                            От кого: {item.user.firstName} {item.user.lastName}
+                            {T.t('transfer_from')}: {item.user.firstName}{' '}
+                            {item.user.lastName}
                           </Paragraph>
                           <Paragraph style={styles.paragraph}>
-                            Дата:{' '}
+                            {T.t('title_date')}:{' '}
                             {moment(item.updatedAt).format('YYYY-MM-DD HH:mm')}
                           </Paragraph>
                           <Paragraph style={styles.paragraph}>
-                            Комментарий: "{item.message}"
+                            {T.t('title_comment')}: "{item.message}"
                           </Paragraph>
                         </Card.Content>
                       </Card>
@@ -102,7 +100,7 @@ const Comments = props => {
                 multiline={true}
                 style={styles.textInput}
                 mode="outlined"
-                label="Новый комментарий"
+                label={T.t('title_comment_new')}
                 value={text}
                 onChangeText={text => setText(text)}
               />

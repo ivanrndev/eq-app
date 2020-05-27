@@ -7,6 +7,7 @@ import {
   ScrollView,
 } from 'react-native';
 import {Card, Title, Searchbar, Paragraph} from 'react-native-paper';
+import T from '../../../../i18n';
 // components
 import Appbar from '../../../../components/Appbar';
 import {getProperErrorMessage} from '../../../../utils/helpers.js';
@@ -48,22 +49,20 @@ const GiveList = props => {
         arrow={true}
         newScan={false}
         goTo={'AcceptGive'}
-        title={'Выберите пользователя'}
+        title={T.t('select_user')}
       />
       <SafeAreaView />
       <View style={styles.body}>
         {!error && (
           <Searchbar
-            placeholder="Поиск"
+            placeholder={T.t('search')}
             onChangeText={query => itemSearch(query)}
             value={search}
             style={styles.search}
           />
         )}
         {showEmptyError && (
-          <Paragraph style={styles.text}>
-            У Вас нет доступных пользователей
-          </Paragraph>
+          <Paragraph style={styles.text}>{T.t('no_users')}</Paragraph>
         )}
         {!error && (
           <>

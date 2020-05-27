@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
   StyleSheet,
   View,
@@ -8,8 +8,10 @@ import {
   Linking,
   KeyboardAvoidingView,
 } from 'react-native';
+import {useFocusEffect} from '@react-navigation/native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {isEmpty} from 'lodash';
+import T from '../../i18n';
 // utils
 import {validateEmail} from '../../utils/validateEmail.js';
 import {ucFirst} from '../../utils/helpers.js';
@@ -34,13 +36,24 @@ const Auth = props => {
   const store = useSelector(state => state.auth);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('Неверные данные');
+  const [error, setError] = useState(T.t('access_denied'));
   const [loginError, setLoginError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [disabled, setDisabled] = useState(true);
 
   const handelLogin = e => setEmail(ucFirst(e.trim()));
   const handelPass = e => setPassword(e.trim());
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        setError(T.t('access_denied'));
+        dispatch(statusError(false));
+        setLoginError(false);
+        setPasswordError(false);
+      };
+    }, []),
+  );
 
   // check disabled button
   useEffect(() => {
@@ -110,11 +123,11 @@ const Auth = props => {
     <>
       <View style={styles.body}>
         <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={30}>
-          <Title style={styles.title}>Авторизация</Title>
+          <Title style={styles.title}>{T.t('auth')}</Title>
           <TextInput
             onChangeText={e => handelLogin(e)}
             style={styles.input}
-            label="Логин"
+            label={T.t('login')}
             error={loginError ? true : false}
             mode="outlined"
           />
@@ -122,7 +135,7 @@ const Auth = props => {
             onChangeText={e => handelPass(e)}
             secureTextEntry={true}
             style={styles.input}
-            label="Пароль"
+            label={T.t('password')}
             error={passwordError ? true : false}
             mode="outlined"
           />
@@ -137,7 +150,7 @@ const Auth = props => {
           {!store.isLoad && (
             <View style={styles.buttonBlock}>
               <DarkButton
-                text={'Войти'}
+                text={T.t('come_in')}
                 onPress={handleSubmit}
                 disabled={disabled}
               />
@@ -145,28 +158,28 @@ const Auth = props => {
           )}
         </KeyboardAvoidingView>
         <Text style={styles.textRegister}>
-          Ещё нет аккаунта?{' '}
+          {T.t('registration_label')}{' '}
           <Text
             onPress={() => {
               Linking.openURL('http://admin.eqman.co/auth/register');
             }}
             style={styles.textBlue}>
-            Зарегистрируйся
+            {T.t('registration_btn')}
           </Text>
         </Text>
         <Snackbar
           style={styles.snackbar}
           visible={!!store.isError}
           onDismiss={() => {
-            setError('Неверные данные');
+            setError(T.t('access_denied'));
             setLoginError(false);
             setPasswordError(false);
             dispatch(statusError(false));
           }}
           action={{
-            label: 'Закрыть',
+            label: T.t('close'),
             onPress: () => {
-              setError('Неверные данные');
+              setError(T.t('access_denied'));
               dispatch(statusError(false));
             },
           }}>

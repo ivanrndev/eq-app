@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import moment from 'moment';
 import AsyncStorage from '@react-native-community/async-storage';
+import T from '../../i18n';
 import {
   StyleSheet,
   View,
@@ -56,7 +57,7 @@ const Transfers = props => {
         newScan={true}
         clearTransfer={true}
         goTo={'AcceptGive'}
-        title={'История заявок'}
+        title={T.t('history_of_transfer')}
       />
       <SafeAreaView />
       <View style={styles.body}>
@@ -81,22 +82,23 @@ const Transfers = props => {
                       }>
                       <Card.Content>
                         <Paragraph style={styles.paragraph}>
-                          От кого: {item.sender.firstName}{' '}
+                          {T.t('transfer_from')}: {item.sender.firstName}{' '}
                           {item.sender.lastName}
                         </Paragraph>
                         <Paragraph style={styles.paragraph}>
-                          Создано:{' '}
+                          {T.t('transfer_created_at')}:{' '}
                           {moment(item.createdAt).format('YYYY-MM-DD HH:mm')}
                         </Paragraph>
                         <Paragraph style={styles.paragraph}>
-                          Колличество: {item.items.length}
+                          {T.t('transfer_count')}: {item.items.length}
                         </Paragraph>
                         <Paragraph style={styles.paragraph}>
-                          Кому: {item.recipient.firstName}{' '}
+                          {T.t('transfer_to')}: {item.recipient.firstName}{' '}
                           {item.recipient.lastName}
                         </Paragraph>
                         <Paragraph style={styles.paragraph}>
-                          Статус: {getProperTransferStatus(item.status)}
+                          {T.t('transfer_status')}:{' '}
+                          {getProperTransferStatus(item.status)}
                         </Paragraph>
                       </Card.Content>
                     </Card>
@@ -110,7 +112,7 @@ const Transfers = props => {
                       mode="Text"
                       color="#22215B"
                       onPress={getMoreItems}>
-                       Загрузить еще
+                       {T.t('load_more')}
                     </Button>
                   )}
                   {transfers.loadMoreTransfers && (

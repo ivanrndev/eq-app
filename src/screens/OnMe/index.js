@@ -14,6 +14,7 @@ import {
   Button,
   ActivityIndicator,
 } from 'react-native-paper';
+import T from '../../i18n';
 // components
 import Appbar from '../../components/Appbar';
 import {getProperErrorMessage} from '../../utils/helpers.js';
@@ -51,13 +52,13 @@ const OnMe = props => {
         arrow={true}
         newScan={true}
         goTo={'Home'}
-        title={'Мой подотчет'}
+        title={T.t('who_i')}
       />
       <SafeAreaView />
       <View style={styles.body}>
         {!error && (
           <Searchbar
-            placeholder="Поиск"
+            placeholder={T.t('search')}
             onChangeText={query => itemSearch(query)}
             value={search}
             style={styles.search}
@@ -70,7 +71,7 @@ const OnMe = props => {
                 <ScrollView>
                   {showEmptyError && (
                     <Paragraph style={styles.text}>
-                      На данный момент нет ТМЦ, которые за Вами числятся
+                      {T.t('who_i_info')}
                     </Paragraph>
                   )}
                   {!error
@@ -128,7 +129,7 @@ const OnMe = props => {
                         mode="Text"
                         color="#22215B"
                         onPress={getMoreItems}>
-                         Загрузить еще
+                         {T.t('load_more')}
                       </Button>
                     )}
                     {onMe.myloadMore && (

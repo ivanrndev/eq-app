@@ -14,6 +14,7 @@ import {
   Button,
   ActivityIndicator,
 } from 'react-native-paper';
+import T from '../../../i18n';
 import AsyncStorage from '@react-native-community/async-storage';
 // components
 import Appbar from '../../../components/Appbar';
@@ -51,7 +52,7 @@ const Accept = props => {
         newScan={true}
         clearBidList={true}
         goTo={'AcceptGive'}
-        title={'Выберите заявку'}
+        title={T.t('title_choose')}
       />
       <SafeAreaView />
       <View style={styles.body}>
@@ -61,7 +62,7 @@ const Accept = props => {
               <ScrollView>
                 {showEmptyError && (
                   <Paragraph style={styles.text}>
-                    На данный момент нет доступных заявок
+                    {T.t('no_available')}
                   </Paragraph>
                 )}
                 {!error
@@ -74,18 +75,19 @@ const Accept = props => {
                         }>
                         <Card.Content>
                           <Title style={styles.cardTitle}>
-                            Отправитель: {item.sender.firstName}{' '}
+                            {T.t('transfer_from')}: {item.sender.firstName}{' '}
                             {item.sender.lastName}
                           </Title>
                           <Paragraph style={styles.paragraph}>
-                            Cтатус: {getProperTransferStatus(item.status)}
+                            {T.t('transfer_status')}:{' '}
+                            {getProperTransferStatus(item.status)}
                           </Paragraph>
                           <Paragraph style={styles.paragraph}>
-                            Дата операции:{' '}
+                            {T.t('title_date')}:{' '}
                             {moment(item.createdAt).format('YYYY-MM-DD HH:mm')}
                           </Paragraph>
                           <Paragraph style={styles.paragraph}>
-                            Колличество ТМЦ: {item.items.length}
+                            {T.t('transfer_count')}: {item.items.length}
                           </Paragraph>
                         </Card.Content>
                       </Card>
@@ -101,7 +103,7 @@ const Accept = props => {
                     mode="Text"
                     color="#22215B"
                     onPress={getMoreItems}>
-                     Загрузить еще
+                     {T.t('load_more')}
                   </Button>
                 )}
                 {accept.acceptloadMore && (

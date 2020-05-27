@@ -12,6 +12,7 @@ import {Button} from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
 import {useDispatch} from 'react-redux';
 import {logOut} from '../../actions/actions.js';
+import T from '../../i18n';
 
 const CustomDrawer = props => {
   const dispatch = useDispatch();
@@ -34,16 +35,6 @@ const CustomDrawer = props => {
         title: 'EqMan',
         message: 'EqMan | http://eqman.co/',
       });
-
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          // shared with activity type of result.activityType
-        } else {
-          // shared
-        }
-      } else if (result.action === Share.dismissedAction) {
-        // dismissed
-      }
     } catch (error) {
       alert(error.message);
     }
@@ -66,7 +57,7 @@ const CustomDrawer = props => {
           onPress={() => {
             Linking.openURL('http://admin.eqman.co/auth/login');
           }}>
-          Админ панель
+          {T.t('admin_panel')}
         </Button>
       )}
       <Button
@@ -75,8 +66,8 @@ const CustomDrawer = props => {
         icon="settings"
         color="#22215B"
         mode="outlined"
-        onPress={() => {}}>
-        Настройки
+        onPress={() => props.navigation.navigate('Settings')}>
+        {T.t('settings')}
       </Button>
       <Button
         style={styles.buttton}
@@ -85,16 +76,16 @@ const CustomDrawer = props => {
         color="#22215B"
         mode="outlined"
         onPress={handelShare}>
-        Поделиться
+        {T.t('share')}
       </Button>
       <Button
         style={styles.butttonBotttom}
         contentStyle={styles.contentButton}
         icon="logout"
-        color="#22215B"
+        color="#ef5466"
         mode="outlined"
         onPress={() => dispatch(logOut(props.navigation))}>
-        Выход
+        {T.t('logout')}
       </Button>
     </>
   );
@@ -104,7 +95,7 @@ export default CustomDrawer;
 
 const styles = StyleSheet.create({
   user: {
-    height: Dimensions.get('window').height / 10,
+    height: Dimensions.get('window').height / 9,
     backgroundColor: '#EDF6FF',
     padding: 20,
     display: 'flex',
@@ -121,6 +112,14 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     color: '#22215B',
   },
+  butttonBotttom: {
+    position: 'absolute',
+    bottom: 30,
+    fontSize: 13,
+    width: '100%',
+    borderRadius: 0,
+    borderColor: 'white',
+  },
   buttton: {
     display: 'flex',
     alignItems: 'center',
@@ -128,19 +127,13 @@ const styles = StyleSheet.create({
     fontSize: 13,
     width: '100%',
     borderRadius: 0,
-  },
-  butttonBotttom: {
-    position: 'absolute',
-    bottom: 30,
-    display: 'flex',
-    alignItems: 'center',
-    marginTop: 10,
-    fontSize: 13,
-    width: '100%',
-    borderRadius: 0,
+    borderColor: 'white',
   },
   contentButton: {
     height: Dimensions.get('window').height / 18,
-    width: Dimensions.get('window').width / 1.47,
+    width: 280,
+    display: 'flex',
+    justifyContent: 'flex-start',
+    paddingLeft: 20,
   },
 });

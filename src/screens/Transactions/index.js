@@ -14,6 +14,7 @@ import {
   ActivityIndicator,
   Button,
 } from 'react-native-paper';
+import T from '../../i18n';
 import AsyncStorage from '@react-native-community/async-storage';
 // components
 import Appbar from '../../components/Appbar';
@@ -61,7 +62,7 @@ const Transactions = props => {
         newScan={false}
         goTo={'back'}
         clearTransaction={true}
-        title={'Транзакции'}
+        title={T.t('title_history_of_transaction')}
       />
       <SafeAreaView />
       <View style={styles.body}>
@@ -71,7 +72,7 @@ const Transactions = props => {
               <ScrollView>
                 {showEmptyError && (
                   <Paragraph style={styles.text}>
-                    Выдача и прием ТМЦ пока не производились
+                    {T.t('transaction_info')}
                   </Paragraph>
                 )}
                 {!error &&
@@ -79,18 +80,18 @@ const Transactions = props => {
                     <Card style={styles.card} key={index} onPress={() => {}}>
                       <Card.Content>
                         <Paragraph style={styles.paragraph}>
-                          Идентификатор: {item.item.code}
+                          {T.t('detail_code')}: {item.item.code}
                         </Paragraph>
                         <Paragraph style={styles.paragraph}>
-                          Дата операции:{' '}
+                          {T.t('title_date')}:{' '}
                           {moment(item.updatedAt).format('YYYY-MM-DD HH:mm')}
                         </Paragraph>
                         <Paragraph style={styles.paragraph}>
-                          Кто проводил: {item.user.firstName}{' '}
+                          {T.t('transfer_from')}: {item.user.firstName}{' '}
                           {item.user.lastName}
                         </Paragraph>
                         <Paragraph style={styles.paragraph}>
-                          Инфо: {getDescription(item, role)}
+                          {T.t('info')}: {getDescription(item, role)}
                         </Paragraph>
                       </Card.Content>
                     </Card>
@@ -104,7 +105,7 @@ const Transactions = props => {
                       mode="Text"
                       color="#22215B"
                       onPress={getMoreItems}>
-                       Загрузить еще
+                       {T.t('load_more')}
                     </Button>
                   )}
                   {transactions.loadMoreTransaction && (

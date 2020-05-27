@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 // settings
 export const LOADER = 'LOADER';
+export const LANG = 'LANG';
 
 // auth
 export const LOGUT = 'LOGUT';

@@ -8,6 +8,7 @@ import {
   ScrollView,
 } from 'react-native';
 import {Card, IconButton, Paragraph, Snackbar} from 'react-native-paper';
+import T from '../../../../i18n';
 // components
 import Appbar from '../../../../components/Appbar';
 import {getProperErrorTransfer} from '../../../../utils/helpers.js';
@@ -33,7 +34,11 @@ const GiveListCheck = props => {
 
   useEffect(() => {
     if (give.userRole === scan.scanUserRole) {
-      setError(`ТМЦ "${scan.currentScan}" уже у выбранного МОЛ.`);
+      setError(
+        `${T.t('give_alredy_user_first')} "${scan.currentScan}" ${T.t(
+          'give_alredy_user_second',
+        )}`,
+      );
       deleteItem(scan.selectGiveId);
     }
   }, [scan.selectGiveId]);
@@ -80,15 +85,13 @@ const GiveListCheck = props => {
         arrow={true}
         newScan={true}
         goTo={'GiveList'}
-        title={'Создание заявки'}
+        title={T.t('create_request')}
       />
       <SafeAreaView />
       <View style={styles.body}>
         <ScrollView>
           {showEmptyError && (
-            <Paragraph style={styles.text}>
-              У Вас нет ТМЦ доступных к передаче
-            </Paragraph>
+            <Paragraph style={styles.text}>{T.t('no_item_transfer')}</Paragraph>
           )}
           {scan.scanGiveList.map((item, index) => (
             <Card.Title
@@ -112,10 +115,10 @@ const GiveListCheck = props => {
         </ScrollView>
         <View style={styles.buttons}>
           <View style={styles.buttonBlock}>
-            <DarkButton text={'Добавить'} onPress={addMore} />
+            <DarkButton text={T.t('add')} onPress={addMore} />
           </View>
           <View style={styles.buttonBlock}>
-            <TransparentButton text={'Создать'} onPress={createTransfer} />
+            <TransparentButton text={T.t('create')} onPress={createTransfer} />
           </View>
         </View>
 
@@ -126,7 +129,7 @@ const GiveListCheck = props => {
             setError('');
           }}
           action={{
-            label: 'ЗАКРЫТЬ',
+            label: T.t('close'),
             onPress: () => {
               dispatch(allowNewScan(true));
               setError('');

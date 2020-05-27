@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, Dimensions, SafeAreaView, Text} from 'react-native';
 import {Title, Portal, ActivityIndicator} from 'react-native-paper';
+import T from '../../../i18n';
 // components
 import Appbar from '../../../components/Appbar';
 import DarkButton from '../../../components/Buttons/DarkButton';
@@ -61,7 +62,7 @@ export const WriteOffInfo = props => {
         newScan={true}
         arrow={true}
         goTo={'WriteOff'}
-        title={'Списать инструмент?'}
+        title={T.t('title_ban_question')}
       />
       <SafeAreaView />
       <Portal>
@@ -86,37 +87,49 @@ export const WriteOffInfo = props => {
             )}
             {!store.scanInfoError && (
               <View style={styles.info}>
-                <Title style={styles.title}>Списать?</Title>
+                <Title style={styles.title}>{T.t('title_ban_question')}?</Title>
                 {show && (
                   <View style={styles.info}>
                     {store.scanInfo && (
                       <Text style={styles.text}>
-                        Статус: {getStatus(store.scanInfo, role)}
+                        {T.t('transfer_status')}:{' '}
+                        {getStatus(store.scanInfo, role)}
                       </Text>
                     )}
                     {metaData && (
-                      <Text style={styles.text}>Название: {nameOfProduct}</Text>
+                      <Text style={styles.text}>
+                        {T.t('detail_title')}: {nameOfProduct}
+                      </Text>
                     )}
                     {metaData.brand && (
-                      <Text style={styles.text}>Бренд: {metaData.brand}</Text>
+                      <Text style={styles.text}>
+                        {T.t('detail_brand')}: {metaData.brand}
+                      </Text>
                     )}
                     {metaData.model && (
-                      <Text style={styles.text}>Модель: {metaData.model}</Text>
+                      <Text style={styles.text}>
+                        {T.t('detail_model')}: {metaData.model}
+                      </Text>
                     )}
                     {metaData.capacity && (
                       <Text style={styles.text}>
-                        Мощность: {metaData.capacity}
+                        {T.t('detail_capacity')}: {metaData.capacity}
                       </Text>
                     )}
                     {metaData.serial && (
-                      <Text style={styles.text}>Серия: {metaData.serial}</Text>
+                      <Text style={styles.text}>
+                        {T.t('detail_serial')}: {metaData.serial}
+                      </Text>
                     )}
                     {metaData.type && (
-                      <Text style={styles.text}>Тип: {metaData.type}</Text>
+                      <Text style={styles.text}>
+                        {T.t('detail_type')}: {metaData.type}
+                      </Text>
                     )}
                     {store.scanInfo.person && (
                       <Text style={styles.text}>
-                        Закреплен на: {store.scanInfo.person.firstName}{' '}
+                        {T.t('detail_person')}:{' '}
+                        {store.scanInfo.person.firstName}{' '}
                         {store.scanInfo.person.lastName}
                       </Text>
                     )}
@@ -128,11 +141,11 @@ export const WriteOffInfo = props => {
           <View style={styles.buttons}>
             {!store.scanInfoError && (
               <View style={styles.buttonBlock}>
-                <DarkButton text={'Списать'} onPress={writteOff} />
+                <DarkButton text={T.t('ban_btn')} onPress={writteOff} />
               </View>
             )}
             <View style={styles.buttonBlock}>
-              <DarkButton text={'Отмена'} onPress={againScan} />
+              <DarkButton text={T.t('cancel')} onPress={againScan} />
             </View>
           </View>
         </View>

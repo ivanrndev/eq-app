@@ -1,6 +1,7 @@
 import React from 'react';
 import {StyleSheet, View, Dimensions, SafeAreaView} from 'react-native';
-import {Button, Title} from 'react-native-paper';
+import {Title} from 'react-native-paper';
+import T from '../../../../i18n';
 // components
 import Appbar from '../../../../components/Appbar';
 import DarkButton from '../../../../components/Buttons/DarkButton';
@@ -38,7 +39,7 @@ export const AcceptFinish = props => {
         newScan={true}
         arrow={true}
         goTo={'Home'}
-        title={'Заявка'}
+        title={T.t('title_accept_bid')}
         alreadyScannedBids={true}
         clearBidList={true}
       />
@@ -47,21 +48,25 @@ export const AcceptFinish = props => {
         <View style={styles.container}>
           {!!error && (
             <View style={styles.info}>
-              <Title style={styles.titleError}>Заявка не принята</Title>
+              <Title style={styles.titleError}>
+                {T.t('title_request_not_accepted')}
+              </Title>
             </View>
           )}
           {!error && (
             <View style={styles.info}>
-              <Title style={styles.title}>Заявка принята</Title>
+              <Title style={styles.title}>
+                {T.t('title_request_accepted')}
+              </Title>
             </View>
           )}
           {!error ? (
             <View style={styles.buttonBlock}>
-              <DarkButton text={'Меню'} onPress={goMenu} />
+              <DarkButton text={T.t('menu')} onPress={goMenu} />
             </View>
           ) : (
             <View style={styles.buttonBlock}>
-              <DarkButton text={'К списку заявок'} onPress={goList} />
+              <DarkButton text={T.t('to_list')} onPress={goList} />
             </View>
           )}
         </View>

@@ -6,6 +6,7 @@ import {
   KeyboardAvoidingView,
   Keyboard,
 } from 'react-native';
+import T from '../../i18n';
 import {RNCamera} from 'react-native-camera';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {
@@ -62,16 +63,14 @@ const Scanner = props => {
     }
   }, [customId]);
 
-  const text = props.text
-    ? 'Введите новый идентификатор ТМЦ'
-    : 'Введитее идентификатор';
+  const text = props.text ? T.t('input_detail_new') : T.t('input_detail');
 
   const onSuccess = e => {
     if (store.isNewScan) {
       let cyrillicRegular = /[а-яА-ЯЁё]/;
       let cyrillicFilterId = cyrillicRegular.exec(e.data);
       if (cyrillicFilterId) {
-        setErrorText('Используйте только латинские буквы');
+        setErrorText(T.t('latin_info'));
         setIsSnackbar(true);
       } else {
         let finishRegular = /^[a-z]{1,2}[0-9]{4,5}$/g;
@@ -89,7 +88,7 @@ const Scanner = props => {
             ),
           );
         } else {
-          setErrorText('Неверный фомат ТМЦ');
+          setErrorText(T.t('wrong_format_info'));
           setIsSnackbar(true);
         }
       }
@@ -147,14 +146,14 @@ const Scanner = props => {
                       <TextInput
                         onChangeText={e => setCustomId(e.trim().toLowerCase())}
                         style={styles.input}
-                        label="ТМЦ"
+                        label={T.t('qr_code')}
                         mode="outlined"
                       />
                     </Dialog.Content>
                     <Dialog.Actions style={styles.buttonFind}>
                       <View style={styles.buttonBlock}>
                         <DarkButton
-                          text={'Найти'}
+                          text={T.t('find')}
                           onPress={handelCurrentScan}
                           disabled={disabled}
                         />
@@ -167,7 +166,7 @@ const Scanner = props => {
                   visible={!!isSnackbar}
                   onDismiss={() => setIsSnackbar(false)}
                   action={{
-                    label: 'Закрыть',
+                    label: T.t('close'),
                     onPress: () => setIsSnackbar(false),
                   }}>
                   {errorText}
@@ -176,11 +175,11 @@ const Scanner = props => {
               <View style={styles.buttons}>
                 <View style={styles.buttonBlock}>
                   <DarkButton
-                    text={'Ввести код вручную'}
+                    text={T.t('input_code')}
                     onPress={() => dispatch(dialogInput(!store.dialogInput))}
                   />
                   <TransparentButton
-                    text={'Освещение'}
+                    text={T.t('flash')}
                     onPress={handleOnFlashMode}
                   />
                 </View>

@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
 import {isEmpty, isEqual} from 'lodash';
+import T from '../../../../i18n';
 import {
   StyleSheet,
   View,
@@ -121,7 +122,7 @@ const AcceptList = props => {
         clearUserAcceptBid={true}
         alreadyScannedBids={true}
         goTo={'Accept'}
-        title={'ТМЦ в заявке'}
+        title={T.t('accept')}
       />
       <SafeAreaView />
       <Portal>
@@ -139,8 +140,8 @@ const AcceptList = props => {
       <View style={styles.body}>
         <ScrollView>
           {showEmptyError && (
-            <Paragraph style={styles.text}>
-              ТМЦ не были добавлены в заявку
+            <Paragraph style={styles.title}>
+              {T.t('accept_not_added')}
             </Paragraph>
           )}
           {!isEmpty(bidItems)
@@ -168,23 +169,25 @@ const AcceptList = props => {
             : null}
         </ScrollView>
         <>
-          {/*
-          СКАНИРОВАТЬ    ОТМЕНА
-          ПРИНЯТЬ        ОТМЕНА
-          */}
           <View style={styles.buttons}>
             {showButtonsScan && (
               <View style={styles.buttonBlock}>
-                <DarkButton text={'Сканировать'} onPress={makeScan} />
+                <DarkButton
+                  text={T.t('title_continued_accept')}
+                  onPress={makeScan}
+                />
               </View>
             )}
             {!showButtonsScan && (
               <View style={styles.buttonBlock}>
-                <DarkButton text={'Принять'} onPress={() => makeAcceptBid()} />
+                <DarkButton
+                  text={T.t('title_accept_bid')}
+                  onPress={() => makeAcceptBid()}
+                />
               </View>
             )}
             <View style={styles.buttonBlock}>
-              <TransparentButton text={'Отменить'} onPress={cancelScan} />
+              <TransparentButton text={T.t('cancel')} onPress={cancelScan} />
             </View>
           </View>
         </>
@@ -194,7 +197,7 @@ const AcceptList = props => {
             setError('');
           }}
           action={{
-            label: 'ЗАКРЫТЬ',
+            label: T.t('close'),
             onPress: () => {
               setError('');
             },

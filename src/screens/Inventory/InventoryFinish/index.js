@@ -2,6 +2,7 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, Dimensions, SafeAreaView} from 'react-native';
 import {Title, Portal, ActivityIndicator} from 'react-native-paper';
+import T from '../../../i18n';
 // components
 import Appbar from '../../../components/Appbar';
 import {getInventoryMesageError} from '../../../utils/helpers.js';
@@ -69,7 +70,7 @@ export const InventoryFinish = props => {
         newScan={true}
         arrow={true}
         goTo={'InventoryScaner'}
-        title={'Инвентаризация'}
+        title={T.t('inventorization')}
         alreadyScanned={true}
         clearBidList={true}
       />
@@ -89,12 +90,15 @@ export const InventoryFinish = props => {
 
       <View style={styles.body}>
         <View style={styles.container}>
-          <Title style={styles.title}>Отсканировать еще?</Title>
+          <Title style={styles.title}>{T.t('scan_more')}?</Title>
           {!!error && <Title style={styles.titleError}>{error}</Title>}
           <View style={styles.buttons}>
             <View style={styles.buttonBlock}>
-              <DarkButton text={'Еще'} onPress={more} />
-              <DarkButton text={'Завершить'} onPress={endScan} />
+              <DarkButton
+                text={T.t('title_inventorization_question')}
+                onPress={more}
+              />
+              <DarkButton text={T.t('complete')} onPress={endScan} />
             </View>
           </View>
         </View>

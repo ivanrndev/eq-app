@@ -1,6 +1,7 @@
 import React from 'react';
 import {StyleSheet, View, Dimensions, SafeAreaView} from 'react-native';
 // components
+import T from '../../../i18n';
 import Appbar from '../../../components/Appbar';
 import DarkButton from '../../../components/Buttons/DarkButton';
 import TransparentButton from '../../../components/Buttons/TransparentButton';
@@ -13,20 +14,20 @@ const ServiceMenu = props => {
         arrow={true}
         newScan={true}
         goTo={'Home'}
-        title={'Отправка/возврат из сервиса'}
+        title={T.t('service')}
       />
       <SafeAreaView />
       <View style={styles.body}>
         <View style={styles.buttons}>
           <View style={styles.buttonBlock}>
             <DarkButton
-              text={'Отправить в сервис'}
+              text={T.t('send_service')}
               onPress={() => props.navigation.navigate('Service')}
             />
           </View>
           <View style={styles.buttonBlock}>
             <TransparentButton
-              text={'Вернуть из сервиса'}
+              text={T.t('back_service')}
               onPress={() => props.navigation.navigate('BackScanner')}
             />
           </View>

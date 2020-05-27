@@ -1,6 +1,7 @@
 import React, {useCallback, useState} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
 import {StyleSheet, View, Dimensions, SafeAreaView} from 'react-native';
+import T from '../../../i18n';
 // components
 import Appbar from '../../../components/Appbar';
 import Scanner from '../../../components/Scanner';
@@ -24,7 +25,7 @@ const InventoryScaner = props => {
         arrow={true}
         goTo={'Inventory'}
         clearGiveList={true}
-        title={'Инвентаризация'}
+        title={T.t('inventorization')}
       />
       <SafeAreaView />
       <View style={styles.body}>
