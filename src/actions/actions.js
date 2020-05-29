@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage';
+import I18n from '../i18n';
 import axios from '../utils/axios';
 import {API_URL, LOGIN_URL} from '../constants/auth.js';
 import {getProperError, actionCheckError} from '../utils/helpers.js';
@@ -12,6 +13,7 @@ import {
   ALLOW_NEW_SCAN,
   LOADER,
   LANG,
+  HELP,
   SAVE_CURRENT_SCAN_INFO,
   SAVE_CURRENT_SCAN_INFO_LIST,
   CLEAR_SCAN_GIVE_LIST,
@@ -86,6 +88,13 @@ export const lang = language => dispatch => {
   });
 };
 
+export const helps = status => dispatch => {
+  dispatch({
+    type: HELP,
+    payload: {help: status},
+  });
+};
+
 // Auth actions
 export const userPostFetch = ({email, password}) => dispatch => {
   return axios
@@ -126,6 +135,7 @@ export const logOut = (nav, ifNav = true) => dispatch => {
   AsyncStorage.removeItem('email');
   AsyncStorage.removeItem('firstName');
   AsyncStorage.removeItem('lastName');
+  AsyncStorage.removeItem('help');
   dispatch({
     type: LOGUT,
     payload: {
@@ -156,7 +166,16 @@ export const currentUser = () => dispatch => {
       if (resp.data.company) {
         AsyncStorage.setItem('userId', resp.data._id);
       }
-      AsyncStorage.setItem('language', 'en');
+
+      const currentLocale = I18n.currentLocale();
+      if (currentLocale === 'ru' || currentLocale === 'ru-US') {
+        AsyncStorage.setItem('language', 'ru');
+      } else {
+        AsyncStorage.setItem('language', 'en');
+      }
+      console.log('currentLocale', currentLocale);
+      AsyncStorage.setItem('help', '1');
+      dispatch(helps(1));
     }
   });
 };

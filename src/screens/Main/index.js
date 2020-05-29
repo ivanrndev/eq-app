@@ -9,13 +9,20 @@ import T from '../../i18n';
 import I18n from '../../i18n';
 import {Portal, ActivityIndicator} from 'react-native-paper';
 import Button from '../../components/Buttons/Menu';
+import {copilot, walkthroughable, CopilotStep} from 'react-native-copilot';
+import {useDispatch} from 'react-redux';
+import {helps} from '../../actions/actions.js';
 
 const Main = props => {
+  const dispatch = useDispatch();
   const store = useSelector(state => state.auth);
   const settings = useSelector(state => state.settings);
+
   const [myRole, setMyRole] = useState();
   const [lang, setLang] = useState();
+  const CopilotText = walkthroughable(View);
 
+  // check is logOut
   useEffect(() => {
     AsyncStorage.getItem('token').then(token => {
       if (isEmpty(token)) {
@@ -25,12 +32,25 @@ const Main = props => {
     AsyncStorage.getItem('role').then(role => setMyRole(role));
   }, [store.isLogOut]);
 
+  // check is change language
   useEffect(() => {
     AsyncStorage.getItem('language').then(language => {
       I18n.locale = language;
+      I18n.defaultLocale = language;
       setLang(language);
     });
-  }, [lang]);
+  }, [settings.lang, lang]);
+
+  // check help
+  useEffect(() => {
+    AsyncStorage.getItem('help').then(help => {
+      if (help === '1') {
+        props.start();
+        AsyncStorage.setItem('help', '0');
+        dispatch(helps(0));
+      }
+    });
+  }, [settings.help]);
 
   return (
     <>
@@ -57,53 +77,87 @@ const Main = props => {
               </View>
             )}
           </Portal>
-          <Button
-            nav={props.navigation}
-            text={T.t('identification')}
-            route={'Ident'}
-            svg={'ident'}
-          />
-          <Button
-            nav={props.navigation}
-            text={T.t('mark')}
-            route={'Marking'}
-            svg={'marking'}
-          />
-          <Button
-            nav={props.navigation}
-            text={T.t('inventorization')}
-            getUserList={true}
-            svg={'inventory'}
-          />
-          <Button
-            nav={props.navigation}
-            text={T.t('give_accept')}
-            route={'AcceptGive'}
-            svg={'acceptGive'}
-          />
+          <CopilotStep text={T.t('ident_help')} order={1} name="Identification">
+            <CopilotText>
+              <Button
+                nav={props.navigation}
+                text={T.t('identification')}
+                route={'Ident'}
+                svg={'ident'}
+              />
+            </CopilotText>
+          </CopilotStep>
+          <CopilotStep text={T.t('mark_help')} order={2} name="Marking">
+            <CopilotText>
+              <Button
+                nav={props.navigation}
+                text={T.t('mark')}
+                route={'Marking'}
+                svg={'marking'}
+              />
+            </CopilotText>
+          </CopilotStep>
+          <CopilotStep text={T.t('invent_help')} order={3} name="Inventory">
+            <CopilotText>
+              <Button
+                nav={props.navigation}
+                text={T.t('inventorization')}
+                getUserList={true}
+                svg={'inventory'}
+              />
+            </CopilotText>
+          </CopilotStep>
+
+          <CopilotStep text={T.t('accept_help')} order={4} name="AcceptGive">
+            <CopilotText>
+              <Button
+                nav={props.navigation}
+                text={T.t('give_accept')}
+                route={'AcceptGive'}
+                svg={'acceptGive'}
+              />
+            </CopilotText>
+          </CopilotStep>
+
           {myRole !== 'worker' && (
             <>
-              <Button
-                nav={props.navigation}
-                text={T.t('service')}
-                route={'ServiceMenu'}
-                svg={'services'}
-              />
-              <Button
-                nav={props.navigation}
-                text={T.t('ban')}
-                route={'WriteOff'}
-                svg={'writeOff'}
-              />
+              <CopilotStep text={T.t('service_help')} order={5} name="Service">
+                <CopilotText>
+                  <Button
+                    nav={props.navigation}
+                    text={T.t('service')}
+                    route={'ServiceMenu'}
+                    svg={'services'}
+                  />
+                </CopilotText>
+              </CopilotStep>
+              <CopilotStep
+                text={T.t('write_off_help')}
+                order={6}
+                name="writeOff">
+                <CopilotText>
+                  <Button
+                    nav={props.navigation}
+                    text={T.t('ban')}
+                    route={'WriteOff'}
+                    svg={'writeOff'}
+                  />
+                </CopilotText>
+              </CopilotStep>
             </>
           )}
-          <Button
-            nav={props.navigation}
-            text={T.t('who_i')}
-            getItemsOnMe={true}
-            loader={true}
-            svg={'my'}
-          />
+
+          <CopilotStep text={T.t('my_account')} order={7} name="Who_i">
+            <CopilotText>
+              <Button
+                nav={props.navigation}
+                text={T.t('who_i')}
+                getItemsOnMe={true}
+                loader={true}
+                svg={'my'}
+              />
+            </CopilotText>
+          </CopilotStep>
         </View>
       </View>
     </>
@@ -132,4 +186,14 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Main;
+export default copilot({
+  animated: true,
+  backdropColor: 'rgba(72, 124, 168, 0.68)',
+  overlay: 'svg',
+  labels: {
+    previous: 'Назад',
+    next: 'Далее',
+    skip: 'Закрыть',
+    finish: 'Конец',
+  },
+})(Main);

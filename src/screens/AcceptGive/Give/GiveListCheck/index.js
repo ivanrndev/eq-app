@@ -117,9 +117,14 @@ const GiveListCheck = props => {
           <View style={styles.buttonBlock}>
             <DarkButton text={T.t('add')} onPress={addMore} />
           </View>
-          <View style={styles.buttonBlock}>
-            <TransparentButton text={T.t('create')} onPress={createTransfer} />
-          </View>
+          {scan.scanGiveList.length > 0 && (
+            <View style={styles.buttonBlock}>
+              <TransparentButton
+                text={T.t('create')}
+                onPress={createTransfer}
+              />
+            </View>
+          )}
         </View>
 
         <Snackbar

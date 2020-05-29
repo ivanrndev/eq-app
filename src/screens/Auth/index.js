@@ -12,6 +12,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {isEmpty} from 'lodash';
 import T from '../../i18n';
+import I18n from '../../i18n';
 // utils
 import {validateEmail} from '../../utils/validateEmail.js';
 import {ucFirst} from '../../utils/helpers.js';

@@ -27,6 +27,13 @@ const Button = props => {
     if (props.loader) {
       dispatch(loader(true));
     }
+    if (props.loader) {
+      dispatch(loader(true));
+    }
+    if (props.onPress) {
+      props.onPress();
+    }
+    console.log(props.text);
   };
 
   return (

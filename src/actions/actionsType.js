@@ -2,6 +2,7 @@
 // settings
 export const LOADER = 'LOADER';
 export const LANG = 'LANG';
+export const HELP = 'HELP';
 
 // auth
 export const LOGUT = 'LOGUT';

@@ -11,7 +11,7 @@ import {
 import {Button} from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
 import {useDispatch} from 'react-redux';
-import {logOut} from '../../actions/actions.js';
+import {logOut, helps} from '../../actions/actions.js';
 import T from '../../i18n';
 
 const CustomDrawer = props => {
@@ -29,6 +29,7 @@ const CustomDrawer = props => {
   );
 
   const ifRole = role === 'user' || role === 'worker' ? false : true;
+
   const handelShare = async () => {
     try {
       const result = await Share.share({
@@ -38,6 +39,12 @@ const CustomDrawer = props => {
     } catch (error) {
       alert(error.message);
     }
+  };
+
+  const handelHelp = () => {
+    props.navigation.navigate('Home');
+    AsyncStorage.setItem('help', '1');
+    dispatch(helps(1));
   };
 
   return (
@@ -77,6 +84,15 @@ const CustomDrawer = props => {
         mode="outlined"
         onPress={handelShare}>
         {T.t('share')}
+      </Button>
+      <Button
+        style={styles.buttton}
+        contentStyle={styles.contentButton}
+        icon="help"
+        color="#22215B"
+        mode="outlined"
+        onPress={handelHelp}>
+        {T.t('help')}
       </Button>
       <Button
         style={styles.butttonBotttom}
@@ -130,7 +146,9 @@ const styles = StyleSheet.create({
     borderColor: 'white',
   },
   contentButton: {
-    height: Dimensions.get('window').height / 18,
+    height: Dimensions.get('window').height / 10,
+    marginTop: -Dimensions.get('window').height / 45,
+    marginBottom: -Dimensions.get('window').height / 45,
     width: 280,
     display: 'flex',
     justifyContent: 'flex-start',

@@ -147,5 +147,13 @@
     "error_email_un_approved": "Email not verified",
     "error_password_incorrect": "Wrong password",
     "error_internet": "Connection error. Check internet",
-    "select_lang": "Choose language"
+    "select_lang": "Choose language",
+    "help": "Advices",
+    "ident_help": "Scan the QR code of the item and get detailed information about it",
+    "mark_help": "Label a new item or relabel it if QR code was lost or damaged",
+    "invent_help": "Just scan the QR code of the item, the inventory report will be in the Administrative Panel",
+    "accept_help": "Accept the item in your report or transfer it to another employee",
+    "service_help": "Send items to the service or making a return from the service",
+    "write_off_help": "Scan the QR code of items, if its further operation is impossible and it is subject to write-off",
+    "my_account": "Look at the items assigned to you"
   }

@@ -10,7 +10,16 @@ I18n.fallbacks = true;
 // Define the supported translations
 I18n.translations = {en, ru};
 const currentLocale = I18n.currentLocale();
-I18n.defaultLocale = 'en';
+
+// if (currentLocale === 'ru' || currentLocale === 'ru-US') {
+//   I18n.defaultLocale = 'ru';
+//   I18n.locale = 'ru';
+// } else {
+//   I18n.defaultLocale = 'en';
+//   I18n.locale = 'en';
+// }
+I18n.defaultLocale = currentLocale;
+// I18n.defaultLocale = I18n.currentLocale();
 
 // Is it a RTL language?
 export const isRTL =
