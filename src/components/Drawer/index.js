@@ -42,18 +42,22 @@ const CustomDrawer = props => {
   };
 
   const handelHelp = () => {
-    props.navigation.navigate('Home');
     AsyncStorage.setItem('help', '1');
     dispatch(helps(1));
+    props.navigation.reset({
+      routes: [{name: 'Home'}],
+    });
   };
 
   return (
     <>
       <SafeAreaView />
-      <View style={styles.user}>
-        <Text style={styles.title}>{`${firstName} ${lastName}`}</Text>
-        <Text style={styles.text}>{email}</Text>
-      </View>
+      {email && (
+        <View style={styles.user}>
+          <Text style={styles.title}>{`${firstName} ${lastName}`}</Text>
+          <Text style={styles.text}>{email}</Text>
+        </View>
+      )}
       {ifRole && (
         <Button
           style={styles.buttton}
@@ -67,15 +71,17 @@ const CustomDrawer = props => {
           {T.t('admin_panel')}
         </Button>
       )}
-      <Button
-        style={styles.buttton}
-        contentStyle={styles.contentButton}
-        icon="settings"
-        color="#22215B"
-        mode="outlined"
-        onPress={() => props.navigation.navigate('Settings')}>
-        {T.t('settings')}
-      </Button>
+      {email && (
+        <Button
+          style={styles.buttton}
+          contentStyle={styles.contentButton}
+          icon="settings"
+          color="#22215B"
+          mode="outlined"
+          onPress={() => props.navigation.navigate('Settings')}>
+          {T.t('settings')}
+        </Button>
+      )}
       <Button
         style={styles.buttton}
         contentStyle={styles.contentButton}
@@ -85,24 +91,28 @@ const CustomDrawer = props => {
         onPress={handelShare}>
         {T.t('share')}
       </Button>
-      <Button
-        style={styles.buttton}
-        contentStyle={styles.contentButton}
-        icon="help"
-        color="#22215B"
-        mode="outlined"
-        onPress={handelHelp}>
-        {T.t('help')}
-      </Button>
-      <Button
-        style={styles.butttonBotttom}
-        contentStyle={styles.contentButton}
-        icon="logout"
-        color="#ef5466"
-        mode="outlined"
-        onPress={() => dispatch(logOut(props.navigation))}>
-        {T.t('logout')}
-      </Button>
+      {email && (
+        <>
+          <Button
+            style={styles.buttton}
+            contentStyle={styles.contentButton}
+            icon="help"
+            color="#22215B"
+            mode="outlined"
+            onPress={handelHelp}>
+            {T.t('help')}
+          </Button>
+          <Button
+            style={styles.butttonBotttom}
+            contentStyle={styles.contentButton}
+            icon="logout"
+            color="#ef5466"
+            mode="outlined"
+            onPress={() => dispatch(logOut(props.navigation))}>
+            {T.t('logout')}
+          </Button>
+        </>
+      )}
     </>
   );
 };

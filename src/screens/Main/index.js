@@ -17,9 +17,8 @@ const Main = props => {
   const dispatch = useDispatch();
   const store = useSelector(state => state.auth);
   const settings = useSelector(state => state.settings);
-
   const [myRole, setMyRole] = useState();
-  const [lang, setLang] = useState();
+  // const [lang, setLang] = useState();
   const CopilotText = walkthroughable(View);
 
   // check is logOut
@@ -36,10 +35,10 @@ const Main = props => {
   useEffect(() => {
     AsyncStorage.getItem('language').then(language => {
       I18n.locale = language;
+      console.log('main language:', language);
       I18n.defaultLocale = language;
-      setLang(language);
     });
-  }, [settings.lang, lang]);
+  }, [settings.lang]);
 
   // check help
   useEffect(() => {
@@ -191,9 +190,9 @@ export default copilot({
   backdropColor: 'rgba(72, 124, 168, 0.68)',
   overlay: 'svg',
   labels: {
-    previous: 'Назад',
-    next: 'Далее',
-    skip: 'Закрыть',
-    finish: 'Конец',
+    previous: '  <  ',
+    next: '  >  ',
+    skip: 'x  ',
+    finish: '  x  ',
   },
 })(Main);

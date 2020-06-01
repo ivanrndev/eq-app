@@ -136,6 +136,7 @@ export const logOut = (nav, ifNav = true) => dispatch => {
   AsyncStorage.removeItem('firstName');
   AsyncStorage.removeItem('lastName');
   AsyncStorage.removeItem('help');
+  AsyncStorage.removeItem('language');
   dispatch({
     type: LOGUT,
     payload: {
@@ -148,7 +149,7 @@ export const logOut = (nav, ifNav = true) => dispatch => {
   }
 };
 
-export const currentUser = () => dispatch => {
+export const currentUser = props => dispatch => {
   return axios.get('/users/me').then(resp => {
     if (resp.status === 200) {
       if (resp.data.email) {
@@ -168,14 +169,23 @@ export const currentUser = () => dispatch => {
       }
 
       const currentLocale = I18n.currentLocale();
-      if (currentLocale === 'ru' || currentLocale === 'ru-US') {
+      console.log('currentLocale acttions:', currentLocale);
+      let language = '';
+      if (
+        currentLocale === 'ru' ||
+        currentLocale === 'ru-US' ||
+        currentLocale === 'ru-UA'
+      ) {
         AsyncStorage.setItem('language', 'ru');
+        language = 'ru';
       } else {
         AsyncStorage.setItem('language', 'en');
+        language = 'en';
       }
-      console.log('currentLocale', currentLocale);
       AsyncStorage.setItem('help', '1');
       dispatch(helps(1));
+      console.log('language acttions:', language);
+      dispatch(lang(language));
     }
   });
 };

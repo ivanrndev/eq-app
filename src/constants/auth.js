@@ -1,8 +1,8 @@
-// API URL PROD
-export const API_URL = 'http://167.71.54.196:4000/v1';
+// // API URL PROD
+// export const API_URL = 'http://167.71.54.196:4000/v1';
 
 // API URL TEST
-// export const API_URL = 'http://104.131.15.180:4000/v1';
+export const API_URL = 'http://104.131.15.180:4000/v1';
 
 // API End Points
 export const LOGIN_URL = `${API_URL}/auth/login`;
