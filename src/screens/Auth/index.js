@@ -41,6 +41,7 @@ const Auth = props => {
   const [loginError, setLoginError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [disabled, setDisabled] = useState(true);
+  const settings = useSelector(state => state.settings);
 
   const handelLogin = e => setEmail(ucFirst(e.trim()));
   const handelPass = e => setPassword(e.trim());

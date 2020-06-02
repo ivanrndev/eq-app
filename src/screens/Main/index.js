@@ -6,19 +6,18 @@ import Appbar from '../../components/Appbar';
 import {useSelector} from 'react-redux';
 import {isEmpty} from 'lodash';
 import T from '../../i18n';
-import I18n from '../../i18n';
 import {Portal, ActivityIndicator} from 'react-native-paper';
 import Button from '../../components/Buttons/Menu';
 import {copilot, walkthroughable, CopilotStep} from 'react-native-copilot';
 import {useDispatch} from 'react-redux';
 import {helps} from '../../actions/actions.js';
+import {menuSvg} from '../../utils/menuSvg.js';
 
 const Main = props => {
   const dispatch = useDispatch();
   const store = useSelector(state => state.auth);
   const settings = useSelector(state => state.settings);
   const [myRole, setMyRole] = useState();
-  // const [lang, setLang] = useState();
   const CopilotText = walkthroughable(View);
 
   // check is logOut
@@ -30,15 +29,6 @@ const Main = props => {
     });
     AsyncStorage.getItem('role').then(role => setMyRole(role));
   }, [store.isLogOut]);
-
-  // check is change language
-  useEffect(() => {
-    AsyncStorage.getItem('language').then(language => {
-      I18n.locale = language;
-      console.log('main language:', language);
-      I18n.defaultLocale = language;
-    });
-  }, [settings.lang]);
 
   // check help
   useEffect(() => {
@@ -190,9 +180,9 @@ export default copilot({
   backdropColor: 'rgba(72, 124, 168, 0.68)',
   overlay: 'svg',
   labels: {
-    previous: '  <  ',
-    next: '  >  ',
-    skip: 'x  ',
-    finish: '  x  ',
+    previous: <View>{menuSvg('left')}</View>,
+    next: <View>{menuSvg('right')}</View>,
+    skip: <View>{menuSvg('close')}</View>,
+    finish: <View>{menuSvg('close')}</View>,
   },
 })(Main);

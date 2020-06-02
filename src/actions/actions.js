@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import I18n from '../i18n';
 import axios from '../utils/axios';
 import {API_URL, LOGIN_URL} from '../constants/auth.js';
 import {getProperError, actionCheckError} from '../utils/helpers.js';
@@ -168,24 +167,9 @@ export const currentUser = props => dispatch => {
         AsyncStorage.setItem('userId', resp.data._id);
       }
 
-      const currentLocale = I18n.currentLocale();
-      console.log('currentLocale acttions:', currentLocale);
-      let language = '';
-      if (
-        currentLocale === 'ru' ||
-        currentLocale === 'ru-US' ||
-        currentLocale === 'ru-UA'
-      ) {
-        AsyncStorage.setItem('language', 'ru');
-        language = 'ru';
-      } else {
-        AsyncStorage.setItem('language', 'en');
-        language = 'en';
-      }
+      // first open help
       AsyncStorage.setItem('help', '1');
       dispatch(helps(1));
-      console.log('language acttions:', language);
-      dispatch(lang(language));
     }
   });
 };

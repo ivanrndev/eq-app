@@ -6,6 +6,9 @@ import AcceptGive from '../assets/svg/acceptGive.svg';
 import Inventory from '../assets/svg/inventory.svg';
 import Mark from '../assets/svg/mark.svg';
 import Ident from '../assets/svg/ident.svg';
+import Left from '../assets/svg/left-arrow.svg';
+import Right from '../assets/svg/right-arrow.svg';
+import Close from '../assets/svg/cancel.svg';
 
 export const menuSvg = item => {
   switch (item) {
@@ -23,6 +26,12 @@ export const menuSvg = item => {
       return <Mark width={20} height={20} />;
     case 'ident':
       return <Ident width={20} height={20} />;
+    case 'left':
+      return <Left width={20} height={20} />;
+    case 'right':
+      return <Right width={20} height={20} />;
+    case 'close':
+      return <Close width={20} height={20} />;
     default:
       return null;
   }

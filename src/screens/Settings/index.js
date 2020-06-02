@@ -14,10 +14,13 @@ const Settings = props => {
 
   useEffect(() => {
     AsyncStorage.getItem('language').then(language => {
-      setSelectedValue(language);
-      I18n.locale = language;
+      if (language === 'ru' || language === 'ru-US' || language === 'ru-UA') {
+        setSelectedValue('ru');
+      } else {
+        setSelectedValue('en');
+      }
     });
-  }, [selectedValue]);
+  }, []);
 
   return (
     <>
