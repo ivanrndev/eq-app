@@ -7,6 +7,7 @@ import T from '../../../i18n';
 import Appbar from '../../../components/Appbar';
 import {getInventoryMesageError} from '../../../utils/helpers.js';
 import DarkButton from '../../../components/Buttons/DarkButton';
+import {fontSizer} from '../../../utils/helpers.js';
 // redux and actions
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -24,6 +25,7 @@ export const InventoryFinish = props => {
   const scan = useSelector(state => state.scan);
   const [error, setError] = useState();
   const alreadyScan = inventory.inventoryScanList.filter(Boolean);
+  const width = Dimensions.get('window').width;
 
   const more = () => {
     props.navigation.navigate('InventoryScaner');
@@ -95,10 +97,15 @@ export const InventoryFinish = props => {
           <View style={styles.buttons}>
             <View style={styles.buttonBlock}>
               <DarkButton
+                size={fontSizer(width)}
                 text={T.t('title_inventorization_question')}
                 onPress={more}
               />
-              <DarkButton text={T.t('complete')} onPress={endScan} />
+              <DarkButton
+                size={fontSizer(width)}
+                text={T.t('complete')}
+                onPress={endScan}
+              />
             </View>
           </View>
         </View>
@@ -120,7 +127,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     borderRadius: 10,
-    height: Dimensions.get('window').height / 2.1,
+    height: '80%',
     paddingBottom: 10,
     paddingTop: 20,
     width: Dimensions.get('window').width / 1.1,
@@ -139,13 +146,16 @@ const styles = StyleSheet.create({
   title: {
     color: '#22215B',
     textAlign: 'center',
-    padding: 15,
+    padding: 10,
     fontSize: 21,
   },
   titleError: {
     color: '#E40B67',
     textAlign: 'center',
-    padding: 30,
+    paddingTop: 15,
+    paddingBottom: 30,
+    paddingLeft: 20,
+    paddingRight: 20,
   },
   text: {
     fontSize: 20,
@@ -154,8 +164,8 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width / 1.3,
   },
   buttons: {
+    bottom: 50,
     position: 'absolute',
-    bottom: 10,
   },
   button: {
     display: 'flex',

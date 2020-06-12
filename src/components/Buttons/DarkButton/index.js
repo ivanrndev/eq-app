@@ -34,7 +34,9 @@ const DarkButton = props => {
         onShowUnderlay={handleUnderlay}>
         <View
           style={pressed ? styles.textWhiteContainer : styles.textContainer}>
-          <Text style={{...pressedText, ...disabledText}}>{props.text}</Text>
+          <Text style={{...pressedText, ...disabledText}}>
+            <Text style={{fontSize: props.size}}>{props.text}</Text>
+          </Text>
         </View>
       </TouchableHighlight>
     </View>
@@ -86,10 +88,10 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   text: {
-    height: 25,
+    height: 20,
     color: '#EDF6FF',
     textTransform: 'none',
-    fontSize: 18,
+    // fontSize: 18,
     fontWeight: '300',
     textAlign: 'center',
     width: '100%',
@@ -97,9 +99,9 @@ const styles = StyleSheet.create({
   textPress: {
     backgroundColor: '#2D2C71',
     color: '#EDF6FF',
-    height: 25,
+    height: 20,
     textTransform: 'none',
-    fontSize: 18,
+    // fontSize: 18,
     fontWeight: '300',
     textAlign: 'center',
     width: '100%',

@@ -1,5 +1,6 @@
+/* eslint-disable no-extra-boolean-cast */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useEffect, useCallback, useRef} from 'react';
 import {
   StyleSheet,
   View,
@@ -7,44 +8,66 @@ import {
   Dimensions,
   Linking,
   KeyboardAvoidingView,
+  Keyboard,
 } from 'react-native';
 import {useFocusEffect} from '@react-navigation/native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {isEmpty} from 'lodash';
 import T from '../../i18n';
-import I18n from '../../i18n';
 // utils
 import {validateEmail} from '../../utils/validateEmail.js';
-import {ucFirst} from '../../utils/helpers.js';
+import {ucFirst, getForgotEmailMesage} from '../../utils/helpers.js';
 import DarkButton from '../../components/Buttons/DarkButton';
 // redux
 import {useDispatch, useSelector} from 'react-redux';
 import {
+  forgotPassword,
   userPostFetch,
   statusError,
   statusLoad,
   logOut,
+  resetPassInfo,
 } from '../../actions/actions.js';
 import {
   Title,
   TextInput,
   Snackbar,
   ActivityIndicator,
+  Portal,
+  Dialog,
+  Button,
 } from 'react-native-paper';
 
 const Auth = props => {
   const dispatch = useDispatch();
   const store = useSelector(state => state.auth);
+  const settings = useSelector(state => state.settings);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(T.t('access_denied'));
   const [loginError, setLoginError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [disabled, setDisabled] = useState(true);
-  const settings = useSelector(state => state.settings);
+
+  // reset password
+  const [infoEmail, setInfoEmail] = useState(false);
+  const [isModal, setIsModal] = useState(false);
+  const [changeEmail, setChahgeEmail] = useState('');
+  const [emailForgotError, setEmailForgotError] = useState(false);
 
   const handelLogin = e => setEmail(ucFirst(e.trim()));
   const handelPass = e => setPassword(e.trim());
+
+  const handleSubmit = () => {
+    if (!isEmpty(password) && validateEmail(email)) {
+      dispatch(statusLoad(true));
+      dispatch(userPostFetch({email, password}));
+    } else {
+      dispatch(statusError(true));
+      setPasswordError(true);
+      setLoginError(true);
+    }
+  };
 
   useFocusEffect(
     useCallback(() => {
@@ -53,6 +76,10 @@ const Auth = props => {
         dispatch(statusError(false));
         setLoginError(false);
         setPasswordError(false);
+        setInfoEmail(false);
+        setEmailForgotError(false);
+        setIsModal(false);
+        setInfoEmail(false);
       };
     }, []),
   );
@@ -110,14 +137,46 @@ const Auth = props => {
     });
   }, [store.isLogin, store.isError]);
 
-  const handleSubmit = () => {
-    if (!isEmpty(password) && validateEmail(email)) {
-      dispatch(statusLoad(true));
-      dispatch(userPostFetch({email, password}));
+  // detected keyboard
+  const [isOpen, setIsOpen] = useState(false);
+  const keyboardShowListener = useRef(null);
+  const keyboardHideListener = useRef(null);
+
+  useEffect(() => {
+    keyboardShowListener.current = Keyboard.addListener('keyboardDidShow', () =>
+      setIsOpen(true),
+    );
+    keyboardHideListener.current = Keyboard.addListener('keyboardDidHide', () =>
+      setIsOpen(false),
+    );
+    return () => {
+      keyboardShowListener.current.remove();
+      keyboardHideListener.current.remove();
+    };
+  });
+
+  // check forgot password
+  useEffect(() => {
+    setInfoEmail(
+      getForgotEmailMesage(
+        settings.forgot_pass_error || settings.forgot_pass_sucess,
+      ),
+    );
+  }, [settings.forgot_pass_sucess, settings.forgot_pass_error]);
+
+  const resetForModal = () => {
+    setEmailForgotError(false);
+    setIsModal(!isModal);
+    setInfoEmail(false);
+    dispatch(resetPassInfo());
+  };
+
+  const handelSendEmail = () => {
+    if (!isEmpty(changeEmail) && validateEmail(changeEmail)) {
+      setEmailForgotError(false);
+      dispatch(forgotPassword(changeEmail));
     } else {
-      dispatch(statusError(true));
-      setPasswordError(true);
-      setLoginError(true);
+      setEmailForgotError(true);
     }
   };
 
@@ -127,6 +186,7 @@ const Auth = props => {
         <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={30}>
           <Title style={styles.title}>{T.t('auth')}</Title>
           <TextInput
+            email={true}
             onChangeText={e => handelLogin(e)}
             style={styles.input}
             label={T.t('login')}
@@ -141,6 +201,11 @@ const Auth = props => {
             error={passwordError ? true : false}
             mode="outlined"
           />
+          <View style={styles.forgotBlock}>
+            <Text style={styles.forgot} onPress={() => setIsModal(!isModal)}>
+              {T.t('forgot_your_pass')}
+            </Text>
+          </View>
           {store.isLoad && (
             <ActivityIndicator
               style={styles.load}
@@ -188,6 +253,48 @@ const Auth = props => {
           {error}
         </Snackbar>
       </View>
+      <View>
+        <Portal>
+          <Dialog
+            style={isOpen ? styles.dialogOpen : styles.dialogClose}
+            visible={isModal}
+            onDismiss={resetForModal}>
+            <>
+              <Dialog.Title>
+                <Title style={styles.titleForgot}>
+                  {!!infoEmail
+                    ? `${T.t('pass_recovery')}`
+                    : `${T.t('forgot_your_pass')}`}
+                </Title>
+              </Dialog.Title>
+              <Dialog.Content>
+                <Text style={styles.titleForgotText}>
+                  {!!infoEmail ? infoEmail : `${T.t('entry_email')}`}
+                </Text>
+                {!infoEmail && (
+                  <TextInput
+                    error={emailForgotError ? true : false}
+                    onChangeText={e => {
+                      setEmailForgotError(false);
+                      setChahgeEmail(e.trim().toLowerCase());
+                    }}
+                    style={styles.inputForgot}
+                    label={'Email'}
+                    mode="outlined"
+                  />
+                )}
+              </Dialog.Content>
+              <Dialog.Actions>
+                {!!infoEmail ? (
+                  <Button onPress={resetForModal}>{T.t('close')}</Button>
+                ) : (
+                  <Button onPress={handelSendEmail}>{T.t('next')}</Button>
+                )}
+              </Dialog.Actions>
+            </>
+          </Dialog>
+        </Portal>
+      </View>
     </>
   );
 };
@@ -207,10 +314,25 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'center',
   },
+  titleForgot: {
+    color: '#22215B',
+    fontSize: 23,
+    marginBottom: 20,
+    textAlign: 'left',
+  },
+  titleForgotText: {
+    marginTop: -10,
+    marginBottom: 10,
+  },
   input: {
     marginBottom: 10,
     marginTop: 10,
     width: Dimensions.get('window').width / 1.3,
+    backgroundColor: '#fff',
+  },
+  inputForgot: {
+    marginBottom: 10,
+    marginTop: 10,
     backgroundColor: '#fff',
   },
   text: {
@@ -232,6 +354,19 @@ const styles = StyleSheet.create({
     color: '#22215B',
     textAlign: 'center',
   },
+  forgotBlock: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+  },
+  forgot: {
+    fontSize: 14,
+    color: '#22215B',
+    textAlign: 'right',
+    textDecorationLine: 'underline',
+    textDecorationStyle: 'solid',
+    textDecorationColor: '#22215B',
+  },
   textBlue: {
     color: '#137CDF',
     textDecorationLine: 'underline',
@@ -246,6 +381,13 @@ const styles = StyleSheet.create({
   },
   snackbar: {
     backgroundColor: '#22215B',
+  },
+  dialogOpen: {
+    backgroundColor: '#EDF6FF',
+    marginTop: -Dimensions.get('window').height / 2.4,
+  },
+  dialogClose: {
+    backgroundColor: '#EDF6FF',
   },
 });
 

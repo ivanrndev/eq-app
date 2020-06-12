@@ -3,7 +3,9 @@
 export const LOADER = 'LOADER';
 export const LANG = 'LANG';
 export const HELP = 'HELP';
-
+export const FORGOT_PASS_SUCESS = 'FORGOT_PASS_SUCESS';
+export const FORGOT_PASS_ERROR = 'FORGOT_PASS_ERROR';
+export const RESET_PASS_INFO = 'RESET_PASS_INFO';
 // auth
 export const LOGUT = 'LOGUT';
 export const LOGIN_USER = 'LOGIN_USER';

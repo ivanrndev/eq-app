@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from '../utils/axios';
-import {API_URL, LOGIN_URL} from '../constants/auth.js';
+import {API_URL, LOGIN_URL, PORGOT_PASS} from '../constants/auth.js';
 import {getProperError, actionCheckError} from '../utils/helpers.js';
 import {
   LOGUT,
@@ -70,6 +70,9 @@ import {
   CLEAR_COMMENTS,
   SEND_COMMENT,
   SEND_COMMENT_ERROR,
+  FORGOT_PASS_SUCESS,
+  FORGOT_PASS_ERROR,
+  RESET_PASS_INFO,
 } from '../actions/actionsType.js';
 
 // Settings
@@ -1186,5 +1189,43 @@ export const sendComments = (itemId, message) => dispatch => {
           });
         }
       });
+  });
+};
+
+// forgot password
+export const forgotPassword = email => dispatch => {
+  return axios
+    .post(PORGOT_PASS, {email})
+    .then(resp => {
+      if (resp.status === 200) {
+        dispatch({
+          type: FORGOT_PASS_SUCESS,
+          payload: {
+            forgot_pass_sucess: 'SUCESS',
+            forgot_pass_error: false,
+          },
+        });
+      }
+    })
+    .catch(e => {
+      if (!e.response.data.success) {
+        dispatch({
+          type: FORGOT_PASS_ERROR,
+          payload: {
+            forgot_pass_sucess: false,
+            forgot_pass_error: e.response.data.message.name,
+          },
+        });
+      }
+    });
+};
+
+export const resetPassInfo = status => dispatch => {
+  dispatch({
+    type: RESET_PASS_INFO,
+    payload: {
+      forgot_pass_sucess: false,
+      forgot_pass_error: false,
+    },
   });
 };

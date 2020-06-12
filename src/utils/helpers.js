@@ -266,3 +266,26 @@ export const ucFirst = str => {
   }
   return str[0].toLowerCase() + str.slice(1);
 };
+
+export const fontSizer = screenWidth => {
+  if (screenWidth > 400) {
+    return 17;
+  } else if (screenWidth > 250){
+    return 14;
+  } else {
+    return 12;
+  }
+};
+
+export const getForgotEmailMesage = text => {
+  if (text === 'NotNow') {
+    return `${T.t('not_now')}`;
+  }
+  if (text === 'NotFound') {
+    return `${T.t('not_found')}`;
+  }
+  if (text === 'SUCESS') {
+    return `${T.t('sucess_reset_pass')}`;
+
+  }
+};

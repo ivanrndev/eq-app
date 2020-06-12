@@ -14,6 +14,7 @@ import T from '../../../i18n';
 import {getStatus, getProperErrorMessage} from '../../../utils/helpers.js';
 import AsyncStorage from '@react-native-community/async-storage';
 import DarkButton from '../../../components/Buttons/DarkButton';
+import {fontSizer} from '../../../utils/helpers.js';
 
 export const IdentInfo = props => {
   const dispatch = useDispatch();
@@ -21,6 +22,7 @@ export const IdentInfo = props => {
   const error = getProperErrorMessage(store.scanInfoError, store.currentScan);
   const show = store.isInfoOpen;
   const metaData = store.scanInfo.metadata;
+  const width = Dimensions.get('window').width;
 
   let nameOfProduct = '';
   if (metaData) {
@@ -136,10 +138,12 @@ export const IdentInfo = props => {
               <View style={styles.buttonsBlock}>
                 <View style={styles.buttonBlock}>
                   <DarkButton
+                    size={fontSizer(width)}
                     text={T.t('title_comments')}
                     onPress={getAllComments}
                   />
                   <DarkButton
+                    size={fontSizer(width)}
                     text={T.t('title_history_of_transaction')}
                     onPress={handleTransactions}
                   />

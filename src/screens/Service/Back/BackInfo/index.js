@@ -88,7 +88,7 @@ export const BackInfo = props => {
             )}
             {!store.scanInfoError && (
               <View style={styles.info}>
-                <Title style={styles.title}>{T.t('back_service')}?</Title>
+                {/* <Title style={styles.title}>{T.t('back_service')}?</Title> */}
                 {show && (
                   <View style={styles.info}>
                     {store.scanInfo && (
@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     height: Dimensions.get('window').height / 1.3,
     paddingBottom: 10,
-    paddingTop: 20,
+    paddingTop: 25,
     width: Dimensions.get('window').width / 1.1,
     backgroundColor: '#EDF6FF',
   },
@@ -197,17 +197,17 @@ const styles = StyleSheet.create({
   title: {
     color: '#22215B',
     textAlign: 'center',
-    padding: 30,
-    fontSize: 21,
+    padding: 5,
+    fontSize: 19,
   },
   titleError: {
     color: '#E40B67',
     textAlign: 'center',
-    padding: 30,
-    fontSize: 21,
+    padding: 5,
+    fontSize: 19,
   },
   text: {
-    fontSize: 16,
+    fontSize: 15,
     paddingBottom: 5,
     color: '#7A7A9D',
     width: Dimensions.get('window').width / 1.3,
@@ -225,6 +225,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignSelf: 'center',
     height: 50,
+
     width: Dimensions.get('window').width / 1.3,
   },
   loader: {

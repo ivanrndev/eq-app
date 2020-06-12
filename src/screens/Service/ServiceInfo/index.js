@@ -28,7 +28,9 @@ export const ServiceInfo = props => {
   const settings = useSelector(state => state.settings);
   const error = getProperErrorMessage(store.scanInfoError, store.currentScan);
   const show = store.isInfoOpen;
-  const keyboardMarginTop = Dimensions.get('window').height / 9;
+  // const keyboardMarginTop = Dimensions.get('window').height / 15;
+  const keyboardMarginTop = 50;
+
   const metaData = store.scanInfo.metadata;
   const [role, setRole] = useState();
   const [reason, setReason] = useState('');
@@ -104,7 +106,7 @@ export const ServiceInfo = props => {
               )}
               {!store.scanInfoError && (
                 <View style={styles.info}>
-                  <Title style={styles.title}>{T.t('send_service')}</Title>
+                  {/* <Title style={styles.title}>{T.t('send_service')}</Title> */}
                   {show && (
                     <View style={styles.info}>
                       {store.scanInfo && (
@@ -205,7 +207,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     height: Dimensions.get('window').height / 1.3,
     paddingBottom: 10,
-    paddingTop: 20,
+    paddingTop: 25,
     width: Dimensions.get('window').width / 1.1,
     backgroundColor: '#EDF6FF',
   },
@@ -217,35 +219,31 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   buttonsBlock: {
-    // marginTop: 20,
     marginBottom: -20,
   },
   info: {
     display: 'flex',
     alignItems: 'center',
-    // paddingBottom: Dimensions.get('window').height / 40,
   },
   title: {
     color: '#22215B',
     textAlign: 'center',
-    paddingBottom: 15,
-    fontSize: 21,
+    paddingBottom: 5,
+    fontSize: 19,
   },
   titleError: {
     color: '#E40B67',
     textAlign: 'center',
-    paddingBottom: 15,
-    fontSize: 21,
+    paddingBottom: 5,
+    fontSize: 19,
   },
   text: {
-    fontSize: 16,
+    fontSize: 15,
     paddingBottom: 5,
     color: '#7A7A9D',
     width: Dimensions.get('window').width / 1.3,
   },
   buttons: {
-    // position: 'absolute',
-    // bottom: 10,
     display: 'flex',
     alignSelf: 'center',
     width: Dimensions.get('window').width / 1.5,
@@ -257,7 +255,7 @@ const styles = StyleSheet.create({
   textInput: {
     display: 'flex',
     alignSelf: 'center',
-    height: 43,
+    height: 40,
     backgroundColor: '#EDF6FF',
     color: '#7A7A9D',
     width: Dimensions.get('window').width / 1.3,

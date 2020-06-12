@@ -5,8 +5,10 @@ import T from '../../../i18n';
 import Appbar from '../../../components/Appbar';
 import DarkButton from '../../../components/Buttons/DarkButton';
 import TransparentButton from '../../../components/Buttons/TransparentButton';
+import {fontSizer} from '../../../utils/helpers.js';
 
 const ServiceMenu = props => {
+  const width = Dimensions.get('window').width;
   return (
     <>
       <Appbar
@@ -14,19 +16,21 @@ const ServiceMenu = props => {
         arrow={true}
         newScan={true}
         goTo={'Home'}
-        title={T.t('service')}
+        title={T.t('service_title')}
       />
       <SafeAreaView />
       <View style={styles.body}>
         <View style={styles.buttons}>
           <View style={styles.buttonBlock}>
             <DarkButton
+              size={fontSizer(width)}
               text={T.t('send_service')}
               onPress={() => props.navigation.navigate('Service')}
             />
           </View>
           <View style={styles.buttonBlock}>
             <TransparentButton
+              size={fontSizer(width)}
               text={T.t('back_service')}
               onPress={() => props.navigation.navigate('BackScanner')}
             />

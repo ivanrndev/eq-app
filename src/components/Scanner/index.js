@@ -19,6 +19,7 @@ import {
 import {minY, maxY, minX, maxX} from '../../utils/markerParams.js';
 import DarkButton from '../../components/Buttons/DarkButton/';
 import TransparentButton from '../../components/Buttons/TransparentButton';
+import {fontSizer} from '../../utils/helpers.js';
 
 // redux and actions
 import {useDispatch, useSelector} from 'react-redux';
@@ -28,6 +29,7 @@ const Scanner = props => {
   const dispatch = useDispatch();
   const store = useSelector(state => state.scan);
   const settings = useSelector(state => state.settings);
+  const width = Dimensions.get('window').width;
 
   const [isFlash, setFlashMode] = useState(false);
   const [customId, setCustomId] = useState('');
@@ -175,10 +177,12 @@ const Scanner = props => {
               <View style={styles.buttons}>
                 <View style={styles.buttonBlock}>
                   <DarkButton
+                    size={fontSizer(width)}
                     text={T.t('input_code')}
                     onPress={() => dispatch(dialogInput(!store.dialogInput))}
                   />
                   <TransparentButton
+                    size={fontSizer(width)}
                     text={T.t('flash')}
                     onPress={handleOnFlashMode}
                   />

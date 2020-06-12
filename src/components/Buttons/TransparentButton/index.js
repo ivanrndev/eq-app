@@ -28,7 +28,7 @@ const TransparentButton = props => {
         <View
           style={pressed ? styles.textWhiteContainer : styles.textContainer}>
           <Text style={pressed ? styles.textPress : styles.text}>
-            {props.text}
+            <Text style={{fontSize: props.size}}>{props.text}</Text>
           </Text>
         </View>
       </TouchableHighlight>
@@ -79,19 +79,19 @@ const styles = StyleSheet.create({
   },
   text: {
     backgroundColor: '#D3E3F2',
-    height: 25,
+    height: 20,
     color: '#22215B',
     textTransform: 'none',
-    fontSize: 18,
+    // fontSize: 18,
     fontWeight: '300',
     textAlign: 'center',
     width: '100%',
   },
   textPress: {
     color: '#22215B',
-    height: 25,
+    height: 20,
     textTransform: 'none',
-    fontSize: 18,
+    // fontSize: 18,
     fontWeight: '300',
     textAlign: 'center',
     width: '100%',

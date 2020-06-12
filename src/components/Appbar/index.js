@@ -113,6 +113,7 @@ const styles = StyleSheet.create({
   content: {
     color: '#22215B',
     fontWeight: 'bold',
+    // fontSize: 11
   },
   snackbar: {
     zIndex: 100,

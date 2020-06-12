@@ -51,7 +51,7 @@ const AcceptGive = props => {
         arrow={true}
         newScan={true}
         goTo={'Home'}
-        title={T.t('give_accept')}
+        title={T.t('give_accept_title')}
       />
       <SafeAreaView />
       <Portal>
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
   },
   BottomButton: {
     position: 'absolute',
-    bottom: 160,
+    bottom: 140,
     display: 'flex',
     textAlign: 'center',
     justifyContent: 'center',
