@@ -4,6 +4,8 @@ import {
   LOAD_MORE_TRANSFERS,
   CLEAR_TRANSFERS_LIST,
   TRANSFERS_ID,
+  TRANSFERS_UPDATE,
+  TRANSFERS_UPDATE_ERROR,
 } from '../../../actions/actionsType.js';
 
 const initialState = {
@@ -12,6 +14,8 @@ const initialState = {
   transferError: false,
   loadMoreTransfers: false,
   offSet: 0,
+  transferUpdate: false,
+  transferUpdateError: false,
 };
 
 const transfersReducer = (state = initialState, action) => {
@@ -39,6 +43,16 @@ const transfersReducer = (state = initialState, action) => {
         ...action.payload,
       };
     case TRANSFERS_ID:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case TRANSFERS_UPDATE:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case TRANSFERS_UPDATE_ERROR:
       return {
         ...state,
         ...action.payload,

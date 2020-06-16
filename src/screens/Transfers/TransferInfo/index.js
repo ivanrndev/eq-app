@@ -6,7 +6,7 @@ import {
   SafeAreaView,
   ScrollView,
 } from 'react-native';
-import {Card, IconButton} from 'react-native-paper';
+import {Card} from 'react-native-paper';
 import T from '../../../i18n';
 // components
 import Appbar from '../../../components/Appbar';
@@ -46,16 +46,22 @@ const TransferInfo = props => {
                   style={styles.card}
                   title={`${item.metadata.brand} / ${item.code}`}
                   subtitle={`${item.metadata.serial} / ${item.metadata.model}`}
-                  right={props => <IconButton {...props} onPress={() => {}} />}
                 />
               ))}
           </ScrollView>
           <View style={styles.button}>
             <View style={styles.buttonBlock}>
-              <DarkButton
-                text={T.t('to_list')}
-                onPress={() => props.navigation.navigate('Transfers')}
-              />
+              {infoList && infoList.status === 'pending' ? (
+                <DarkButton
+                  text={T.t('edit')}
+                  onPress={() => props.navigation.navigate('TransfersEdit')}
+                />
+              ) : (
+                <DarkButton
+                  text={T.t('to_list')}
+                  onPress={() => props.navigation.navigate('Transfers')}
+                />
+              )}
             </View>
           </View>
         </View>

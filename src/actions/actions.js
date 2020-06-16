@@ -52,6 +52,8 @@ import {
   CLEAR_TRANSFERS_LIST,
   CLEAR_TRANSACTIONS_LIST,
   TRANSFERS_ID,
+  TRANSFERS_UPDATE,
+  TRANSFERS_UPDATE_ERROR,
   GET_BID_LIST,
   GET_BID_LIST_ERROR,
   LOAD_MORE_STATUS,
@@ -845,7 +847,13 @@ export const makeTransfer = (nav, list, user) => dispatch => {
 };
 
 // Transfers action
-export const getTransfers = (nav, user_id, offset) => dispatch => {
+export const getTransfers = (
+  nav,
+  user_id,
+  offset,
+  unSave = false,
+  route = 'Transfers',
+) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
       .get(`${API_URL}/company/${company}/user/${user_id}/transfers`, {
@@ -853,16 +861,32 @@ export const getTransfers = (nav, user_id, offset) => dispatch => {
       })
       .then(resp => {
         if (resp.status === 200) {
-          dispatch({
-            type: TRANSFERS_LIST,
-            payload: {
-              transferList: resp.data.data,
-              transferError: false,
-              loadMoreTransfers: false,
-              offSet: 6,
-            },
-          });
-          nav.navigate('Transfers');
+          if (unSave) {
+            dispatch({
+              type: TRANSFERS_UPDATE,
+              payload: {
+                transferList: resp.data.data,
+                transferError: false,
+                loadMoreTransfers: false,
+                offSet: 6,
+              },
+            });
+          } else {
+            dispatch({
+              type: TRANSFERS_LIST,
+              payload: {
+                transferList: resp.data.data,
+                transferError: false,
+                loadMoreTransfers: false,
+                offSet: 6,
+              },
+            });
+          }
+          if (route) {
+            nav.navigate(route);
+          } else {
+            nav.navigate('Transfers');
+          }
           dispatch(loader(false));
         }
       })
@@ -1228,4 +1252,39 @@ export const resetPassInfo = status => dispatch => {
       forgot_pass_error: false,
     },
   });
+};
+
+// Update Transfer
+export const updateTransfer = (nav, id, items, route) => dispatch => {
+  return axios
+    .patch(`${API_URL}/transfer/${id}/edit`, {
+      item_ids: items.map(item => item._id),
+    })
+    .then(resp => {
+      if (resp.status === 200) {
+        dispatch({
+          type: TRANSFERS_UPDATE,
+          payload: {
+            transferUpdate: true,
+            transferUpdateError:
+              resp.data.errors.length > 0 ? resp.data.errors[0] : '',
+          },
+        });
+        dispatch(loader(false));
+        AsyncStorage.getItem('userId').then(id => {
+          dispatch(getTransfers(nav, id, 0, true, route));
+        });
+      }
+    })
+    .catch(e => {
+      if (!e.response.data.success) {
+        dispatch({
+          type: TRANSFERS_UPDATE_ERROR,
+          payload: {
+            transferUpdateError: e.response.data.message.name,
+          },
+        });
+        dispatch(loader(false));
+      }
+    });
 };

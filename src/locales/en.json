@@ -164,5 +164,8 @@
     "forgot_your_pass": "Forgot your password?",
     "pass_recovery": "Password recovery",
     "entry_email": "Enter your email and we will send a link to reset your password",
-    "next": "Next"
+    "next": "Next",
+    "edit" : "Edit",
+    "delete": "Delete",
+    "delete_confirm": "Are you sure you want to delete the selected items?"
   }

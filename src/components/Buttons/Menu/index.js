@@ -33,7 +33,6 @@ const Button = props => {
     if (props.onPress) {
       props.onPress();
     }
-    console.log(props.text);
   };
 
   return (

@@ -53,6 +53,8 @@ import InventoryDone from './screens/Inventory/InventoryDone';
 import Comments from './screens/Сomments/';
 import CustomDrawer from './components/Drawer';
 import Settings from './screens/Settings';
+import TransfersEdit from './screens/Transfers/TransferEdit';
+import TransferScaner from './screens/Transfers/TransferScan';
 
 const theme = {
   ...DefaultTheme,
@@ -114,6 +116,8 @@ const App = () => {
               <Drawer.Screen name="InventoryDone" component={InventoryDone} />
               <Drawer.Screen name="Comments" component={Comments} />
               <Drawer.Screen name="Settings" component={Settings} />
+              <Drawer.Screen name="TransfersEdit" component={TransfersEdit} />
+              <Drawer.Screen name="TransferScaner" component={TransferScaner} />
             </Drawer.Navigator>
           </PaperProvider>
         </NativeRouter>
