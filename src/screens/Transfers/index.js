@@ -96,7 +96,12 @@ const Transfers = props => {
                           {T.t('transfer_to')}: {item.recipient.firstName}{' '}
                           {item.recipient.lastName}
                         </Paragraph>
-                        <Paragraph style={styles.paragraph}>
+                        <Paragraph
+                          style={
+                            item.status === 'pending'
+                              ? styles.paragraphActive
+                              : styles.paragraph
+                          }>
                           {T.t('transfer_status')}:{' '}
                           {getProperTransferStatus(item.status)}
                         </Paragraph>
@@ -176,6 +181,12 @@ const styles = StyleSheet.create({
   paragraph: {
     fontSize: 12,
     lineHeight: 15,
+  },
+  paragraphActive: {
+    fontSize: 12,
+    lineHeight: 15,
+    color: 'rgba(34, 33, 91, 0.99)',
+    fontWeight: '700',
   },
   button: {
     marginTop: 10,

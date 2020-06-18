@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import AsyncStorage from '@react-native-community/async-storage';
 import {
   StyleSheet,
   View,
@@ -6,17 +7,24 @@ import {
   SafeAreaView,
   ScrollView,
 } from 'react-native';
-import {Card} from 'react-native-paper';
+import {Card, Portal, Dialog, Title, Text, Button} from 'react-native-paper';
 import T from '../../../i18n';
 // components
 import Appbar from '../../../components/Appbar';
 import DarkButton from '../../../components/Buttons/DarkButton';
+import TransparentButton from '../../../components/Buttons/TransparentButton';
+
 // redux and actions
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
+import {loader} from '../../../actions/actions.js';
+import {deleteTransfer} from '../../../actions/actions.js';
 
 const TransferInfo = props => {
+  const dispatch = useDispatch();
   const transfers = useSelector(state => state.transfers);
   const [infoList, setInfoList] = useState();
+  const [transferOwner, setTransferOwner] = useState(false);
+  const [isModal, setIsModal] = useState(false);
 
   useEffect(() => {
     const transferList = transfers.transferList;
@@ -24,7 +32,23 @@ const TransferInfo = props => {
       return item._id === transfers.transferId;
     });
     setInfoList(correctItem);
+
+    // check owner of transfer
+    AsyncStorage.getItem('userId').then(userId => {
+      let sender = correctItem ? correctItem.sender._id : '';
+      if (userId === sender && correctItem.status === 'pending') {
+        setTransferOwner(true);
+      } else {
+        setTransferOwner(false);
+      }
+    });
   }, [transfers]);
+
+  const handelDeleteTransfer = () => {
+    setIsModal(false);
+    dispatch(loader(true));
+    dispatch(deleteTransfer(props.navigation, infoList._id, 'Transfers'));
+  };
 
   return (
     <>
@@ -49,22 +73,52 @@ const TransferInfo = props => {
                 />
               ))}
           </ScrollView>
-          <View style={styles.button}>
-            <View style={styles.buttonBlock}>
-              {infoList && infoList.status === 'pending' ? (
-                <DarkButton
-                  text={T.t('edit')}
-                  onPress={() => props.navigation.navigate('TransfersEdit')}
-                />
-              ) : (
+          <View style={styles.buttons}>
+            {transferOwner ? (
+              <>
+                <View style={styles.buttonBlock}>
+                  <DarkButton
+                    text={T.t('edit')}
+                    onPress={() => props.navigation.navigate('TransfersEdit')}
+                  />
+                </View>
+                <View style={styles.buttonBlock}>
+                  <TransparentButton
+                    text={T.t('delete')}
+                    onPress={() => setIsModal(true)}
+                  />
+                </View>
+              </>
+            ) : (
+              <View style={styles.buttonBlock}>
                 <DarkButton
                   text={T.t('to_list')}
                   onPress={() => props.navigation.navigate('Transfers')}
                 />
-              )}
-            </View>
+              </View>
+            )}
           </View>
         </View>
+        <Portal>
+          <Dialog
+            style={styles.dialogOpen}
+            visible={isModal}
+            onDismiss={() => setIsModal(false)}>
+            <>
+              <Dialog.Title>
+                <Title style={styles.titleForgot}>{T.t('delete')}</Title>
+              </Dialog.Title>
+              <Dialog.Content>
+                <Text style={styles.titleForgotText}>
+                  {T.t('delete_transfer_confirm')}
+                </Text>
+              </Dialog.Content>
+              <Dialog.Actions>
+                <Button onPress={handelDeleteTransfer}>{T.t('delete')}</Button>
+              </Dialog.Actions>
+            </>
+          </Dialog>
+        </Portal>
       </View>
     </>
   );
@@ -84,10 +138,6 @@ const styles = StyleSheet.create({
   },
   load: {
     marginTop: 10,
-  },
-  buttonBlock: {
-    width: Dimensions.get('window').height / 3.3,
-    textAlign: 'center',
   },
   card: {
     display: 'flex',
@@ -113,6 +163,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
     marginBottom: 10,
+  },
+  buttonBlock: {
+    width: Dimensions.get('window').height / 5,
+    textAlign: 'center',
+  },
+  buttons: {
+    marginTop: 15,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 30,
   },
 });
 

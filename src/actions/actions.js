@@ -102,7 +102,7 @@ export const helps = status => dispatch => {
 // Auth actions
 export const userPostFetch = ({email, password}) => dispatch => {
   return axios
-    .post(LOGIN_URL, {email, password})
+    .post(LOGIN_URL, {login: email, password})
     .then(resp => {
       if (resp.status === 200) {
         AsyncStorage.setItem('token', resp.data.token);
@@ -1274,6 +1274,37 @@ export const updateTransfer = (nav, id, items, route) => dispatch => {
         AsyncStorage.getItem('userId').then(id => {
           dispatch(getTransfers(nav, id, 0, true, route));
         });
+      }
+    })
+    .catch(e => {
+      if (!e.response.data.success) {
+        dispatch({
+          type: TRANSFERS_UPDATE_ERROR,
+          payload: {
+            transferUpdateError: e.response.data.message.name,
+          },
+        });
+        dispatch(loader(false));
+      }
+    });
+};
+
+// Delete Transfer
+export const deleteTransfer = (nav, id, route) => dispatch => {
+  return axios
+    .delete(`${API_URL}/transfer/${id}/reject`)
+    .then(resp => {
+      if (resp.status === 200) {
+        dispatch({
+          type: TRANSFERS_UPDATE,
+          payload: {
+            transferUpdate: true,
+          },
+        });
+        AsyncStorage.getItem('userId').then(id => {
+          dispatch(getTransfers(nav, id, 0, true, route));
+        });
+        dispatch(loader(false));
       }
     })
     .catch(e => {

@@ -126,7 +126,7 @@
     "title_request_created": "Application created",
     "status_transfer_complete": "Completed",
     "status_transfer_pending": "Pending",
-    "status_application_rejected": "Application rejected",
+    "status_application_rejected": "Application deleted",
     "status_transfer_failed": "Failed",
     "error_write_off": "has already been write-off",
     "error_services": "is in service.",
@@ -167,5 +167,7 @@
     "next": "Next",
     "edit" : "Edit",
     "delete": "Delete",
-    "delete_confirm": "Are you sure you want to delete the selected items?"
+    "delete_confirm": "Are you sure you want to delete the selected items?",
+    "delete_transfer_confirm": "Are you sure you want to delete the selected application?",
+    "auto_accept_transfer": "Application created. Attention, the 'No confirmation' mode is enabled, which means that when creating an application, the employee will not need to confirm it upon receipt. To enable confirmation, go to the 'Settings' tab in the administrative panel and enable Confirm mode."
   }

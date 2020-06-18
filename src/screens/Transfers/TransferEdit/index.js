@@ -115,7 +115,7 @@ const TransferEdit = props => {
         navigation={props.navigation}
         arrow={true}
         newScan={true}
-        goTo={'Transfers'}
+        goTo={'TransferInfo'}
         title={T.t('edit')}
       />
       <SafeAreaView />

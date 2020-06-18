@@ -25,6 +25,7 @@ const GiveFinish = props => {
   const give = useSelector(state => state.give);
   const [status, setStatus] = useState('');
   const [errors, setErrors] = useState('');
+  const [titleStatus, setTitleStatus] = useState(false);
 
   let showButton = false;
   if (give.statusTransfer !== 'error') {
@@ -46,8 +47,15 @@ const GiveFinish = props => {
 
   useEffect(() => {
     allErrors();
-    setStatus(getProperTransferStatus(give.statusTransfer));
-  }, [give]);
+    if (give.statusTransfer === 'complete') {
+      setStatus(T.t('auto_accept_transfer'));
+      setTitleStatus(true);
+    } else {
+      setTitleStatus(false);
+      setStatus(getProperTransferStatus(give.statusTransfer));
+    }
+  }, [give.statusTransfer]);
+
   return (
     <>
       <Appbar
@@ -62,7 +70,11 @@ const GiveFinish = props => {
         <View style={styles.container}>
           <View style={styles.info}>
             <ScrollView style={styles.scrollView}>
-              {status ? <Title style={styles.title}>{status}</Title> : null}
+              {status ? (
+                <Title style={titleStatus ? styles.titleLarge : styles.title}>
+                  {status}
+                </Title>
+              ) : null}
               {errors
                 ? errors.map((item, index) => {
                     return (
@@ -156,6 +168,13 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 20,
     fontSize: 21,
+    color: '#22215B',
+  },
+  titleLarge: {
+    textAlign: 'center',
+    paddingLeft: 20,
+    paddingRight: 20,
+    fontSize: 14,
     color: '#22215B',
   },
   info: {
