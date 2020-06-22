@@ -37,7 +37,9 @@ const TransferEdit = props => {
 
   // auto save after scaner
   useEffect(() => {
-    if (!scan.selectGiveId) return;
+    if (!scan.selectGiveId) {
+      return;
+    }
     if (scan.scanInfoError) {
       setError(getProperErrorTransfer(scan.scanInfoError, scan.currentScan));
     } else {
@@ -48,7 +50,9 @@ const TransferEdit = props => {
       } else {
         infoList.push(scan.scanInfo);
         let updateList = infoList.filter(item => {
-          if (!item.willDelete) return item;
+          if (!item.willDelete) {
+            return item;
+          }
         });
         dispatch(
           updateTransfer(
@@ -122,6 +126,9 @@ const TransferEdit = props => {
       <View style={styles.body}>
         <View style={styles.container}>
           <ScrollView>
+            {infoList && infoList.length < 1 && (
+              <Text style={styles.infoText}>{T.t('empty_transfer')}</Text>
+            )}
             {infoList &&
               infoList.map((item, index) => (
                 <Card.Title
@@ -262,8 +269,9 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   buttonBlock: {
-    width: Dimensions.get('window').height / 5,
+    width: Dimensions.get('window').height / 5.5,
     textAlign: 'center',
+    margin: 4,
   },
   dialogOpen: {
     backgroundColor: '#EDF6FF',
@@ -277,6 +285,12 @@ const styles = StyleSheet.create({
   titleForgotText: {
     marginTop: -10,
     marginBottom: 10,
+  },
+  infoText: {
+    fontSize: 14,
+    textAlign: 'center',
+    paddingLeft: 15,
+    paddingRight: 15,
   },
 });
 

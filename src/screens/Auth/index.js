@@ -54,8 +54,10 @@ const Auth = props => {
   const [isModal, setIsModal] = useState(false);
   const [changeEmail, setChahgeEmail] = useState('');
   const [emailForgotError, setEmailForgotError] = useState(false);
+  const [emailFocus, setEmailFocus] = useState(false);
 
-  const handelLogin = e => setEmail(ucFirst(e.trim()));
+  // const handelLogin = e => setEmail(ucFirst(e.trim()));
+  const handelLogin = e => setEmail(e.trim());
   const handelPass = e => setPassword(e.trim());
 
   const handleSubmit = () => {
@@ -192,7 +194,11 @@ const Auth = props => {
             label={T.t('login')}
             error={loginError ? true : false}
             mode="outlined"
+            onFocus={() => setEmailFocus(true)}
           />
+          {emailFocus && (
+            <Text style={styles.infoEmail}>{T.t('email_register')}</Text>
+          )}
           <TextInput
             onChangeText={e => handelPass(e)}
             secureTextEntry={true}
@@ -200,6 +206,7 @@ const Auth = props => {
             label={T.t('password')}
             error={passwordError ? true : false}
             mode="outlined"
+            onFocus={() => setEmailFocus(false)}
           />
           <View style={styles.forgotBlock}>
             <Text style={styles.forgot} onPress={() => setIsModal(!isModal)}>
@@ -388,6 +395,11 @@ const styles = StyleSheet.create({
   },
   dialogClose: {
     backgroundColor: '#EDF6FF',
+  },
+  infoEmail: {
+    fontSize: 14,
+    color: '#22215B',
+    textAlign: 'right',
   },
 });
 

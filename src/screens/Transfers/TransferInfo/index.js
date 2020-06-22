@@ -63,6 +63,9 @@ const TransferInfo = props => {
       <View style={styles.body}>
         <View style={styles.container}>
           <ScrollView>
+            {infoList && infoList.items.length < 1 && (
+              <Text style={styles.infoText}>{T.t('empty_transfer')}</Text>
+            )}
             {infoList &&
               infoList.items.map((item, index) => (
                 <Card.Title
@@ -157,6 +160,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
   },
+  infoText: {
+    fontSize: 14,
+    textAlign: 'center',
+    paddingLeft: 15,
+    paddingRight: 15,
+  },
   button: {
     display: 'flex',
     textAlign: 'center',
@@ -165,8 +174,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   buttonBlock: {
-    width: Dimensions.get('window').height / 5,
+    width: Dimensions.get('window').height / 5.5,
     textAlign: 'center',
+    margin: 4,
   },
   buttons: {
     marginTop: 15,
