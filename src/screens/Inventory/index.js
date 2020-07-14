@@ -111,7 +111,8 @@ const styles = StyleSheet.create({
     paddingTop: 25,
     alignItems: 'center',
     backgroundColor: '#D3E3F2',
-    height: Dimensions.get('window').height,
+    height: '90%',
+    paddingBottom: 80,
   },
   load: {
     marginTop: 10,

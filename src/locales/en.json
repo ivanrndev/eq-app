@@ -69,7 +69,7 @@
     "service_back_done": "Item was returned from service",
     "service_identifier_first": "The identifier",
     "service_identifier_second": "is not in the service",
-    "select_user": "Inventorization",
+    "select_user": "Select user",
     "no_users": "There are currently no users",
     "complete": "Complete",
     "scan_more": "Scan yet",

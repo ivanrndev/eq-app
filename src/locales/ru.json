@@ -69,7 +69,7 @@
     "service_back_done": "ТМЦ возвращено из сервиса",
     "service_identifier_first": "Идентификатор",
     "service_identifier_second": "не находиться в сервисе",
-    "select_user": "Инвентаризация",
+    "select_user": "Выберите пользователя",
     "no_users": "На данный момент пользователей нет",
     "complete": "Завершить",
     "scan_more": "Отсканировать еще",

@@ -10,9 +10,17 @@ I18n.fallbacks = true;
 
 // setup language
 I18n.translations = {en, ru};
-const currentLocale = I18n.currentLocale();
+let currentLocale = I18n.currentLocale();
+
+// if uk lang, set ru
+if (currentLocale === 'uk-US' || currentLocale === 'uk') {
+  currentLocale = 'ru';
+}
 
 AsyncStorage.getItem('language').then(language => {
+  if (language === 'uk-US' || language === 'uk') {
+    language = 'ru';
+  }
   if (language) {
     I18n.defaultLocale = language;
     I18n.locale = language;

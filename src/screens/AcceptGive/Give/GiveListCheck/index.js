@@ -33,7 +33,11 @@ const GiveListCheck = props => {
   const userCurrentId = give.userCurrentId;
 
   useEffect(() => {
-    if (give.userRole === scan.scanUserRole) {
+    const correctItem = scan.scanGiveList.find(
+      item => item._id === scan.selectGiveId,
+    );
+    const responsible = correctItem && correctItem.responsible._id;
+    if (responsible === give.userCurrentId) {
       setError(
         `${T.t('give_alredy_user_first')} "${scan.currentScan}" ${T.t(
           'give_alredy_user_second',
