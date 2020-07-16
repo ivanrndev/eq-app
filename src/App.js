@@ -9,7 +9,7 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import {NativeRouter} from 'react-router-native';
 
 // store
-// import {StoreContext} from 'redux-react-hook';
+import {StoreContext} from 'redux-react-hook';
 import {Provider} from 'react-redux';
 import {store} from './store';
 
@@ -55,6 +55,8 @@ import CustomDrawer from './components/Drawer';
 import Settings from './screens/Settings';
 import TransfersEdit from './screens/Transfers/TransferEdit';
 import TransferScaner from './screens/Transfers/TransferScan';
+import Subscribe from './screens/Subscribe';
+import Layout from './components/Layout';
 
 const theme = {
   ...DefaultTheme,
@@ -70,6 +72,7 @@ const Drawer = createDrawerNavigator();
 
 const App = () => {
   return (
+    <StoreContext.Provider value={store}>
     <Provider store={store}>
       <NavigationContainer>
         <NativeRouter>
@@ -118,11 +121,13 @@ const App = () => {
               <Drawer.Screen name="Settings" component={Settings} />
               <Drawer.Screen name="TransfersEdit" component={TransfersEdit} />
               <Drawer.Screen name="TransferScaner" component={TransferScaner} />
+              <Drawer.Screen name="Subscribe" component={Subscribe} />
             </Drawer.Navigator>
           </PaperProvider>
         </NativeRouter>
       </NavigationContainer>
     </Provider>
+    </StoreContext.Provider>
   );
 };
 

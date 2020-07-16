@@ -12,6 +12,7 @@ import {copilot, walkthroughable, CopilotStep} from 'react-native-copilot';
 import {useDispatch} from 'react-redux';
 import {helps} from '../../actions/actions.js';
 import {menuSvg} from '../../utils/menuSvg.js';
+import withLayout from '../../hooks/withLayout';
 
 const Main = props => {
   const dispatch = useDispatch();
@@ -33,13 +34,14 @@ const Main = props => {
   // check help
   useEffect(() => {
     AsyncStorage.getItem('help').then(help => {
+      console.log('help', help);
       if (help === '1') {
         props.start();
         AsyncStorage.setItem('help', '0');
         dispatch(helps(0));
       }
     });
-  }, [settings.help]);
+  }, []);
 
   return (
     <>
@@ -175,14 +177,16 @@ const styles = StyleSheet.create({
   },
 });
 
-export default copilot({
-  animated: true,
-  backdropColor: 'rgba(72, 124, 168, 0.68)',
-  overlay: 'svg',
-  labels: {
-    previous: <View>{menuSvg('left')}</View>,
-    next: <View>{menuSvg('right')}</View>,
-    skip: <View>{menuSvg('close')}</View>,
-    finish: <View>{menuSvg('close')}</View>,
-  },
-})(Main);
+export default withLayout(
+  copilot({
+    animated: true,
+    backdropColor: 'rgba(72, 124, 168, 0.68)',
+    overlay: 'svg',
+    labels: {
+      previous: <View>{menuSvg('left')}</View>,
+      next: <View>{menuSvg('right')}</View>,
+      skip: <View>{menuSvg('close')}</View>,
+      finish: <View>{menuSvg('close')}</View>,
+    },
+  })(Main),
+);

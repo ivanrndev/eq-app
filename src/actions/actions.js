@@ -5,6 +5,8 @@ import {getProperError, actionCheckError} from '../utils/helpers.js';
 import {
   LOGUT,
   LOGIN_USER,
+  GET_COMPANY_INFO,
+  GET_COMPANY_INFO_ERROR,
   LOGIN_USER_ERROR,
   CHANGE_STATUS_ERROR,
   CHANGE_STATUS_LOAD,
@@ -115,6 +117,11 @@ export const userPostFetch = ({email, password}) => dispatch => {
             isLogOut: false,
           },
         });
+
+        // first open help
+        AsyncStorage.setItem('help', '1');
+        dispatch(helps(1));
+
         dispatch(currentUser());
       }
     })
@@ -146,6 +153,7 @@ export const logOut = (nav, ifNav = true) => dispatch => {
     payload: {
       isLogOut: true,
       isLogin: false,
+      currentCompany: {},
     },
   });
   if (ifNav) {
@@ -156,6 +164,7 @@ export const logOut = (nav, ifNav = true) => dispatch => {
 export const currentUser = props => dispatch => {
   return axios.get('/users/me').then(resp => {
     if (resp.status === 200) {
+      // dispatch(getCompanyInfo());
       if (resp.data.email) {
         AsyncStorage.setItem('email', resp.data.email);
       }
@@ -171,11 +180,36 @@ export const currentUser = props => dispatch => {
       if (resp.data.company) {
         AsyncStorage.setItem('userId', resp.data._id);
       }
-
-      // first open help
-      AsyncStorage.setItem('help', '1');
-      dispatch(helps(1));
+      // get company info
+      dispatch(getCompanyInfo());
     }
+  });
+};
+
+export const getCompanyInfo = () => dispatch => {
+  AsyncStorage.getItem('company').then(company => {
+    return axios
+      .get(`${API_URL}/company/my`)
+      .then(resp => {
+        if (resp.status === 200) {
+          dispatch({
+            type: GET_COMPANY_INFO,
+            payload: {
+              currentCompany: resp.data.company,
+            },
+          });
+        }
+      })
+      .catch(e => {
+        if (!e.response.data.success) {
+          dispatch({
+            type: GET_COMPANY_INFO_ERROR,
+            payload: {
+              currentCompany: e.response.data.message.name,
+            },
+          });
+        }
+      });
   });
 };
 
@@ -353,7 +387,6 @@ export const backFromServices = (id, nav) => dispatch => {
       })
       .catch(e => {
         if (!e.response.data.success) {
-          console.log('e.response.data', e.response.data);
           let error = getProperError(e.response.data.message.name);
           dispatch({
             type: ERROR_SEND_SERVICES,

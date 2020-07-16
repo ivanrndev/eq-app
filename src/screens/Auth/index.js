@@ -71,20 +71,17 @@ const Auth = props => {
     }
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      return () => {
-        setError(T.t('access_denied'));
-        dispatch(statusError(false));
-        setLoginError(false);
-        setPasswordError(false);
-        setInfoEmail(false);
-        setEmailForgotError(false);
-        setIsModal(false);
-        setInfoEmail(false);
-      };
-    }, []),
-  );
+  useFocusEffect(() => {
+    return () => {
+      setError(T.t('access_denied'));
+      // setLoginError(false);
+      // setPasswordError(false);
+      setInfoEmail(false);
+      setEmailForgotError(false);
+      setIsModal(false);
+      setInfoEmail(false);
+    };
+  });
 
   // check disabled button
   useEffect(() => {
@@ -98,6 +95,7 @@ const Auth = props => {
   useEffect(() => {
     // if login error
     if (store.isError) {
+      console.log('store.isError', store.isError);
       if (
         store.isError === 'UserNotFound' ||
         store.isError === 'EmailUnApproved' ||
@@ -126,7 +124,7 @@ const Auth = props => {
         AsyncStorage.getItem('token').then(token => {
           if (!isEmpty(token)) {
             props.navigation.navigate('Home');
-            dispatch(statusError(false));
+            // dispatch(statusError(false));
           }
         });
       }
@@ -137,13 +135,12 @@ const Auth = props => {
         dispatch(logOut(props.navigation, false));
       }
     });
-  }, [store.isLogin, store.isError]);
+  }, [store.isLoad, store.isError]);
 
   // detected keyboard
   const [isOpen, setIsOpen] = useState(false);
   const keyboardShowListener = useRef(null);
   const keyboardHideListener = useRef(null);
-
   useEffect(() => {
     keyboardShowListener.current = Keyboard.addListener('keyboardDidShow', () =>
       setIsOpen(true),

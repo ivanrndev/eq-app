@@ -171,5 +171,9 @@
     "delete_transfer_confirm": "Are you sure you want to delete the selected application?",
     "auto_accept_transfer": "Application created. Attention, the 'No confirmation' mode is enabled, which means that when creating an application, the employee will not need to confirm it upon receipt. To enable confirmation, go to the 'Settings' tab in the administrative panel and enable 'Confirm mode'.",
     "empty_transfer": "This application is empty. You can delete it or add items.",
-    "email_register": "Email is case sensitive"
+    "email_register": "Email is case sensitive",
+    "subscribe_end": "Your subscription has ended!",
+    "choise_plan": "Choose a tariff plan",
+    "change_users": "Change account",
+    "subscription": "Subscription"
   }
