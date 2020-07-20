@@ -159,8 +159,8 @@
     "write_off_help": "Scan the QR code of items, if its further operation is impossible and it is subject to write-off.",
     "my_account": "Look at the items assigned to you.",
     "not_now": "Limit is exceeded. You can send a password reset request only once per minute",
-    "not_found": "User with this email not found",
-    "sucess_reset_pass": "Email with a password reset link was successfully sent to the email address",
+    "not_found": "User not found",
+    "sucess_reset_pass": "We have successfully sent a link to reset your password",
     "forgot_your_pass": "Forgot your password?",
     "pass_recovery": "Password recovery",
     "entry_email": "Enter your email and we will send a link to reset your password",
@@ -175,5 +175,6 @@
     "subscribe_end": "Your subscription has ended!",
     "choise_plan": "Choose a tariff plan",
     "change_users": "Change account",
-    "subscription": "Subscription"
+    "subscription": "Subscription",
+    "enter_valid": "Enter your email or verified phone number in the format +38 0ХХ 111 1111"
   }

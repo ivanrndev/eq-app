@@ -286,6 +286,5 @@ export const getForgotEmailMesage = text => {
   }
   if (text === 'SUCESS') {
     return `${T.t('sucess_reset_pass')}`;
-
   }
 };

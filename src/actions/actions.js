@@ -1250,16 +1250,15 @@ export const sendComments = (itemId, message) => dispatch => {
 };
 
 // forgot password
-export const forgotPassword = email => dispatch => {
+export const forgotPassword = key => dispatch => {
   return axios
-    .post(PORGOT_PASS, {email})
+    .post(PORGOT_PASS, {key})
     .then(resp => {
       if (resp.status === 200) {
         dispatch({
           type: FORGOT_PASS_SUCESS,
           payload: {
             forgot_pass_sucess: 'SUCESS',
-            forgot_pass_error: false,
           },
         });
       }

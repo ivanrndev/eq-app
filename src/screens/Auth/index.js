@@ -1,6 +1,6 @@
 /* eslint-disable no-extra-boolean-cast */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {useState, useEffect, useCallback, useRef} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   StyleSheet,
   View,
@@ -15,8 +15,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {isEmpty} from 'lodash';
 import T from '../../i18n';
 // utils
-import {validateEmail} from '../../utils/validateEmail.js';
-import {ucFirst, getForgotEmailMesage} from '../../utils/helpers.js';
+import {validateEmail, validatePhone} from '../../utils/validateEmail.js';
+import {getForgotEmailMesage} from '../../utils/helpers.js';
 import DarkButton from '../../components/Buttons/DarkButton';
 // redux
 import {useDispatch, useSelector} from 'react-redux';
@@ -55,13 +55,22 @@ const Auth = props => {
   const [changeEmail, setChahgeEmail] = useState('');
   const [emailForgotError, setEmailForgotError] = useState(false);
   const [emailFocus, setEmailFocus] = useState(false);
+  const [loginInfo, setLoginInfo] = useState(T.t('enter_valid'));
 
-  // const handelLogin = e => setEmail(ucFirst(e.trim()));
   const handelLogin = e => setEmail(e.trim());
   const handelPass = e => setPassword(e.trim());
 
   const handleSubmit = () => {
-    if (!isEmpty(password) && validateEmail(email)) {
+    const isPhone = validatePhone(email);
+    const isEmail = validateEmail(email);
+
+    if (isEmail) {
+      setLoginInfo(T.t('email_register'));
+    } else {
+      setLoginInfo(T.t('enter_valid'));
+    }
+
+    if (!isEmpty(password) && (isEmail || isPhone)) {
       dispatch(statusLoad(true));
       dispatch(userPostFetch({email, password}));
     } else {
@@ -74,12 +83,6 @@ const Auth = props => {
   useFocusEffect(() => {
     return () => {
       setError(T.t('access_denied'));
-      // setLoginError(false);
-      // setPasswordError(false);
-      setInfoEmail(false);
-      setEmailForgotError(false);
-      setIsModal(false);
-      setInfoEmail(false);
     };
   });
 
@@ -95,7 +98,10 @@ const Auth = props => {
   useEffect(() => {
     // if login error
     if (store.isError) {
-      console.log('store.isError', store.isError);
+      if (store.isError === 'PhoneUnApproved') {
+        setLoginError(true);
+      }
+
       if (
         store.isError === 'UserNotFound' ||
         store.isError === 'EmailUnApproved' ||
@@ -171,7 +177,10 @@ const Auth = props => {
   };
 
   const handelSendEmail = () => {
-    if (!isEmpty(changeEmail) && validateEmail(changeEmail)) {
+    const isPhone = validatePhone(changeEmail);
+    const isEmail = validateEmail(changeEmail);
+
+    if (!isEmpty(changeEmail) && (isEmail || isPhone)) {
       setEmailForgotError(false);
       dispatch(forgotPassword(changeEmail));
     } else {
@@ -193,8 +202,9 @@ const Auth = props => {
             mode="outlined"
             onFocus={() => setEmailFocus(true)}
           />
-          {emailFocus && (
-            <Text style={styles.infoEmail}>{T.t('email_register')}</Text>
+          {loginInfo && (
+            // <Text style={styles.infoEmail}>{T.t('enter_valid')}</Text>
+            <Text style={styles.infoEmail}>{loginInfo}</Text>
           )}
           <TextInput
             onChangeText={e => handelPass(e)}
@@ -273,7 +283,7 @@ const Auth = props => {
               </Dialog.Title>
               <Dialog.Content>
                 <Text style={styles.titleForgotText}>
-                  {!!infoEmail ? infoEmail : `${T.t('entry_email')}`}
+                  {!!infoEmail ? infoEmail : `${T.t('enter_valid')}`}
                 </Text>
                 {!infoEmail && (
                   <TextInput
@@ -283,7 +293,6 @@ const Auth = props => {
                       setChahgeEmail(e.trim().toLowerCase());
                     }}
                     style={styles.inputForgot}
-                    label={'Email'}
                     mode="outlined"
                   />
                 )}
@@ -394,9 +403,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#EDF6FF',
   },
   infoEmail: {
-    fontSize: 14,
+    fontSize: 13,
     color: '#22215B',
     textAlign: 'right',
+    width: Dimensions.get('window').width / 1.3,
   },
 });
 
