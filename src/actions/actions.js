@@ -1158,7 +1158,7 @@ export const makeStocktaking = (array, userId, nav) => dispatch => {
 };
 
 // comments
-export const getComments = (nav, itemId, offset) => dispatch => {
+export const getComments = (nav, itemId, offset, page) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
       .get(`${API_URL}/company/${company}/item/${itemId}/comments/`, {
@@ -1175,6 +1175,7 @@ export const getComments = (nav, itemId, offset) => dispatch => {
               commentsloadMore: false,
               commentsError: false,
               isInfoOpen: true,
+              page: page,
             },
           });
           nav.navigate('Comments');
@@ -1189,6 +1190,7 @@ export const getComments = (nav, itemId, offset) => dispatch => {
             payload: {
               commentsError: error,
               commentsloadMore: false,
+              page: page,
             },
           });
           nav.navigate('Comments');

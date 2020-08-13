@@ -13,12 +13,12 @@ I18n.translations = {en, ru};
 let currentLocale = I18n.currentLocale();
 
 // if uk lang, set ru
-if (currentLocale === 'uk-US' || currentLocale === 'uk') {
+if (currentLocale === 'uk-UA' || currentLocale === 'uk') {
   currentLocale = 'ru';
 }
 
 AsyncStorage.getItem('language').then(language => {
-  if (language === 'uk-US' || language === 'uk') {
+  if (language === 'uk-UA' || language === 'uk') {
     language = 'ru';
   }
   if (language) {

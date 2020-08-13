@@ -16,6 +16,7 @@ const initialState = {
   itemId: '',
   addNewComment: false,
   addNewCommentError: '',
+  page: '',
 };
 
 const commentsReducer = (state = initialState, action) => {

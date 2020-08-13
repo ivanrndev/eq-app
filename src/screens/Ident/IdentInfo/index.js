@@ -38,7 +38,7 @@ export const IdentInfo = props => {
 
   const getAllComments = () => {
     dispatch(loader(true));
-    dispatch(getComments(props.navigation, itemId, 0));
+    dispatch(getComments(props.navigation, itemId, 0, 'IdentInfo'));
   };
 
   const handleTransactions = () => {
@@ -64,7 +64,7 @@ export const IdentInfo = props => {
         navigation={props.navigation}
         newScan={true}
         arrow={true}
-        goTo={'Ident'}
+        goTo={'SelectScan'}
         title={T.t('detail_info')}
       />
       <SafeAreaView />

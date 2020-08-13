@@ -21,7 +21,7 @@ const Ident = props => {
         navigation={props.navigation}
         newScan={true}
         arrow={true}
-        goTo={'Home'}
+        goTo={'SelectScan'}
         title={T.t('title_scan')}
       />
       <SafeAreaView />

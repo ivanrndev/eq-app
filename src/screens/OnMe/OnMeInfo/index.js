@@ -8,7 +8,11 @@ import DarkButton from '../../../components/Buttons/DarkButton';
 import Appbar from '../../../components/Appbar';
 // redux and actions
 import {useDispatch, useSelector} from 'react-redux';
-import {loader, getTransactions} from '../../../actions/actions.js';
+import {
+  loader,
+  getTransactions,
+  getComments,
+} from '../../../actions/actions.js';
 
 export const OnMeInfo = props => {
   const settings = useSelector(state => state.settings);
@@ -33,6 +37,11 @@ export const OnMeInfo = props => {
   const handleTransactions = () => {
     dispatch(loader(true));
     dispatch(getTransactions(metaData._id, props.navigation, 0));
+  };
+
+  const getAllComments = () => {
+    dispatch(loader(true));
+    dispatch(getComments(props.navigation, metaData._id, 0, 'OnMeInfo'));
   };
 
   return (
@@ -118,6 +127,11 @@ export const OnMeInfo = props => {
           )}
           {!store.myError ? (
             <View style={styles.buttons}>
+              <DarkButton
+                // size={fontSizer(width)}
+                text={T.t('title_comments')}
+                onPress={getAllComments}
+              />
               <DarkButton
                 text={T.t('title_history_of_transaction')}
                 onPress={handleTransactions}

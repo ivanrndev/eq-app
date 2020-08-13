@@ -34,7 +34,6 @@ const Main = props => {
   // check help
   useEffect(() => {
     AsyncStorage.getItem('help').then(help => {
-      console.log('help', help);
       if (help === '1') {
         props.start();
         AsyncStorage.setItem('help', '0');
@@ -73,7 +72,7 @@ const Main = props => {
               <Button
                 nav={props.navigation}
                 text={T.t('identification')}
-                route={'Ident'}
+                route={'SelectScan'}
                 svg={'ident'}
               />
             </CopilotText>

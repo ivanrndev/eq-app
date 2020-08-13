@@ -26,6 +26,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {currentScan, dialogInput, loader} from '../../actions/actions.js';
 
 const Scanner = props => {
+  console.log('props', props);
   const dispatch = useDispatch();
   const store = useSelector(state => state.scan);
   const settings = useSelector(state => state.settings);

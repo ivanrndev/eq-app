@@ -57,6 +57,8 @@ import TransfersEdit from './screens/Transfers/TransferEdit';
 import TransferScaner from './screens/Transfers/TransferScan';
 import Subscribe from './screens/Subscribe';
 import Layout from './components/Layout';
+import NFC from './screens/NFC';
+import SelectScan from './screens/Ident/SelectScan';
 
 const theme = {
   ...DefaultTheme,
@@ -122,6 +124,8 @@ const App = () => {
               <Drawer.Screen name="TransfersEdit" component={TransfersEdit} />
               <Drawer.Screen name="TransferScaner" component={TransferScaner} />
               <Drawer.Screen name="Subscribe" component={Subscribe} />
+              <Drawer.Screen name="NFC" component={NFC} />
+              <Drawer.Screen name="SelectScan" component={SelectScan} />
             </Drawer.Navigator>
           </PaperProvider>
         </NativeRouter>

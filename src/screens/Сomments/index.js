@@ -37,7 +37,7 @@ const Comments = props => {
 
   useEffect(() => {
     dispatch(clearComments());
-    dispatch(getComments(props.navigation, comments.itemId, 0));
+    dispatch(getComments(props.navigation, comments.itemId, 0, comments.page));
     setText('');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [comments.addNewComment]);
@@ -49,7 +49,7 @@ const Comments = props => {
         arrow={true}
         clearComments={true}
         newScan={false}
-        goTo={'IdentInfo'}
+        goTo={comments.page}
         title={T.t('title_comments')}
       />
       <SafeAreaView />
