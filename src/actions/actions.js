@@ -77,9 +77,17 @@ import {
   FORGOT_PASS_SUCESS,
   FORGOT_PASS_ERROR,
   RESET_PASS_INFO,
+  NFC,
 } from '../actions/actionsType.js';
 
 // Settings
+export const nfc = (nfcBack, nfcNext, isMultiple) => dispatch => {
+  dispatch({
+    type: NFC,
+    payload: {nfcBack, nfcNext, isMultiple},
+  });
+};
+
 export const loader = status => dispatch => {
   dispatch({
     type: LOADER,
@@ -244,6 +252,7 @@ export const dialogInput = status => dispatch => {
 };
 
 export const scanInfo = (id, nav, page, saveItems) => dispatch => {
+  console.log('PrePAGE', page)
   AsyncStorage.getItem('company').then(company => {
     return axios
       .get(`${API_URL}/company/${company}/item/${id}`)
@@ -287,6 +296,7 @@ export const scanInfo = (id, nav, page, saveItems) => dispatch => {
           }
           dispatch(dialogInput(false));
           dispatch(loader(false));
+          console.log('page', page);
           nav.navigate(page);
         }
       })
@@ -496,7 +506,7 @@ export const saveCurrentItemMark = (id, nav) => dispatch => {
       currentItemMark: id,
     },
   });
-  nav.navigate('MarkingScaner');
+  nav.navigate('SelectScanMarking');
 };
 
 export const makeMarking = (id, code) => dispatch => {
@@ -811,7 +821,7 @@ export const saveCurrentUser = (id, role, nav) => dispatch => {
       userRole: role,
     },
   });
-  nav.navigate('GiveScaner');
+  nav.navigate('SelectScanGive');
 };
 
 export const clearGiveList = () => dispatch => {
@@ -1108,7 +1118,7 @@ export const saveCurrentUserInventory = (id, nav) => dispatch => {
       currentInventoryUser: id,
     },
   });
-  nav.navigate('InventoryScaner');
+  nav.navigate('SelectScanInventory');
 };
 
 export const alreadyScanned = arr => dispatch => {

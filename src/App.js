@@ -56,9 +56,15 @@ import Settings from './screens/Settings';
 import TransfersEdit from './screens/Transfers/TransferEdit';
 import TransferScaner from './screens/Transfers/TransferScan';
 import Subscribe from './screens/Subscribe';
-import Layout from './components/Layout';
 import NFC from './screens/NFC';
-import SelectScan from './screens/Ident/SelectScan';
+import SelectScanIdent from './screens/Ident/SelectScanIdent';
+import SelectScanWriteOff from './screens/WriteOff/SelectScanWriteOff';
+import SelectScanService from './screens/Service/SelectScanService';
+import SelectScanBack from './screens/Service/Back/SelectScanBack';
+import SelectScanInventory from './screens/Inventory/SelectScanInventory';
+import SelectScanMarking from './screens/Marking/SelectScanMarking';
+import SelectScanGive from './screens/AcceptGive/Give/SelectScanGive';
+import SelectScanAccept from './screens/AcceptGive/Accept/SelectScanAccept';
 
 const theme = {
   ...DefaultTheme,
@@ -125,7 +131,14 @@ const App = () => {
               <Drawer.Screen name="TransferScaner" component={TransferScaner} />
               <Drawer.Screen name="Subscribe" component={Subscribe} />
               <Drawer.Screen name="NFC" component={NFC} />
-              <Drawer.Screen name="SelectScan" component={SelectScan} />
+              <Drawer.Screen name="SelectScanIdent" component={SelectScanIdent} />
+              <Drawer.Screen name="SelectScanWriteOff" component={SelectScanWriteOff} />
+              <Drawer.Screen name="SelectScanService" component={SelectScanService} />
+              <Drawer.Screen name="SelectScanBack" component={SelectScanBack} />
+              <Drawer.Screen name="SelectScanInventory" component={SelectScanInventory} />
+              <Drawer.Screen name="SelectScanMarking" component={SelectScanMarking} />
+              <Drawer.Screen name="SelectScanGive" component={SelectScanGive} />
+              <Drawer.Screen name="SelectScanAccept" component={SelectScanAccept} />
             </Drawer.Navigator>
           </PaperProvider>
         </NativeRouter>

@@ -23,7 +23,7 @@ const WriteOff = props => {
         navigation={props.navigation}
         newScan={true}
         arrow={true}
-        goTo={'Home'}
+        goTo={'SelectScanWriteOff'}
         title={T.t('title_scan')}
       />
       <SafeAreaView />

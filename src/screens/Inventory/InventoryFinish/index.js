@@ -28,7 +28,7 @@ export const InventoryFinish = props => {
   const width = Dimensions.get('window').width;
 
   const more = () => {
-    props.navigation.navigate('InventoryScaner');
+    props.navigation.navigate('SelectScanInventory');
     dispatch(allowNewScan(true));
   };
 
@@ -71,7 +71,7 @@ export const InventoryFinish = props => {
         navigation={props.navigation}
         newScan={true}
         arrow={true}
-        goTo={'InventoryScaner'}
+        goTo={'SelectScanInventory'}
         title={T.t('inventorization')}
         alreadyScanned={true}
         clearBidList={true}

@@ -36,7 +36,7 @@ const GiveListCheck = props => {
     const correctItem = scan.scanGiveList.find(
       item => item._id === scan.selectGiveId,
     );
-    const responsible = correctItem && correctItem.responsible._id;
+    const responsible = correctItem && correctItem.person._id;
     if (responsible === give.userCurrentId) {
       setError(
         `${T.t('give_alredy_user_first')} "${scan.currentScan}" ${T.t(
@@ -78,7 +78,7 @@ const GiveListCheck = props => {
   };
 
   const addMore = () => {
-    props.navigation.navigate('GiveScaner');
+    props.navigation.navigate('SelectScanGive');
     dispatch(allowNewScan(true));
   };
 

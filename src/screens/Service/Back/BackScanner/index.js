@@ -21,7 +21,7 @@ const BackScanner = props => {
         navigation={props.navigation}
         arrow={true}
         newScan={true}
-        goTo={'ServiceMenu'}
+        goTo={'SelectScanBack'}
         title={T.t('back_service')}
       />
       <SafeAreaView />

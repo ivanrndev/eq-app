@@ -21,7 +21,7 @@ const MarkingScaner = props => {
         navigation={props.navigation}
         arrow={true}
         newScan={true}
-        goTo={'MarkingList'}
+        goTo={'SelectScanMarking'}
         title={T.t('title_scan')}
       />
       <SafeAreaView />

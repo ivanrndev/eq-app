@@ -101,7 +101,7 @@ const AcceptList = props => {
   };
 
   const makeScan = () => {
-    props.navigation.navigate('AcceptScaner');
+    props.navigation.navigate('SelectScanAccept');
     dispatch(allowNewScan(true));
   };
 

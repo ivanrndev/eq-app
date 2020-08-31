@@ -5,6 +5,7 @@ import {
   FORGOT_PASS_SUCESS,
   FORGOT_PASS_ERROR,
   RESET_PASS_INFO,
+  NFC,
 } from '../../../actions/actionsType.js';
 
 const initialState = {
@@ -13,11 +14,19 @@ const initialState = {
   help: '',
   forgot_pass_sucess: '',
   forgot_pass_error: '',
+  nfcBack: '',
+  nfcNext: '',
+  isMultiple: false,
 };
 
 const settingsReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOADER:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case NFC:
       return {
         ...state,
         ...action.payload,

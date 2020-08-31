@@ -1,38 +1,39 @@
 import React from 'react';
 import {StyleSheet, View, Dimensions, SafeAreaView} from 'react-native';
-// components
 import T from '../../../i18n';
+// components
 import Appbar from '../../../components/Appbar';
 import DarkButton from '../../../components/Buttons/DarkButton';
 import TransparentButton from '../../../components/Buttons/TransparentButton';
-import {fontSizer} from '../../../utils/helpers.js';
+import {nfc} from '../../../actions/actions.js';
+import {useDispatch} from 'react-redux';
 
-const ServiceMenu = props => {
-  const width = Dimensions.get('window').width;
+const SelectScanIdent = props => {
+  const dispatch = useDispatch();
   return (
     <>
       <Appbar
         navigation={props.navigation}
         arrow={true}
         newScan={true}
+        clearMarking={true}
         goTo={'Home'}
-        title={T.t('service_title')}
+        title={'Scanning'}
       />
       <SafeAreaView />
       <View style={styles.body}>
         <View style={styles.buttons}>
           <View style={styles.buttonBlock}>
             <DarkButton
-              size={fontSizer(width)}
-              text={T.t('send_service')}
-              onPress={() => props.navigation.navigate('SelectScanService')}
+              text={'QR Scan'}
+              onPress={() => props.navigation.navigate('Ident')}
             />
-          </View>
-          <View style={styles.buttonBlock}>
             <TransparentButton
-              size={fontSizer(width)}
-              text={T.t('back_service')}
-              onPress={() => props.navigation.navigate('SelectScanBack')}
+              text={'NFC'}
+              onPress={() => {
+                dispatch(nfc('SelectScanIdent', 'IdentInfo', false));
+                props.navigation.navigate('NFC');
+              }}
             />
           </View>
         </View>
@@ -64,21 +65,19 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginBottom: 10,
   },
-  buttonStyle: {
-    width: Dimensions.get('window').width / 1.5,
-    height: Dimensions.get('window').height / 15,
-  },
   buttons: {
     top: Dimensions.get('window').height / 3,
   },
-  BottomButton: {
-    position: 'absolute',
-    bottom: 140,
+  loader: {
+    backgroundColor: 'rgba(52, 52, 52, 0.8)',
     display: 'flex',
     textAlign: 'center',
     justifyContent: 'center',
-    alignSelf: 'center',
+    marginTop: Dimensions.get('window').height / 9,
+    zIndex: 99,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
   },
 });
 
-export default ServiceMenu;
+export default SelectScanIdent;

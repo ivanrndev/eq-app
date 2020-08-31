@@ -1,4 +1,5 @@
-import React, {useState, useEffect} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useState, useEffect, useCallback, useRef} from 'react';
 import {isEmpty} from 'lodash';
 import moment from 'moment';
 import {
@@ -28,7 +29,7 @@ const Comments = props => {
   const scan = useSelector(state => state.scan);
   let error = getProperErrorMessage(comments.commentsError);
   const [text, setText] = useState('');
-  let scrollView = '';
+  let scrollView = useRef();
   let showEmptyError = !comments.commentsList.length;
 
   const sendComment = () => {
@@ -39,9 +40,11 @@ const Comments = props => {
     dispatch(clearComments());
     dispatch(getComments(props.navigation, comments.itemId, 0, comments.page));
     setText('');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [comments.addNewComment]);
 
+  const test = useCallback(() => {
+    scrollView.current.scrollToEnd({animated: true});
+  }, [scrollView]);
   return (
     <>
       <Appbar
@@ -57,13 +60,7 @@ const Comments = props => {
         <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={90}>
           <View style={styles.container}>
             {!error && (
-              <ScrollView
-                ref={ref => {
-                  scrollView = ref;
-                }}
-                onContentSizeChange={() => {
-                  scrollView.scrollToEnd({animated: true});
-                }}>
+              <ScrollView ref={scrollView} onContentSizeChange={test}>
                 {showEmptyError && (
                   <Paragraph style={styles.text}>
                     {T.t('format_comments_empty_first')} {scan.currentScan}{' '}

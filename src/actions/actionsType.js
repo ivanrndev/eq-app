@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 // settings
 export const LOADER = 'LOADER';
+export const NFC = 'NFC';
 export const LANG = 'LANG';
 export const HELP = 'HELP';
 export const FORGOT_PASS_SUCESS = 'FORGOT_PASS_SUCESS';

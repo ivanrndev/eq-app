@@ -72,7 +72,8 @@ const Main = props => {
               <Button
                 nav={props.navigation}
                 text={T.t('identification')}
-                route={'SelectScan'}
+                route={'SelectScanIdent'}
+                // route={'Ident'}
                 svg={'ident'}
               />
             </CopilotText>
@@ -129,7 +130,8 @@ const Main = props => {
                   <Button
                     nav={props.navigation}
                     text={T.t('ban')}
-                    route={'WriteOff'}
+                    // route={'WriteOff'}
+                    route={'SelectScanWriteOff'}
                     svg={'writeOff'}
                   />
                 </CopilotText>

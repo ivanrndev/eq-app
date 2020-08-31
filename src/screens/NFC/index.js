@@ -9,11 +9,12 @@ import Appbar from '../../components/Appbar';
 import DarkButton from '../../components/Buttons/DarkButton';
 
 // redux and actions
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {currentScan, loader} from '../../actions/actions.js';
 
 const NFC = props => {
   const dispatch = useDispatch();
+  const settings = useSelector(state => state.settings);
   const [log, setLog] = useState('Поднесите метку');
 
   useFocusEffect(
@@ -24,14 +25,14 @@ const NFC = props => {
         cleanUp();
         setLog('Поднесите метку');
       };
-    }, [readData]),
+    }, [readData, settings.nfcNext]),
   );
 
   const cleanUp = () => {
     NfcManager.cancelTechnologyRequest().catch(() => 0);
   };
 
-  const readData = useCallback(async () => {
+  const readData = async () => {
     try {
       let tech = Platform.OS === 'ios' ? NfcTech.MifareIOS : NfcTech.NfcA;
       let resp = await NfcManager.requestTechnology(tech, {
@@ -70,7 +71,12 @@ const NFC = props => {
         setLog(codeFormat[0]);
         dispatch(loader(true));
         dispatch(
-          currentScan(codeFormat[0], props.navigation, 'IdentInfo', false),
+          currentScan(
+            codeFormat[0],
+            props.navigation,
+            settings.nfcNext,
+            settings.isMultiple,
+          ),
         );
       } else {
         setLog('Неверный формат');
@@ -82,7 +88,7 @@ const NFC = props => {
       setLog('Попробуйте еще раз');
       cleanUp();
     }
-  });
+  };
 
   return (
     <>
@@ -91,7 +97,7 @@ const NFC = props => {
         arrow={true}
         newScan={true}
         clearMarking={true}
-        goTo={'SelectScan'}
+        goTo={settings.nfcBack}
         title={'NFC'}
       />
       <SafeAreaView style={styles.container}>

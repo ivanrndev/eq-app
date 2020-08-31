@@ -26,7 +26,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import {currentScan, dialogInput, loader} from '../../actions/actions.js';
 
 const Scanner = props => {
-  console.log('props', props);
   const dispatch = useDispatch();
   const store = useSelector(state => state.scan);
   const settings = useSelector(state => state.settings);
@@ -67,6 +66,8 @@ const Scanner = props => {
   }, [customId]);
 
   const text = props.text ? T.t('input_detail_new') : T.t('input_detail');
+
+  console.log('camera', props.saveItems);
 
   const onSuccess = e => {
     if (store.isNewScan) {

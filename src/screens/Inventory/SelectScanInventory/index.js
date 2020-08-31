@@ -1,12 +1,14 @@
 import React from 'react';
 import {StyleSheet, View, Dimensions, SafeAreaView} from 'react-native';
-import T from '../../../i18n';
 // components
 import Appbar from '../../../components/Appbar';
 import DarkButton from '../../../components/Buttons/DarkButton';
 import TransparentButton from '../../../components/Buttons/TransparentButton';
+import {nfc} from '../../../actions/actions.js';
+import {useDispatch} from 'react-redux';
 
-const SelectScan = props => {
+const SelectScanInventory = props => {
+  const dispatch = useDispatch();
   return (
     <>
       <Appbar
@@ -14,8 +16,8 @@ const SelectScan = props => {
         arrow={true}
         newScan={true}
         clearMarking={true}
-        goTo={'Home'}
-        title={'Scan'}
+        goTo={'Inventory'}
+        title={'Scanning'}
       />
       <SafeAreaView />
       <View style={styles.body}>
@@ -23,11 +25,14 @@ const SelectScan = props => {
           <View style={styles.buttonBlock}>
             <DarkButton
               text={'QR Scan'}
-              onPress={() => props.navigation.navigate('Ident')}
+              onPress={() => props.navigation.navigate('InventoryScaner')}
             />
             <TransparentButton
               text={'NFC'}
-              onPress={() => props.navigation.navigate('NFC')}
+              onPress={() => {
+                dispatch(nfc('SelectScanInventory', 'InventoryFinish', false));
+                props.navigation.navigate('NFC');
+              }}
             />
           </View>
         </View>
@@ -74,4 +79,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SelectScan;
+export default SelectScanInventory;

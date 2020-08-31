@@ -21,7 +21,7 @@ const Service = props => {
         navigation={props.navigation}
         arrow={true}
         newScan={true}
-        goTo={'ServiceMenu'}
+        goTo={'SelectScanService'}
         title={T.t('send_service')}
       />
       <SafeAreaView />

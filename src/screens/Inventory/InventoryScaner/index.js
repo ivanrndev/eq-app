@@ -23,7 +23,7 @@ const InventoryScaner = props => {
         navigation={props.navigation}
         newScan={true}
         arrow={true}
-        goTo={'Inventory'}
+        goTo={'SelectScanInventory'}
         clearGiveList={true}
         title={T.t('inventorization')}
       />

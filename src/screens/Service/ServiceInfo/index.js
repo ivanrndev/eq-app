@@ -46,7 +46,7 @@ export const ServiceInfo = props => {
   }
 
   const againScan = () => {
-    props.navigation.navigate('Service');
+    props.navigation.navigate('ServiceMenu');
     dispatch(allowNewScan(true));
   };
 
@@ -77,7 +77,7 @@ export const ServiceInfo = props => {
         navigation={props.navigation}
         newScan={true}
         arrow={true}
-        goTo={'ServiceMenu'}
+        goTo={'Service'}
         title={T.t('send_service')}
       />
       <SafeAreaView />
