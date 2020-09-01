@@ -28,6 +28,7 @@ import {
   userAcceptBid,
   getBidList,
   acceptloadMoreStatus,
+  getLocations,
 } from '../../../actions/actions.js';
 
 const Accept = props => {
@@ -70,9 +71,10 @@ const Accept = props => {
                       <Card
                         style={styles.card}
                         key={index}
-                        onPress={() =>
-                          dispatch(userAcceptBid(props.navigation, item._id))
-                        }>
+                        onPress={() => {
+                          dispatch(userAcceptBid(props.navigation, item._id));
+                          dispatch(getLocations());
+                        }}>
                         <Card.Content>
                           <Title style={styles.cardTitle}>
                             {T.t('transfer_from')}: {item.sender.firstName}{' '}

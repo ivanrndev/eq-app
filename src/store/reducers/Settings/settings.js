@@ -6,6 +6,7 @@ import {
   FORGOT_PASS_ERROR,
   RESET_PASS_INFO,
   NFC,
+  LOCATIONS,
 } from '../../../actions/actionsType.js';
 
 const initialState = {
@@ -17,6 +18,7 @@ const initialState = {
   nfcBack: '',
   nfcNext: '',
   isMultiple: false,
+  locations: '',
 };
 
 const settingsReducer = (state = initialState, action) => {
@@ -52,6 +54,11 @@ const settingsReducer = (state = initialState, action) => {
         ...action.payload,
       };
     case RESET_PASS_INFO:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case LOCATIONS:
       return {
         ...state,
         ...action.payload,

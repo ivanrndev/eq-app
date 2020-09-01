@@ -1,13 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {isEmpty, isEqual} from 'lodash';
 import T from '../../../../i18n';
+import {useFocusEffect} from '@react-navigation/native';
 import {
   StyleSheet,
   View,
   Dimensions,
   SafeAreaView,
   ScrollView,
+  Picker,
 } from 'react-native';
 import {
   Card,
@@ -16,6 +18,7 @@ import {
   Snackbar,
   Portal,
   ActivityIndicator,
+  Text,
 } from 'react-native-paper';
 // components
 import Appbar from '../../../../components/Appbar';
@@ -39,6 +42,7 @@ const AcceptList = props => {
   const alreadyScanned = accept.alreadyScannedBids;
   const [error, setError] = useState('');
   let reject = [];
+  const objects = settings.locations ? settings.locations : [];
 
   let bidItems = accept.acceptList.filter(item => {
     return item._id === accept.userAcceptBid;
@@ -46,6 +50,24 @@ const AcceptList = props => {
 
   const [acceptedIds, setAcceptedIds] = useState(alreadyScanned);
   const [showButtonsScan, setShowButtonsScan] = useState(true);
+
+  // objects and locations, sort
+  const [selectedValue, setSelectedValue] = useState('');
+  const [selectedValueLoc, setSelectedValueLoc] = useState('');
+  const currentLocation = objects.filter(x => {
+    if (x.title === selectedValue) {
+      return x;
+    }
+  });
+  useFocusEffect(
+    useCallback(() => {
+      // setScaner(true);
+      return () => {
+        setSelectedValue('');
+        setSelectedValueLoc('');
+      };
+    }, []),
+  );
 
   useEffect(() => {
     if (!isEmpty(bidItems)) {
@@ -97,7 +119,15 @@ const AcceptList = props => {
     }
     let rejectIds = reject.map(item => item._id);
     dispatch(loader(true));
-    dispatch(makeAccept(accept.userAcceptBid, rejectIds, props.navigation));
+    dispatch(
+      makeAccept(
+        accept.userAcceptBid,
+        rejectIds,
+        props.navigation,
+        selectedValue,
+        selectedValueLoc,
+      ),
+    );
   };
 
   const makeScan = () => {
@@ -169,6 +199,46 @@ const AcceptList = props => {
             : null}
         </ScrollView>
         <>
+          <View style={styles.container}>
+            <Text style={styles.left}>{T.t('object')}:</Text>
+            <Picker
+              selectedValue={selectedValue}
+              style={styles.picker}
+              onValueChange={(itemValue, itemIndex) => {
+                setSelectedValue(itemValue);
+              }}>
+              <Picker.Item label={T.t('choise')} value="" />
+              {objects.map((item, index) => {
+                return (
+                  <Picker.Item
+                    key={index}
+                    label={item.title}
+                    value={item.title}
+                  />
+                );
+              })}
+            </Picker>
+            {!!selectedValue && (
+              <>
+                <Text style={styles.leftTwo}>{T.t('location')}:</Text>
+                <Picker
+                  selectedValue={selectedValueLoc}
+                  style={styles.pickerTwo}
+                  onValueChange={(itemValue, itemIndex) => {
+                    setSelectedValueLoc(itemValue);
+                  }}>
+                  <Picker.Item label={T.t('choise')} value="" />
+                  {currentLocation
+                    ? currentLocation[0].locations.map((item, index) => {
+                        return (
+                          <Picker.Item key={index} label={item} value={item} />
+                        );
+                      })
+                    : null}
+                </Picker>
+              </>
+            )}
+          </View>
           <View style={styles.buttons}>
             {showButtonsScan && (
               <View style={styles.buttonBlock}>
@@ -242,7 +312,19 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 14,
+    paddingLeft: 15,
     textAlign: 'center',
+  },
+  left: {
+    fontSize: 14,
+    paddingLeft: 15,
+    textAlign: 'left',
+    marginBottom: -70,
+  },
+  leftTwo: {
+    fontSize: 14,
+    textAlign: 'left',
+    marginBottom: -95,
   },
   buttons: {
     marginTop: 15,
@@ -269,6 +351,18 @@ const styles = StyleSheet.create({
     zIndex: 99,
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
+  },
+  picker: {
+    marginTop: -45,
+  },
+  pickerTwo: {
+    marginTop: -20,
+    marginBottom: -40,
+  },
+  container: {
+    paddingTop: 40,
+    width: Dimensions.get('window').width / 1.1,
+    height: 'auto',
   },
 });
 

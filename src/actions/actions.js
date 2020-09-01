@@ -78,6 +78,7 @@ import {
   FORGOT_PASS_ERROR,
   RESET_PASS_INFO,
   NFC,
+  LOCATIONS,
 } from '../actions/actionsType.js';
 
 // Settings
@@ -252,7 +253,7 @@ export const dialogInput = status => dispatch => {
 };
 
 export const scanInfo = (id, nav, page, saveItems) => dispatch => {
-  console.log('PrePAGE', page)
+  console.log('PrePAGE', page);
   AsyncStorage.getItem('company').then(company => {
     return axios
       .get(`${API_URL}/company/${company}/item/${id}`)
@@ -1071,12 +1072,20 @@ export const alreadyScannedBids = arr => dispatch => {
   });
 };
 
-export const makeAccept = (accept_id, reject, nav) => dispatch => {
+export const makeAccept = (
+  accept_id,
+  reject,
+  nav,
+  object = '',
+  location = '',
+) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
       .post(`${API_URL}/transfer/${accept_id}/complete/`, {
         reject,
         company_id: company,
+        object,
+        location,
       })
       .then(resp => {
         if (resp.status === 200) {
@@ -1362,4 +1371,18 @@ export const deleteTransfer = (nav, id, route) => dispatch => {
         dispatch(loader(false));
       }
     });
+};
+
+// locations
+export const getLocations = props => dispatch => {
+  AsyncStorage.getItem('company').then(company => {
+    return axios.get(`/company/${company}/locations`).then(resp => {
+      if (resp.status === 200) {
+        dispatch({
+          type: LOCATIONS,
+          payload: {locations: resp.data.data},
+        });
+      }
+    });
+  });
 };

@@ -176,5 +176,8 @@
     "choise_plan": "Choose a tariff plan",
     "change_users": "Change account",
     "subscription": "Subscription",
-    "enter_valid": "Enter your email or verified phone number in the format +38 0ХХ 111 1111"
+    "enter_valid": "Enter your email or verified phone number in the format +38 0ХХ 111 1111",
+    "location": "Location",
+    "object": "Object",
+    "choise": "not chosen"
   }
