@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Appbar, Snackbar, Portal} from 'react-native-paper';
 import {withRouter} from 'react-router-native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {StyleSheet, View} from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import T from '../../i18n';
@@ -18,12 +18,15 @@ import {
   clearMarking,
   clearComments,
   clearUserAcceptBid,
+  switchStartPage,
 } from '../../actions/actions.js';
 
 const AppbarCustom = props => {
   const dispatch = useDispatch();
   const icon = props.arrow ? 'arrow-left' : 'menu';
   const [isConnection, setIsConnection] = useState(false);
+  const iconSwitch = props.typeSwitchCamera ? 'camera' : 'cast';
+  const settings = useSelector(state => state.settings);
 
   NetInfo.fetch().then(state => {
     if (state.isConnected) {
@@ -83,6 +86,23 @@ const AppbarCustom = props => {
           }}
         />
         <Appbar.Content title={props.title} titleStyle={styles.content} />
+        {props.switch && (
+          <Appbar.Action
+            icon={iconSwitch}
+            onPress={() => {
+              if (props.typeSwitchNFC) {
+                dispatch(switchStartPage(settings.nameOfType, 'NFC'));
+                props.navigation.navigate('NFC');
+              }
+              if (props.typeSwitchCamera) {
+                dispatch(
+                  switchStartPage(settings.nameOfType, settings.swithCamera),
+                );
+                props.navigation.navigate(settings.swithCamera);
+              }
+            }}
+          />
+        )}
       </Appbar.Header>
       <View style={styles.borderRadius} />
       <Portal>
@@ -113,7 +133,6 @@ const styles = StyleSheet.create({
   content: {
     color: '#22215B',
     fontWeight: 'bold',
-    // fontSize: 11
   },
   snackbar: {
     zIndex: 100,

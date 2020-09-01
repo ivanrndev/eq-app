@@ -29,6 +29,7 @@ import {
 const MarkingList = props => {
   const dispatch = useDispatch();
   const marking = useSelector(state => state.marking);
+  const settings = useSelector(state => state.settings);
   let error = getProperErrorMessage(marking.markingError);
   const [search, setSearch] = useState('');
 
@@ -83,7 +84,11 @@ const MarkingList = props => {
                       key={index}
                       onPress={() =>
                         dispatch(
-                          saveCurrentItemMark(item._id, props.navigation),
+                          saveCurrentItemMark(
+                            item._id,
+                            props.navigation,
+                            settings.startPageMarking,
+                          ),
                         )
                       }>
                       <Card.Content>

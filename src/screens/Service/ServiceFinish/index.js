@@ -13,6 +13,7 @@ import {allowNewScan} from '../../../actions/actions.js';
 export const ServiceFinish = props => {
   const dispatch = useDispatch();
   const services = useSelector(state => state.services);
+  const settings = useSelector(state => state.settings);
   const store = useSelector(state => state.scan);
   const error = getProperErrorMessage(
     services.inServicesError,
@@ -30,7 +31,7 @@ export const ServiceFinish = props => {
         navigation={props.navigation}
         newScan={true}
         arrow={true}
-        goTo={'Service'}
+        goTo={settings.startPageService}
         title={T.t('send_service')}
       />
       <SafeAreaView />

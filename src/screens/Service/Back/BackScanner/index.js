@@ -21,8 +21,10 @@ const BackScanner = props => {
         navigation={props.navigation}
         arrow={true}
         newScan={true}
-        goTo={'SelectScanBack'}
+        goTo={'ServiceMenu'}
         title={T.t('back_service')}
+        switch={true}
+        typeSwitchNFC={true}
       />
       <SafeAreaView />
       <View style={styles.body}>

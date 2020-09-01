@@ -79,13 +79,29 @@ import {
   RESET_PASS_INFO,
   NFC,
   LOCATIONS,
+  START_PAGE,
 } from '../actions/actionsType.js';
 
 // Settings
-export const nfc = (nfcBack, nfcNext, isMultiple) => dispatch => {
+export const nfc = (
+  nfcBack,
+  nfcNext,
+  isMultiple,
+  swithCamera,
+  nameOfType,
+) => dispatch => {
   dispatch({
     type: NFC,
-    payload: {nfcBack, nfcNext, isMultiple},
+    payload: {nfcBack, nfcNext, isMultiple, swithCamera, nameOfType},
+  });
+};
+
+export const switchStartPage = (name, page) => dispatch => {
+  dispatch({
+    type: START_PAGE,
+    payload: {
+      [name]: page,
+    },
   });
 };
 
@@ -500,14 +516,17 @@ export const getMarkingList = (status, nav) => dispatch => {
   });
 };
 
-export const saveCurrentItemMark = (id, nav) => dispatch => {
+export const saveCurrentItemMark = (id, nav, startPage) => dispatch => {
   dispatch({
     type: MARKING_CURRENT_ID,
     payload: {
       currentItemMark: id,
     },
   });
-  nav.navigate('SelectScanMarking');
+  dispatch(
+    nfc('Marking', 'MarkingFinish', false, 'MarkingScaner', 'startPageMarking'),
+  );
+  nav.navigate(startPage);
 };
 
 export const makeMarking = (id, code) => dispatch => {
@@ -814,7 +833,7 @@ export const clearUserList = () => dispatch => {
   });
 };
 
-export const saveCurrentUser = (id, role, nav) => dispatch => {
+export const saveCurrentUser = (id, role, nav, startPage) => dispatch => {
   dispatch({
     type: USER_CURRENT_ID,
     payload: {
@@ -822,7 +841,10 @@ export const saveCurrentUser = (id, role, nav) => dispatch => {
       userRole: role,
     },
   });
-  nav.navigate('SelectScanGive');
+  dispatch(
+    nfc('GiveListCheck', 'GiveListCheck', true, 'GiveScaner', 'startPageGive'),
+  );
+  nav.navigate(startPage);
 };
 
 export const clearGiveList = () => dispatch => {
@@ -1051,6 +1073,10 @@ export const userAcceptBid = (nav, id) => dispatch => {
       userAcceptBid: id,
     },
   });
+  console.log('asdadas');
+  dispatch(
+    nfc('AcceptList', 'AcceptList', false, 'AcceptScaner', 'startPageAccept'),
+  );
   nav.navigate('AcceptList');
 };
 
@@ -1120,14 +1146,24 @@ export const makeAccept = (
 };
 
 // inventory actions
-export const saveCurrentUserInventory = (id, nav) => dispatch => {
+export const saveCurrentUserInventory = (id, nav, startPage) => dispatch => {
+  console.log('startPage', startPage);
   dispatch({
     type: SAVE_CURRENT_INVENTORY_USER,
     payload: {
       currentInventoryUser: id,
     },
   });
-  nav.navigate('SelectScanInventory');
+  dispatch(
+    nfc(
+      'Inventory',
+      'InventoryFinish',
+      false,
+      'InventoryScaner',
+      'startPageInventory',
+    ),
+  );
+  nav.navigate(startPage);
 };
 
 export const alreadyScanned = arr => dispatch => {

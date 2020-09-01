@@ -99,6 +99,8 @@ const NFC = props => {
         clearMarking={true}
         goTo={settings.nfcBack}
         title={'NFC'}
+        switch={true}
+        typeSwitchCamera={true}
       />
       <SafeAreaView style={styles.container}>
         <View style={styles.log}>

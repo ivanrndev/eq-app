@@ -1,8 +1,8 @@
 import React, {useCallback, useState} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
 import {StyleSheet, View, Dimensions, SafeAreaView} from 'react-native';
-// components
 import T from '../../i18n';
+// components
 import Appbar from '../../components/Appbar';
 import Scanner from '../../components/Scanner';
 
@@ -21,8 +21,10 @@ const Service = props => {
         navigation={props.navigation}
         arrow={true}
         newScan={true}
-        goTo={'SelectScanService'}
+        goTo={'ServiceMenu'}
         title={T.t('send_service')}
+        switch={true}
+        typeSwitchNFC={true}
       />
       <SafeAreaView />
       <View style={styles.body}>

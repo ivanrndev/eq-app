@@ -7,6 +7,7 @@ import {
   RESET_PASS_INFO,
   NFC,
   LOCATIONS,
+  START_PAGE,
 } from '../../../actions/actionsType.js';
 
 const initialState = {
@@ -18,11 +19,26 @@ const initialState = {
   nfcBack: '',
   nfcNext: '',
   isMultiple: false,
+  nameOfType: '',
+  swithCamera: '',
   locations: '',
+  startPageIdent: 'Ident',
+  startPageWriteOff: 'WriteOff',
+  startPageService: 'Service',
+  startPageBack: 'BackScanner',
+  startPageInventory: 'InventoryScaner',
+  startPageMarking: 'MarkingScaner',
+  startPageGive: 'GiveScaner',
+  startPageAccept: 'AcceptScaner',
 };
 
 const settingsReducer = (state = initialState, action) => {
   switch (action.type) {
+    case START_PAGE:
+      return {
+        ...state,
+        ...action.payload,
+      };
     case LOADER:
       return {
         ...state,

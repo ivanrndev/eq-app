@@ -10,7 +10,7 @@ import {Portal, ActivityIndicator} from 'react-native-paper';
 import Button from '../../components/Buttons/Menu';
 import {copilot, walkthroughable, CopilotStep} from 'react-native-copilot';
 import {useDispatch} from 'react-redux';
-import {helps} from '../../actions/actions.js';
+import {helps, nfc} from '../../actions/actions.js';
 import {menuSvg} from '../../utils/menuSvg.js';
 import withLayout from '../../hooks/withLayout';
 
@@ -72,8 +72,12 @@ const Main = props => {
               <Button
                 nav={props.navigation}
                 text={T.t('identification')}
-                route={'SelectScanIdent'}
-                // route={'Ident'}
+                route={settings.startPageIdent}
+                onPress={() =>
+                  dispatch(
+                    nfc('Home', 'IdentInfo', false, 'Ident', 'startPageIdent'),
+                  )
+                }
                 svg={'ident'}
               />
             </CopilotText>
@@ -130,8 +134,18 @@ const Main = props => {
                   <Button
                     nav={props.navigation}
                     text={T.t('ban')}
-                    // route={'WriteOff'}
-                    route={'SelectScanWriteOff'}
+                    route={settings.startPageWriteOff}
+                    onPress={() =>
+                      dispatch(
+                        nfc(
+                          'Home',
+                          'WriteOffInfo',
+                          false,
+                          'WriteOff',
+                          'startPageWriteOff',
+                        ),
+                      )
+                    }
                     svg={'writeOff'}
                   />
                 </CopilotText>

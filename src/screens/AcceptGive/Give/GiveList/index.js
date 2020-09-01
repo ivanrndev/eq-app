@@ -23,6 +23,7 @@ import {
 const GiveList = props => {
   const dispatch = useDispatch();
   const give = useSelector(state => state.give);
+  const settings = useSelector(state => state.settings);
   let error = getProperErrorMessage(give.getUsetError);
   const [search, setSearch] = useState('');
   const [userList, setUserList] = useState([]);
@@ -74,7 +75,12 @@ const GiveList = props => {
                     key={item._id}
                     onPress={() => {
                       dispatch(
-                        saveCurrentUser(item._id, item.role, props.navigation),
+                        saveCurrentUser(
+                          item._id,
+                          item.role,
+                          props.navigation,
+                          settings.startPageGive,
+                        ),
                       );
                       dispatch(clearGiveList());
                     }}>

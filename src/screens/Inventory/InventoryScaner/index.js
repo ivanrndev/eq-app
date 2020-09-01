@@ -23,9 +23,11 @@ const InventoryScaner = props => {
         navigation={props.navigation}
         newScan={true}
         arrow={true}
-        goTo={'SelectScanInventory'}
+        goTo={'Inventory'}
         clearGiveList={true}
         title={T.t('inventorization')}
+        switch={true}
+        typeSwitchNFC={true}
       />
       <SafeAreaView />
       <View style={styles.body}>

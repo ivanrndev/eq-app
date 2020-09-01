@@ -77,7 +77,7 @@ export const ServiceInfo = props => {
         navigation={props.navigation}
         newScan={true}
         arrow={true}
-        goTo={'Service'}
+        goTo={settings.startPageService}
         title={T.t('send_service')}
       />
       <SafeAreaView />

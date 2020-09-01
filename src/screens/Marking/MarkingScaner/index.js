@@ -21,8 +21,10 @@ const MarkingScaner = props => {
         navigation={props.navigation}
         arrow={true}
         newScan={true}
-        goTo={'SelectScanMarking'}
+        goTo={'MarkingList'}
         title={T.t('title_scan')}
+        switch={true}
+        typeSwitchNFC={true}
       />
       <SafeAreaView />
       <View style={styles.body}>

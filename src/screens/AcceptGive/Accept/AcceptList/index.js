@@ -131,7 +131,7 @@ const AcceptList = props => {
   };
 
   const makeScan = () => {
-    props.navigation.navigate('SelectScanAccept');
+    props.navigation.navigate(settings.startPageAccept);
     dispatch(allowNewScan(true));
   };
 

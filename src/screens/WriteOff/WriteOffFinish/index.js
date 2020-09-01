@@ -13,6 +13,7 @@ import {allowNewScan} from '../../../actions/actions.js';
 export const WriteOffFinish = props => {
   const dispatch = useDispatch();
   const writeoff = useSelector(state => state.writeoff);
+  const settings = useSelector(state => state.settings);
   const store = useSelector(state => state.scan);
   const error = getProperErrorMessage(
     writeoff.inWriteOffError,
@@ -20,7 +21,7 @@ export const WriteOffFinish = props => {
   );
 
   const againSend = () => {
-    props.navigation.navigate('WriteOff');
+    props.navigation.navigate(settings.startPageWriteOff);
     dispatch(allowNewScan(true));
   };
 
@@ -30,7 +31,7 @@ export const WriteOffFinish = props => {
         navigation={props.navigation}
         newScan={true}
         arrow={true}
-        goTo={'WriteOff'}
+        goTo={settings.startPageWriteOff}
         title={T.t('ban')}
       />
       <SafeAreaView />

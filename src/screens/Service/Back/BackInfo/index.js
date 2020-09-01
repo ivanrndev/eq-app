@@ -40,7 +40,7 @@ export const BackInfo = props => {
   };
 
   const againScan = () => {
-    props.navigation.navigate('SelectScanBack');
+    props.navigation.navigate('ServiceMenu');
     dispatch(allowNewScan(true));
   };
 
@@ -62,7 +62,7 @@ export const BackInfo = props => {
         navigation={props.navigation}
         newScan={true}
         arrow={true}
-        goTo={'SelectScanBack'}
+        goTo={settings.startPageBack}
         title={T.t('back_service')}
       />
       <SafeAreaView />

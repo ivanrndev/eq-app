@@ -39,7 +39,7 @@ export const WriteOffInfo = props => {
   };
 
   const againScan = () => {
-    props.navigation.navigate('SelectScanWriteOff');
+    props.navigation.navigate(settings.startPageWriteOff);
     dispatch(allowNewScan(true));
   };
 
@@ -61,7 +61,7 @@ export const WriteOffInfo = props => {
         navigation={props.navigation}
         newScan={true}
         arrow={true}
-        goTo={'SelectScanWriteOff'}
+        goTo={settings.startPageWriteOff}
         title={T.t('title_ban_question')}
       />
       <SafeAreaView />

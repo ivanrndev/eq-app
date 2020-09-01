@@ -6,9 +6,13 @@ import Appbar from '../../../components/Appbar';
 import DarkButton from '../../../components/Buttons/DarkButton';
 import TransparentButton from '../../../components/Buttons/TransparentButton';
 import {fontSizer} from '../../../utils/helpers.js';
+import {useDispatch, useSelector} from 'react-redux';
+import {nfc} from '../../../actions/actions.js';
 
 const ServiceMenu = props => {
   const width = Dimensions.get('window').width;
+  const dispatch = useDispatch();
+  const settings = useSelector(state => state.settings);
   return (
     <>
       <Appbar
@@ -25,14 +29,36 @@ const ServiceMenu = props => {
             <DarkButton
               size={fontSizer(width)}
               text={T.t('send_service')}
-              onPress={() => props.navigation.navigate('SelectScanService')}
+              onPress={() => {
+                props.navigation.navigate(settings.startPageService);
+                dispatch(
+                  nfc(
+                    'ServiceMenu',
+                    'ServiceInfo',
+                    false,
+                    'Service',
+                    'startPageService',
+                  ),
+                );
+              }}
             />
           </View>
           <View style={styles.buttonBlock}>
             <TransparentButton
               size={fontSizer(width)}
               text={T.t('back_service')}
-              onPress={() => props.navigation.navigate('SelectScanBack')}
+              onPress={() => {
+                props.navigation.navigate(settings.startPageBack);
+                dispatch(
+                  nfc(
+                    'ServiceMenu',
+                    'BackInfo',
+                    false,
+                    'BackScanner',
+                    'startPageBack',
+                  ),
+                );
+              }}
             />
           </View>
         </View>

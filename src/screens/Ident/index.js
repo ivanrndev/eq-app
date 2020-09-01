@@ -21,8 +21,10 @@ const Ident = props => {
         navigation={props.navigation}
         newScan={true}
         arrow={true}
-        goTo={'SelectScanIdent'}
+        goTo={'Home'}
         title={T.t('title_scan')}
+        switch={true}
+        typeSwitchNFC={true}
       />
       <SafeAreaView />
       <View style={styles.body}>

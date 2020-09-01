@@ -28,6 +28,7 @@ const GiveListCheck = props => {
   const dispatch = useDispatch();
   const scan = useSelector(state => state.scan);
   const give = useSelector(state => state.give);
+  const settings = useSelector(state => state.settings);
   const [error, setError] = useState('');
   let showEmptyError = !scan.scanGiveList.length;
   const userCurrentId = give.userCurrentId;
@@ -78,7 +79,7 @@ const GiveListCheck = props => {
   };
 
   const addMore = () => {
-    props.navigation.navigate('SelectScanGive');
+    props.navigation.navigate(settings.startPageGive);
     dispatch(allowNewScan(true));
   };
 

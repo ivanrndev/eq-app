@@ -19,6 +19,7 @@ import {saveCurrentUserInventory} from '../../actions/actions.js';
 const Inventory = props => {
   const dispatch = useDispatch();
   const [checked, setChecked] = useState(false);
+  const settings = useSelector(state => state.settings);
   const users = useSelector(state => state.give);
   let showEmptyError = !users.userList.length;
   let error = getProperErrorMessage(users.getUsetError);
@@ -85,7 +86,11 @@ const Inventory = props => {
                     key={index}
                     onPress={() => {
                       dispatch(
-                        saveCurrentUserInventory(item._id, props.navigation),
+                        saveCurrentUserInventory(
+                          item._id,
+                          props.navigation,
+                          settings.startPageInventory,
+                        ),
                       );
                     }}>
                     <Card.Content>

@@ -18,6 +18,7 @@ import {fontSizer} from '../../../utils/helpers.js';
 
 export const IdentInfo = props => {
   const dispatch = useDispatch();
+  const settings = useSelector(state => state.settings);
   const store = useSelector(state => state.scan);
   const error = getProperErrorMessage(store.scanInfoError, store.currentScan);
   const show = store.isInfoOpen;
@@ -64,7 +65,7 @@ export const IdentInfo = props => {
         navigation={props.navigation}
         newScan={true}
         arrow={true}
-        goTo={'SelectScanIdent'}
+        goTo={settings.startPageIdent}
         title={T.t('detail_info')}
       />
       <SafeAreaView />
