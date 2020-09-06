@@ -19,6 +19,8 @@ import {
   Portal,
   ActivityIndicator,
   Text,
+  Dialog,
+  Button,
 } from 'react-native-paper';
 // components
 import Appbar from '../../../../components/Appbar';
@@ -41,6 +43,7 @@ const AcceptList = props => {
   const scan = useSelector(state => state.scan);
   const alreadyScanned = accept.alreadyScannedBids;
   const [error, setError] = useState('');
+  const [showModal, setShowModal] = useState(true);
   let reject = [];
   const objects = settings.locations ? settings.locations : [];
 
@@ -199,45 +202,11 @@ const AcceptList = props => {
             : null}
         </ScrollView>
         <>
-          <View style={styles.container}>
-            <Text style={styles.left}>{T.t('object')}:</Text>
-            <Picker
-              selectedValue={selectedValue}
-              style={styles.picker}
-              onValueChange={(itemValue, itemIndex) => {
-                setSelectedValue(itemValue);
-              }}>
-              <Picker.Item label={T.t('choise')} value="" />
-              {objects.map((item, index) => {
-                return (
-                  <Picker.Item
-                    key={index}
-                    label={item.title}
-                    value={item.title}
-                  />
-                );
-              })}
-            </Picker>
-            {!!selectedValue && (
-              <>
-                <Text style={styles.leftTwo}>{T.t('location')}:</Text>
-                <Picker
-                  selectedValue={selectedValueLoc}
-                  style={styles.pickerTwo}
-                  onValueChange={(itemValue, itemIndex) => {
-                    setSelectedValueLoc(itemValue);
-                  }}>
-                  <Picker.Item label={T.t('choise')} value="" />
-                  {currentLocation
-                    ? currentLocation[0].locations.map((item, index) => {
-                        return (
-                          <Picker.Item key={index} label={item} value={item} />
-                        );
-                      })
-                    : null}
-                </Picker>
-              </>
-            )}
+          <View style={styles.buttonObject}>
+            <DarkButton
+              text="Выбрать объект и локацию"
+              onPress={() => setShowModal(!showModal)}
+            />
           </View>
           <View style={styles.buttons}>
             {showButtonsScan && (
@@ -275,6 +244,60 @@ const AcceptList = props => {
           {error}
         </Snackbar>
       </View>
+      <Portal>
+        <Dialog visible={showModal} onDismiss={() => setShowModal(false)}>
+          {/* <Dialog.Title>{T.t('object')}</Dialog.Title> */}
+          <Dialog.Content>
+            <View style={styles.container}>
+              <Text style={styles.left}>{T.t('object')}:</Text>
+              <Picker
+                selectedValue={selectedValue}
+                style={styles.picker}
+                onValueChange={(itemValue, itemIndex) => {
+                  setSelectedValue(itemValue);
+                }}>
+                <Picker.Item label={T.t('choise')} value="" />
+                {objects.map((item, index) => {
+                  return (
+                    <Picker.Item
+                      key={index}
+                      label={item.title}
+                      value={item.title}
+                    />
+                  );
+                })}
+              </Picker>
+              {!!selectedValue && (
+                <>
+                  <Text style={styles.leftTwo}>{T.t('location')}:</Text>
+                  <Picker
+                    selectedValue={selectedValueLoc}
+                    style={styles.pickerTwo}
+                    onValueChange={(itemValue, itemIndex) => {
+                      setSelectedValueLoc(itemValue);
+                    }}>
+                    <Picker.Item label={T.t('choise')} value="" />
+                    {currentLocation
+                      ? currentLocation[0].locations.map((item, index) => {
+                          return (
+                            <Picker.Item
+                              key={index}
+                              label={item}
+                              value={item}
+                            />
+                          );
+                        })
+                      : null}
+                  </Picker>
+                </>
+              )}
+            </View>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={() => setShowModal(false)}>Done</Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
     </>
   );
 };
@@ -293,6 +316,13 @@ const styles = StyleSheet.create({
   buttonBlock: {
     width: Dimensions.get('window').height / 4.3,
     textAlign: 'center',
+  },
+  buttonObject: {
+    display: 'flex',
+    width: Dimensions.get('window').height / 2,
+    marginBottom: -30,
+    paddingLeft: 13,
+    paddingRight: 13,
   },
   load: {
     marginTop: 10,
@@ -325,6 +355,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'left',
     marginBottom: -95,
+    marginLeft: 20,
   },
   buttons: {
     marginTop: 15,
@@ -353,14 +384,14 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height,
   },
   picker: {
-    marginTop: -45,
+    // marginTop: -45,
   },
   pickerTwo: {
-    marginTop: -20,
+    marginTop: 50,
     marginBottom: -40,
   },
   container: {
-    paddingTop: 40,
+    paddingTop: 25,
     width: Dimensions.get('window').width / 1.1,
     height: 'auto',
   },

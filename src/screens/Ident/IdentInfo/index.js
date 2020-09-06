@@ -1,6 +1,8 @@
+/* eslint-disable prettier/prettier */
 import React, {useState} from 'react';
-import {StyleSheet, View, Dimensions, SafeAreaView, Text} from 'react-native';
-import {Title} from 'react-native-paper';
+import {StyleSheet, View, Dimensions, SafeAreaView, Text, ScrollView} from 'react-native';
+import {Title, Button, Portal, Dialog, IconButton} from 'react-native-paper';
+import {isEmpty} from 'lodash';
 // components
 import Appbar from '../../../components/Appbar';
 // redux and actions
@@ -9,6 +11,7 @@ import {
   getTransactions,
   getComments,
   loader,
+  unMountItemFromParent,
 } from '../../../actions/actions.js';
 import T from '../../../i18n';
 import {getStatus, getProperErrorMessage} from '../../../utils/helpers.js';
@@ -24,6 +27,10 @@ export const IdentInfo = props => {
   const show = store.isInfoOpen;
   const metaData = store.scanInfo.metadata;
   const width = Dimensions.get('window').width;
+  const [isOpen, setIsOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(false);
+  const [role, setRole] = useState();
+  const [userId, setUserId] = useState();
 
   let nameOfProduct = '';
   if (metaData) {
@@ -34,7 +41,6 @@ export const IdentInfo = props => {
         }`;
   }
 
-  const [role, setRole] = useState();
   let itemId = store.scanInfo._id;
 
   const getAllComments = () => {
@@ -59,6 +65,44 @@ export const IdentInfo = props => {
   };
   getRole();
 
+  const getUserId = async () => {
+    try {
+      const value = await AsyncStorage.getItem('userId');
+      if (value !== null) {
+        setUserId(value);
+      }
+    } catch (e) {
+      console.log('no role');
+    }
+  };
+  getUserId();
+
+  const deleteItem = () => {
+    setIsOpen(false);
+    dispatch(loader(true));
+    dispatch(unMountItemFromParent(
+      store.scanInfo.parentю_id,
+      [deleteId],
+      store.scanInfo.code,
+      props.navigation,
+      'IdentInfo'
+    ));
+  };
+
+  const unmount = () => {
+    dispatch(loader(true));
+    dispatch(unMountItemFromParent(
+      store.scanInfo.parent._id,
+      store.scanInfo._id,
+      store.scanInfo.code,
+      props.navigation,
+      'IdentInfo'
+    ));
+  };
+
+  const personId = store.scanInfo.person ? store.scanInfo.person._id : null;
+  const gaveAcess = userId === personId ? true : false;
+
   return (
     <>
       <Appbar
@@ -71,6 +115,7 @@ export const IdentInfo = props => {
       <SafeAreaView />
       <View style={styles.body}>
         <View style={styles.container}>
+        <ScrollView>
           {store.scanInfoError && (
             <View style={styles.info}>
               <Title style={styles.titleError}>{error}</Title>
@@ -130,44 +175,135 @@ export const IdentInfo = props => {
                       {store.scanInfo.person.lastName}
                     </Text>
                   )}
+                  {!isEmpty(store.scanInfo.items) && (
+                    <>
+                    <Text style={styles.textTmc}>{T.t('om_this_setup')}</Text>
+                    {store.scanInfo.items.map((item, index) => {
+                      return (
+                        <View key={index}>
+                          <Text key={index} style={styles.textInfo}>
+                            {item.metadata.title}{'\n'}
+                            {item.metadata.type}{'\n'}
+                            {item.metadata.brand}{'\n'}
+                            {item.metadata.serial}{'\n'}
+                            {item.metadata.model}{'\n'}
+                            {item.code}
+                          </Text>
+                          <Button
+                            style={styles.deleteBtn}
+                            mode="text"
+                            contentStyle={styles.buttonContentStyle}
+                          >
+                            {gaveAcess && (
+                              <IconButton {...props}
+                                icon="delete"
+                                size={35}
+                                color="#22215B"
+                                onPress={() =>  {
+                                  setDeleteId(item._id);
+                                  setIsOpen(true);
+                                }} />
+                            )}
+                          </Button>
+                          <View style={styles.border} />
+                       </View>
+                      );
+                    })}
+                    </>
+                  )}
+                    {store.scanInfo.parent && (
+                      <>
+                      <Text style={styles.textTmc}>{T.t('this_setup')}</Text>
+                      <Text style={styles.text}>
+                        {store.scanInfo.parent.metadata.title},{' '}
+                        {store.scanInfo.parent.metadata.brand},{' '}
+                        {store.scanInfo.parent.metadata.model},{' '}
+                        {store.scanInfo.parent.metadata.serial}
+                      </Text>
+                    </>
+                  )}
                 </View>
               )}
             </View>
           )}
-          {!store.scanInfoError && (
+        </ScrollView>
             <>
               <View style={styles.buttonsBlock}>
                 <View style={styles.buttonBlock}>
-                  <DarkButton
-                    size={fontSizer(width)}
-                    text={T.t('title_comments')}
-                    onPress={getAllComments}
-                  />
-                  <DarkButton
-                    size={fontSizer(width)}
-                    text={T.t('title_history_of_transaction')}
-                    onPress={handleTransactions}
-                  />
+                  {gaveAcess && (
+                    <View>
+                      {!isEmpty(store.scanInfo.parent) ? (
+                        <View style={styles.marginBtn}>
+                          <DarkButton
+                            size={fontSizer(width)}
+                            text={T.t('dismantle')}
+                            onPress={unmount}
+                          />
+                        </View>
+                      ) : (
+                        <View style={styles.marginBtn}>
+                          <DarkButton
+                            size={fontSizer(width)}
+                            text={T.t('setupItem')}
+                            onPress={() => props.navigation.navigate('MountList')}
+                          />
+                        </View>
+                      )}
+                    </View>
+                  )}
+                   <View style={styles.marginBtn}>
+                    <DarkButton
+                      size={fontSizer(width)}
+                      text={T.t('title_comments')}
+                      onPress={getAllComments}
+                    />
+                   </View>
+                   <View style={styles.marginBtn}>
+                    <DarkButton
+                      size={fontSizer(width)}
+                      text={T.t('title_history_of_transaction')}
+                      onPress={handleTransactions}
+                    />
+                  </View>
                 </View>
               </View>
             </>
-          )}
         </View>
+        <Portal>
+        <Dialog style={styles.dialog} visible={isOpen} onDismiss={() => {setIsOpen(!isOpen)}}>
+          <Dialog.Title>Удалить ТМЦ?</Dialog.Title>
+          <Dialog.Actions>
+            <Button onPress={() => deleteItem()}>Удалить</Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
       </View>
     </>
   );
 };
 
 const styles = StyleSheet.create({
+  marginBtn: {
+    marginBottom: -20,
+  },
+  dialog: {
+    backgroundColor: '#EDF6FF',
+  },
   body: {
     display: 'flex',
     marginTop: -15,
     backgroundColor: '#D3E3F2',
     height: Dimensions.get('window').height,
   },
+  buttonsBlock: {
+    alignSelf: 'center',
+    bottom: -10,
+  },
   buttonBlock: {
-    width: Dimensions.get('window').height / 3,
+    width: Dimensions.get('window').width / 1.2,
     textAlign: 'center',
+    backgroundColor: '#EDF6FF',
+    marginBottom: 10,
   },
   container: {
     backgroundColor: '#EDF6FF',
@@ -199,6 +335,21 @@ const styles = StyleSheet.create({
     color: '#7A7A9D',
     width: Dimensions.get('window').width / 1.3,
   },
+  textInfo: {
+    fontSize: 16,
+    paddingBottom: 5,
+    paddingLeft: 15,
+    color: '#7A7A9D',
+    width: Dimensions.get('window').width / 1.3,
+    height: 'auto',
+  },
+  textTmc: {
+    fontSize: 16,
+    marginTop: 20,
+    paddingBottom: 10,
+    color: '#22215B',
+    width: Dimensions.get('window').width / 1.3,
+  },
   button: {
     display: 'flex',
     textAlign: 'center',
@@ -210,11 +361,24 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width / 1.5,
     height: Dimensions.get('window').height / 15,
   },
-  buttonsBlock: {
-    position: 'absolute',
-    display: 'flex',
-    alignSelf: 'center',
-    bottom: 20,
+  deleteBtn: {
+    alignSelf: 'flex-end',
+    width: 20,
+    marginTop: -60,
+    marginRight: 0,
+    paddingLeft: 14,
+    marginBottom: 10,
+    height: Dimensions.get('window').height / 15,
+  },
+  buttonContentStyle: {
+    marginLeft: -13,
+  },
+  border: {
+    width: Dimensions.get('window').width / 1.2,
+    height: 1,
+    backgroundColor: 'gray',
+    marginBottom: 10,
+    marginLeft: 15,
   },
 });
 

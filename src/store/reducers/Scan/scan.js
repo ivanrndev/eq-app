@@ -8,6 +8,9 @@ import {
   SAVE_CURRENT_SCAN_INFO_LIST,
   CLEAR_SCAN_GIVE_LIST,
   UPDATE_SCAN_GIVE_LIST,
+  MOUNT_SCAN,
+  ERROR_CURRENT_MOUNT_SCAN_INFO,
+  SAVE_CURRENT_MOUNT_SCAN_INFO_LIST,
 } from '../../../actions/actionsType.js';
 
 const initialState = {
@@ -21,11 +24,29 @@ const initialState = {
   dialogInput: false,
   isInfoOpen: false,
   scanLoader: false,
+  mountScan: {},
+  mountError: '',
+  mountScanInfo: '',
 };
 
 const scanReducer = (state = initialState, action) => {
   switch (action.type) {
+    case SAVE_CURRENT_MOUNT_SCAN_INFO_LIST:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case ERROR_CURRENT_MOUNT_SCAN_INFO:
+      return {
+        ...state,
+        ...action.payload,
+      };
     case SAVE_CURRENT_SCAN:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case MOUNT_SCAN:
       return {
         ...state,
         ...action.payload,

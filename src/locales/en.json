@@ -179,5 +179,14 @@
     "enter_valid": "Enter your email or verified phone number in the format +38 0ХХ 111 1111",
     "location": "Location",
     "object": "Object",
-    "choise": "not chosen"
+    "choise": "not chosen",
+    "inList": "Item already on the list",
+    "parentError": "Cannot add parent item",
+    "setupItem": "Install Item",
+    "dismantle": "Dismantle",
+    "this_setup": "This item is installed on:",
+    "om_this_setup": "Installed on this item:",
+    "not_marking": "Not marked",
+    "done": "Done",
+    "no_acesss": "You do not have access to this item"
   }

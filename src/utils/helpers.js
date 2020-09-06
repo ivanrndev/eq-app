@@ -224,8 +224,15 @@ export const getProperErrorTransfer = (error, id) => {
     case 'Forbidden':
       errorMessage = `${T.t('error_owner')} ${id}. ${T.t('error_get_item')} `;
       break;
+    case 'Duplicate':
+      errorMessage = `${T.t('error_code_incorrect')} "${id}" ${T.t('error_was_added')}`;
+      break;
+      case 'DuplicateMount':
+        errorMessage = `${T.t('inList')}`;
+        break;
     default:
-      return T.t('unknown_operation');
+      // return T.t('unknown_operation');
+      return '';
   }
   return errorMessage;
 };

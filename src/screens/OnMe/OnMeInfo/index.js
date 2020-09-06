@@ -1,7 +1,21 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {isEmpty} from 'lodash';
-import {StyleSheet, View, Dimensions, SafeAreaView, Text} from 'react-native';
-import {Title, Portal, ActivityIndicator} from 'react-native-paper';
+import {
+  StyleSheet,
+  View,
+  Dimensions,
+  SafeAreaView,
+  Text,
+  ScrollView,
+} from 'react-native';
+import {
+  Title,
+  Portal,
+  ActivityIndicator,
+  IconButton,
+  Button,
+  Dialog,
+} from 'react-native-paper';
 import T from '../../../i18n';
 // components
 import DarkButton from '../../../components/Buttons/DarkButton';
@@ -12,12 +26,16 @@ import {
   loader,
   getTransactions,
   getComments,
+  unMountItemFromParent,
 } from '../../../actions/actions.js';
 
 export const OnMeInfo = props => {
   const settings = useSelector(state => state.settings);
+  const scan = useSelector(state => state.scan);
   const store = useSelector(state => state.onMe);
   const dispatch = useDispatch();
+  const [isOpen, setIsOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(false);
 
   const myList = store.myList.filter(item => {
     return item._id === store.myCurrentId;
@@ -44,6 +62,33 @@ export const OnMeInfo = props => {
     dispatch(getComments(props.navigation, metaData._id, 0, 'OnMeInfo'));
   };
 
+  const unmount = () => {
+    dispatch(loader(true));
+    dispatch(
+      unMountItemFromParent(
+        scan.scanInfo.parent._id,
+        scan.scanInfo._id,
+        scan.scanInfo.code,
+        scan.navigation,
+        'IdentInfo',
+      ),
+    );
+  };
+
+  const deleteItem = () => {
+    setIsOpen(false);
+    dispatch(loader(true));
+    dispatch(
+      unMountItemFromParent(
+        scan.scanInfo._id,
+        [deleteId],
+        scan.scanInfo.code,
+        props.navigation,
+        'OnMeInfo',
+      ),
+    );
+  };
+
   return (
     <>
       <Appbar
@@ -68,78 +113,169 @@ export const OnMeInfo = props => {
       </Portal>
       <View style={styles.body}>
         <View style={styles.container}>
-          {store.myError && (
-            <View style={styles.info}>
-              <Title style={styles.titleError}>ТМЦ не найден</Title>
-            </View>
-          )}
-          {!store.myError && (
-            <View style={styles.info}>
-              {show && (
-                <View style={styles.info}>
-                  {!!info && (
-                    <Text style={styles.text}>
-                      {T.t('detail_title')}: {nameOfProduct}
-                    </Text>
-                  )}
-                  {!!info.brand && (
-                    <Text style={styles.text}>
-                      {T.t('detail_brand')}: {info.brand}
-                    </Text>
-                  )}
-                  {!!info.model && (
-                    <Text style={styles.text}>
-                      {T.t('detail_model')}: {info.model}
-                    </Text>
-                  )}
-                  {!!info.capacity && (
-                    <Text style={styles.text}>
-                      {T.t('detail_capacity')}: {info.capacity}
-                    </Text>
-                  )}
-                  {!!info.serial && (
-                    <Text style={styles.text}>
-                      {T.t('detail_serial')}: {info.serial}
-                    </Text>
-                  )}
-                  {!!info.type && (
-                    <Text style={styles.text}>
-                      {T.t('detail_type')}: {info.type}
-                    </Text>
-                  )}
-                  {show
-                    ? metaData.customFields.map((item, index) => {
-                        return (
-                          <Text key={index} style={styles.text}>
-                            {item.label}: {item.value}
-                          </Text>
-                        );
-                      })
-                    : null}
-                  {show ? (
-                    <Text style={styles.text}>
-                      {T.t('qr_code')}: {metaData.code}
-                    </Text>
-                  ) : null}
-                </View>
-              )}
-            </View>
-          )}
+          <ScrollView>
+            {store.myError && (
+              <View style={styles.info}>
+                <Title style={styles.titleError}>ТМЦ не найден</Title>
+              </View>
+            )}
+            {!store.myError && (
+              <View style={styles.info}>
+                {show && (
+                  <View style={styles.info}>
+                    {!!info && (
+                      <Text style={styles.text}>
+                        {T.t('detail_title')}: {nameOfProduct}
+                      </Text>
+                    )}
+                    {!!info.brand && (
+                      <Text style={styles.text}>
+                        {T.t('detail_brand')}: {info.brand}
+                      </Text>
+                    )}
+                    {!!info.model && (
+                      <Text style={styles.text}>
+                        {T.t('detail_model')}: {info.model}
+                      </Text>
+                    )}
+                    {!!info.capacity && (
+                      <Text style={styles.text}>
+                        {T.t('detail_capacity')}: {info.capacity}
+                      </Text>
+                    )}
+                    {!!info.serial && (
+                      <Text style={styles.text}>
+                        {T.t('detail_serial')}: {info.serial}
+                      </Text>
+                    )}
+                    {!!info.type && (
+                      <Text style={styles.text}>
+                        {T.t('detail_type')}: {info.type}
+                      </Text>
+                    )}
+                    {show
+                      ? metaData.customFields.map((item, index) => {
+                          return (
+                            <Text key={index} style={styles.text}>
+                              {item.label}: {item.value}
+                            </Text>
+                          );
+                        })
+                      : null}
+                    {show ? (
+                      <Text style={styles.text}>
+                        {T.t('qr_code')}: {metaData.code}
+                      </Text>
+                    ) : null}
+                    {!isEmpty(scan.scanInfo.items) && (
+                      <>
+                        <Text style={styles.textTmc}>
+                          {T.t('om_this_setup')}
+                        </Text>
+                        {scan.scanInfo.items.map((item, index) => {
+                          return (
+                            <View key={index}>
+                              <Text key={index} style={styles.textInfo}>
+                                {item.metadata.title} {'\n'}
+                                {item.metadata.type} {'\n'}
+                                {item.metadata.brand} {'\n'}
+                                {item.metadata.serial} {'\n'}
+                                {item.metadata.model} {'\n'}
+                                {item.code}
+                              </Text>
+                              <Button
+                                style={styles.deleteBtn}
+                                mode="text"
+                                contentStyle={styles.buttonContentStyle}>
+                                <IconButton
+                                  {...props}
+                                  icon="delete"
+                                  size={35}
+                                  color="#22215B"
+                                  onPress={() => {
+                                    setDeleteId(item._id);
+                                    setIsOpen(true);
+                                  }}
+                                />
+                              </Button>
+                              <View style={styles.border} />
+                            </View>
+                          );
+                        })}
+                      </>
+                    )}
+                    {scan.scanInfo.parent && (
+                      <>
+                        <Text style={styles.textTmc}>{T.t('this_setup')}</Text>
+                        <Text style={styles.text}>
+                          {scan.scanInfo.parent.metadata.title},{' '}
+                          {scan.scanInfo.parent.metadata.brand},{' '}
+                          {scan.scanInfo.parent.metadata.model},{' '}
+                          {scan.scanInfo.parent.metadata.serial}
+                        </Text>
+                      </>
+                    )}
+                  </View>
+                )}
+              </View>
+            )}
+          </ScrollView>
           {!store.myError ? (
-            <View style={styles.buttons}>
-              <DarkButton
-                // size={fontSizer(width)}
-                text={T.t('title_comments')}
-                onPress={getAllComments}
-              />
-              <DarkButton
-                text={T.t('title_history_of_transaction')}
-                onPress={handleTransactions}
-              />
-            </View>
+            <>
+              <View style={styles.buttonsBlock}>
+                <View style={styles.buttonBlock}>
+                  {!isEmpty(scan.scanInfo) && (
+                    <View>
+                      {!isEmpty(scan.scanInfo.parent) ? (
+                        <View style={styles.marginBtn}>
+                          <DarkButton
+                            text={T.t('dismantle')}
+                            onPress={unmount}
+                          />
+                        </View>
+                      ) : (
+                        <View style={styles.marginBtn}>
+                          <DarkButton
+                            text={T.t('setupItem')}
+                            onPress={() =>
+                              props.navigation.navigate('MountList')
+                            }
+                          />
+                        </View>
+                      )}
+                    </View>
+                  )}
+                  <View style={styles.marginBtn}>
+                    <DarkButton
+                      text={T.t('title_comments')}
+                      onPress={getAllComments}
+                    />
+                  </View>
+                  <View style={styles.marginBtn}>
+                    <DarkButton
+                      text={T.t('title_history_of_transaction')}
+                      onPress={handleTransactions}
+                    />
+                  </View>
+                </View>
+              </View>
+            </>
           ) : null}
         </View>
       </View>
+      <Portal>
+        <Dialog
+          style={styles.dialog}
+          visible={isOpen}
+          onDismiss={() => {
+            setIsOpen(!isOpen);
+          }}>
+          <Dialog.Title>Удалить ТМЦ?</Dialog.Title>
+          <Dialog.Actions>
+            <Button onPress={() => deleteItem()}>Удалить</Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
     </>
   );
 };
@@ -163,9 +299,15 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width / 1.1,
     backgroundColor: '#EDF6FF',
   },
+  buttonsBlock: {
+    alignSelf: 'center',
+    bottom: -10,
+  },
   buttonBlock: {
-    width: Dimensions.get('window').height / 3.3,
+    width: Dimensions.get('window').width / 1.2,
     textAlign: 'center',
+    backgroundColor: '#EDF6FF',
+    marginBottom: 10,
   },
   info: {
     display: 'flex',
@@ -205,6 +347,46 @@ const styles = StyleSheet.create({
     zIndex: 99,
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
+  },
+  textTmc: {
+    fontSize: 16,
+    marginTop: 20,
+    paddingBottom: 10,
+    color: '#22215B',
+    width: Dimensions.get('window').width / 1.3,
+  },
+  textInfo: {
+    fontSize: 16,
+    paddingBottom: 5,
+    paddingLeft: 15,
+    color: '#7A7A9D',
+    width: Dimensions.get('window').width / 1.3,
+    height: 'auto',
+  },
+  deleteBtn: {
+    alignSelf: 'flex-end',
+    width: 20,
+    marginTop: -60,
+    marginRight: 0,
+    paddingLeft: 14,
+    marginBottom: 10,
+    height: Dimensions.get('window').height / 15,
+  },
+  buttonContentStyle: {
+    marginLeft: -13,
+  },
+  border: {
+    width: Dimensions.get('window').width / 1.2,
+    height: 1,
+    backgroundColor: 'gray',
+    marginBottom: 10,
+    marginLeft: 15,
+  },
+  dialog: {
+    backgroundColor: '#EDF6FF',
+  },
+  marginBtn: {
+    marginBottom: -20,
   },
 });
 

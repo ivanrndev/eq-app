@@ -80,6 +80,9 @@ import {
   NFC,
   LOCATIONS,
   START_PAGE,
+  MOUNT_SCAN,
+  ERROR_CURRENT_MOUNT_SCAN_INFO,
+  SAVE_CURRENT_MOUNT_SCAN_INFO_LIST,
 } from '../actions/actionsType.js';
 
 // Settings
@@ -253,12 +256,26 @@ export const statusLoad = status => dispatch => {
 };
 
 // Scan actions
-export const currentScan = (id, nav, page, saveItems = false) => dispatch => {
-  dispatch({
-    type: SAVE_CURRENT_SCAN,
-    payload: {currentScan: id, isNewScan: false},
-  });
-  dispatch(scanInfo(id, nav, page, saveItems));
+export const currentScan = (
+  id,
+  nav,
+  page,
+  saveItems = false,
+  mount = false,
+) => dispatch => {
+  if (mount) {
+    dispatch({
+      type: MOUNT_SCAN,
+      payload: {mountScan: id},
+    });
+    dispatch(scanInfo(id, nav, page, saveItems, true));
+  } else {
+    dispatch({
+      type: SAVE_CURRENT_SCAN,
+      payload: {currentScan: id, isNewScan: false},
+    });
+    dispatch(scanInfo(id, nav, page, saveItems));
+  }
 };
 
 export const dialogInput = status => dispatch => {
@@ -268,67 +285,104 @@ export const dialogInput = status => dispatch => {
   });
 };
 
-export const scanInfo = (id, nav, page, saveItems) => dispatch => {
-  console.log('PrePAGE', page);
+export const scanInfo = (
+  id,
+  nav,
+  page,
+  saveItems,
+  mount = false,
+) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
       .get(`${API_URL}/company/${company}/item/${id}`)
       .then(resp => {
         if (resp.status === 200) {
-          if (saveItems) {
+          if (mount) {
             let checkErrors = actionCheckError(resp.data);
             if (checkErrors) {
               dispatch({
-                type: ERROR_CURRENT_SCAN_INFO,
+                type: ERROR_CURRENT_MOUNT_SCAN_INFO,
                 payload: {
-                  scanInfoError: checkErrors,
-                  selectGiveId: resp.data._id,
+                  mountError: checkErrors,
                 },
               });
               dispatch(loader(false));
             } else {
-              let role = resp.data.person ? resp.data.person.role : 'none';
               dispatch({
-                type: SAVE_CURRENT_SCAN_INFO_LIST,
+                type: SAVE_CURRENT_MOUNT_SCAN_INFO_LIST,
                 payload: {
-                  scanGiveList: resp.data,
-                  scanUserRole: role,
-                  selectGiveId: resp.data._id,
-                  scanInfoError: false,
+                  mountScanInfo: resp.data,
+                  mountError: false,
                 },
               });
               dispatch(loader(false));
             }
           } else {
-            dispatch({
-              type: SAVE_CURRENT_SCAN_INFO,
-              payload: {
-                scanInfo: resp.data,
-                scanInfoError: false,
-                selectGiveId: resp.data._id,
-                isInfoOpen: true,
-              },
-            });
-            dispatch(loader(false));
+            if (saveItems) {
+              let checkErrors = actionCheckError(resp.data);
+              if (checkErrors) {
+                dispatch({
+                  type: ERROR_CURRENT_SCAN_INFO,
+                  payload: {
+                    scanInfoError: checkErrors,
+                    selectGiveId: resp.data._id,
+                  },
+                });
+                dispatch(loader(false));
+              } else {
+                let role = resp.data.person ? resp.data.person.role : 'none';
+                dispatch({
+                  type: SAVE_CURRENT_SCAN_INFO_LIST,
+                  payload: {
+                    scanGiveList: resp.data,
+                    scanUserRole: role,
+                    selectGiveId: resp.data._id,
+                    scanInfoError: false,
+                  },
+                });
+                dispatch(loader(false));
+              }
+            } else {
+              dispatch({
+                type: SAVE_CURRENT_SCAN_INFO,
+                payload: {
+                  scanInfo: resp.data,
+                  scanInfoError: false,
+                  selectGiveId: resp.data._id,
+                  isInfoOpen: true,
+                },
+              });
+              dispatch(loader(false));
+            }
           }
           dispatch(dialogInput(false));
           dispatch(loader(false));
-          console.log('page', page);
           nav.navigate(page);
         }
       })
       .catch(e => {
-        dispatch({
-          type: ERROR_CURRENT_SCAN_INFO,
-          payload: {
-            scanInfoError: e.response.data.message.name,
-            scanInfo: {},
-            isInfoOpen: true,
-          },
-        });
-        dispatch(loader(false));
-        dispatch(dialogInput(false));
-        nav.navigate(page);
+        if (!mount) {
+          dispatch({
+            type: ERROR_CURRENT_SCAN_INFO,
+            payload: {
+              scanInfoError: e.response.data.message.name,
+              scanInfo: {},
+              isInfoOpen: true,
+            },
+          });
+          dispatch(loader(false));
+          dispatch(dialogInput(false));
+          nav.navigate(page);
+        } else {
+          dispatch({
+            type: ERROR_CURRENT_MOUNT_SCAN_INFO,
+            payload: {
+              mountError: e.response.data.message.name,
+            },
+          });
+          dispatch(loader(false));
+          dispatch(dialogInput(false));
+        }
       });
   });
 };
@@ -477,7 +531,7 @@ export const putWriteOffError = error => dispatch => {
 };
 
 // Marking actions
-export const getMarkingList = (status, nav) => dispatch => {
+export const getMarkingList = (status, nav, page = true) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
       .get(`${API_URL}/company/${company}/item/`, {
@@ -495,7 +549,9 @@ export const getMarkingList = (status, nav) => dispatch => {
               markingError: false,
             },
           });
-          nav.navigate('MarkingList');
+          if (page) {
+            nav.navigate('MarkingList');
+          }
           dispatch(loader(false));
         }
       })
@@ -704,11 +760,12 @@ export const searchMyItem = (query, offset, isNew) => dispatch => {
   });
 };
 
-export const saveCurrentMyItem = (id, nav) => dispatch => {
+export const saveCurrentMyItem = (id, code, nav) => dispatch => {
   dispatch({
     type: MY_CURRENT_INFO_ID,
     payload: {
       myCurrentId: id,
+      myCurrentCode: code,
       isMyInfoOpen: true,
     },
   });
@@ -1073,7 +1130,6 @@ export const userAcceptBid = (nav, id) => dispatch => {
       userAcceptBid: id,
     },
   });
-  console.log('asdadas');
   dispatch(
     nfc('AcceptList', 'AcceptList', false, 'AcceptScaner', 'startPageAccept'),
   );
@@ -1147,7 +1203,6 @@ export const makeAccept = (
 
 // inventory actions
 export const saveCurrentUserInventory = (id, nav, startPage) => dispatch => {
-  console.log('startPage', startPage);
   dispatch({
     type: SAVE_CURRENT_INVENTORY_USER,
     payload: {
@@ -1420,5 +1475,55 @@ export const getLocations = props => dispatch => {
         });
       }
     });
+  });
+};
+
+// unMount Item From Parent
+export const unMountItemFromParent = (
+  parent,
+  items,
+  code,
+  nav,
+  page,
+) => dispatch => {
+  console.log(parent, items, code, page);
+  AsyncStorage.getItem('company').then(company => {
+    return axios
+      .put(`${API_URL}/company/${company}/item/unmount`, {parent, items})
+      .then(resp => {
+        if (resp.status === 200) {
+          dispatch(loader(false));
+          dispatch(currentScan(code, nav, page, false));
+        }
+      })
+      .catch(e => {
+        if (!e.response.data.success) {
+          dispatch(loader(false));
+        }
+      });
+  });
+};
+
+export const mountItemFromParent = (
+  parent,
+  items,
+  code,
+  nav,
+  page,
+) => dispatch => {
+  AsyncStorage.getItem('company').then(company => {
+    return axios
+      .put(`${API_URL}/company/${company}/item/mount`, {parent, items})
+      .then(resp => {
+        if (resp.status === 200) {
+          dispatch(loader(false));
+          dispatch(currentScan(code, nav, page, false));
+        }
+      })
+      .catch(e => {
+        if (!e.response.data.success) {
+          dispatch(loader(false));
+        }
+      });
   });
 };

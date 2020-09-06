@@ -24,6 +24,7 @@ import {
   saveCurrentMyItem,
   searchMyItem,
   myloadMore,
+  currentScan,
 } from '../../actions/actions.js';
 
 const OnMe = props => {
@@ -79,11 +80,20 @@ const OnMe = props => {
                         <Card
                           style={styles.card}
                           key={item._id}
-                          onPress={() =>
+                          onPress={() => {
+                            if (item.code) {
+                              dispatch(
+                                currentScan(item.code, props.nav, 'OnMeInfo'),
+                              );
+                            }
                             dispatch(
-                              saveCurrentMyItem(item._id, props.navigation),
-                            )
-                          }>
+                              saveCurrentMyItem(
+                                item._id,
+                                item.code,
+                                props.navigation,
+                              ),
+                            );
+                          }}>
                           <Card.Content>
                             {item.metadata.title ? (
                               <Title style={styles.cardTitle}>
@@ -183,10 +193,6 @@ const styles = StyleSheet.create({
     fontSize: 13,
     textTransform: 'uppercase',
     color: '#22215B',
-  },
-  paragraph: {
-    fontSize: 12,
-    lineHeight: 15,
   },
   paragraph: {
     fontSize: 12,

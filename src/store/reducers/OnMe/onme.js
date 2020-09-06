@@ -12,6 +12,7 @@ const initialState = {
   offSet: 0,
   myError: false,
   myCurrentId: '',
+  myCurrentCode: '',
   isMyInfoOpen: false,
 };
 

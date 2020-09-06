@@ -16,16 +16,16 @@ import {
   Snackbar,
   ActivityIndicator,
 } from 'react-native-paper';
-import {minY, maxY, minX, maxX} from '../../utils/markerParams.js';
-import DarkButton from '../../components/Buttons/DarkButton/';
-import TransparentButton from '../../components/Buttons/TransparentButton';
+import {minY, maxY, minX, maxX} from '../../utils/mountMarkerParams.js';
+import DarkButton from '../Buttons/DarkButton';
+import TransparentButton from '../Buttons/TransparentButton';
 import {fontSizer} from '../../utils/helpers.js';
 
 // redux and actions
 import {useDispatch, useSelector} from 'react-redux';
 import {currentScan, dialogInput, loader} from '../../actions/actions.js';
 
-const Scanner = props => {
+const MountScanner = props => {
   const dispatch = useDispatch();
   const store = useSelector(state => state.scan);
   const settings = useSelector(state => state.settings);
@@ -66,33 +66,31 @@ const Scanner = props => {
   }, [customId]);
 
   const text = props.text ? T.t('input_detail_new') : T.t('input_detail');
-
   const onSuccess = e => {
-    if (store.isNewScan) {
-      let cyrillicRegular = /[а-яА-ЯЁё]/;
-      let cyrillicFilterId = cyrillicRegular.exec(e.data);
-      if (cyrillicFilterId) {
-        setErrorText(T.t('latin_info'));
-        setIsSnackbar(true);
+    let cyrillicRegular = /[а-яА-ЯЁё]/;
+    let cyrillicFilterId = cyrillicRegular.exec(e.data);
+    if (cyrillicFilterId) {
+      setErrorText(T.t('latin_info'));
+      setIsSnackbar(true);
+    } else {
+      let finishRegular = /^[a-z]{1,2}[0-9]{4,5}$/g;
+      let finishFilterId = finishRegular.exec(e.data);
+      if (finishFilterId) {
+        dispatch(dialogInput(false));
+        setIsSnackbar(false);
+        dispatch(loader(true));
+        dispatch(
+          currentScan(
+            finishFilterId[0],
+            props.nav,
+            props.page,
+            props.saveItems,
+            true,
+          ),
+        );
       } else {
-        let finishRegular = /^[a-z]{1,2}[0-9]{4,5}$/g;
-        let finishFilterId = finishRegular.exec(e.data);
-        if (finishFilterId) {
-          dispatch(dialogInput(false));
-          setIsSnackbar(false);
-          dispatch(loader(true));
-          dispatch(
-            currentScan(
-              finishFilterId[0],
-              props.nav,
-              props.page,
-              props.saveItems,
-            ),
-          );
-        } else {
-          setErrorText(T.t('wrong_format_info'));
-          setIsSnackbar(true);
-        }
+        setErrorText(T.t('wrong_format_info'));
+        setIsSnackbar(true);
       }
     }
   };
@@ -104,7 +102,9 @@ const Scanner = props => {
   const handelCurrentScan = () => {
     dispatch(dialogInput(false));
     dispatch(loader(true));
-    dispatch(currentScan(customId, props.nav, props.page, props.saveItems));
+    dispatch(
+      currentScan(customId, props.nav, props.page, props.saveItems, true),
+    );
   };
 
   return (
@@ -176,11 +176,13 @@ const Scanner = props => {
               </Portal>
               <View style={styles.buttons}>
                 <View style={styles.buttonBlock}>
-                  <DarkButton
-                    size={fontSizer(width)}
-                    text={T.t('input_code')}
-                    onPress={() => dispatch(dialogInput(!store.dialogInput))}
-                  />
+                  <View style={{marginBottom: -15}}>
+                    <DarkButton
+                      size={fontSizer(width)}
+                      text={T.t('input_code')}
+                      onPress={() => dispatch(dialogInput(!store.dialogInput))}
+                    />
+                  </View>
                   <TransparentButton
                     size={fontSizer(width)}
                     text={T.t('flash')}
@@ -267,8 +269,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   actions: {
-    position: 'absolute',
-    top: Dimensions.get('window').height / 1.7,
+    // position: 'absolute',
+    top: Dimensions.get('window').height / 1.35,
     height:
       Dimensions.get('window').height - Dimensions.get('window').height / 7.5,
     marginLeft: 20,
@@ -307,4 +309,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Scanner;
+export default MountScanner;
