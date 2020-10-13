@@ -7,6 +7,7 @@ import NfcManager, {NfcTech} from 'react-native-nfc-manager';
 import {useFocusEffect} from '@react-navigation/native';
 import Appbar from '../../components/Appbar';
 import DarkButton from '../../components/Buttons/DarkButton';
+import T from '../../i18n';
 
 // redux and actions
 import {useDispatch, useSelector} from 'react-redux';
@@ -15,7 +16,7 @@ import {currentScan, loader} from '../../actions/actions.js';
 const NFC = props => {
   const dispatch = useDispatch();
   const settings = useSelector(state => state.settings);
-  const [log, setLog] = useState('Поднесите метку');
+  const [log, setLog] = useState(T.t('hold_nfc'));
 
   useFocusEffect(
     useCallback(() => {
@@ -23,7 +24,7 @@ const NFC = props => {
       readData();
       return () => {
         cleanUp();
-        setLog('Поднесите метку');
+        setLog(T.t('hold_nfc'));
       };
     }, [readData, settings.nfcNext]),
   );
@@ -36,7 +37,7 @@ const NFC = props => {
     try {
       let tech = Platform.OS === 'ios' ? NfcTech.MifareIOS : NfcTech.NfcA;
       let resp = await NfcManager.requestTechnology(tech, {
-        alertMessage: 'Готовы к считыванию NFC местки',
+        alertMessage: T.t('ready_nfc'),
       });
 
       let cmd =
@@ -45,17 +46,23 @@ const NFC = props => {
           : NfcManager.transceive;
 
       resp = await cmd([0x3a, 4, 4]);
-      let payloadLength = parseInt(resp.toString().split(',')[1]);
-      let payloadPages = Math.ceil(payloadLength / 4);
-      let startPage = 5;
-      let endPage = startPage + payloadPages - 1;
-
-      resp = await cmd([0x3a, startPage, endPage]);
+      resp = await cmd([0x3a, 5, 8]);
       bytes = resp.toString().split(',');
+
+      function removeElement(arrayName, arrayElement) {
+        for (var i = 0; i < arrayName.length; i++) {
+          if (arrayName[i] == arrayElement) {
+            arrayName.splice(i, 1);
+          }
+        }
+      }
+      removeElement(bytes, '0');
+
       let text = '';
+      const number = bytes.length <= 13 ? 5 : 10;
 
       for (let i = 0; i < bytes.length; i++) {
-        if (i < 5) {
+        if (i < number) {
           continue;
         }
         if (parseInt(bytes[i]) === 254) {
@@ -79,13 +86,12 @@ const NFC = props => {
           ),
         );
       } else {
-        setLog('Неверный формат');
+        setLog(T.t('wrong_format_info'));
       }
 
       cleanUp();
     } catch (ex) {
-      // console.log(`ERROR: ${x.toString()}`);
-      setLog('Попробуйте еще раз');
+      setLog(T.t('again'));
       cleanUp();
     }
   };
@@ -107,7 +113,7 @@ const NFC = props => {
           <Text style={styles.info}>{log}</Text>
         </View>
         <View style={styles.button}>
-          <DarkButton text={'Еще раз'} onPress={readData} />
+          <DarkButton text={T.t('again_short')} onPress={readData} />
         </View>
       </SafeAreaView>
     </>

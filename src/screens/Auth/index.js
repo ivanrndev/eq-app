@@ -136,7 +136,7 @@ const Auth = props => {
       }
       // if don`t have company
       if (role === 'user') {
-        setError('Сначала создайте компанию');
+        setError(T.t('create_company'));
         dispatch(statusError(true));
         dispatch(logOut(props.navigation, false));
       }

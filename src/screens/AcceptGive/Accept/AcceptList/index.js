@@ -86,7 +86,9 @@ const AcceptList = props => {
       } else {
         if (scan.currentScan) {
           setError(
-            `Идентификатор ${scan.currentScan} не относиться к этой заявке`,
+            `${T.t('service_identifier_first')} ${scan.currentScan} ${T.t(
+              'do_not_apply',
+            )}`,
           );
         }
       }
@@ -204,7 +206,7 @@ const AcceptList = props => {
         <>
           <View style={styles.buttonObject}>
             <DarkButton
-              text="Выбрать объект и локацию"
+              text={T.t('select_location')}
               onPress={() => setShowModal(!showModal)}
             />
           </View>

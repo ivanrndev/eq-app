@@ -32,7 +32,7 @@ export const MountNoMarking = props => {
   };
 
   const addItem = item => {
-    setIsOpen(true);
+    // setIsOpen(true);
     dispatch(loader(true));
     dispatch(mountItemFromParent(
       store.scanInfo._id,
@@ -66,13 +66,13 @@ export const MountNoMarking = props => {
                         <Card.Title
                         key={index}
                         style={styles.card}
-                        title={`${item.metadata.brand} / ${item.code ? item.code : ''}`}
-                        subtitle={`${item.metadata.type}, ${item.metadata.brand}, ${item.metadata.model}, ${item.metadata.serial}`}
+                        title={`${item.metadata.title ? item.metadata.title : ''}`}
+                        subtitle={`${item.metadata.type ? item.metadata.type + ',' : ''} ${item.metadata.brand ? item.metadata.brand + ',' : ''} ${item.metadata.model ? item.metadata.model + ',' : ''} ${item.metadata.serial ? item.metadata.serial : ''}`}
                         right={props =>
                           !isEmpty(originalList) && originalList.map(i => i._id).includes(item._id) ? (
                             <IconButton {...props} icon="check" onPress={() => {}} />
                           ) : (
-                            <IconButton {...props} icon="plus" onPress={() => addItem(item._id)} />
+                            !item.parent && ( <IconButton {...props} icon="plus" onPress={() => addItem(item._id)} /> )
                           )
                         }
                     />
@@ -99,9 +99,9 @@ export const MountNoMarking = props => {
         </View>
         <Portal>
           <Dialog style={styles.dialog} visible={isOpen} onDismiss={() => setIsOpen(!isOpen)}>
-            <Dialog.Title>Добавлено</Dialog.Title>
+            <Dialog.Title>{T.t('add')}</Dialog.Title>
             <Dialog.Actions>
-              <Button onPress={() => setIsOpen(!isOpen)}>OK</Button>
+              <Button onPress={() => setIsOpen(!isOpen)}>Done</Button>
             </Dialog.Actions>
           </Dialog>
         </Portal>

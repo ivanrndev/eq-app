@@ -188,5 +188,14 @@
     "om_this_setup": "Installed on this item:",
     "not_marking": "Not marked",
     "done": "Done",
-    "no_acesss": "You do not have access to this item"
+    "no_acesss": "You do not have access to this item",
+    "inComplect": "The item is already installed",
+    "delete_item": "Delete item?",
+    "select_location": "Select object and location",
+    "do_not_apply": "do not apply to this application",
+    "again": "Try again",
+    "ready_nfc": "Ready to read NFC tag",
+    "hold_nfc": "Hold the NFC tag",
+    "again_short": "Again", 
+    "create_company": "First create a company"
   }

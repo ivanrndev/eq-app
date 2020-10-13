@@ -557,15 +557,19 @@ export const getMarkingList = (status, nav, page = true) => dispatch => {
       })
       .catch(e => {
         if (!e.response.data.success) {
+          console.log('Ошибка', e.response.data);
           let error = getProperError(e.response.data.message.name);
           dispatch({
             type: MARKING_ERROR,
             payload: {
+              marking: status,
               markingError: error,
               loadMore: false,
             },
           });
-          nav.navigate('MarkingList');
+          if (page) {
+            nav.navigate('MarkingList');
+          }
           dispatch(loader(false));
         }
       });

@@ -17,12 +17,12 @@ const Marking = props => {
 
   const getMarking = () => {
     dispatch(loader(true));
-    dispatch(getMarkingList(false, props.navigation));
+    dispatch(getMarkingList(false, props.navigation, true));
   };
 
   const getReMarking = () => {
     dispatch(loader(true));
-    dispatch(getMarkingList(true, props.navigation));
+    dispatch(getMarkingList(true, props.navigation, true));
   };
 
   return (

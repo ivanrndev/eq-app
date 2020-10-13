@@ -33,7 +33,7 @@ const MountScanner = props => {
 
   const [isFlash, setFlashMode] = useState(false);
   const [customId, setCustomId] = useState('');
-  const [disabled, setDisabled] = useState(true);
+  const [disabled, setDisabled] = useState(false);
   const [isSnackbar, setIsSnackbar] = useState(false);
   const [errorText, setErrorText] = useState('');
   // detected keyboard
@@ -57,12 +57,12 @@ const MountScanner = props => {
 
   useEffect(() => {
     let regular = /^[a-z]{1,2}[0-9]{4,5}$/g;
-    let filterId = regular.exec(customId);
-    if (filterId) {
-      setDisabled(false);
-    } else {
-      setDisabled(true);
-    }
+    // let filterId = regular.exec(customId);
+    // if (filterId) {
+    //   setDisabled(false);
+    // } else {
+    //   setDisabled(true);
+    // }
   }, [customId]);
 
   const text = props.text ? T.t('input_detail_new') : T.t('input_detail');
@@ -73,25 +73,26 @@ const MountScanner = props => {
       setErrorText(T.t('latin_info'));
       setIsSnackbar(true);
     } else {
-      let finishRegular = /^[a-z]{1,2}[0-9]{4,5}$/g;
-      let finishFilterId = finishRegular.exec(e.data);
-      if (finishFilterId) {
-        dispatch(dialogInput(false));
-        setIsSnackbar(false);
-        dispatch(loader(true));
-        dispatch(
-          currentScan(
-            finishFilterId[0],
-            props.nav,
-            props.page,
-            props.saveItems,
-            true,
-          ),
-        );
-      } else {
-        setErrorText(T.t('wrong_format_info'));
-        setIsSnackbar(true);
-      }
+      // let finishRegular = /^[a-z]{1,2}[0-9]{4,5}$/g;
+      // let finishFilterId = finishRegular.exec(e.data);
+      // if (finishFilterId) {
+      let finishFilterId = e.data;
+      dispatch(dialogInput(false));
+      setIsSnackbar(false);
+      dispatch(loader(true));
+      dispatch(
+        currentScan(
+          finishFilterId[0],
+          props.nav,
+          props.page,
+          props.saveItems,
+          true,
+        ),
+      );
+      // } else {
+      //   setErrorText(T.t('wrong_format_info'));
+      //   setIsSnackbar(true);
+      // }
     }
   };
 

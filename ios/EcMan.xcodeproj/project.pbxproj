@@ -34,6 +34,7 @@
 		690ECCD4848B46B8AA7FF400 /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2AA9335EBC344E4D904C7AA3 /* FontAwesome5_Solid.ttf */; };
 		765E9517F3144F6BB8A2C142 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 948FA61EDADF4AC5AB92B4A2 /* Entypo.ttf */; };
 		7A00C575162B4807AEC3336C /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 04FC114D861645598211A28E /* Montserrat-Regular.ttf */; };
+		8097240B2528E99100CBC010 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 801D69C2251A4F41002E9900 /* Info.plist */; };
 		8DDCB7D7940F41DF81F1879C /* Montserrat-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A04B227B83404CF9ABE37D82 /* Montserrat-MediumItalic.ttf */; };
 		A1F16168B6CD4DB19C69F958 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D82A9BE059434B89A2CC19AB /* MaterialIcons.ttf */; };
 		A22451DD210B4B2A8C0CC209 /* Montserrat-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9A1ED8835F9D47FBAAF50B14 /* Montserrat-ThinItalic.ttf */; };
@@ -83,7 +84,6 @@
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = EcMan/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = EcMan/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = EcMan/Images.xcassets; sourceTree = "<group>"; };
-		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = EcMan/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = EcMan/main.m; sourceTree = "<group>"; };
 		145F0AB25D15F595F19F0FBD /* libPods-EcMan.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-EcMan.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		196494CA18E644D190319AC9 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
@@ -108,6 +108,7 @@
 		768DB0A518984D44AF2D4175 /* Montserrat-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-Light.ttf"; path = "../src/assets/fonts/Montserrat/Montserrat-Light.ttf"; sourceTree = "<group>"; };
 		798840846FE94ACA85831036 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		802F6B9624DD556A00581610 /* EqMan.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = EqMan.entitlements; path = EcMan/EqMan.entitlements; sourceTree = "<group>"; };
+		8081D8292532F9F50046BAF4 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = ru; path = ru.lproj/Info.plist; sourceTree = "<group>"; };
 		948FA61EDADF4AC5AB92B4A2 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		978675E2951B436E83997DCE /* Montserrat-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-ExtraBold.ttf"; path = "../src/assets/fonts/Montserrat/Montserrat-ExtraBold.ttf"; sourceTree = "<group>"; };
 		98CB69521D7DDDF572FC1BB0 /* Pods-EcMan-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EcMan-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-EcMan-tvOS/Pods-EcMan-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
@@ -191,7 +192,7 @@
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				FE26B75824752F4400236F6E /* LaunchScreen.storyboard */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
-				13B07FB61A68108700A75B9A /* Info.plist */,
+				801D69C2251A4F41002E9900 /* Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
 			name = EcMan;
@@ -424,7 +425,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
-				Base,
+				ru,
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
@@ -471,6 +472,7 @@
 				623E6E999A9F4F67B77BBAA1 /* FontAwesome.ttf in Resources */,
 				C07BBDA48D8B4554AF959734 /* FontAwesome5_Brands.ttf in Resources */,
 				E861B93846FF40A2A92DE343 /* FontAwesome5_Regular.ttf in Resources */,
+				8097240B2528E99100CBC010 /* Info.plist in Resources */,
 				690ECCD4848B46B8AA7FF400 /* FontAwesome5_Solid.ttf in Resources */,
 				4D342F775DDC43AB8D9777BD /* Fontisto.ttf in Resources */,
 				1E4E104991CB46B09231CB03 /* Foundation.ttf in Resources */,
@@ -705,6 +707,18 @@
 		};
 /* End PBXTargetDependency section */
 
+/* Begin PBXVariantGroup section */
+		801D69C2251A4F41002E9900 /* Info.plist */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8081D8292532F9F50046BAF4 /* ru */,
+			);
+			name = Info.plist;
+			path = EcMan;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -726,7 +740,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 1.50;
+				MARKETING_VERSION = 1.56;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -759,7 +773,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 1.50;
+				MARKETING_VERSION = 1.56;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",

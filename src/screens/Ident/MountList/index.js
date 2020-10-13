@@ -47,18 +47,28 @@ export const MountList = props => {
     const newItem = store.mountScanInfo._id;
     const checkInArray = !isEmpty(editItems) && editItems.map(i => i._id).includes(newItem) ? 'DuplicateMount' : false;
 
-    const itemError = getProperErrorTransfer((store.mountError || checkInArray), store.mountScan);
-    setIsText(itemError);
+    const inComplect =
+       (store.mountScanInfo.items && !isEmpty(store.mountScanInfo.items)) ||
+       (store.mountScanInfo.parent  && !isEmpty(store.mountScanInfo.parent)) ? true : false;
+
+    if (inComplect) {
+      setIsText(T.t('inComplect'));
+    }
 
     const isParent =  store.mountScan === store.currentScan ? true : false;
     if (isParent) {
       setIsText(T.t('parentError'));
     }
 
-    if (!gaveAcess) {
+    if (!isEmpty(store.mountScan) && !gaveAcess) {
       setIsText(T.t('no_acesss'));
     }
-    console.log('gaveAcess', gaveAcess);
+
+    const itemError = getProperErrorTransfer((store.mountError || checkInArray), store.mountScan);
+    if (!isEmpty(itemError)) {
+      setIsText(itemError);
+    }
+
     if (!isText && gaveAcess) {
       dispatch(
         mountItemFromParent(
@@ -141,8 +151,8 @@ export const MountList = props => {
                         <Card.Title
                         key={index}
                         style={styles.card}
-                        title={`${item.metadata.brand} / ${item.code ? item.code : ''}`}
-                        subtitle={`${item.metadata.type}, ${item.metadata.brand}, ${item.metadata.model}, ${item.metadata.serial}`}
+                        title={`${item.metadata.title ? item.metadata.title : ''}`}
+                        subtitle={`${item.metadata.type ? item.metadata.type + ',' : ''} ${item.metadata.brand ? item.metadata.brand + ',' : ''} ${item.metadata.model ? item.metadata.model : ''} ${item.metadata.serial ? item.metadata.serial : ''}`}
                         right={props =>
                             <IconButton
                                 {...props}
@@ -159,9 +169,9 @@ export const MountList = props => {
             </ScrollView>
             <Portal>
             <Dialog style={styles.dialog} visible={isOpen} onDismiss={() => {setIsOpen(!isOpen);}}>
-              <Dialog.Title>Удалить ТМЦ?</Dialog.Title>
+              <Dialog.Title>{T.t('delete_item')}</Dialog.Title>
               <Dialog.Actions>
-                <Button onPress={() => deleteItem()}>Удалить</Button>
+                      <Button onPress={() => deleteItem()}>{T.t('delete')}</Button>
               </Dialog.Actions>
             </Dialog>
             <Snackbar

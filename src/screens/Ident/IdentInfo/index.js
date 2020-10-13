@@ -271,9 +271,9 @@ export const IdentInfo = props => {
         </View>
         <Portal>
         <Dialog style={styles.dialog} visible={isOpen} onDismiss={() => {setIsOpen(!isOpen)}}>
-          <Dialog.Title>Удалить ТМЦ?</Dialog.Title>
+          <Dialog.Title>{T.t('delete_item')}</Dialog.Title>
           <Dialog.Actions>
-            <Button onPress={() => deleteItem()}>Удалить</Button>
+            <Button onPress={() => deleteItem()}>{T.t('delete')}</Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>
