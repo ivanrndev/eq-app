@@ -197,5 +197,10 @@
     "ready_nfc": "Ready to read NFC tag",
     "hold_nfc": "Hold the NFC tag",
     "again_short": "Again", 
-    "create_company": "First create a company"
+    "create_company": "First create a company",
+    "eqp_one": "Mounting on Item",
+    "eqp_two": "Unmounting from Item",
+    "eqp_three": "Mounting items",
+    "eqp_four": "Unmounting items",
+    "errr_name_item": "Unknown Item"
   }

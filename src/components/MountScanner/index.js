@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef, useCallback} from 'react';
 import {
   View,
   StyleSheet,
@@ -20,6 +20,7 @@ import {minY, maxY, minX, maxX} from '../../utils/mountMarkerParams.js';
 import DarkButton from '../Buttons/DarkButton';
 import TransparentButton from '../Buttons/TransparentButton';
 import {fontSizer} from '../../utils/helpers.js';
+import {isEmpty} from 'lodash';
 
 // redux and actions
 import {useDispatch, useSelector} from 'react-redux';
@@ -30,6 +31,7 @@ const MountScanner = props => {
   const store = useSelector(state => state.scan);
   const settings = useSelector(state => state.settings);
   const width = Dimensions.get('window').width;
+  const [debou, setDebou] = useState('');
 
   const [isFlash, setFlashMode] = useState(false);
   const [customId, setCustomId] = useState('');
@@ -56,13 +58,14 @@ const MountScanner = props => {
   });
 
   useEffect(() => {
-    let regular = /^[a-z]{1,2}[0-9]{4,5}$/g;
+    console.log('customId', isEmpty(customId));
+    // let regular = /^[a-z]{1,2}[0-9]{4,5}$/g;
     // let filterId = regular.exec(customId);
-    // if (filterId) {
-    //   setDisabled(false);
-    // } else {
-    //   setDisabled(true);
-    // }
+    if (!isEmpty(customId)) {
+      setDisabled(false);
+    } else {
+      setDisabled(true);
+    }
   }, [customId]);
 
   const text = props.text ? T.t('input_detail_new') : T.t('input_detail');
@@ -80,9 +83,10 @@ const MountScanner = props => {
       dispatch(dialogInput(false));
       setIsSnackbar(false);
       dispatch(loader(true));
+
       dispatch(
         currentScan(
-          finishFilterId[0],
+          finishFilterId,
           props.nav,
           props.page,
           props.saveItems,

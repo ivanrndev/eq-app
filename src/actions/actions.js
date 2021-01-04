@@ -1471,7 +1471,7 @@ export const deleteTransfer = (nav, id, route) => dispatch => {
 // locations
 export const getLocations = props => dispatch => {
   AsyncStorage.getItem('company').then(company => {
-    return axios.get(`/company/${company}/locations`).then(resp => {
+    return axios.get('/locations').then(resp => {
       if (resp.status === 200) {
         dispatch({
           type: LOCATIONS,

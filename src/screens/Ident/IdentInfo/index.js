@@ -81,7 +81,7 @@ export const IdentInfo = props => {
     setIsOpen(false);
     dispatch(loader(true));
     dispatch(unMountItemFromParent(
-      store.scanInfo.parentю_id,
+      store.selectGiveId,
       [deleteId],
       store.scanInfo.code,
       props.navigation,

@@ -20,6 +20,7 @@ import {minY, maxY, minX, maxX} from '../../utils/markerParams.js';
 import DarkButton from '../../components/Buttons/DarkButton/';
 import TransparentButton from '../../components/Buttons/TransparentButton';
 import {fontSizer} from '../../utils/helpers.js';
+import {isEmpty} from 'lodash';
 
 // redux and actions
 import {useDispatch, useSelector} from 'react-redux';
@@ -56,13 +57,14 @@ const Scanner = props => {
   });
 
   useEffect(() => {
-    let regular = /^[a-z]{1,2}[0-9]{4,5}$/g;
+    console.log('customId', isEmpty(customId));
+    // let regular = /^[a-z]{1,2}[0-9]{4,5}$/g;
     // let filterId = regular.exec(customId);
-    // if (filterId) {
-    //   setDisabled(false);
-    // } else {
-    //   setDisabled(true);
-    // }
+    if (!isEmpty(customId)) {
+      setDisabled(false);
+    } else {
+      setDisabled(true);
+    }
   }, [customId]);
 
   const text = props.text ? T.t('input_detail_new') : T.t('input_detail');
@@ -79,6 +81,7 @@ const Scanner = props => {
         // let finishFilterId = finishRegular.exec(e.data);
         // if (finishFilterId) {
         let finishFilterId = e.data;
+      console.log('finishFilterId', finishFilterId);
         dispatch(dialogInput(false));
         setIsSnackbar(false);
         dispatch(loader(true));

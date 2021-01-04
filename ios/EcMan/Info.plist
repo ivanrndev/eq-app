@@ -3,7 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>ru</string>
+	<string>en</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>865462011613-fjnupeeu18j80ltmjn69bs2felmt7701.apps.googleusercontent.com</string>
 	<key>CFBundleDisplayName</key>
 	<string>EqMan</string>
 	<key>CFBundleExecutable</key>
@@ -20,12 +22,23 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>865462011613-fjnupeeu18j80ltmjn69bs2felmt7701.apps.googleusercontent.com</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NFCReaderUsageDescription</key>
-	<string>Это приложение используется для чтения NFC меток.</string>
+	<string>Это приложение используется для чтения тегов NFC</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
@@ -40,7 +53,7 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Это приложение используется для сканирования штрих-кодов.</string>
+	<string>Это приложение используется для сканирования штрих-кодов</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Montserrat-Black.ttf</string>

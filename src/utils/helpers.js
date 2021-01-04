@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import T from '../i18n';
 
-export const getDescription = (tx, role) => {
+export const getDescription = (tx, role, id, parent) => {
   switch (+tx.type) {
     case 0:
       return T.t('transaction_add');
@@ -25,6 +25,10 @@ export const getDescription = (tx, role) => {
       return `${T.t('item')} ${tx.item.code} ${T.t('was_write_off')}`;
     case 5:
       return `${T.t('item')} ${tx.item.code} ${T.t('was_back_services')}`;
+    case 6:
+      return  parent ? `${T.t('eqp_one')}: ${id}` : `${T.t('eqp_three')}: ${id}`;
+    case 7:
+      return parent ? `${T.t('eqp_two')}: ${id}` : `${T.t('eqp_four')}: ${id}`;
     default:
       return T.t('unknown_operation');
   }

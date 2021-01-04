@@ -23,6 +23,7 @@ import {getDescription} from '../../utils/helpers.js';
 // redux and actions
 import {useDispatch, useSelector} from 'react-redux';
 import {loadMoreTransactions, getTransactions} from '../../actions/actions.js';
+import {isEmpty} from 'lodash';
 
 const Transactions = props => {
   const [role, setRole] = useState();
@@ -91,7 +92,18 @@ const Transactions = props => {
                           {item.user.lastName}
                         </Paragraph>
                         <Paragraph style={styles.paragraph}>
-                          {T.t('info')}: {getDescription(item, role)}
+                          {T.t('info')}:{' '}
+                          {getDescription(
+                            item,
+                            role,
+                            item.data.parent
+                              ? item.data.parent.code
+                              : !isEmpty(item.data.items)
+                              ? item.data.items[0].code ||
+                                item.data.items[0].title
+                              : T.t('errr_name_item'),
+                            item.data.parent ? !!item.data.parent : null,
+                          )}
                         </Paragraph>
                       </Card.Content>
                     </Card>

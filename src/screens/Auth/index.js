@@ -38,6 +38,7 @@ import {
   Button,
 } from 'react-native-paper';
 
+// import { GoogleSignin, GoogleSigninButton, statusCodes } from 'react-native-google-signin';
 const Auth = props => {
   const dispatch = useDispatch();
   const store = useSelector(state => state.auth);
@@ -188,6 +189,75 @@ const Auth = props => {
     }
   };
 
+  const [userInfo, setUserInfo] = useState(null);
+  const [gettingLoginStatus, setGettingLoginStatus] = useState(true);
+
+  // useEffect(() => {
+  //   // Initial configuration
+  //   GoogleSignin.configure({
+  //     // Mandatory method to call before calling signIn()
+  //     scopes: ['https://www.googleapis.com/auth/drive.readonly'],
+  //     // Repleace with your webClientId
+  //     // Generated from Firebase console
+  //     webClientId: 'REPLACE_YOUR_WEB_CLIENT_ID_HERE',
+  //   });
+  //   // Check if user is already signed in
+  //   _isSignedIn();
+  // }, []);
+
+  // const _isSignedIn = async () => {
+  //   const isSignedIn = await GoogleSignin.isSignedIn();
+  //   if (isSignedIn) {
+  //     alert('User is already signed in');
+  //     // Set User Info if user is already signed in
+  //     _getCurrentUserInfo();
+  //   } else {
+  //     console.log('Please Login');
+  //   }
+  //   setGettingLoginStatus(false);
+  // };
+
+  // const _getCurrentUserInfo = async () => {
+  //   try {
+  //     let info = await GoogleSignin.signInSilently();
+  //     console.log('User Info --> ', info);
+  //     setUserInfo(info);
+  //   } catch (error) {
+  //     if (error.code === statusCodes.SIGN_IN_REQUIRED) {
+  //       alert('User has not signed in yet');
+  //       console.log('User has not signed in yet');
+  //     } else {
+  //       alert("Unable to get user's info");
+  //       console.log("Unable to get user's info");
+  //     }
+  //   }
+  // };
+
+  // const _signIn = async () => {
+  //   // It will prompt google Signin Widget
+  //   try {
+  //     await GoogleSignin.hasPlayServices({
+  //       // Check if device has Google Play Services installed
+  //       // Always resolves to true on iOS
+  //       showPlayServicesUpdateDialog: true,
+  //     });
+  //     const userInfo = await GoogleSignin.signIn();
+  //     console.log('User Info --> ', userInfo);
+  //     setUserInfo(userInfo);
+  //   } catch (error) {
+  //     console.log('Message', JSON.stringify(error));
+  //     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+  //       alert('User Cancelled the Login Flow');
+  //     } else if (error.code === statusCodes.IN_PROGRESS) {
+  //       alert('Signing In');
+  //     } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+  //       alert('Play Services Not Available or Outdated');
+  //     } else {
+  //       alert(error.message);
+  //     }
+  //   }
+  // };
+
   return (
     <>
       <View style={styles.body}>
@@ -237,6 +307,15 @@ const Auth = props => {
               />
             </View>
           )}
+          <View>
+            {/* <GoogleSigninButton
+              style={{width: 192, height: 48}}
+              size={GoogleSigninButton.Size.Wide}
+              color={GoogleSigninButton.Color.Dark}
+              onPress={_signIn}
+              // disabled={this.state.isSigninInProgress}
+            /> */}
+          </View>
         </KeyboardAvoidingView>
         <Text style={styles.textRegister}>
           {T.t('registration_label')}{' '}
