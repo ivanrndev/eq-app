@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
   StyleSheet,
   View,
@@ -51,6 +51,7 @@ const Inventory = props => {
         clearUserList={true}
         newScan={true}
         goTo={'Home'}
+        isMutiple={true}
         title={T.t('select_user')}
       />
       <SafeAreaView />

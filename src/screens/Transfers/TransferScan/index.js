@@ -23,6 +23,8 @@ const TransferScaner = props => {
         newScan={true}
         goTo={'TransfersEdit'}
         title={T.t('title_scan')}
+        switch={true}
+        typeSwitchNFC={true}
       />
       <SafeAreaView />
       <View style={styles.body}>

@@ -265,6 +265,8 @@ PODS:
     - React
   - RNCMaskedView (0.1.7):
     - React
+  - RNCPicker (1.8.1):
+    - React-Core
   - RNGestureHandler (1.6.0):
     - React
   - RNI18n (2.0.15):
@@ -316,6 +318,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
+  - "RNCPicker (from `../node_modules/@react-native-community/picker`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNI18n (from `../node_modules/react-native-i18n`)
   - RNPermissions (from `../node_modules/react-native-permissions`)
@@ -394,6 +397,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/async-storage"
   RNCMaskedView:
     :path: "../node_modules/@react-native-community/masked-view"
+  RNCPicker:
+    :path: "../node_modules/@react-native-community/picker"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNI18n:
@@ -445,6 +450,7 @@ SPEC CHECKSUMS:
   ReactCommon: a0a1edbebcac5e91338371b72ffc66aa822792ce
   RNCAsyncStorage: db711e29e5e0500d9bd21aa0c2e397efa45302b1
   RNCMaskedView: 90dd32f5b786bd562e876e1421ea77c700cbf71e
+  RNCPicker: 914b557e20b3b8317b084aca9ff4b4edb95f61e4
   RNGestureHandler: dde546180bf24af0b5f737c8ad04b6f3fa51609a
   RNI18n: e2f7e76389fcc6e84f2c8733ea89b92502351fd8
   RNPermissions: 6db7e0a4d94c9c02390d11020b1d3d187aaf77e5

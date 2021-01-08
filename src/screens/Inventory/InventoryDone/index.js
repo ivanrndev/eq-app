@@ -12,6 +12,7 @@ import {
   clearGiveList,
   allowNewScan,
   alreadyScanned,
+  changeIsMultiple,
 } from '../../../actions/actions.js';
 
 export const InventoryDone = props => {
@@ -20,6 +21,7 @@ export const InventoryDone = props => {
   const error = inventory.inventoryError;
 
   const endInventory = () => {
+    dispatch(changeIsMultiple(false));
     props.navigation.navigate('Home');
     dispatch(clearGiveList());
     dispatch(allowNewScan(true));

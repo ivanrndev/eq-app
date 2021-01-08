@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, useCallback} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   StyleSheet,
@@ -21,17 +21,21 @@ import DarkButton from '../Buttons/DarkButton';
 import TransparentButton from '../Buttons/TransparentButton';
 import {fontSizer} from '../../utils/helpers.js';
 import {isEmpty} from 'lodash';
-
+import {
+  currentScan,
+  loader,
+  mountCameraList,
+  dialogInput,
+} from '../../actions/actions.js';
 // redux and actions
 import {useDispatch, useSelector} from 'react-redux';
-import {currentScan, dialogInput, loader} from '../../actions/actions.js';
 
 const MountScanner = props => {
   const dispatch = useDispatch();
   const store = useSelector(state => state.scan);
   const settings = useSelector(state => state.settings);
+  const listArray = settings.mountCameraList;
   const width = Dimensions.get('window').width;
-  const [debou, setDebou] = useState('');
 
   const [isFlash, setFlashMode] = useState(false);
   const [customId, setCustomId] = useState('');
@@ -42,6 +46,7 @@ const MountScanner = props => {
   const [isOpen, setIsOpen] = useState(false);
   const keyboardShowListener = useRef(null);
   const keyboardHideListener = useRef(null);
+  const text = props.text ? T.t('input_detail_new') : T.t('input_detail');
 
   useEffect(() => {
     keyboardShowListener.current = Keyboard.addListener('keyboardDidShow', () =>
@@ -58,9 +63,6 @@ const MountScanner = props => {
   });
 
   useEffect(() => {
-    console.log('customId', isEmpty(customId));
-    // let regular = /^[a-z]{1,2}[0-9]{4,5}$/g;
-    // let filterId = regular.exec(customId);
     if (!isEmpty(customId)) {
       setDisabled(false);
     } else {
@@ -68,7 +70,6 @@ const MountScanner = props => {
     }
   }, [customId]);
 
-  const text = props.text ? T.t('input_detail_new') : T.t('input_detail');
   const onSuccess = e => {
     let cyrillicRegular = /[а-яА-ЯЁё]/;
     let cyrillicFilterId = cyrillicRegular.exec(e.data);
@@ -76,27 +77,23 @@ const MountScanner = props => {
       setErrorText(T.t('latin_info'));
       setIsSnackbar(true);
     } else {
-      // let finishRegular = /^[a-z]{1,2}[0-9]{4,5}$/g;
-      // let finishFilterId = finishRegular.exec(e.data);
-      // if (finishFilterId) {
-      let finishFilterId = e.data;
-      dispatch(dialogInput(false));
       setIsSnackbar(false);
-      dispatch(loader(true));
-
-      dispatch(
-        currentScan(
-          finishFilterId,
-          props.nav,
-          props.page,
-          props.saveItems,
-          true,
-        ),
-      );
-      // } else {
-      //   setErrorText(T.t('wrong_format_info'));
-      //   setIsSnackbar(true);
-      // }
+      let finishFilterId = e.data;
+      const ifInDebou = listArray.includes(finishFilterId);
+      if (!ifInDebou) {
+        dispatch(mountCameraList(listArray, finishFilterId));
+        dispatch(dialogInput(false));
+        dispatch(loader(true));
+        dispatch(
+          currentScan(
+            finishFilterId,
+            props.nav,
+            props.page,
+            props.saveItems,
+            true,
+          ),
+        );
+      }
     }
   };
 
@@ -237,8 +234,8 @@ const styles = StyleSheet.create({
   },
   preview: {
     marginTop: -10,
-    zIndex: 1,
-    height: Dimensions.get('window').height + 47,
+    // zIndex: 1,
+    // height: Dimensions.get('window').height + 47,
   },
   min: {
     height: 3,

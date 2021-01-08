@@ -10,7 +10,7 @@ import {Portal, ActivityIndicator} from 'react-native-paper';
 import Button from '../../components/Buttons/Menu';
 import {copilot, walkthroughable, CopilotStep} from 'react-native-copilot';
 import {useDispatch} from 'react-redux';
-import {helps, nfc} from '../../actions/actions.js';
+import {helps, nfc, changeIsMultiple} from '../../actions/actions.js';
 import {menuSvg} from '../../utils/menuSvg.js';
 import withLayout from '../../hooks/withLayout';
 
@@ -99,6 +99,7 @@ const Main = props => {
                 text={T.t('inventorization')}
                 getUserList={true}
                 svg={'inventory'}
+                onPress={() => dispatch(changeIsMultiple(true))}
               />
             </CopilotText>
           </CopilotStep>

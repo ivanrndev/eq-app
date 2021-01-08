@@ -8,6 +8,13 @@ import {
   NFC,
   LOCATIONS,
   START_PAGE,
+  BACK_PAGE_MOUNT,
+  NFC_FOR_MOUNTING,
+  NEXT_PAGE_MOUNT,
+  MOUNT_CAMERA_LIST,
+  CHANGE_IS_MULTYPLE,
+  LOCATION_MAIN,
+  LOCATTION_LOC,
 } from '../../../actions/actionsType.js';
 
 const initialState = {
@@ -22,6 +29,8 @@ const initialState = {
   nameOfType: '',
   swithCamera: '',
   locations: '',
+  locationMain: '',
+  locationLoc: '',
   startPageIdent: 'Ident',
   startPageWriteOff: 'WriteOff',
   startPageService: 'Service',
@@ -30,11 +39,51 @@ const initialState = {
   startPageMarking: 'MarkingScaner',
   startPageGive: 'GiveScaner',
   startPageAccept: 'AcceptScaner',
+  startPageMountList: 'MountList',
+  backPageMount: '',
+  nextPageMount: '',
+  NFCforMounting: false,
+  mountCameraList: [''],
 };
 
 const settingsReducer = (state = initialState, action) => {
   switch (action.type) {
+    case LOCATION_MAIN:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case LOCATTION_LOC:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case CHANGE_IS_MULTYPLE:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case MOUNT_CAMERA_LIST:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case NEXT_PAGE_MOUNT:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case NFC_FOR_MOUNTING:
+      return {
+        ...state,
+        ...action.payload,
+      };
     case START_PAGE:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case BACK_PAGE_MOUNT:
       return {
         ...state,
         ...action.payload,

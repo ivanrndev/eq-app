@@ -83,6 +83,13 @@ import {
   MOUNT_SCAN,
   ERROR_CURRENT_MOUNT_SCAN_INFO,
   SAVE_CURRENT_MOUNT_SCAN_INFO_LIST,
+  BACK_PAGE_MOUNT,
+  NFC_FOR_MOUNTING,
+  NEXT_PAGE_MOUNT,
+  MOUNT_CAMERA_LIST,
+  CHANGE_IS_MULTYPLE,
+  LOCATION_MAIN,
+  LOCATTION_LOC,
 } from '../actions/actionsType.js';
 
 // Settings
@@ -92,10 +99,68 @@ export const nfc = (
   isMultiple,
   swithCamera,
   nameOfType,
+  NFCforMounting = false,
 ) => dispatch => {
   dispatch({
     type: NFC,
-    payload: {nfcBack, nfcNext, isMultiple, swithCamera, nameOfType},
+    payload: {
+      nfcBack,
+      nfcNext,
+      isMultiple,
+      swithCamera,
+      nameOfType,
+      NFCforMounting,
+    },
+  });
+};
+
+export const changeLocationMain = name => dispatch => {
+  dispatch({
+    type: LOCATION_MAIN,
+    payload: {locationMain: name},
+  });
+};
+
+export const changeLocationLoc = name => dispatch => {
+  dispatch({
+    type: LOCATTION_LOC,
+    payload: {locationLoc: name},
+  });
+};
+
+export const changeIsMultiple = status => dispatch => {
+  dispatch({
+    type: CHANGE_IS_MULTYPLE,
+    payload: {isMultiple: status},
+  });
+};
+
+export const mountCameraList = (array, item) => dispatch => {
+  const newArray = array.concat(item);
+  dispatch({
+    type: MOUNT_CAMERA_LIST,
+    payload: {mountCameraList: newArray},
+  });
+};
+
+export const backPageMount = page => dispatch => {
+  dispatch({
+    type: BACK_PAGE_MOUNT,
+    payload: {backPageMount: page},
+  });
+};
+
+export const nextPageMount = page => dispatch => {
+  dispatch({
+    type: NEXT_PAGE_MOUNT,
+    payload: {nextPageMount: page},
+  });
+};
+
+export const NFCforMounting = page => dispatch => {
+  dispatch({
+    type: NFC_FOR_MOUNTING,
+    payload: {NFCforMounting: page},
   });
 };
 
@@ -1217,7 +1282,7 @@ export const saveCurrentUserInventory = (id, nav, startPage) => dispatch => {
     nfc(
       'Inventory',
       'InventoryFinish',
-      false,
+      true,
       'InventoryScaner',
       'startPageInventory',
     ),
@@ -1471,7 +1536,8 @@ export const deleteTransfer = (nav, id, route) => dispatch => {
 // locations
 export const getLocations = props => dispatch => {
   AsyncStorage.getItem('company').then(company => {
-    return axios.get('/locations').then(resp => {
+    return axios.get(`/company/${company}/locations`).then(resp => {
+      console.log('resp', resp);
       if (resp.status === 200) {
         dispatch({
           type: LOCATIONS,

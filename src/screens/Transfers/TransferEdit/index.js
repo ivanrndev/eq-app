@@ -25,7 +25,7 @@ import TransparentButton from '../../../components/Buttons/TransparentButton';
 import {getProperErrorTransfer} from '../../../utils/helpers.js';
 // redux and actions
 import {useSelector, useDispatch} from 'react-redux';
-import {loader, updateTransfer} from '../../../actions/actions.js';
+import {loader, updateTransfer, nfc} from '../../../actions/actions.js';
 
 const TransferEdit = props => {
   const dispatch = useDispatch();
@@ -164,7 +164,19 @@ const TransferEdit = props => {
             <View style={styles.buttonBlock}>
               <DarkButton
                 text={T.t('add')}
-                onPress={() => props.navigation.navigate('TransferScaner')}
+                onPress={() => {
+                  dispatch(
+                    nfc(
+                      'TransfersEdit',
+                      'TransfersEdit',
+                      false,
+                      'TransferEdit',
+                      null,
+                      false,
+                    ),
+                  );
+                  props.navigation.navigate('TransferScaner');
+                }}
               />
             </View>
             {infoList && infoList.map(i => i.willDelete).includes(true) && (

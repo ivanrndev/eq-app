@@ -1,16 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useEffect} from 'react';
 import {isEmpty, isEqual} from 'lodash';
 import T from '../../../../i18n';
-import {useFocusEffect} from '@react-navigation/native';
 import {
   StyleSheet,
   View,
   Dimensions,
   SafeAreaView,
   ScrollView,
-  Picker,
+  // Picker,
 } from 'react-native';
+import {Picker} from '@react-native-community/picker';
 import {
   Card,
   IconButton,
@@ -34,6 +34,8 @@ import {
   alreadyScannedBids,
   makeAccept,
   allowNewScan,
+  changeLocationMain,
+  changeLocationLoc,
 } from '../../../../actions/actions.js';
 
 const AcceptList = props => {
@@ -55,22 +57,14 @@ const AcceptList = props => {
   const [showButtonsScan, setShowButtonsScan] = useState(true);
 
   // objects and locations, sort
-  const [selectedValue, setSelectedValue] = useState('');
-  const [selectedValueLoc, setSelectedValueLoc] = useState('');
+  const selectedValue = settings.locationMain;
+  const selectedValueLoc = settings.locationLoc;
+
   const currentLocation = objects.filter(x => {
     if (x.title === selectedValue) {
       return x;
     }
   });
-  useFocusEffect(
-    useCallback(() => {
-      // setScaner(true);
-      return () => {
-        setSelectedValue('');
-        setSelectedValueLoc('');
-      };
-    }, []),
-  );
 
   useEffect(() => {
     if (!isEmpty(bidItems)) {
@@ -158,6 +152,8 @@ const AcceptList = props => {
         alreadyScannedBids={true}
         goTo={'Accept'}
         title={T.t('accept')}
+        clearlocationMain={true}
+        clearlocationLoc={true}
       />
       <SafeAreaView />
       <Portal>
@@ -256,7 +252,7 @@ const AcceptList = props => {
                 selectedValue={selectedValue}
                 style={styles.picker}
                 onValueChange={(itemValue, itemIndex) => {
-                  setSelectedValue(itemValue);
+                  dispatch(changeLocationMain(itemValue));
                 }}>
                 <Picker.Item label={T.t('choise')} value="" />
                 {objects.map((item, index) => {
@@ -276,7 +272,7 @@ const AcceptList = props => {
                     selectedValue={selectedValueLoc}
                     style={styles.pickerTwo}
                     onValueChange={(itemValue, itemIndex) => {
-                      setSelectedValueLoc(itemValue);
+                      dispatch(changeLocationLoc(itemValue));
                     }}>
                     <Picker.Item label={T.t('choise')} value="" />
                     {currentLocation
@@ -394,7 +390,7 @@ const styles = StyleSheet.create({
   },
   container: {
     paddingTop: 25,
-    width: Dimensions.get('window').width / 1.1,
+    width: Dimensions.get('window').width / 1.4,
     height: 'auto',
   },
 });

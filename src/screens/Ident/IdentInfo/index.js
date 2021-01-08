@@ -12,13 +12,15 @@ import {
   getComments,
   loader,
   unMountItemFromParent,
+  nfc,
+  backPageMount,
+  nextPageMount,
 } from '../../../actions/actions.js';
 import T from '../../../i18n';
 import {getStatus, getProperErrorMessage} from '../../../utils/helpers.js';
 import AsyncStorage from '@react-native-community/async-storage';
 import DarkButton from '../../../components/Buttons/DarkButton';
 import {fontSizer} from '../../../utils/helpers.js';
-
 export const IdentInfo = props => {
   const dispatch = useDispatch();
   const settings = useSelector(state => state.settings);
@@ -245,7 +247,21 @@ export const IdentInfo = props => {
                           <DarkButton
                             size={fontSizer(width)}
                             text={T.t('setupItem')}
-                            onPress={() => props.navigation.navigate('MountList')}
+                            onPress={() => {
+                              dispatch(backPageMount('IdentInfo'));
+                              dispatch(nextPageMount('MountList'));
+                              dispatch(
+                                nfc(
+                                  settings.nfcBack,
+                                  settings.nfcNext,
+                                  false,
+                                  'Ident',
+                                  'startPageMountList',
+                                  true,
+                                ),
+                              );
+                              props.navigation.navigate('MountList');
+                            }}
                           />
                         </View>
                       )}

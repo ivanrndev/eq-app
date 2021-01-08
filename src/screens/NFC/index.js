@@ -26,7 +26,7 @@ const NFC = props => {
         cleanUp();
         setLog(T.t('hold_nfc'));
       };
-    }, [readData, settings.nfcNext]),
+    }, [readData, settings.nfcNext, settings.NFCforMounting]),
   );
 
   const cleanUp = () => {
@@ -81,8 +81,9 @@ const NFC = props => {
           currentScan(
             codeFormat[0],
             props.navigation,
-            settings.nfcNext,
+            settings.NFCforMounting ? settings.nextPageMount : settings.nfcNext,
             settings.isMultiple,
+            settings.NFCforMounting,
           ),
         );
       } else {

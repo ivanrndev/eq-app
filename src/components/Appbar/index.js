@@ -19,6 +19,10 @@ import {
   clearComments,
   clearUserAcceptBid,
   switchStartPage,
+  NFCforMounting,
+  changeIsMultiple,
+  changeLocationMain,
+  changeLocationLoc,
 } from '../../actions/actions.js';
 
 const AppbarCustom = props => {
@@ -71,6 +75,9 @@ const AppbarCustom = props => {
             if (props.alreadyScannedBids) {
               dispatch(alreadyScannedBids([]));
             }
+            if (props.backPageMount) {
+              dispatch(NFCforMounting(false));
+            }
             if (props.clearGiveList) {
               dispatch(clearGiveList());
             }
@@ -82,6 +89,15 @@ const AppbarCustom = props => {
             }
             if (props.menu) {
               props.navigation.openDrawer();
+            }
+            if (props.isMutiple) {
+              dispatch(changeIsMultiple(false));
+            }
+            if (props.clearlocationMain) {
+              dispatch(changeLocationMain(''));
+            }
+            if (props.clearlocationLoc) {
+              dispatch(changeLocationLoc(''));
             }
           }}
         />

@@ -27,6 +27,9 @@ import {
   getTransactions,
   getComments,
   unMountItemFromParent,
+  nfc,
+  backPageMount,
+  nextPageMount,
 } from '../../../actions/actions.js';
 
 export const OnMeInfo = props => {
@@ -237,9 +240,21 @@ export const OnMeInfo = props => {
                         <View style={styles.marginBtn}>
                           <DarkButton
                             text={T.t('setupItem')}
-                            onPress={() =>
-                              props.navigation.navigate('MountList')
-                            }
+                            onPress={() => {
+                              dispatch(backPageMount('OnMeInfo'));
+                              dispatch(nextPageMount('MountList'));
+                              dispatch(
+                                nfc(
+                                  'MountList',
+                                  'MountList',
+                                  false,
+                                  'MountList',
+                                  'startPageMountList',
+                                  true,
+                                ),
+                              );
+                              props.navigation.navigate('MountList');
+                            }}
                           />
                         </View>
                       )}

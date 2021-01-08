@@ -4,8 +4,6 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
-	<key>REVERSED_CLIENT_ID</key>
-	<string>865462011613-fjnupeeu18j80ltmjn69bs2felmt7701.apps.googleusercontent.com</string>
 	<key>CFBundleDisplayName</key>
 	<string>EqMan</string>
 	<key>CFBundleExecutable</key>
@@ -28,9 +26,7 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>865462011613-fjnupeeu18j80ltmjn69bs2felmt7701.apps.googleusercontent.com</string>
-			</array>
+			<array/>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>

@@ -81,7 +81,7 @@ const Scanner = props => {
         // let finishFilterId = finishRegular.exec(e.data);
         // if (finishFilterId) {
         let finishFilterId = e.data;
-      console.log('finishFilterId', finishFilterId);
+
         dispatch(dialogInput(false));
         setIsSnackbar(false);
         dispatch(loader(true));
@@ -235,8 +235,8 @@ const styles = StyleSheet.create({
   },
   preview: {
     marginTop: -10,
-    zIndex: 1,
-    height: Dimensions.get('window').height + 47,
+    // zIndex: 1,
+    // height: Dimensions.get('window').height + 47,
   },
   min: {
     height: 3,

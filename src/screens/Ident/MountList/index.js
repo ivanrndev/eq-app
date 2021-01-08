@@ -10,7 +10,7 @@ import Appbar from '../../../components/Appbar';
 import MountScanner from '../../../components/MountScanner';
 // redux and actions
 import {useDispatch, useSelector} from 'react-redux';
-import {loader, unMountItemFromParent, getMarkingList, mountItemFromParent} from '../../../actions/actions.js';
+import {loader, unMountItemFromParent, getMarkingList, mountItemFromParent, NFCforMounting, mountCameraList} from '../../../actions/actions.js';
 import T from '../../../i18n';
 import DarkButton from '../../../components/Buttons/DarkButton';
 import TransparentButton from '../../../components/Buttons/TransparentButton';
@@ -27,6 +27,7 @@ export const MountList = props => {
   const editItems = store.scanInfo.items;
   const [isText, setIsText] = useState('');
   const [userId, setUserId] = useState();
+  const settings = useSelector(state => state.settings);
 
   const getUserId = async () => {
     try {
@@ -112,8 +113,11 @@ export const MountList = props => {
         navigation={props.navigation}
         newScan={false}
         arrow={true}
-        goTo={'back'}
+        goTo={settings.backPageMount}
+        backPageMount={true}
         title={T.t('edit')}
+        switch={true}
+        typeSwitchNFC={true}
       />
       <SafeAreaView/>
         <View style={styles.container}>
@@ -142,7 +146,11 @@ export const MountList = props => {
                     <DarkButton
                       size={fontSizer(width)}
                       text={T.t('done')}
-                      onPress={() => props.navigation.goBack()}
+                      onPress={() => {
+                        dispatch(NFCforMounting(false));
+                        props.navigation.navigate(settings.backPageMount);
+                      }
+                      }
                     />
                 </View>
               </View>
@@ -158,6 +166,7 @@ export const MountList = props => {
                                 {...props}
                                 icon="delete"
                                 onPress={() => {
+                                    console.warn('asdasda');
                                     setDeleteId(item._id);
                                     setIsOpen(true);
                                 }}
@@ -171,7 +180,9 @@ export const MountList = props => {
             <Dialog style={styles.dialog} visible={isOpen} onDismiss={() => {setIsOpen(!isOpen);}}>
               <Dialog.Title>{T.t('delete_item')}</Dialog.Title>
               <Dialog.Actions>
-                      <Button onPress={() => deleteItem()}>{T.t('delete')}</Button>
+                      <Button onPress={() => {
+                        dispatch(mountCameraList([], ''));
+                        deleteItem();}}>{T.t('delete')}</Button>
               </Dialog.Actions>
             </Dialog>
             <Snackbar
