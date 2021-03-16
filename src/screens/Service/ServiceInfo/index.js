@@ -21,20 +21,26 @@ import {
 } from '../../../actions/actions.js';
 import {getStatus, getProperErrorMessage} from '../../../utils/helpers.js';
 import AsyncStorage from '@react-native-community/async-storage';
+import {useQuantityAndPrice} from '../../../hooks/useQuantityAndPrice';
 
 export const ServiceInfo = props => {
   const dispatch = useDispatch();
-  const store = useSelector(state => state.scan);
-  const settings = useSelector(state => state.settings);
+  const [store, settings, show] = useSelector(({scan, settings}) => [
+    scan,
+    settings,
+    scan.isInfoOpen,
+  ]);
+  const {quantity, units} = useQuantityAndPrice();
   const error = getProperErrorMessage(store.scanInfoError, store.currentScan);
-  const show = store.isInfoOpen;
   // const keyboardMarginTop = Dimensions.get('window').height / 15;
   const keyboardMarginTop = 50;
-
   const metaData = store.scanInfo.metadata;
   const [role, setRole] = useState();
   const [reason, setReason] = useState('');
   const [stockroom, setStockroom] = useState('');
+  const [quantityToService, setQuantityToService] = useState(quantity);
+  const isEnteredQuantityValid = quantityToService <= quantity;
+  const isFormValid = !!reason && !!stockroom && isEnteredQuantityValid;
 
   let nameOfProduct = '';
   if (metaData) {
@@ -53,12 +59,17 @@ export const ServiceInfo = props => {
   const sendSercive = () => {
     dispatch(loader(true));
     dispatch(
-      sendToServices(store.scanInfo._id, reason, stockroom, props.navigation),
+      sendToServices(
+        store.scanInfo._id,
+        reason,
+        stockroom,
+        quantityToService,
+        props.navigation,
+      ),
     );
     setReason('');
     setStockroom('');
   };
-
   const getRole = async () => {
     try {
       const value = await AsyncStorage.getItem('role');
@@ -152,7 +163,33 @@ export const ServiceInfo = props => {
                           {store.scanInfo.person.lastName}
                         </Text>
                       )}
+
+                      <Text style={styles.text}>
+                        {T.t('detail_quantity')}: {quantity} {units}
+                      </Text>
                     </View>
+                  )}
+
+                  {quantity > 1 && (
+                    <>
+                      <Text style={styles.text}>
+                        {T.t('title_service_quantity')}
+                      </Text>
+                      <View style={styles.quantityInputWrap}>
+                        <TextInput
+                          style={styles.quantityInput}
+                          mode="outlined"
+                          value={`${quantityToService}`}
+                          keyboardType="numeric"
+                          onChangeText={text => setQuantityToService(text)}
+                        />
+                        <Text style={styles.quantityUnits}>{T.t('piece')}</Text>
+                      </View>
+                      <Text style={styles.error}>
+                        {!isEnteredQuantityValid &&
+                          `Указанное значение превышает \nдоступный остаток, операция не может\nбыть совершена.`}
+                      </Text>
+                    </>
                   )}
                 </View>
               )}
@@ -176,7 +213,11 @@ export const ServiceInfo = props => {
                   />
                   <View style={styles.buttonsBlock}>
                     <View style={styles.buttonBlock}>
-                      <DarkButton text={T.t('send')} onPress={sendSercive} />
+                      <DarkButton
+                        text={T.t('send')}
+                        disabled={!isFormValid}
+                        onPress={sendSercive}
+                      />
                     </View>
                   </View>
                 </>
@@ -237,6 +278,13 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
     fontSize: 19,
   },
+  error: {
+    color: '#E40B67',
+    alignSelf: 'flex-start',
+    fontSize: 15,
+    marginVertical: 10,
+    height: 60,
+  },
   text: {
     fontSize: 15,
     paddingBottom: 5,
@@ -259,6 +307,21 @@ const styles = StyleSheet.create({
     backgroundColor: '#EDF6FF',
     color: '#7A7A9D',
     width: Dimensions.get('window').width / 1.3,
+  },
+  quantityInputWrap: {
+    alignSelf: 'flex-start',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  quantityUnits: {
+    fontSize: 15,
+    color: '#7A7A9D',
+  },
+  quantityInput: {
+    height: 50,
+    width: 100,
+    marginRight: 10,
   },
   loader: {
     backgroundColor: 'rgba(52, 52, 52, 0.8)',

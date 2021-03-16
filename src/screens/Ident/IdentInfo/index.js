@@ -1,6 +1,13 @@
 /* eslint-disable prettier/prettier */
 import React, {useState} from 'react';
-import {StyleSheet, View, Dimensions, SafeAreaView, Text, ScrollView} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Dimensions,
+  SafeAreaView,
+  Text,
+  ScrollView,
+} from 'react-native';
 import {Title, Button, Portal, Dialog, IconButton} from 'react-native-paper';
 import {isEmpty} from 'lodash';
 // components
@@ -21,6 +28,7 @@ import {getStatus, getProperErrorMessage} from '../../../utils/helpers.js';
 import AsyncStorage from '@react-native-community/async-storage';
 import DarkButton from '../../../components/Buttons/DarkButton';
 import {fontSizer} from '../../../utils/helpers.js';
+import {ItemQuantityAndPrice} from '../../../components/ItemQuantityAndPrice/ItemQuantityAndPrice';
 export const IdentInfo = props => {
   const dispatch = useDispatch();
   const settings = useSelector(state => state.settings);
@@ -33,7 +41,6 @@ export const IdentInfo = props => {
   const [deleteId, setDeleteId] = useState(false);
   const [role, setRole] = useState();
   const [userId, setUserId] = useState();
-
   let nameOfProduct = '';
   if (metaData) {
     nameOfProduct = metaData.title
@@ -82,28 +89,32 @@ export const IdentInfo = props => {
   const deleteItem = () => {
     setIsOpen(false);
     dispatch(loader(true));
-    dispatch(unMountItemFromParent(
-      store.selectGiveId,
-      [deleteId],
-      store.scanInfo.code,
-      props.navigation,
-      'IdentInfo'
-    ));
+    dispatch(
+      unMountItemFromParent(
+        store.selectGiveId,
+        [deleteId],
+        store.scanInfo.code,
+        props.navigation,
+        'IdentInfo',
+      ),
+    );
   };
 
   const unmount = () => {
     dispatch(loader(true));
-    dispatch(unMountItemFromParent(
-      store.scanInfo.parent._id,
-      store.scanInfo._id,
-      store.scanInfo.code,
-      props.navigation,
-      'IdentInfo'
-    ));
+    dispatch(
+      unMountItemFromParent(
+        store.scanInfo.parent._id,
+        store.scanInfo._id,
+        store.scanInfo.code,
+        props.navigation,
+        'IdentInfo',
+      ),
+    );
   };
 
   const personId = store.scanInfo.person ? store.scanInfo.person._id : null;
-  const gaveAcess = userId === personId ? true : false;
+  const gaveAcess = userId === personId;
 
   return (
     <>
@@ -117,182 +128,197 @@ export const IdentInfo = props => {
       <SafeAreaView />
       <View style={styles.body}>
         <View style={styles.container}>
-        <ScrollView>
-          {store.scanInfoError && (
-            <View style={styles.info}>
-              <Title style={styles.titleError}>{error}</Title>
-            </View>
-          )}
-          {!store.scanInfoError && (
-            <View style={styles.info}>
-              {show && (
-                <View style={styles.info}>
-                  {store.scanInfo && (
-                    <Text style={styles.text}>
-                      {T.t('transfer_status')}:{' '}
-                      {getStatus(store.scanInfo, role)}
-                    </Text>
-                  )}
-                  {metaData && (
-                    <Text style={styles.text}>
-                      {T.t('detail_title')}: {nameOfProduct}
-                    </Text>
-                  )}
-                  {metaData.brand && (
-                    <Text style={styles.text}>
-                      {T.t('detail_brand')}: {metaData.brand}
-                    </Text>
-                  )}
-                  {metaData.model && (
-                    <Text style={styles.text}>
-                      {T.t('detail_model')}: {metaData.model}
-                    </Text>
-                  )}
-                  {metaData.capacity && (
-                    <Text style={styles.text}>
-                      {T.t('detail_capacity')}: {metaData.capacity}
-                    </Text>
-                  )}
-                  {metaData.serial && (
-                    <Text style={styles.text}>
-                      {T.t('detail_serial')}: {metaData.serial}
-                    </Text>
-                  )}
-                  {metaData.type && (
-                    <Text style={styles.text}>
-                      {T.t('detail_type')}: {metaData.type}
-                    </Text>
-                  )}
-                  {store.scanInfo.customFields &&
-                    store.scanInfo.customFields.map((item, index) => {
-                      return (
-                        <Text key={index} style={styles.text}>
-                          {item.label}: {item.value}
-                        </Text>
-                      );
-                    })}
-                  {store.scanInfo.person && (
-                    <Text style={styles.text}>
-                      {T.t('detail_person')}: {store.scanInfo.person.firstName}{' '}
-                      {store.scanInfo.person.lastName}
-                    </Text>
-                  )}
-                  {!isEmpty(store.scanInfo.items) && (
-                    <>
-                    <Text style={styles.textTmc}>{T.t('om_this_setup')}</Text>
-                    {store.scanInfo.items.map((item, index) => {
-                      return (
-                        <View key={index}>
-                          <Text key={index} style={styles.textInfo}>
-                            {item.metadata.title}{'\n'}
-                            {item.metadata.type}{'\n'}
-                            {item.metadata.brand}{'\n'}
-                            {item.metadata.serial}{'\n'}
-                            {item.metadata.model}{'\n'}
-                            {item.code}
+          <ScrollView>
+            {store.scanInfoError && (
+              <View style={styles.info}>
+                <Title style={styles.titleError}>{error}</Title>
+              </View>
+            )}
+            {!store.scanInfoError && (
+              <View style={styles.info}>
+                {show && (
+                  <View style={styles.info}>
+                    {store.scanInfo && (
+                      <Text style={styles.text}>
+                        {T.t('transfer_status')}:{' '}
+                        {getStatus(store.scanInfo, role)}
+                      </Text>
+                    )}
+                    {metaData && (
+                      <Text style={styles.text}>
+                        {T.t('detail_title')}: {nameOfProduct}
+                      </Text>
+                    )}
+                    {metaData.brand && (
+                      <Text style={styles.text}>
+                        {T.t('detail_brand')}: {metaData.brand}
+                      </Text>
+                    )}
+                    {metaData.model && (
+                      <Text style={styles.text}>
+                        {T.t('detail_model')}: {metaData.model}
+                      </Text>
+                    )}
+                    {metaData.capacity && (
+                      <Text style={styles.text}>
+                        {T.t('detail_capacity')}: {metaData.capacity}
+                      </Text>
+                    )}
+                    {metaData.serial && (
+                      <Text style={styles.text}>
+                        {T.t('detail_serial')}: {metaData.serial}
+                      </Text>
+                    )}
+                    {metaData.type && (
+                      <Text style={styles.text}>
+                        {T.t('detail_type')}: {metaData.type}
+                      </Text>
+                    )}
+                    {store.scanInfo.customFields &&
+                      store.scanInfo.customFields.map((item, index) => {
+                        return (
+                          <Text key={index} style={styles.text}>
+                            {item.label}: {item.value}
                           </Text>
-                          <Button
-                            style={styles.deleteBtn}
-                            mode="text"
-                            contentStyle={styles.buttonContentStyle}
-                          >
-                            {gaveAcess && (
-                              <IconButton {...props}
-                                icon="delete"
-                                size={35}
-                                color="#22215B"
-                                onPress={() =>  {
-                                  setDeleteId(item._id);
-                                  setIsOpen(true);
-                                }} />
-                            )}
-                          </Button>
-                          <View style={styles.border} />
-                       </View>
-                      );
-                    })}
-                    </>
-                  )}
+                        );
+                      })}
+                    {store.scanInfo.person && (
+                      <Text style={styles.text}>
+                        {T.t('detail_person')}:{' '}
+                        {store.scanInfo.person.firstName}{' '}
+                        {store.scanInfo.person.lastName}
+                      </Text>
+                    )}
+                    <ItemQuantityAndPrice />
+                    {!isEmpty(store.scanInfo.items) && (
+                      <>
+                        <Text style={styles.textTmc}>
+                          {T.t('om_this_setup')}
+                        </Text>
+                        {store.scanInfo.items.map((item, index) => {
+                          return (
+                            <View key={index}>
+                              <Text key={index} style={styles.textInfo}>
+                                {item.metadata.title}
+                                {'\n'}
+                                {item.metadata.type}
+                                {'\n'}
+                                {item.metadata.brand}
+                                {'\n'}
+                                {item.metadata.serial}
+                                {'\n'}
+                                {item.metadata.model}
+                                {'\n'}
+                                {item.code}
+                              </Text>
+                              <Button
+                                style={styles.deleteBtn}
+                                mode="text"
+                                contentStyle={styles.buttonContentStyle}>
+                                {gaveAcess && (
+                                  <IconButton
+                                    {...props}
+                                    icon="delete"
+                                    size={35}
+                                    color="#22215B"
+                                    onPress={() => {
+                                      setDeleteId(item._id);
+                                      setIsOpen(true);
+                                    }}
+                                  />
+                                )}
+                              </Button>
+                              <View style={styles.border} />
+                            </View>
+                          );
+                        })}
+                      </>
+                    )}
                     {store.scanInfo.parent && (
                       <>
-                      <Text style={styles.textTmc}>{T.t('this_setup')}</Text>
-                      <Text style={styles.text}>
-                        {store.scanInfo.parent.metadata.title},{' '}
-                        {store.scanInfo.parent.metadata.brand},{' '}
-                        {store.scanInfo.parent.metadata.model},{' '}
-                        {store.scanInfo.parent.metadata.serial}
-                      </Text>
-                    </>
-                  )}
-                </View>
-              )}
-            </View>
-          )}
-        </ScrollView>
-            <>
-              <View style={styles.buttonsBlock}>
-                <View style={styles.buttonBlock}>
-                  {gaveAcess && (
-                    <View>
-                      {!isEmpty(store.scanInfo.parent) ? (
-                        <View style={styles.marginBtn}>
-                          <DarkButton
-                            size={fontSizer(width)}
-                            text={T.t('dismantle')}
-                            onPress={unmount}
-                          />
-                        </View>
-                      ) : (
-                        <View style={styles.marginBtn}>
-                          <DarkButton
-                            size={fontSizer(width)}
-                            text={T.t('setupItem')}
-                            onPress={() => {
-                              dispatch(backPageMount('IdentInfo'));
-                              dispatch(nextPageMount('MountList'));
-                              dispatch(
-                                nfc(
-                                  settings.nfcBack,
-                                  settings.nfcNext,
-                                  false,
-                                  'Ident',
-                                  'startPageMountList',
-                                  true,
-                                ),
-                              );
-                              props.navigation.navigate('MountList');
-                            }}
-                          />
-                        </View>
-                      )}
-                    </View>
-                  )}
-                   <View style={styles.marginBtn}>
-                    <DarkButton
-                      size={fontSizer(width)}
-                      text={T.t('title_comments')}
-                      onPress={getAllComments}
-                    />
-                   </View>
-                   <View style={styles.marginBtn}>
-                    <DarkButton
-                      size={fontSizer(width)}
-                      text={T.t('title_history_of_transaction')}
-                      onPress={handleTransactions}
-                    />
+                        <Text style={styles.textTmc}>{T.t('this_setup')}</Text>
+                        <Text style={styles.text}>
+                          {store.scanInfo.parent.metadata.title},{' '}
+                          {store.scanInfo.parent.metadata.brand},{' '}
+                          {store.scanInfo.parent.metadata.model},{' '}
+                          {store.scanInfo.parent.metadata.serial}
+                        </Text>
+                      </>
+                    )}
                   </View>
+                )}
+              </View>
+            )}
+          </ScrollView>
+          <>
+            <View style={styles.buttonsBlock}>
+              <View style={styles.buttonBlock}>
+                {gaveAcess && (
+                  <View>
+                    {!isEmpty(store.scanInfo.parent) ? (
+                      <View style={styles.marginBtn}>
+                        <DarkButton
+                          size={fontSizer(width)}
+                          text={T.t('dismantle')}
+                          onPress={unmount}
+                        />
+                      </View>
+                    ) : (
+                      <View style={styles.marginBtn}>
+                        <DarkButton
+                          size={fontSizer(width)}
+                          text={T.t('setupItem')}
+                          onPress={() => {
+                            dispatch(backPageMount('IdentInfo'));
+                            dispatch(nextPageMount('MountList'));
+                            dispatch(
+                              nfc(
+                                settings.nfcBack,
+                                settings.nfcNext,
+                                false,
+                                'Ident',
+                                'startPageMountList',
+                                true,
+                              ),
+                            );
+                            props.navigation.navigate('MountList');
+                          }}
+                        />
+                      </View>
+                    )}
+                  </View>
+                )}
+                <View style={styles.marginBtn}>
+                  <DarkButton
+                    size={fontSizer(width)}
+                    text={T.t('title_comments')}
+                    onPress={getAllComments}
+                  />
+                </View>
+                <View style={styles.marginBtn}>
+                  <DarkButton
+                    size={fontSizer(width)}
+                    text={T.t('title_history_of_transaction')}
+                    onPress={handleTransactions}
+                  />
                 </View>
               </View>
-            </>
+            </View>
+          </>
         </View>
         <Portal>
-        <Dialog style={styles.dialog} visible={isOpen} onDismiss={() => {setIsOpen(!isOpen)}}>
-          <Dialog.Title>{T.t('delete_item')}</Dialog.Title>
-          <Dialog.Actions>
-            <Button onPress={() => deleteItem()}>{T.t('delete')}</Button>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
+          <Dialog
+            style={styles.dialog}
+            visible={isOpen}
+            onDismiss={() => {
+              setIsOpen(!isOpen);
+            }}>
+            <Dialog.Title>{T.t('delete_item')}</Dialog.Title>
+            <Dialog.Actions>
+              <Button onPress={() => deleteItem()}>{T.t('delete')}</Button>
+            </Dialog.Actions>
+          </Dialog>
+        </Portal>
       </View>
     </>
   );

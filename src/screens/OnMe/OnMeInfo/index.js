@@ -20,6 +20,7 @@ import T from '../../../i18n';
 // components
 import DarkButton from '../../../components/Buttons/DarkButton';
 import Appbar from '../../../components/Appbar';
+
 // redux and actions
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -31,11 +32,12 @@ import {
   backPageMount,
   nextPageMount,
 } from '../../../actions/actions.js';
+import {ItemQuantityAndPrice} from '../../../components/ItemQuantityAndPrice/ItemQuantityAndPrice';
 
 export const OnMeInfo = props => {
   const settings = useSelector(state => state.settings);
-  const scan = useSelector(state => state.scan);
-  const store = useSelector(state => state.onMe);
+  const [scan, store] = useSelector(({scan, onMe}) => [scan, onMe]);
+
   const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(false);
@@ -49,6 +51,7 @@ export const OnMeInfo = props => {
   const show = !isEmpty(metaData);
 
   let nameOfProduct = '';
+
   if (info) {
     nameOfProduct = info.title
       ? info.title
@@ -156,6 +159,7 @@ export const OnMeInfo = props => {
                         {T.t('detail_type')}: {info.type}
                       </Text>
                     )}
+
                     {show
                       ? metaData.customFields.map((item, index) => {
                           return (
@@ -170,6 +174,7 @@ export const OnMeInfo = props => {
                         {T.t('qr_code')}: {metaData.code}
                       </Text>
                     ) : null}
+                    <ItemQuantityAndPrice />
                     {!isEmpty(scan.scanInfo.items) && (
                       <>
                         <Text style={styles.textTmc}>

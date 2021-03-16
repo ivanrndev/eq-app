@@ -469,12 +469,19 @@ export const allowNewScan = status => dispatch => {
 };
 
 // Service actions
-export const sendToServices = (id, description, place, nav) => dispatch => {
-  const isFullFilled = !!description && !!place;
+export const sendToServices = (
+  id,
+  description,
+  place,
+  quantity,
+  nav,
+) => dispatch => {
+  const isFullFilled = !!description && !!place && !!quantity;
   const data = isFullFilled
     ? {
         description,
         place,
+        quantity,
       }
     : {};
   AsyncStorage.getItem('company').then(company => {
