@@ -1,35 +1,39 @@
 import React, {useState} from 'react';
 import {
-  StyleSheet,
-  View,
   Dimensions,
   SafeAreaView,
   ScrollView,
+  StyleSheet,
+  View,
 } from 'react-native';
 import {
+  ActivityIndicator,
+  Button,
   Card,
-  Title,
   Paragraph,
   Searchbar,
-  Button,
-  ActivityIndicator,
+  Title,
 } from 'react-native-paper';
 import T from '../../../i18n';
+import {useQuantityAndPrice} from '../../../hooks/useQuantityAndPrice';
 // components
 import Appbar from '../../../components/Appbar';
 import {getProperErrorMessage} from '../../../utils/helpers.js';
 // redux and actions
 import {useDispatch, useSelector} from 'react-redux';
 import {
+  loadMore,
   saveCurrentItemMark,
   searchItem,
-  loadMore,
 } from '../../../actions/actions.js';
 
 const MarkingList = props => {
   const dispatch = useDispatch();
-  const marking = useSelector(state => state.marking);
-  const settings = useSelector(state => state.settings);
+  const [marking, settings] = useSelector(({marking, settings}) => [
+    marking,
+    settings,
+  ]);
+  const {currency} = useQuantityAndPrice();
   let error = getProperErrorMessage(marking.markingError);
   const [search, setSearch] = useState('');
 
@@ -94,32 +98,51 @@ const MarkingList = props => {
                       <Card.Content>
                         {item.metadata.title ? (
                           <Title style={styles.cardTitle}>
-                            {item.metadata.title}
+                            {T.t('detail_title')}: {item.metadata.title}
                           </Title>
                         ) : (
                           <Title style={styles.cardTitle}>
-                            {item.metadata.type} {item.metadata.brand}{' '}
+                            {T.t('detail_type')}: {item.metadata.type}{' '}
+                            {item.metadata.brand} {T.t('detail_model')}:{' '}
                             {item.metadata.model} {item.metadata.serial}
                           </Title>
                         )}
                         {item.metadata.type && (
                           <Paragraph style={styles.paragraph}>
-                            {item.metadata.type} {item.code && '/ ' + item.code}
+                            {T.t('detail_type')}: {item.metadata.type}{' '}
+                            {item.code && '/ ' + item.code}
                           </Paragraph>
                         )}
                         {item.metadata.brand && (
                           <Paragraph style={styles.paragraph}>
-                            {item.metadata.brand}
+                            {T.t('detail_brand')}: {item.metadata.brand}
                           </Paragraph>
                         )}
                         {item.metadata.model && (
                           <Paragraph style={styles.paragraph}>
-                            {item.metadata.model}
+                            {T.t('detail_model')}: {item.metadata.model}
                           </Paragraph>
                         )}
                         {item.metadata.serial && (
                           <Paragraph style={styles.paragraph}>
-                            {item.metadata.serial}
+                            {T.t('detail_serial')}: {item.metadata.serial}
+                          </Paragraph>
+                        )}
+                        <Paragraph style={styles.paragraph}>
+                          {T.t('detail_quantity')}: {item.batch.quantity}{' '}
+                          {item.batch.units}
+                        </Paragraph>
+                        <Paragraph style={styles.paragraph}>
+                          {T.t('detail_price_per_item')}: {item.metadata.price}{' '}
+                          {currency}
+                        </Paragraph>
+                        {item.batch.quantity != 1 && (
+                          <Paragraph style={styles.paragraph}>
+                            {T.t('detail_price_per_lot')}:{' '}
+                            {Number(
+                              item.metadata.price * item.batch.quantity,
+                            ).toFixed(2)}{' '}
+                            {currency}
                           </Paragraph>
                         )}
                       </Card.Content>

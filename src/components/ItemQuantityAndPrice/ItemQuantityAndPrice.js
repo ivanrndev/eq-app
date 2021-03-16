@@ -23,7 +23,7 @@ export const ItemQuantityAndPrice = () => {
           {T.t('detail_price_per_item')}: {price} {currency}
         </Text>
       )}
-      {price && !!quantity && quantity !== +1 && (
+      {price && !!quantity && quantity !== 1 && (
         <Text style={styles.text}>
           {T.t('detail_price_per_lot')}: {`${totalLotPrice} ${currency}`}
         </Text>

@@ -26,10 +26,12 @@ import {
   myloadMore,
   currentScan,
 } from '../../actions/actions.js';
+import {useQuantityAndPrice} from '../../hooks/useQuantityAndPrice';
 
 const OnMe = props => {
   const dispatch = useDispatch();
   const onMe = useSelector(state => state.onMe);
+  const {currency} = useQuantityAndPrice();
   let error = getProperErrorMessage(onMe.markingError);
   const [search, setSearch] = useState('');
 
@@ -45,7 +47,7 @@ const OnMe = props => {
   };
 
   let showEmptyError = !onMe.myList.length;
-
+  console.log('ONME', useSelector(state => state));
   return (
     <>
       <Appbar
@@ -97,33 +99,51 @@ const OnMe = props => {
                           <Card.Content>
                             {item.metadata.title ? (
                               <Title style={styles.cardTitle}>
-                                {item.metadata.title}
+                                {T.t('detail_title')}: {item.metadata.title}
                               </Title>
                             ) : (
                               <Title style={styles.cardTitle}>
-                                {item.metadata.type} {item.metadata.brand}{' '}
+                                {T.t('detail_type')}: {item.metadata.type}{' '}
+                                {item.metadata.brand} {T.t('detail_model')}:{' '}
                                 {item.metadata.model} {item.metadata.serial}
                               </Title>
                             )}
                             {item.metadata.type && (
                               <Paragraph style={styles.paragraph}>
-                                {item.metadata.type}{' '}
+                                {T.t('detail_type')}: {item.metadata.type}{' '}
                                 {item.code && '/ ' + item.code}
                               </Paragraph>
                             )}
                             {item.metadata.brand && (
                               <Paragraph style={styles.paragraph}>
-                                {item.metadata.brand}
+                                {T.t('detail_brand')}: {item.metadata.brand}
                               </Paragraph>
                             )}
                             {item.metadata.model && (
                               <Paragraph style={styles.paragraph}>
-                                {item.metadata.model}
+                                {T.t('detail_model')}: {item.metadata.model}
                               </Paragraph>
                             )}
                             {item.metadata.serial && (
                               <Paragraph style={styles.paragraph}>
-                                {item.metadata.serial}
+                                {T.t('detail_serial')}: {item.metadata.serial}
+                              </Paragraph>
+                            )}
+                            <Paragraph style={styles.paragraph}>
+                              {T.t('detail_quantity')}: {item.batch.quantity}{' '}
+                              {item.batch.units}
+                            </Paragraph>
+                            <Paragraph style={styles.paragraph}>
+                              {T.t('detail_price_per_item')}:{' '}
+                              {item.metadata.price} {currency}
+                            </Paragraph>
+                            {item.batch.quantity != 1 && (
+                              <Paragraph style={styles.paragraph}>
+                                {T.t('detail_price_per_lot')}:{' '}
+                                {Number(
+                                  item.metadata.price * item.batch.quantity,
+                                ).toFixed(2)}{' '}
+                                {currency}
                               </Paragraph>
                             )}
                           </Card.Content>
@@ -139,7 +159,7 @@ const OnMe = props => {
                         mode="Text"
                         color="#22215B"
                         onPress={getMoreItems}>
-                         {T.t('load_more')}
+                        {T.t('load_more')}
                       </Button>
                     )}
                     {onMe.myloadMore && (

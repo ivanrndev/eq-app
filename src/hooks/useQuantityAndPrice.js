@@ -1,7 +1,7 @@
 import {useSelector} from 'react-redux';
 import T from '../i18n';
 
-export const useQuantityAndPrice = () => {
+export const useQuantityAndPrice = (key = 'scan') => {
   const [quantity, units, price, currency] = useSelector(({scan, auth}) => [
     scan.scanInfo.batch ? scan.scanInfo.batch.quantity : 1,
     scan.scanInfo.batch ? scan.scanInfo.batch.units : `${T.t('piece')}`,
