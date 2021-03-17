@@ -1,38 +1,41 @@
 /* eslint-disable prettier/prettier */
 import React, {useState} from 'react';
 import {
-  StyleSheet,
-  View,
   Dimensions,
   SafeAreaView,
-  Text,
   ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from 'react-native';
-import {Title, Button, Portal, Dialog, IconButton} from 'react-native-paper';
+import {Button, Dialog, IconButton, Portal, Title} from 'react-native-paper';
 import {isEmpty} from 'lodash';
 // components
 import Appbar from '../../../components/Appbar';
 // redux and actions
 import {useDispatch, useSelector} from 'react-redux';
 import {
-  getTransactions,
-  getComments,
-  loader,
-  unMountItemFromParent,
-  nfc,
   backPageMount,
+  getComments,
+  getTransactions,
+  loader,
   nextPageMount,
+  nfc,
+  unMountItemFromParent,
 } from '../../../actions/actions.js';
 import T from '../../../i18n';
-import {getStatus, getProperErrorMessage} from '../../../utils/helpers.js';
+import {
+  fontSizer,
+  getProperErrorMessage,
+  getStatus,
+} from '../../../utils/helpers.js';
 import AsyncStorage from '@react-native-community/async-storage';
 import DarkButton from '../../../components/Buttons/DarkButton';
-import {fontSizer} from '../../../utils/helpers.js';
-import {ItemQuantityAndPrice} from '../../../components/ItemQuantityAndPrice/ItemQuantityAndPrice';
+import {ItemCardQuantityAndPrice} from '../../../components/ItemCardQuantityAndPrice/ItemCardQuantityAndPrice';
+
 export const IdentInfo = props => {
   const dispatch = useDispatch();
-  const settings = useSelector(state => state.settings);
-  const store = useSelector(state => state.scan);
+  const [settings, store] = useSelector(({settings, scan}) => [settings, scan]);
   const error = getProperErrorMessage(store.scanInfoError, store.currentScan);
   const show = store.isInfoOpen;
   const metaData = store.scanInfo.metadata;
@@ -59,7 +62,7 @@ export const IdentInfo = props => {
 
   const handleTransactions = () => {
     dispatch(loader(true));
-    dispatch(getTransactions(store.scanInfo._id, props.navigation, 0));
+    dispatch(getTransactions(itemId, props.navigation, 0));
   };
 
   const getRole = async () => {
@@ -105,7 +108,7 @@ export const IdentInfo = props => {
     dispatch(
       unMountItemFromParent(
         store.scanInfo.parent._id,
-        store.scanInfo._id,
+        itemId,
         store.scanInfo.code,
         props.navigation,
         'IdentInfo',
@@ -115,7 +118,7 @@ export const IdentInfo = props => {
 
   const personId = store.scanInfo.person ? store.scanInfo.person._id : null;
   const gaveAcess = userId === personId;
-
+  console.log('IDENTINFO', store);
   return (
     <>
       <Appbar
@@ -189,7 +192,12 @@ export const IdentInfo = props => {
                         {store.scanInfo.person.lastName}
                       </Text>
                     )}
-                    <ItemQuantityAndPrice />
+                    <ItemCardQuantityAndPrice
+                      quantity={store.scanInfo.batch.quantity}
+                      price={store.scanInfo.metadata.price}
+                      units={store.scanInfo.batch.units}
+                      styles={styles}
+                    />
                     {!isEmpty(store.scanInfo.items) && (
                       <>
                         <Text style={styles.textTmc}>

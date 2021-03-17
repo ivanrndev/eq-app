@@ -67,6 +67,7 @@
     "title_service_reason": "Причина",
     "title_service_place": "Место",
     "title_service_quantity": "Задайте количество ТМЦ которое нужно передать в сервис",
+    "error_service_quantity": "Указанное значение превышает \nдоступный остаток, операция не может\nбыть совершена.",
     "send": "Отправить",
     "menu": "Меню",
     "send_service_finish": "ТМЦ отправлен в сервис",

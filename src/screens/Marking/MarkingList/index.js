@@ -15,7 +15,6 @@ import {
   Title,
 } from 'react-native-paper';
 import T from '../../../i18n';
-import {useQuantityAndPrice} from '../../../hooks/useQuantityAndPrice';
 // components
 import Appbar from '../../../components/Appbar';
 import {getProperErrorMessage} from '../../../utils/helpers.js';
@@ -26,6 +25,7 @@ import {
   saveCurrentItemMark,
   searchItem,
 } from '../../../actions/actions.js';
+import {ItemListCardContent} from '../../../components/ItemListCardContent/ItemListCardContent';
 
 const MarkingList = props => {
   const dispatch = useDispatch();
@@ -33,7 +33,6 @@ const MarkingList = props => {
     marking,
     settings,
   ]);
-  const {currency} = useQuantityAndPrice();
   let error = getProperErrorMessage(marking.markingError);
   const [search, setSearch] = useState('');
 
@@ -95,57 +94,7 @@ const MarkingList = props => {
                           ),
                         )
                       }>
-                      <Card.Content>
-                        {item.metadata.title ? (
-                          <Title style={styles.cardTitle}>
-                            {T.t('detail_title')}: {item.metadata.title}
-                          </Title>
-                        ) : (
-                          <Title style={styles.cardTitle}>
-                            {T.t('detail_type')}: {item.metadata.type}{' '}
-                            {item.metadata.brand} {T.t('detail_model')}:{' '}
-                            {item.metadata.model} {item.metadata.serial}
-                          </Title>
-                        )}
-                        {item.metadata.type && (
-                          <Paragraph style={styles.paragraph}>
-                            {T.t('detail_type')}: {item.metadata.type}{' '}
-                            {item.code && '/ ' + item.code}
-                          </Paragraph>
-                        )}
-                        {item.metadata.brand && (
-                          <Paragraph style={styles.paragraph}>
-                            {T.t('detail_brand')}: {item.metadata.brand}
-                          </Paragraph>
-                        )}
-                        {item.metadata.model && (
-                          <Paragraph style={styles.paragraph}>
-                            {T.t('detail_model')}: {item.metadata.model}
-                          </Paragraph>
-                        )}
-                        {item.metadata.serial && (
-                          <Paragraph style={styles.paragraph}>
-                            {T.t('detail_serial')}: {item.metadata.serial}
-                          </Paragraph>
-                        )}
-                        <Paragraph style={styles.paragraph}>
-                          {T.t('detail_quantity')}: {item.batch.quantity}{' '}
-                          {item.batch.units}
-                        </Paragraph>
-                        <Paragraph style={styles.paragraph}>
-                          {T.t('detail_price_per_item')}: {item.metadata.price}{' '}
-                          {currency}
-                        </Paragraph>
-                        {item.batch.quantity != 1 && (
-                          <Paragraph style={styles.paragraph}>
-                            {T.t('detail_price_per_lot')}:{' '}
-                            {Number(
-                              item.metadata.price * item.batch.quantity,
-                            ).toFixed(2)}{' '}
-                            {currency}
-                          </Paragraph>
-                        )}
-                      </Card.Content>
+                      <ItemListCardContent item={item} />
                     </Card>
                   ))}
               </ScrollView>
@@ -205,16 +154,6 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width / 1.1,
     marginBottom: 15,
     backgroundColor: '#EDF6FF',
-  },
-  cardTitle: {
-    fontSize: 13,
-    textTransform: 'uppercase',
-    color: '#22215B',
-  },
-  paragraph: {
-    fontSize: 12,
-    lineHeight: 15,
-    color: '#22215B',
   },
   button: {
     marginTop: 10,

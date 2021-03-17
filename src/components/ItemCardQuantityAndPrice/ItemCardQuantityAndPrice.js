@@ -1,17 +1,12 @@
 import React from 'react';
 import {Dimensions, StyleSheet, Text} from 'react-native';
 import T from '../../i18n';
-import {useQuantityAndPrice} from '../../hooks/useQuantityAndPrice';
+import {useQuantityUnitsAndCurrency} from '../../hooks/useQuantityUnitsAndCurrency';
+import {getTotalLotPrice} from '../../utils/helpers';
 
-export const ItemQuantityAndPrice = () => {
-  const {
-    quantity,
-    units,
-    price,
-    currency,
-    totalLotPrice,
-  } = useQuantityAndPrice();
-
+export const ItemCardQuantityAndPrice = ({quantity, units, price, styles}) => {
+  const {currency} = useQuantityUnitsAndCurrency();
+  const totalLotPrice = getTotalLotPrice(quantity, price);
   return (
     <>
       <Text style={styles.text}>
@@ -31,11 +26,3 @@ export const ItemQuantityAndPrice = () => {
     </>
   );
 };
-const styles = StyleSheet.create({
-  text: {
-    fontSize: 16,
-    paddingBottom: 5,
-    color: '#7A7A9D',
-    width: Dimensions.get('window').width / 1.3,
-  },
-});

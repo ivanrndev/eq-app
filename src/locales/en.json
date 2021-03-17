@@ -67,6 +67,7 @@
     "title_service_reason": "Reason",
     "title_service_place": "Place",
     "title_service_quantity": "Specify quantity of items which need to go to the service center",
+    "error_service_quantity": "The specified value exceeds\navailable balance, operation cannot\nbe committed",
     "send": "Send",
     "menu": "Menu",
     "send_service_finish": "Item was sent to service",

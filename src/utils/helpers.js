@@ -26,7 +26,7 @@ export const getDescription = (tx, role, id, parent) => {
     case 5:
       return `${T.t('item')} ${tx.item.code} ${T.t('was_back_services')}`;
     case 6:
-      return  parent ? `${T.t('eqp_one')}: ${id}` : `${T.t('eqp_three')}: ${id}`;
+      return parent ? `${T.t('eqp_one')}: ${id}` : `${T.t('eqp_three')}: ${id}`;
     case 7:
       return parent ? `${T.t('eqp_two')}: ${id}` : `${T.t('eqp_four')}: ${id}`;
     default:
@@ -121,7 +121,9 @@ export const getProperErrorMessage = (error, id) => {
   let errorMessage = '';
   switch (error) {
     case 'NotFound':
-      errorMessage = `${T.t('error_code_incorrect')} "${id}" ${T.t('error_not_found')}`;
+      errorMessage = `${T.t('error_code_incorrect')} "${id}" ${T.t(
+        'error_not_found',
+      )}`;
       break;
     case 'NotMarked':
       errorMessage = T.t('error_not_marked');
@@ -130,10 +132,14 @@ export const getProperErrorMessage = (error, id) => {
       errorMessage = `${T.t('item')} ${id} ${T.t('error_write_off')}`;
       break;
     case 'InRepair':
-      errorMessage = `${T.t('error_code_incorrect')} ${id} ${T.t('error_services')}`;
+      errorMessage = `${T.t('error_code_incorrect')} ${id} ${T.t(
+        'error_services',
+      )}`;
       break;
     case 'InTransfer':
-      errorMessage = `${T.t('error_code_incorrect')} ${id} ${T.t('error_already_in')}`;
+      errorMessage = `${T.t('error_code_incorrect')} ${id} ${T.t(
+        'error_already_in',
+      )}`;
       break;
     case 'AccessError':
       errorMessage = T.t('error_forbidden');
@@ -145,10 +151,14 @@ export const getProperErrorMessage = (error, id) => {
       errorMessage = 'Validation Error';
       break;
     case 'QRCodeUnavailable':
-      errorMessage = `${T.t('error_code_incorrect')} ${id} использован, или не пренадлежит этой компании`;
+      errorMessage = `${T.t(
+        'error_code_incorrect',
+      )} ${id} использован, или не пренадлежит этой компании`;
       break;
     case 'QRCodeUsed':
-      errorMessage = `${T.t('error_code_incorrect')} ${id} уже закреплен за другим ТМЦ`;
+      errorMessage = `${T.t(
+        'error_code_incorrect',
+      )} ${id} уже закреплен за другим ТМЦ`;
       break;
     case 'LinkIsUnavailable':
       errorMessage = T.t('error_link');
@@ -214,26 +224,34 @@ export const getProperErrorTransfer = (error, id) => {
       errorMessage = `${T.t('item')} "${id}" ${T.t('error_another')}.`;
       break;
     case 'AccessDenied':
-      errorMessage = `${T.t('error_owner')} "${id}". ${T.t('error_owner_text')}`;
+      errorMessage = `${T.t('error_owner')} "${id}". ${T.t(
+        'error_owner_text',
+      )}`;
       break;
     case 'NotFound':
-      errorMessage = `${T.t('error_code_incorrect')} "${id}" ${T.t('error_not_found')}`;
+      errorMessage = `${T.t('error_code_incorrect')} "${id}" ${T.t(
+        'error_not_found',
+      )}`;
       break;
     case 'RecipientIsHolder':
       errorMessage = `${T.t('item')} "${id}" ${T.t('error_already_mol')}`;
       break;
     case 'Copy':
-      errorMessage = `${T.t('error_code_incorrect')} "${id}" ${T.t('error_already_added')}`;
+      errorMessage = `${T.t('error_code_incorrect')} "${id}" ${T.t(
+        'error_already_added',
+      )}`;
       break;
     case 'Forbidden':
       errorMessage = `${T.t('error_owner')} ${id}. ${T.t('error_get_item')} `;
       break;
     case 'Duplicate':
-      errorMessage = `${T.t('error_code_incorrect')} "${id}" ${T.t('error_was_added')}`;
+      errorMessage = `${T.t('error_code_incorrect')} "${id}" ${T.t(
+        'error_was_added',
+      )}`;
       break;
-      case 'DuplicateMount':
-        errorMessage = `${T.t('inList')}`;
-        break;
+    case 'DuplicateMount':
+      errorMessage = `${T.t('inList')}`;
+      break;
     default:
       // return T.t('unknown_operation');
       return '';
@@ -281,7 +299,7 @@ export const ucFirst = str => {
 export const fontSizer = screenWidth => {
   if (screenWidth > 400) {
     return 17;
-  } else if (screenWidth > 250){
+  } else if (screenWidth > 250) {
     return 14;
   } else {
     return 12;
@@ -298,4 +316,9 @@ export const getForgotEmailMesage = text => {
   if (text === 'SUCESS') {
     return `${T.t('sucess_reset_pass')}`;
   }
+};
+
+export const getTotalLotPrice = (quantity, price) => {
+  const lotPrice = Number(price * quantity);
+  return Number.isInteger(lotPrice) ? lotPrice : lotPrice.toFixed(2);
 };

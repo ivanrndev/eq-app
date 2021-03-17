@@ -1,22 +1,20 @@
 import React, {useState} from 'react';
 import {isEmpty} from 'lodash';
 import {
-  StyleSheet,
-  View,
   Dimensions,
   SafeAreaView,
-  Text,
   ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from 'react-native';
 import {
-  Title,
-  Portal,
   ActivityIndicator,
-  IconButton,
   Button,
   Dialog,
-  Paragraph,
-  Card,
+  IconButton,
+  Portal,
+  Title,
 } from 'react-native-paper';
 import T from '../../../i18n';
 // components
@@ -26,15 +24,15 @@ import Appbar from '../../../components/Appbar';
 // redux and actions
 import {useDispatch, useSelector} from 'react-redux';
 import {
-  loader,
-  getTransactions,
-  getComments,
-  unMountItemFromParent,
-  nfc,
   backPageMount,
+  getComments,
+  getTransactions,
+  loader,
   nextPageMount,
+  nfc,
+  unMountItemFromParent,
 } from '../../../actions/actions.js';
-import {useQuantityAndPrice} from '../../../hooks/useQuantityAndPrice';
+import {ItemCardQuantityAndPrice} from '../../../components/ItemCardQuantityAndPrice/ItemCardQuantityAndPrice';
 
 export const OnMeInfo = props => {
   const [scan, store, settings] = useSelector(({scan, onMe, settings}) => [
@@ -50,11 +48,9 @@ export const OnMeInfo = props => {
   const myList = store.myList.filter(item => {
     return item._id === store.myCurrentId;
   });
-  const {currency} = useQuantityAndPrice();
   const metaData = myList.length ? myList[0] : {};
   const info = metaData.metadata;
   const show = !isEmpty(metaData);
-  console.log('INFO', useSelector(state => state), metaData);
   let nameOfProduct = '';
 
   if (info) {
@@ -178,24 +174,12 @@ export const OnMeInfo = props => {
                         {T.t('qr_code')}: {metaData.code}
                       </Text>
                     ) : null}
-                    <Text style={styles.text}>
-                      {T.t('detail_quantity')}: {metaData.batch.quantity}{' '}
-                      {metaData.batch.units}
-                    </Text>
-
-                    <Text style={styles.text}>
-                      {T.t('detail_price_per_item')}: {info.price} {currency}
-                    </Text>
-
-                    {metaData.batch.quantity !== 1 && (
-                      <Text style={styles.text}>
-                        {T.t('detail_price_per_lot')}:{' '}
-                        {Number(info.price * metaData.batch.quantity).toFixed(
-                          2,
-                        )}{' '}
-                        {currency}
-                      </Text>
-                    )}
+                    <ItemCardQuantityAndPrice
+                      quantity={metaData.batch.quantity}
+                      price={info.price}
+                      units={metaData.batch.units}
+                      styles={styles}
+                    />
 
                     {!isEmpty(scan.scanInfo.items) && (
                       <>

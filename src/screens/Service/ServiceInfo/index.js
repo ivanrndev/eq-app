@@ -21,7 +21,6 @@ import {
 } from '../../../actions/actions.js';
 import {getStatus, getProperErrorMessage} from '../../../utils/helpers.js';
 import AsyncStorage from '@react-native-community/async-storage';
-import {useQuantityAndPrice} from '../../../hooks/useQuantityAndPrice';
 
 export const ServiceInfo = props => {
   const dispatch = useDispatch();
@@ -30,7 +29,7 @@ export const ServiceInfo = props => {
     settings,
     scan.isInfoOpen,
   ]);
-  const {quantity, units} = useQuantityAndPrice();
+  const quantity = store.scanInfo.batch ? store.scanInfo.batch.quantity : 1;
   const error = getProperErrorMessage(store.scanInfoError, store.currentScan);
   // const keyboardMarginTop = Dimensions.get('window').height / 15;
   const keyboardMarginTop = 50;
@@ -38,7 +37,9 @@ export const ServiceInfo = props => {
   const [role, setRole] = useState();
   const [reason, setReason] = useState('');
   const [stockroom, setStockroom] = useState('');
-  const [quantityToService, setQuantityToService] = useState(quantity);
+  const [quantityToService, setQuantityToService] = useState(
+    store.scanInfo.batch ? store.scanInfo.batch.quantity : 1,
+  );
   const isEnteredQuantityValid = quantityToService <= quantity;
   const isFormValid = !!reason && !!stockroom && isEnteredQuantityValid;
 
@@ -165,7 +166,8 @@ export const ServiceInfo = props => {
                       )}
 
                       <Text style={styles.text}>
-                        {T.t('detail_quantity')}: {quantity} {units}
+                        {T.t('detail_quantity')}: {quantity}{' '}
+                        {store.scanInfo.batch.units}
                       </Text>
                     </View>
                   )}
@@ -187,7 +189,7 @@ export const ServiceInfo = props => {
                       </View>
                       <Text style={styles.error}>
                         {!isEnteredQuantityValid &&
-                          `Указанное значение превышает \nдоступный остаток, операция не может\nбыть совершена.`}
+                          T.t('error_service_quantity')}
                       </Text>
                     </>
                   )}

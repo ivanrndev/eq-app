@@ -14,12 +14,12 @@ import {
 } from '../../../../actions/actions.js';
 import {getStatus, getProperErrorMessage} from '../../../../utils/helpers.js';
 import AsyncStorage from '@react-native-community/async-storage';
-import {useQuantityAndPrice} from '../../../../hooks/useQuantityAndPrice';
+import {useQuantityUnitsAndCurrency} from '../../../../hooks/useQuantityUnitsAndCurrency';
 
 export const BackInfo = props => {
   const dispatch = useDispatch();
   const [store, settings] = useSelector(({scan, settings}) => [scan, settings]);
-  const {quantity, units} = useQuantityAndPrice();
+  const {quantity, units} = useQuantityUnitsAndCurrency();
   const error = getProperErrorMessage(store.scanInfoError, store.currentScan);
   const show = store.isInfoOpen;
   const metaData = store.scanInfo.metadata;
