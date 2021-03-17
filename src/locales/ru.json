@@ -67,6 +67,7 @@
     "title_service_reason": "Причина",
     "title_service_place": "Место",
     "title_service_quantity": "Задайте количество ТМЦ которое нужно передать в сервис",
+    "title_write_off_quantity": "Задайте количество ТМЦ которое нужно списать",
     "error_service_quantity": "Указанное значение превышает \nдоступный остаток, операция не может\nбыть совершена.",
     "send": "Отправить",
     "menu": "Меню",
@@ -128,6 +129,7 @@
     "status_storekeeper": "У кладовщика",
     "status_person": "Передано МОЛ",
     "status_marked": "Маркировано",
+    "status_disbanding": "Расформирование ТМЦ",
     "status_undefined": "Не распределено",
     "title_request_created": "Заявка создана",
     "status_transfer_complete": "Завершено",
@@ -208,5 +210,5 @@
     "eqp_two": "Удаление с ТМЦ",
     "eqp_three": "Установка ТМЦ",
     "eqp_four": "Разукомплектация",
-    "errr_name_item": "Неизвестное ТМЦ"
+    "error_name_item": "Неизвестное ТМЦ"
   }

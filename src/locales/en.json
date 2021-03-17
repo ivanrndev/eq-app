@@ -67,6 +67,7 @@
     "title_service_reason": "Reason",
     "title_service_place": "Place",
     "title_service_quantity": "Specify quantity of items which need to go to the service center",
+    "title_write_off_quantity": "Specify quantity of items which need to be wrote off",
     "error_service_quantity": "The specified value exceeds\navailable balance, operation cannot\nbe committed",
     "send": "Send",
     "menu": "Menu",
@@ -128,6 +129,7 @@
     "status_storekeeper": "Аt the storekeeper",
     "status_person": "At the responsible person",
     "status_marked": "Marked",
+    "status_disbanding": "Disbanding item",
     "status_undefined": "Not distributed",
     "title_request_created": "Application created",
     "status_transfer_complete": "Completed",
@@ -208,5 +210,5 @@
     "eqp_two": "Unmounting from Item",
     "eqp_three": "Mounting items",
     "eqp_four": "Unmounting items",
-    "errr_name_item": "Unknown Item"
+    "error_name_item": "Unknown Item"
   }

@@ -14,15 +14,24 @@ import {
 } from '../../../actions/actions.js';
 import {getStatus, getProperErrorMessage} from '../../../utils/helpers.js';
 import AsyncStorage from '@react-native-community/async-storage';
+import {ItemSetQuantityArea} from '../../../components/ItemSetQuantityArea/ItemSetQuantityArea';
 
 export const WriteOffInfo = props => {
   const dispatch = useDispatch();
-  const store = useSelector(state => state.scan);
-  const settings = useSelector(state => state.settings);
+  const [store, settings] = useSelector(({scan, settings}) => [scan, settings]);
   const error = getProperErrorMessage(store.scanInfoError, store.currentScan);
   const show = store.isInfoOpen;
   const metaData = store.scanInfo.metadata;
+  const quantity = store.scanInfo.batch ? store.scanInfo.batch.quantity : 1;
+  const units = store.scanInfo.batch
+    ? store.scanInfo.batch.units
+    : T.t('piece');
   const [role, setRole] = useState();
+  const [quantityToWireOff, setQuantityToWireOff] = useState(
+    store.scanInfo.batch ? store.scanInfo.batch.quantity : 1,
+  );
+  const isEnteredQuantityValid =
+    quantityToWireOff <= quantity || quantityToWireOff <= 0;
 
   let nameOfProduct = '';
   if (metaData) {
@@ -35,7 +44,9 @@ export const WriteOffInfo = props => {
 
   const writteOff = () => {
     dispatch(loader(true));
-    dispatch(sendToWriteOff(store.scanInfo._id, props.navigation));
+    dispatch(
+      sendToWriteOff(store.scanInfo._id, props.navigation, quantityToWireOff),
+    );
   };
 
   const againScan = () => {
@@ -133,15 +144,31 @@ export const WriteOffInfo = props => {
                         {store.scanInfo.person.lastName}
                       </Text>
                     )}
+                    <Text style={styles.text}>
+                      {T.t('detail_quantity')}: {quantity}{' '}
+                      {store.scanInfo.batch.units}
+                    </Text>
                   </View>
                 )}
+                <ItemSetQuantityArea
+                  quantity={quantity}
+                  units={units}
+                  isEnteredQuantityValid={isEnteredQuantityValid}
+                  value={quantityToWireOff}
+                  setQuantity={setQuantityToWireOff}
+                  mode="write_off"
+                />
               </View>
             )}
           </View>
           <View style={styles.buttons}>
             {!store.scanInfoError && (
               <View style={styles.buttonBlock}>
-                <DarkButton text={T.t('ban_btn')} onPress={writteOff} />
+                <DarkButton
+                  text={T.t('ban_btn')}
+                  onPress={writteOff}
+                  disabled={!isEnteredQuantityValid}
+                />
               </View>
             )}
             <View style={styles.buttonBlock}>
@@ -180,7 +207,6 @@ const styles = StyleSheet.create({
   info: {
     display: 'flex',
     alignItems: 'center',
-    paddingBottom: Dimensions.get('window').height / 40,
   },
   title: {
     color: '#22215B',

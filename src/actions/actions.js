@@ -562,10 +562,15 @@ export const putServicesError = error => dispatch => {
 };
 
 // WriteOff actions
-export const sendToWriteOff = (id, nav) => dispatch => {
+export const sendToWriteOff = (id, nav, quantity) => dispatch => {
+  const data = quantity
+    ? {
+        quantity,
+      }
+    : {};
   AsyncStorage.getItem('company').then(company => {
     return axios
-      .put(`${API_URL}/company/${company}/item/${id}/ban`)
+      .put(`${API_URL}/company/${company}/item/${id}/ban`, data)
       .then(resp => {
         if (resp.status === 200) {
           dispatch({

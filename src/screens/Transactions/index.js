@@ -101,7 +101,7 @@ const Transactions = props => {
                               : !isEmpty(item.data.items)
                               ? item.data.items[0].code ||
                                 item.data.items[0].title
-                              : T.t('errr_name_item'),
+                              : T.t('error_name_item'),
                             item.data.parent ? !!item.data.parent : null,
                           )}
                         </Paragraph>

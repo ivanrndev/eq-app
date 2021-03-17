@@ -29,6 +29,8 @@ export const getDescription = (tx, role, id, parent) => {
       return parent ? `${T.t('eqp_one')}: ${id}` : `${T.t('eqp_three')}: ${id}`;
     case 7:
       return parent ? `${T.t('eqp_two')}: ${id}` : `${T.t('eqp_four')}: ${id}`;
+    case 11:
+      return `${T.t('status_disbanding')}`;
     default:
       return T.t('unknown_operation');
   }

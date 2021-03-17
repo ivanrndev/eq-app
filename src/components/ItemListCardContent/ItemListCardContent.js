@@ -41,20 +41,24 @@ export const ItemListCardContent = ({item}) => {
           {T.t('detail_serial')}: {item.metadata.serial}
         </Paragraph>
       )}
-      <Paragraph style={styles.paragraph}>
-        {T.t('detail_quantity')}: {item.batch.quantity} {item.batch.units}
-      </Paragraph>
-      <Paragraph style={styles.paragraph}>
-        {T.t('detail_price_per_item')}: {item.metadata.price} {currency}
-      </Paragraph>
-      {+item.batch.quantity !== 1 && (
-        <Paragraph style={styles.paragraph}>
-          {T.t('detail_price_per_lot')}:
-          {` ${getTotalLotPrice(
-            item.metadata.price,
-            item.batch.quantity,
-          )} ${currency}`}
-        </Paragraph>
+      {item.batch && (
+        <>
+          <Paragraph style={styles.paragraph}>
+            {T.t('detail_quantity')}: {item.batch.quantity} {item.batch.units}
+          </Paragraph>
+          <Paragraph style={styles.paragraph}>
+            {T.t('detail_price_per_item')}: {item.metadata.price} {currency}
+          </Paragraph>
+          {+item.batch.quantity !== 1 && (
+            <Paragraph style={styles.paragraph}>
+              {T.t('detail_price_per_lot')}:
+              {` ${getTotalLotPrice(
+                item.metadata.price,
+                item.batch.quantity,
+              )} ${currency}`}
+            </Paragraph>
+          )}
+        </>
       )}
     </Card.Content>
   );

@@ -21,6 +21,7 @@ import {
 } from '../../../actions/actions.js';
 import {getStatus, getProperErrorMessage} from '../../../utils/helpers.js';
 import AsyncStorage from '@react-native-community/async-storage';
+import {ItemSetQuantityArea} from '../../../components/ItemSetQuantityArea/ItemSetQuantityArea';
 
 export const ServiceInfo = props => {
   const dispatch = useDispatch();
@@ -30,6 +31,9 @@ export const ServiceInfo = props => {
     scan.isInfoOpen,
   ]);
   const quantity = store.scanInfo.batch ? store.scanInfo.batch.quantity : 1;
+  const units = store.scanInfo.batch
+    ? store.scanInfo.batch.units
+    : T.t('piece');
   const error = getProperErrorMessage(store.scanInfoError, store.currentScan);
   // const keyboardMarginTop = Dimensions.get('window').height / 15;
   const keyboardMarginTop = 50;
@@ -37,10 +41,11 @@ export const ServiceInfo = props => {
   const [role, setRole] = useState();
   const [reason, setReason] = useState('');
   const [stockroom, setStockroom] = useState('');
-  const [quantityToService, setQuantityToService] = useState(
+  const [quantityToService, setQuantityForService] = useState(
     store.scanInfo.batch ? store.scanInfo.batch.quantity : 1,
   );
-  const isEnteredQuantityValid = quantityToService <= quantity;
+  const isEnteredQuantityValid =
+    quantityToService <= quantity || quantityToService <= 0;
   const isFormValid = !!reason && !!stockroom && isEnteredQuantityValid;
 
   let nameOfProduct = '';
@@ -171,28 +176,14 @@ export const ServiceInfo = props => {
                       </Text>
                     </View>
                   )}
-
-                  {quantity > 1 && (
-                    <>
-                      <Text style={styles.text}>
-                        {T.t('title_service_quantity')}
-                      </Text>
-                      <View style={styles.quantityInputWrap}>
-                        <TextInput
-                          style={styles.quantityInput}
-                          mode="outlined"
-                          value={`${quantityToService}`}
-                          keyboardType="numeric"
-                          onChangeText={text => setQuantityToService(text)}
-                        />
-                        <Text style={styles.quantityUnits}>{T.t('piece')}</Text>
-                      </View>
-                      <Text style={styles.error}>
-                        {!isEnteredQuantityValid &&
-                          T.t('error_service_quantity')}
-                      </Text>
-                    </>
-                  )}
+                  <ItemSetQuantityArea
+                    quantity={quantity}
+                    units={units}
+                    isEnteredQuantityValid={isEnteredQuantityValid}
+                    value={quantityToService}
+                    setQuantity={setQuantityForService}
+                    mode="service"
+                  />
                 </View>
               )}
             </View>
@@ -280,13 +271,6 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
     fontSize: 19,
   },
-  error: {
-    color: '#E40B67',
-    alignSelf: 'flex-start',
-    fontSize: 15,
-    marginVertical: 10,
-    height: 60,
-  },
   text: {
     fontSize: 15,
     paddingBottom: 5,
@@ -310,21 +294,7 @@ const styles = StyleSheet.create({
     color: '#7A7A9D',
     width: Dimensions.get('window').width / 1.3,
   },
-  quantityInputWrap: {
-    alignSelf: 'flex-start',
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-  },
-  quantityUnits: {
-    fontSize: 15,
-    color: '#7A7A9D',
-  },
-  quantityInput: {
-    height: 50,
-    width: 100,
-    marginRight: 10,
-  },
+
   loader: {
     backgroundColor: 'rgba(52, 52, 52, 0.8)',
     display: 'flex',

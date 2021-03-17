@@ -61,6 +61,12 @@ pod 'react-native-nfc-manager', :path => '../node_modules/react-native-nfc-manag
   use_native_modules!
 end
 
+  use_flipper!({'Flipper' => '0.79.0'})
+  post_install do |installer|
+    flipper_post_install(installer)
+  end
+
+
 target 'EcMan-tvOS' do
   # Pods for EcMan-tvOS
 
