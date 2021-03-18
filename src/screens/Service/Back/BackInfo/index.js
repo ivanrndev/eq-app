@@ -25,7 +25,7 @@ export const BackInfo = props => {
   const metaData = store.scanInfo.metadata;
   const [role, setRole] = useState();
   const arrayIds = [store.scanInfo._id];
-
+  console.log('BACK', useSelector(state => state));
   let nameOfProduct = '';
   if (metaData) {
     nameOfProduct = metaData.title

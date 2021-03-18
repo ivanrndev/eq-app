@@ -156,7 +156,7 @@ export const WriteOffInfo = props => {
                   isEnteredQuantityValid={isEnteredQuantityValid}
                   value={quantityToWireOff}
                   setQuantity={setQuantityToWireOff}
-                  mode="write_off"
+                  mode="title_write_off_quantity"
                 />
               </View>
             )}

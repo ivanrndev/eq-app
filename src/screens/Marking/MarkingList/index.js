@@ -25,7 +25,7 @@ import {
   saveCurrentItemMark,
   searchItem,
 } from '../../../actions/actions.js';
-import ItemListCardContent from '../../../components/ItemListCardContent';
+import ItemListCard from '../../../components/ItemListCard';
 
 const MarkingList = props => {
   const dispatch = useDispatch();
@@ -94,7 +94,7 @@ const MarkingList = props => {
                           ),
                         )
                       }>
-                      <ItemListCardContent item={item} />
+                      <ItemListCard item={item} />
                     </Card>
                   ))}
               </ScrollView>

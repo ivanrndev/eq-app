@@ -289,7 +289,6 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				8055006E25A2457000F32CD3 /* Embed Frameworks */,
 				5EED68334FB5AD3C5FDC4DF8 /* [CP] Copy Pods Resources */,
-				0803C6D6510BABA316407512 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -310,7 +309,6 @@
 				2D02E4781E0B4A5D006451C7 /* Frameworks */,
 				2D02E4791E0B4A5D006451C7 /* Resources */,
 				2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */,
-				A7BC6D83588F8C13DA473D2C /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -459,24 +457,6 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
-		0803C6D6510BABA316407512 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-EcMan/Pods-EcMan-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL/OpenSSL.framework/OpenSSL",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-EcMan/Pods-EcMan-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		1F640E6DB4FCFFF1169AAEF3 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -583,24 +563,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-EcMan/Pods-EcMan-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		A7BC6D83588F8C13DA473D2C /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-EcMan-tvOS/Pods-EcMan-tvOS-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL/OpenSSL.framework/OpenSSL",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-EcMan-tvOS/Pods-EcMan-tvOS-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C3191F8E7D48296AF3CA40DD /* [CP] Check Pods Manifest.lock */ = {

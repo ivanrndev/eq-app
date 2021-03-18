@@ -33,10 +33,10 @@ const AcceptGive = props => {
   };
 
   const userList = () => {
-    /* dispatch(loader(true));*/
+    dispatch(loader(true));
     dispatch(getUserList(props.navigation, '', 'GiveList'));
   };
-  console.log('KKK', props.navigation);
+
   const transfers = () => {
     AsyncStorage.getItem('userId').then(id => {
       dispatch(loader(true));

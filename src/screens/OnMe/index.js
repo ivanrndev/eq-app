@@ -17,7 +17,10 @@ import {
 import T from '../../i18n';
 // components
 import Appbar from '../../components/Appbar';
-import {getProperErrorMessage} from '../../utils/helpers.js';
+import {
+  getProperErrorMessage,
+  handleNavigateToSingleItemPage,
+} from '../../utils/helpers.js';
 // redux and actions
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -26,7 +29,7 @@ import {
   saveCurrentMyItem,
   searchMyItem,
 } from '../../actions/actions.js';
-import ItemListCardContent from '../../components/ItemListCardContent';
+import ItemListCard from '../../components/ItemListCard';
 
 const OnMe = props => {
   const dispatch = useDispatch();
@@ -81,21 +84,16 @@ const OnMe = props => {
                         <Card
                           style={styles.card}
                           key={item._id}
-                          onPress={() => {
-                            if (item.code) {
-                              dispatch(
-                                currentScan(item.code, props.nav, 'OnMeInfo'),
-                              );
-                            }
-                            dispatch(
-                              saveCurrentMyItem(
-                                item._id,
-                                item.code,
-                                props.navigation,
-                              ),
-                            );
-                          }}>
-                          <ItemListCardContent item={item} />
+                          onPress={() =>
+                            handleNavigateToSingleItemPage(
+                              item.code,
+                              props.navigation,
+                              item._id,
+                              'OnMeInfo',
+                              dispatch,
+                            )
+                          }>
+                          <ItemListCard item={item} />
                         </Card>
                       ))
                     : null}

@@ -169,11 +169,11 @@ export const OnMeInfo = props => {
                           );
                         })
                       : null}
-                    {show ? (
+                    {show && metaData.code && (
                       <Text style={styles.text}>
                         {T.t('qr_code')}: {metaData.code}
                       </Text>
-                    ) : null}
+                    )}
                     <ItemCardQuantityAndPrice
                       quantity={metaData.batch.quantity}
                       price={info.price}

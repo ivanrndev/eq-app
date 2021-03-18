@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import T from '../i18n';
+import {currentScan, loader, saveCurrentMyItem} from '../actions/actions';
 
 export const getDescription = (tx, role, id, parent) => {
   switch (+tx.type) {
@@ -333,4 +334,18 @@ export const getForgotEmailMesage = text => {
 export const getTotalLotPrice = (quantity, price) => {
   const lotPrice = Number(price * quantity);
   return Number.isInteger(lotPrice) ? lotPrice : lotPrice.toFixed(2);
+};
+
+export const handleNavigateToSingleItemPage = (
+  code,
+  navigation,
+  id,
+  page,
+  dispatch,
+) => {
+  if (code) {
+    dispatch(loader(true));
+    dispatch(currentScan(code, navigation, page));
+  }
+  dispatch(saveCurrentMyItem(id, code, navigation, page));
 };

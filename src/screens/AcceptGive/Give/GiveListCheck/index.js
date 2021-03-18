@@ -1,29 +1,33 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState} from 'react';
 import {
-  StyleSheet,
-  View,
   Dimensions,
   SafeAreaView,
   ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from 'react-native';
 import {Card, IconButton, Paragraph, Snackbar} from 'react-native-paper';
 import T from '../../../../i18n';
 // components
 import Appbar from '../../../../components/Appbar';
-import {getProperErrorTransfer} from '../../../../utils/helpers.js';
+import {
+  getProperErrorTransfer,
+  handleNavigateToSingleItemPage,
+} from '../../../../utils/helpers.js';
 import DarkButton from '../../../../components/Buttons/DarkButton';
 import TransparentButton from '../../../../components/Buttons/TransparentButton';
 
 // redux and actions
 import {useDispatch, useSelector} from 'react-redux';
 import {
-  loader,
   allowNewScan,
-  updateGiveList,
   makeTransfer,
+  updateGiveList,
 } from '../../../../actions/actions.js';
-import ItemListCardContent from '../../../../components/ItemListCardContent';
+import ItemListCard from '../../../../components/ItemListCard';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const GiveListCheck = props => {
   const dispatch = useDispatch();
@@ -32,20 +36,15 @@ const GiveListCheck = props => {
     give,
     settings,
   ]);
-  const quantity = scan.scanGiveList.batch
-    ? scan.scanGiveList.batch.quantity
-    : 1;
   const [error, setError] = useState('');
-  const [giveList, setGiveList] = useState(
-    scan.scanGiveList.map(item => ({id: item._id, quantity})),
-  );
+
   let showEmptyError = !scan.scanGiveList.length;
   const userCurrentId = give.userCurrentId;
-
   useEffect(() => {
     const correctItem = scan.scanGiveList.find(
       item => item._id === scan.selectGiveId,
     );
+
     const responsible = correctItem && correctItem.person._id;
     if (responsible === give.userCurrentId) {
       setError(
@@ -81,15 +80,24 @@ const GiveListCheck = props => {
     dispatch(updateGiveList(updateList));
   };
 
+  const list = scan.scanGiveList
+    .filter(item => give.giveList.find(pc => pc.id !== item._id))
+    .map(item => ({id: item._id, quantity: item.batch.quantity}));
   const createTransfer = () => {
-    dispatch(makeTransfer(props.navigation, giveList, userCurrentId));
+    dispatch(
+      makeTransfer(
+        props.navigation,
+        [...list, ...give.giveList],
+        userCurrentId,
+      ),
+    );
   };
 
   const addMore = () => {
     props.navigation.navigate(settings.startPageGive);
     dispatch(allowNewScan(true));
   };
-  const setQuantity = () => {};
+  const setItemQty = itemId => give.giveList.find(pc => pc.id === itemId);
   return (
     <>
       <Appbar
@@ -105,14 +113,41 @@ const GiveListCheck = props => {
           {showEmptyError && (
             <Paragraph style={styles.text}>{T.t('no_item_transfer')}</Paragraph>
           )}
-          {scan.scanGiveList.map((item, index) => (
+          {scan.scanGiveList.map(item => (
             <Card style={styles.card}>
-              <ItemListCardContent item={item}>
+              <ItemListCard item={item} isPriceShown={false}>
+                {setItemQty(item._id) && (
+                  <View style={styles.giveArea}>
+                    <Text style={styles.cardTitle}>
+                      {T.t('give')}: {setItemQty(item._id).quantity}
+                    </Text>
+                    <TouchableOpacity
+                      onPress={() =>
+                        handleNavigateToSingleItemPage(
+                          item.code,
+                          props.navigation,
+                          item._id,
+                          'GiveSetQuantity',
+                          dispatch,
+                        )
+                      }>
+                      <Text style={styles.edit}>Edit</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
                 <View style={styles.cardBottom}>
                   <View style={styles.setQtyBtn}>
-                    {+item.batch.quantity !== 1 && (
+                    {+item.batch.quantity !== 1 && !setItemQty(item._id) && (
                       <DarkButton
-                        onPress={setQuantity}
+                        onPress={() =>
+                          handleNavigateToSingleItemPage(
+                            item.code,
+                            props.navigation,
+                            item._id,
+                            'GiveSetQuantity',
+                            dispatch,
+                          )
+                        }
                         text={T.t('set_quantity')}
                       />
                     )}
@@ -123,14 +158,17 @@ const GiveListCheck = props => {
                     onPress={() => deleteItem(item._id)}
                   />
                 </View>
-              </ItemListCardContent>
+              </ItemListCard>
             </Card>
           ))}
         </ScrollView>
         <View style={styles.buttons}>
           <DarkButton text={T.t('add')} onPress={addMore} />
           {scan.scanGiveList.length > 0 && (
-            <TransparentButton text={T.t('create')} onPress={createTransfer} />
+            <TransparentButton
+              text={T.t('apply_request')}
+              onPress={createTransfer}
+            />
           )}
         </View>
 
@@ -157,18 +195,12 @@ const GiveListCheck = props => {
 const styles = StyleSheet.create({
   body: {
     marginTop: -10,
-    display: 'flex',
     paddingTop: 25,
     alignItems: 'center',
     backgroundColor: '#D3E3F2',
     height: Dimensions.get('window').height / 1.1,
   },
-
-  load: {
-    marginTop: 10,
-  },
   card: {
-    display: 'flex',
     justifyContent: 'center',
     width: Dimensions.get('window').width / 1.1,
     marginBottom: 15,
@@ -176,7 +208,14 @@ const styles = StyleSheet.create({
     color: '#22215B',
     borderRadius: 10,
   },
-
+  load: {
+    marginTop: 10,
+  },
+  giveArea: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 10,
+  },
   cardTitle: {
     fontSize: 14,
     textTransform: 'uppercase',
@@ -190,6 +229,9 @@ const styles = StyleSheet.create({
   },
   setQtyBtn: {
     width: Dimensions.get('window').width / 2.2,
+  },
+  edit: {
+    color: '#8c03fc',
   },
   title: {
     fontSize: 14,

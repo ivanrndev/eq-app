@@ -5,6 +5,7 @@ import {
   SUCCES_TRANSFER,
   TRANSFER,
   CLEAR_USER_LIST,
+  SET_ITEM_QTY,
 } from '../../../actions/actionsType.js';
 
 const initialState = {
@@ -14,6 +15,7 @@ const initialState = {
   userRole: '',
   statusTransfer: '',
   transferError: '',
+  giveList: [],
 };
 
 const giveReducer = (state = initialState, action) => {
@@ -47,6 +49,22 @@ const giveReducer = (state = initialState, action) => {
       return {
         ...state,
         ...action.payload,
+      };
+    case SET_ITEM_QTY:
+      const existedItem = [...state.giveList].filter(
+        item => item.id !== action.payload.id,
+      );
+      const newGiveList = [
+        ...existedItem,
+        {
+          id: action.payload.id,
+          quantity: action.payload.quantity,
+        },
+      ];
+
+      return {
+        ...state,
+        giveList: newGiveList,
       };
     default:
       return state;

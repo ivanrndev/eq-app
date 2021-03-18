@@ -182,7 +182,7 @@ export const ServiceInfo = props => {
                     isEnteredQuantityValid={isEnteredQuantityValid}
                     value={quantityToService}
                     setQuantity={setQuantityForService}
-                    mode="service"
+                    mode="title_service_quantity"
                   />
                 </View>
               )}

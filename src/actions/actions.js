@@ -90,6 +90,7 @@ import {
   CHANGE_IS_MULTYPLE,
   LOCATION_MAIN,
   LOCATTION_LOC,
+  SET_ITEM_QTY,
 } from '../actions/actionsType.js';
 
 // Settings
@@ -841,7 +842,7 @@ export const searchMyItem = (query, offset, isNew) => dispatch => {
   });
 };
 
-export const saveCurrentMyItem = (id, code, nav) => dispatch => {
+export const saveCurrentMyItem = (id, code, nav, page) => dispatch => {
   dispatch({
     type: MY_CURRENT_INFO_ID,
     payload: {
@@ -850,7 +851,7 @@ export const saveCurrentMyItem = (id, code, nav) => dispatch => {
       isMyInfoOpen: true,
     },
   });
-  nav.navigate('OnMeInfo');
+  nav.navigate(page);
 };
 
 export const myloadMore = status => dispatch => {
@@ -923,9 +924,15 @@ export const loadMoreTransactions = status => dispatch => {
 };
 
 // Give actions
+export const setItemsQty = (id, quantity) => dispatch => {
+  dispatch({
+    type: SET_ITEM_QTY,
+    payload: {id, quantity},
+  });
+};
+
 export const getUserList = (nav, search = '', page = '') => dispatch => {
   AsyncStorage.getItem('company').then(company => {
-    console.log('LLL', company, nav, search, page);
     return axios
       .get(`${API_URL}/company/${company}/user`, {
         params: {search},

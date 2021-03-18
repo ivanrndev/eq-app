@@ -14,7 +14,7 @@ const ItemSetQuantityArea = ({
   <>
     {quantity > 1 && (
       <>
-        <Text style={styles.text}>{T.t(`title_${mode}_quantity`)}</Text>
+        <Text style={styles.text}>{T.t(`${mode}`)}</Text>
         <View style={styles.quantityInputWrap}>
           <TextInput
             style={styles.quantityInput}
@@ -42,8 +42,8 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 15,
-    paddingBottom: 5,
-    color: '#7A7A9D',
+    paddingVertical: 10,
+    color: '#22215B',
     width: Dimensions.get('window').width / 1.3,
   },
   quantityInputWrap: {
