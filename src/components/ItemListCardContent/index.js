@@ -5,7 +5,7 @@ import {getTotalLotPrice} from '../../utils/helpers';
 import {useQuantityUnitsAndCurrency} from '../../hooks/useQuantityUnitsAndCurrency';
 import {StyleSheet} from 'react-native';
 
-export const ItemListCardContent = ({item}) => {
+const ItemListCardContent = ({item, children}) => {
   const {currency} = useQuantityUnitsAndCurrency();
 
   return (
@@ -60,6 +60,7 @@ export const ItemListCardContent = ({item}) => {
           )}
         </>
       )}
+      {children}
     </Card.Content>
   );
 };
@@ -80,3 +81,5 @@ const styles = StyleSheet.create({
     color: '#22215B',
   },
 });
+
+export default ItemListCardContent;

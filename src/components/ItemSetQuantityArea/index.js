@@ -3,7 +3,7 @@ import {Dimensions, StyleSheet, Text, View} from 'react-native';
 import {TextInput} from 'react-native-paper';
 import T from '../../i18n';
 
-export const ItemSetQuantityArea = ({
+const ItemSetQuantityArea = ({
   quantity,
   units,
   value,
@@ -62,3 +62,4 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
 });
+export default ItemSetQuantityArea;

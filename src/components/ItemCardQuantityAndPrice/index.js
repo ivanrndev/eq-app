@@ -1,10 +1,10 @@
 import React from 'react';
-import {Dimensions, StyleSheet, Text} from 'react-native';
+import {Text} from 'react-native';
 import T from '../../i18n';
 import {useQuantityUnitsAndCurrency} from '../../hooks/useQuantityUnitsAndCurrency';
 import {getTotalLotPrice} from '../../utils/helpers';
 
-export const ItemCardQuantityAndPrice = ({quantity, units, price, styles}) => {
+const ItemCardQuantityAndPrice = ({quantity, units, price, styles}) => {
   const {currency} = useQuantityUnitsAndCurrency();
   const totalLotPrice = getTotalLotPrice(quantity, price);
   return (
@@ -26,3 +26,5 @@ export const ItemCardQuantityAndPrice = ({quantity, units, price, styles}) => {
     </>
   );
 };
+
+export default ItemCardQuantityAndPrice;

@@ -29,8 +29,18 @@ export const getDescription = (tx, role, id, parent) => {
       return parent ? `${T.t('eqp_one')}: ${id}` : `${T.t('eqp_three')}: ${id}`;
     case 7:
       return parent ? `${T.t('eqp_two')}: ${id}` : `${T.t('eqp_four')}: ${id}`;
+    case 8:
+      return `${T.t('status_change_quantity')}`;
+    case 9:
+      return `${T.t('status_change_price')}`;
+    case 10:
+      return `${T.t('status_change_price_total')}`;
     case 11:
-      return `${T.t('status_disbanding')}`;
+      return `${T.t('status_separate')}`;
+    case 12:
+      return `${T.t('status_merge')}`;
+    case 13:
+      return `${T.t('status_add_to_transfer')}`;
     default:
       return T.t('unknown_operation');
   }

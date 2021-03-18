@@ -23,13 +23,22 @@ import {
   updateGiveList,
   makeTransfer,
 } from '../../../../actions/actions.js';
+import ItemListCardContent from '../../../../components/ItemListCardContent';
 
 const GiveListCheck = props => {
   const dispatch = useDispatch();
-  const scan = useSelector(state => state.scan);
-  const give = useSelector(state => state.give);
-  const settings = useSelector(state => state.settings);
+  const [scan, give, settings] = useSelector(({scan, give, settings}) => [
+    scan,
+    give,
+    settings,
+  ]);
+  const quantity = scan.scanGiveList.batch
+    ? scan.scanGiveList.batch.quantity
+    : 1;
   const [error, setError] = useState('');
+  const [giveList, setGiveList] = useState(
+    scan.scanGiveList.map(item => ({id: item._id, quantity})),
+  );
   let showEmptyError = !scan.scanGiveList.length;
   const userCurrentId = give.userCurrentId;
 
@@ -73,16 +82,14 @@ const GiveListCheck = props => {
   };
 
   const createTransfer = () => {
-    dispatch(loader(true));
-    let list = scan.scanGiveList.map(item => item._id);
-    dispatch(makeTransfer(props.navigation, list, userCurrentId));
+    dispatch(makeTransfer(props.navigation, giveList, userCurrentId));
   };
 
   const addMore = () => {
     props.navigation.navigate(settings.startPageGive);
     dispatch(allowNewScan(true));
   };
-
+  const setQuantity = () => {};
   return (
     <>
       <Appbar
@@ -99,36 +106,31 @@ const GiveListCheck = props => {
             <Paragraph style={styles.text}>{T.t('no_item_transfer')}</Paragraph>
           )}
           {scan.scanGiveList.map((item, index) => (
-            <Card.Title
-              key={index}
-              style={styles.card}
-              title={`${item.metadata.brand} / ${item.code}`}
-              subtitle={
-                item.metadata.title
-                  ? item.metadata.title
-                  : `${item.type} ${item.brand} ${item.model} ${item.serial}`
-              }
-              right={props => (
-                <IconButton
-                  {...props}
-                  icon="delete"
-                  onPress={() => deleteItem(item._id)}
-                />
-              )}
-            />
+            <Card style={styles.card}>
+              <ItemListCardContent item={item}>
+                <View style={styles.cardBottom}>
+                  <View style={styles.setQtyBtn}>
+                    {+item.batch.quantity !== 1 && (
+                      <DarkButton
+                        onPress={setQuantity}
+                        text={T.t('set_quantity')}
+                      />
+                    )}
+                  </View>
+                  <IconButton
+                    {...props}
+                    icon="delete"
+                    onPress={() => deleteItem(item._id)}
+                  />
+                </View>
+              </ItemListCardContent>
+            </Card>
           ))}
         </ScrollView>
         <View style={styles.buttons}>
-          <View style={styles.buttonBlock}>
-            <DarkButton text={T.t('add')} onPress={addMore} />
-          </View>
+          <DarkButton text={T.t('add')} onPress={addMore} />
           {scan.scanGiveList.length > 0 && (
-            <View style={styles.buttonBlock}>
-              <TransparentButton
-                text={T.t('create')}
-                onPress={createTransfer}
-              />
-            </View>
+            <TransparentButton text={T.t('create')} onPress={createTransfer} />
           )}
         </View>
 
@@ -161,10 +163,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#D3E3F2',
     height: Dimensions.get('window').height / 1.1,
   },
-  buttonBlock: {
-    width: Dimensions.get('window').height / 4.3,
-    textAlign: 'center',
-  },
+
   load: {
     marginTop: 10,
   },
@@ -177,11 +176,20 @@ const styles = StyleSheet.create({
     color: '#22215B',
     borderRadius: 10,
   },
+
   cardTitle: {
     fontSize: 14,
     textTransform: 'uppercase',
     textAlign: 'center',
     color: '#22215B',
+  },
+  cardBottom: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  setQtyBtn: {
+    width: Dimensions.get('window').width / 2.2,
   },
   title: {
     fontSize: 14,
@@ -191,14 +199,13 @@ const styles = StyleSheet.create({
     marginTop: 15,
     display: 'flex',
     alignSelf: 'center',
-    flexDirection: 'row',
     textAlign: 'center',
-    justifyContent: 'space-around',
-    width: Dimensions.get('window').width,
+    justifyContent: 'center',
+    width: Dimensions.get('window').width / 1.1,
     marginBottom: 70,
   },
   button: {
-    width: Dimensions.get('window').width / 2.5,
+    flex: 1,
   },
 });
 

@@ -129,7 +129,13 @@
     "status_storekeeper": "Аt the storekeeper",
     "status_person": "At the responsible person",
     "status_marked": "Marked",
-    "status_disbanding": "Disbanding item",
+    "status_separate": "Item Separate",
+    "status_change_quantity": "Quantity edit",
+    "status_merge": "Формирование ТМЦ",
+    "status_change_price": "Price by piece edit",
+    "status_change_price_total": "Total price edit",
+    "status_remove_from_transfer": "Передача отклонена",
+    "status_change_location": "Перемещение на объект",
     "status_undefined": "Not distributed",
     "title_request_created": "Application created",
     "status_transfer_complete": "Completed",
@@ -210,5 +216,6 @@
     "eqp_two": "Unmounting from Item",
     "eqp_three": "Mounting items",
     "eqp_four": "Unmounting items",
-    "error_name_item": "Unknown Item"
+    "error_name_item": "Unknown Item",
+    "set_quantity": "Set quantity"
   }

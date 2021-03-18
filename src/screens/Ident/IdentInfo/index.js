@@ -31,7 +31,7 @@ import {
 } from '../../../utils/helpers.js';
 import AsyncStorage from '@react-native-community/async-storage';
 import DarkButton from '../../../components/Buttons/DarkButton';
-import {ItemCardQuantityAndPrice} from '../../../components/ItemCardQuantityAndPrice/ItemCardQuantityAndPrice';
+import ItemCardQuantityAndPrice from '../../../components/ItemCardQuantityAndPrice';
 
 export const IdentInfo = props => {
   const dispatch = useDispatch();

@@ -14,7 +14,7 @@ import {
 } from '../../../actions/actions.js';
 import {getStatus, getProperErrorMessage} from '../../../utils/helpers.js';
 import AsyncStorage from '@react-native-community/async-storage';
-import {ItemSetQuantityArea} from '../../../components/ItemSetQuantityArea/ItemSetQuantityArea';
+import ItemSetQuantityArea from '../../../components/ItemSetQuantityArea';
 
 export const WriteOffInfo = props => {
   const dispatch = useDispatch();

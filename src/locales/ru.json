@@ -129,7 +129,14 @@
     "status_storekeeper": "У кладовщика",
     "status_person": "Передано МОЛ",
     "status_marked": "Маркировано",
-    "status_disbanding": "Расформирование ТМЦ",
+    "status_separate": "Расформирование ТМЦ",
+    "status_change_quantity": "Изменение остатка",
+    "status_merge": "Формирование ТМЦ",
+    "status_change_price": "Изменение цены за единицу",
+    "status_change_price_total": "Изменение общей стоимости",
+    "status_remove_from_transfer": "Передача отклонена",
+    "status_change_location": "Перемещение на объект",
+    "status_add_to_transfer": "В процессе передачи",
     "status_undefined": "Не распределено",
     "title_request_created": "Заявка создана",
     "status_transfer_complete": "Завершено",
@@ -210,5 +217,6 @@
     "eqp_two": "Удаление с ТМЦ",
     "eqp_three": "Установка ТМЦ",
     "eqp_four": "Разукомплектация",
-    "error_name_item": "Неизвестное ТМЦ"
+    "error_name_item": "Неизвестное ТМЦ",
+    "set_quantity": "Задать количество"
   }

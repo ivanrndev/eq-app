@@ -25,7 +25,7 @@ import {
   saveCurrentItemMark,
   searchItem,
 } from '../../../actions/actions.js';
-import {ItemListCardContent} from '../../../components/ItemListCardContent/ItemListCardContent';
+import ItemListCardContent from '../../../components/ItemListCardContent';
 
 const MarkingList = props => {
   const dispatch = useDispatch();

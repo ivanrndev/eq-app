@@ -32,7 +32,7 @@ import {
   nfc,
   unMountItemFromParent,
 } from '../../../actions/actions.js';
-import {ItemCardQuantityAndPrice} from '../../../components/ItemCardQuantityAndPrice/ItemCardQuantityAndPrice';
+import ItemCardQuantityAndPrice from '../../../components/ItemCardQuantityAndPrice';
 
 export const OnMeInfo = props => {
   const [scan, store, settings] = useSelector(({scan, onMe, settings}) => [

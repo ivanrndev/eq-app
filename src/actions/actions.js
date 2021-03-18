@@ -923,8 +923,9 @@ export const loadMoreTransactions = status => dispatch => {
 };
 
 // Give actions
-export const getUserList = (nav, search, page = '') => dispatch => {
+export const getUserList = (nav, search = '', page = '') => dispatch => {
   AsyncStorage.getItem('company').then(company => {
+    console.log('LLL', company, nav, search, page);
     return axios
       .get(`${API_URL}/company/${company}/user`, {
         params: {search},
