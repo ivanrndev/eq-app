@@ -29,6 +29,7 @@ const InventoryScaner = props => {
         title={T.t('inventorization')}
         switch={true}
         typeSwitchNFC={true}
+        page="InventoryFinish"
       />
       <SafeAreaView />
       <View style={styles.body}>

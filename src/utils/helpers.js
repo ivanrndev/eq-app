@@ -2,7 +2,25 @@
 import T from '../i18n';
 import {currentScan, loader, saveCurrentMyItem} from '../actions/actions';
 
+export const getUserName = (user: any) => {
+  let name = '';
+
+  if (user.firstName) {
+    name += user.firstName;
+  }
+
+  if (user.lastName) {
+    name += ' ' + user.lastName;
+  }
+
+  if (!user.firstName && !user.lastName && user.email) {
+    name += user.email;
+  }
+
+  return name;
+};
 export const getDescription = (tx, role, id, parent) => {
+  console.log('TX', tx);
   switch (+tx.type) {
     case 0:
       return T.t('transaction_add');
@@ -31,17 +49,63 @@ export const getDescription = (tx, role, id, parent) => {
     case 7:
       return parent ? `${T.t('eqp_two')}: ${id}` : `${T.t('eqp_four')}: ${id}`;
     case 8:
-      return `${T.t('status_change_quantity')}`;
+      return `${T.t('user')}  ${tx.user.firstName ||
+        tx.user.email} изменил количество ТМЦ с ${tx.data.prevQuantity} ${
+        tx.data.units
+      } на ${tx.data.newQuantity} ${tx.data.units}`;
     case 9:
-      return `${T.t('status_change_price')}`;
+      return `${T.t('user')} ${tx.user.firstName ||
+        tx.user.email} изменил цену за единицу ТМЦ с ${tx.data.prevPrice} на ${
+        tx.data.newPrice
+      }`;
     case 10:
-      return `${T.t('status_change_price_total')}`;
+      return `${T.t('user')} ${tx.user.firstName ||
+        tx.user.email} изменил общую стоимость ТМЦ с ${tx.data.prevPrice} на ${
+        tx.data.newPrice
+      }`;
     case 11:
-      return `${T.t('status_separate')}`;
+      return ` ${T.t('user')} ${tx.user.firstName} ${tx.user.lastName} ${T.t(
+        'transaction_gave',
+      )} ${tx.data.quantity} ${T.t('item')}${T.t('status_separate')} ${
+        tx.data.metadata.title
+      } ${tx.data.metadata.brand} ${tx.data.metadata.model}`;
+
     case 12:
-      return `${T.t('status_merge')}`;
+      return `${T.t('user')} ${tx.user.firstName ||
+        tx.user.email} вернул ранее расформированное ТМЦ ${
+        tx.data.batch
+          ? `в количестве ${tx.data.batch.quantity} ${tx.data.batch.units}`
+          : ''
+      }, в текущую родительскую ТМЦ.`;
     case 13:
-      return `${T.t('status_add_to_transfer')}`;
+      return `${T.t('status_add_to_transfer')} ${getUserName(
+        tx.data.sender,
+      )} к ${getUserName(tx.data.recipient)}`;
+    case 14:
+      if (tx.data.complete) {
+        return `${tx.user.firstName} ${tx.user.lastName} ${T.t(
+          'operation_remove_from_transfer_complete',
+        )}`;
+      } else {
+        return `${tx.user.firstName} ${tx.user.lastName} ${T.t(
+          'operation_remove_from_transfer',
+        )}`;
+      }
+    case 15:
+      return `
+          ${T.t('operation_location_from')} ${
+        tx.data.from && tx.data.from.object
+          ? `с ${tx.data.from.object || ''}`
+          : ''
+      } ${
+        tx.data.from && tx.data.from.location
+          ? `(${tx.data.from.location})`
+          : ''
+      }
+          ${T.t('operation_location_to')} ${
+        tx.data.to && tx.data.to.location ? tx.data.to.object : ''
+      } ${tx.data.to && tx.data.to.location ? `(${tx.data.to.location})` : ''}
+        `;
     default:
       return T.t('unknown_operation');
   }
