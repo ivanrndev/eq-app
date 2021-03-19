@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Dimensions, SafeAreaView, Text} from 'react-native';
-import {Title, Portal, ActivityIndicator} from 'react-native-paper';
+import {Dimensions, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {ActivityIndicator, Portal, Title} from 'react-native-paper';
 import T from '../../../../i18n';
 // components
 import Appbar from '../../../../components/Appbar';
@@ -12,7 +12,7 @@ import {
   backFromServices,
   loader,
 } from '../../../../actions/actions.js';
-import {getStatus, getProperErrorMessage} from '../../../../utils/helpers.js';
+import {getProperErrorMessage, getStatus} from '../../../../utils/helpers.js';
 import AsyncStorage from '@react-native-community/async-storage';
 import {useQuantityUnitsAndCurrency} from '../../../../hooks/useQuantityUnitsAndCurrency';
 
@@ -25,7 +25,7 @@ export const BackInfo = props => {
   const metaData = store.scanInfo.metadata;
   const [role, setRole] = useState();
   const arrayIds = [store.scanInfo._id];
-  console.log('BACK', useSelector(state => state));
+
   let nameOfProduct = '';
   if (metaData) {
     nameOfProduct = metaData.title
