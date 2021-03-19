@@ -25,6 +25,8 @@ const GiveScaner = props => {
         title={T.t('title_scan')}
         switch={true}
         typeSwitchNFC={true}
+        search={true}
+        page="GiveListCheck"
       />
       <SafeAreaView />
       <View style={styles.body}>

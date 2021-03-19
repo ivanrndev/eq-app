@@ -37,7 +37,7 @@ const GiveListCheck = props => {
     settings,
   ]);
   const [error, setError] = useState('');
-
+  console.log('HHH', useSelector(state => state));
   let showEmptyError = !scan.scanGiveList.length;
   const userCurrentId = give.userCurrentId;
   useEffect(() => {

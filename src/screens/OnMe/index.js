@@ -45,7 +45,7 @@ const OnMe = props => {
 
   const getMoreItems = () => {
     dispatch(myloadMore(true));
-    dispatch(searchMyItem(search, onMe.offSet, false));
+    dispatch(searchMyItem(search, onMe.offSet, false, 6));
   };
 
   let showEmptyError = !onMe.myList.length;

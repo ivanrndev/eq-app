@@ -25,6 +25,8 @@ const BackScanner = props => {
         title={T.t('back_service')}
         switch={true}
         typeSwitchNFC={true}
+        search={true}
+        page="BackInfo"
       />
       <SafeAreaView />
       <View style={styles.body}>

@@ -60,6 +60,7 @@ import NFC from './screens/NFC';
 import MountList from './screens/Ident/MountList';
 import MountNoMarking from './screens/Ident/MountNoMarking';
 import GiveSetQuantity from './screens/AcceptGive/Give/GiveListCheck/GiveSetQuantity';
+import Search from './components/Search';
 
 const theme = {
   ...DefaultTheme,
@@ -143,6 +144,7 @@ const App = () => {
                 <Drawer.Screen name="Subscribe" component={Subscribe} />
                 <Drawer.Screen name="NFC" component={NFC} />
                 <Drawer.Screen name="MountList" component={MountList} />
+                <Drawer.Screen name="Search" component={Search} />
                 <Drawer.Screen
                   name="MountNoMarking"
                   component={MountNoMarking}

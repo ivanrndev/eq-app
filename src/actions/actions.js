@@ -91,6 +91,8 @@ import {
   LOCATION_MAIN,
   LOCATTION_LOC,
   SET_ITEM_QTY,
+  SAVE_CURRENT_SEARCH,
+  SAVE_CURRENT_SEARCH_ERROR,
 } from '../actions/actionsType.js';
 
 // Settings
@@ -321,7 +323,8 @@ export const statusLoad = status => dispatch => {
   });
 };
 
-// Scan actions
+// Scan and search actions
+
 export const currentScan = (
   id,
   nav,
@@ -348,6 +351,37 @@ export const dialogInput = status => dispatch => {
   dispatch({
     type: DIALOG_INPUT,
     payload: {dialogInput: status},
+  });
+};
+
+export const getSearchItem = id => dispatch => {
+  AsyncStorage.getItem('company').then(company => {
+    return axios
+      .get(`${API_URL}/company/${company}/item/${id}/detailed`)
+      .then(resp => {
+        if (resp.status === 200) {
+          let checkErrors = actionCheckError(resp.data);
+          if (checkErrors) {
+            dispatch({
+              type: SAVE_CURRENT_SEARCH_ERROR,
+              payload: {
+                mountError: checkErrors,
+              },
+            });
+          } else {
+            dispatch({
+              type: SAVE_CURRENT_SEARCH,
+              payload: {
+                scanInfo: resp.data,
+                scanInfoError: false,
+                selectGiveId: resp.data._id,
+                isInfoOpen: true,
+              },
+            });
+          }
+          dispatch(loader(false));
+        }
+      });
   });
 };
 
@@ -797,11 +831,11 @@ export const getItemsOnMe = nav => dispatch => {
   });
 };
 
-export const searchMyItem = (query, offset, isNew) => dispatch => {
+export const searchMyItem = (query, offset, isNew, limit) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
       .get(`${API_URL}/company/${company}/item/me`, {
-        params: {search: query, limit: 6, offset: offset},
+        params: {search: query, offset, limit},
       })
       .then(resp => {
         if (resp.status === 200) {
@@ -810,7 +844,7 @@ export const searchMyItem = (query, offset, isNew) => dispatch => {
             dispatch({
               type: GET_MY_ITEMS,
               payload: {
-                offSet: 6,
+                offSet: offset,
                 myloadMore: false,
                 myList: data,
               },

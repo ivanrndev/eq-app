@@ -25,6 +25,8 @@ const Service = props => {
         title={T.t('send_service')}
         switch={true}
         typeSwitchNFC={true}
+        search={true}
+        page="ServiceInfo"
       />
       <SafeAreaView />
       <View style={styles.body}>

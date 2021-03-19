@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
-import {Appbar, Snackbar, Portal} from 'react-native-paper';
-import {withRouter} from 'react-router-native';
+import {Appbar, Snackbar, Portal, IconButton} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import {StyleSheet, View} from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
@@ -24,11 +23,13 @@ import {
   changeLocationMain,
   changeLocationLoc,
 } from '../../actions/actions.js';
+import Search from '../Search';
 
 const AppbarCustom = props => {
   const dispatch = useDispatch();
   const icon = props.arrow ? 'arrow-left' : 'menu';
   const [isConnection, setIsConnection] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const iconSwitch = props.typeSwitchCamera ? 'camera' : 'cast';
   const settings = useSelector(state => state.settings);
 
@@ -119,7 +120,23 @@ const AppbarCustom = props => {
             }}
           />
         )}
+
+        {props.search && (
+          <IconButton
+            icon="magnify"
+            size={35}
+            color="#22215B"
+            onPress={() => setIsSearchOpen(true)}
+          />
+        )}
       </Appbar.Header>
+      {isSearchOpen && (
+        <Search
+          nav={props.navigation}
+          pageSearchItem={props.page}
+          setIsSearchOpen={setIsSearchOpen}
+        />
+      )}
       <View style={styles.borderRadius} />
       <Portal>
         <Snackbar
@@ -163,4 +180,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withRouter(AppbarCustom);
+export default AppbarCustom;

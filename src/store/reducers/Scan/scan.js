@@ -11,6 +11,7 @@ import {
   MOUNT_SCAN,
   ERROR_CURRENT_MOUNT_SCAN_INFO,
   SAVE_CURRENT_MOUNT_SCAN_INFO_LIST,
+  SAVE_CURRENT_SEARCH,
 } from '../../../actions/actionsType.js';
 
 const initialState = {
@@ -88,6 +89,11 @@ const scanReducer = (state = initialState, action) => {
         ...action.payload,
       };
     case CHANGE_ALL_IS_OPEN:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case SAVE_CURRENT_SEARCH:
       return {
         ...state,
         ...action.payload,

@@ -27,6 +27,8 @@ const WriteOff = props => {
         title={T.t('title_scan')}
         switch={true}
         typeSwitchNFC={true}
+        search={true}
+        page="WriteOffInfo"
       />
       <SafeAreaView />
       <View style={styles.body}>
