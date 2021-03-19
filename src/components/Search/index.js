@@ -13,31 +13,33 @@ const Search = props => {
 
   const [search, setSearch] = useState('');
   const [searchList, setSearchList] = useState([]);
+  const showEmptyError = !onMe.myList.length && search.length !== 0;
+
   useEffect(
     () =>
       search.length === 0 ? setSearchList([]) : setSearchList(onMe.myList),
     [search],
   );
 
-  const showEmptyError = !onMe.myList.length && search.length !== 0;
-
   const handleItemSearch = query => {
     setSearch(query);
     dispatch(searchMyItem(query, 0, true));
   };
+
   const handleCurrentScan = item => {
     actionCheckError(item);
-    console.log('ERR', actionCheckError(item));
     dispatch(loader(true));
-    dispatch(getSearchItem(item._id));
+    dispatch(getSearchItem(item._id, props.isSearchForGiveItem));
     props.nav.navigate(props.pageSearchItem);
     props.setIsSearchOpen(false);
+    setSearch('');
   };
   const renderItem = ({item}) => (
     <Card style={styles.card} onPress={() => handleCurrentScan(item)}>
       <ItemListCard item={item} />
     </Card>
   );
+
   return (
     <View style={styles.body}>
       <Searchbar
@@ -51,7 +53,6 @@ const Search = props => {
         {showEmptyError && (
           <Paragraph style={styles.text}>{T.t('error_not_found')}</Paragraph>
         )}
-
         <FlatList
           renderItem={item => renderItem(item)}
           data={searchList}

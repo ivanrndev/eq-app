@@ -23,19 +23,15 @@ import {
 } from '../../utils/helpers.js';
 // redux and actions
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  currentScan,
-  myloadMore,
-  saveCurrentMyItem,
-  searchMyItem,
-} from '../../actions/actions.js';
+import {myloadMore, searchMyItem} from '../../actions/actions.js';
 import ItemListCard from '../../components/ItemListCard';
 
 const OnMe = props => {
   const dispatch = useDispatch();
   const onMe = useSelector(state => state.onMe);
-  let error = getProperErrorMessage(onMe.markingError);
   const [search, setSearch] = useState('');
+  let error = getProperErrorMessage(onMe.markingError);
+  let showEmptyError = !onMe.myList.length;
 
   const itemSearch = query => {
     setSearch(query);
@@ -47,8 +43,6 @@ const OnMe = props => {
     dispatch(myloadMore(true));
     dispatch(searchMyItem(search, onMe.offSet, false, 6));
   };
-
-  let showEmptyError = !onMe.myList.length;
 
   return (
     <>

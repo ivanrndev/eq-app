@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Appbar, Snackbar, Portal, IconButton} from 'react-native-paper';
+import {Appbar, IconButton, Portal, Snackbar} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import {StyleSheet, View} from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
@@ -7,21 +7,21 @@ import T from '../../i18n';
 
 import {
   allowNewScan,
-  clearTransfer,
-  clearTransaction,
-  clearBidList,
-  alreadyScannedBids,
   alreadyScanned,
-  clearGiveList,
-  clearUserList,
-  clearMarking,
-  clearComments,
-  clearUserAcceptBid,
-  switchStartPage,
-  NFCforMounting,
+  alreadyScannedBids,
   changeIsMultiple,
-  changeLocationMain,
   changeLocationLoc,
+  changeLocationMain,
+  clearBidList,
+  clearComments,
+  clearGiveList,
+  clearMarking,
+  clearTransaction,
+  clearTransfer,
+  clearUserAcceptBid,
+  clearUserList,
+  NFCforMounting,
+  switchStartPage,
 } from '../../actions/actions.js';
 import Search from '../Search';
 
@@ -135,6 +135,7 @@ const AppbarCustom = props => {
           nav={props.navigation}
           pageSearchItem={props.page}
           setIsSearchOpen={setIsSearchOpen}
+          isSearchForGiveItem={props.isSearchForGiveItem}
         />
       )}
       <View style={styles.borderRadius} />

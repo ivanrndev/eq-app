@@ -37,9 +37,26 @@ const GiveListCheck = props => {
     settings,
   ]);
   const [error, setError] = useState('');
-  console.log('HHH', useSelector(state => state));
   let showEmptyError = !scan.scanGiveList.length;
   const userCurrentId = give.userCurrentId;
+  const errorId = !!scan.currentScan
+    ? scan.currentScan
+    : scan.scanInfo.metadata && scan.scanInfo.metadata.title;
+
+  const list = scan.scanGiveList
+    .filter(item => give.giveList.find(pc => pc.id !== item._id))
+    .map(item => ({id: item._id, quantity: item.batch.quantity}));
+  const createTransfer = () => {
+    dispatch(
+      makeTransfer(
+        props.navigation,
+        [...list, ...give.giveList],
+        userCurrentId,
+      ),
+    );
+  };
+  const setItemQty = itemId => give.giveList.find(pc => pc.id === itemId);
+
   useEffect(() => {
     const correctItem = scan.scanGiveList.find(
       item => item._id === scan.selectGiveId,
@@ -70,7 +87,7 @@ const GiveListCheck = props => {
       setError(getProperErrorTransfer('Copy', scan.currentScan));
     } else {
       if (scan.scanInfoError) {
-        setError(getProperErrorTransfer(scan.scanInfoError, scan.currentScan));
+        setError(getProperErrorTransfer(scan.scanInfoError, errorId));
       }
     }
   }, [scan.scanGiveList, scan.currentScan, scan.scanInfoError]);
@@ -80,24 +97,11 @@ const GiveListCheck = props => {
     dispatch(updateGiveList(updateList));
   };
 
-  const list = scan.scanGiveList
-    .filter(item => give.giveList.find(pc => pc.id !== item._id))
-    .map(item => ({id: item._id, quantity: item.batch.quantity}));
-  const createTransfer = () => {
-    dispatch(
-      makeTransfer(
-        props.navigation,
-        [...list, ...give.giveList],
-        userCurrentId,
-      ),
-    );
-  };
-
   const addMore = () => {
     props.navigation.navigate(settings.startPageGive);
     dispatch(allowNewScan(true));
   };
-  const setItemQty = itemId => give.giveList.find(pc => pc.id === itemId);
+
   return (
     <>
       <Appbar

@@ -1,98 +1,98 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from '../utils/axios';
 import {API_URL, LOGIN_URL, PORGOT_PASS} from '../constants/auth.js';
-import {getProperError, actionCheckError} from '../utils/helpers.js';
+import {actionCheckError, getProperError} from '../utils/helpers.js';
 import {
-  LOGUT,
-  LOGIN_USER,
-  GET_COMPANY_INFO,
-  GET_COMPANY_INFO_ERROR,
-  LOGIN_USER_ERROR,
+  ALLOW_NEW_SCAN,
+  ALREADY_SCANNED_BIDS,
+  BACK_PAGE_MOUNT,
+  CHANGE_IS_MULTYPLE,
   CHANGE_STATUS_ERROR,
   CHANGE_STATUS_LOAD,
-  SAVE_CURRENT_SCAN,
-  ALLOW_NEW_SCAN,
-  LOADER,
-  LANG,
-  HELP,
-  SAVE_CURRENT_SCAN_INFO,
-  SAVE_CURRENT_SCAN_INFO_LIST,
-  CLEAR_SCAN_GIVE_LIST,
-  UPDATE_SCAN_GIVE_LIST,
-  ERROR_CURRENT_SCAN_INFO,
-  DIALOG_INPUT,
-  SUCCES_IN_SERVICES,
-  ERROR_SEND_SERVICES,
-  PUT_ERROR_SEND_SERVICES,
-  SUCCES_WRITE_OFF,
-  ERROR_WRITE_OFF,
-  PUT_ERROR_WRITE_OFF,
-  MARKING,
-  CLEAR_MARKING,
-  MARKING_ERROR,
-  MARKING_ERROR_DONE,
-  MARKING_CURRENT_ID,
-  MARKING_SEARCH,
   CHANGE_STATUS_LOAD_MORE,
+  CHANGE_STATUS_LOAD_MORE_COMMENTS,
+  CHANGE_STATUS_MY_LOAD_MORE,
+  CLEAR_BID_LIST,
+  CLEAR_COMMENTS,
+  CLEAR_MARKING,
+  CLEAR_SCAN_GIVE_LIST,
+  CLEAR_TRANSACTIONS_LIST,
+  CLEAR_TRANSFERS_LIST,
+  CLEAR_USER_LIST,
+  DIALOG_INPUT,
+  ERROR_CURRENT_MOUNT_SCAN_INFO,
+  ERROR_CURRENT_SCAN_INFO,
+  ERROR_SEND_SERVICES,
+  ERROR_TRANSFER,
+  ERROR_WRITE_OFF,
+  FORGOT_PASS_ERROR,
+  FORGOT_PASS_SUCESS,
+  GET_BID_LIST,
+  GET_BID_LIST_ERROR,
+  GET_COMMENTS,
+  GET_COMMENTS_ERROR,
+  GET_COMPANY_INFO,
+  GET_COMPANY_INFO_ERROR,
   GET_MY_ITEMS,
   GET_MY_ITEMS_ERROR,
   GET_MY_ITEMS_SEARCH,
-  CHANGE_STATUS_MY_LOAD_MORE,
-  MY_CURRENT_INFO_ID,
-  TRANSACTIONS_LIST,
-  TRANSACTIONS_ERROR,
   GET_USERS,
-  CLEAR_USER_LIST,
   GET_USERS_ERROR,
-  USER_CURRENT_ID,
-  TRANSFER,
-  ERROR_TRANSFER,
-  TRANSFERS_LIST,
-  TRANSFERS_ERROR,
-  LOAD_MORE_TRANSFERS,
-  LOAD_MORE_TRANSACTIONS,
-  CLEAR_TRANSFERS_LIST,
-  CLEAR_TRANSACTIONS_LIST,
-  TRANSFERS_ID,
-  TRANSFERS_UPDATE,
-  TRANSFERS_UPDATE_ERROR,
-  GET_BID_LIST,
-  GET_BID_LIST_ERROR,
+  HELP,
+  LANG,
   LOAD_MORE_STATUS,
-  CLEAR_BID_LIST,
-  SAVE_USER_ACCEPT_BID,
-  ALREADY_SCANNED_BIDS,
+  LOAD_MORE_TRANSACTIONS,
+  LOAD_MORE_TRANSFERS,
+  LOADER,
+  LOCATION_MAIN,
+  LOCATIONS,
+  LOCATTION_LOC,
+  LOGIN_USER,
+  LOGIN_USER_ERROR,
+  LOGUT,
   MAKE_ACCEPT,
   MAKE_ACCEPT_ERROR,
-  SAVE_CURRENT_INVENTORY_USER,
-  SAVE_INVENTORY_SCANS,
   MAKE_STOCKTAKING,
   MAKE_STOCKTAKING_ERROR,
-  GET_COMMENTS,
-  GET_COMMENTS_ERROR,
-  CHANGE_STATUS_LOAD_MORE_COMMENTS,
-  CLEAR_COMMENTS,
-  SEND_COMMENT,
-  SEND_COMMENT_ERROR,
-  FORGOT_PASS_SUCESS,
-  FORGOT_PASS_ERROR,
-  RESET_PASS_INFO,
-  NFC,
-  LOCATIONS,
-  START_PAGE,
-  MOUNT_SCAN,
-  ERROR_CURRENT_MOUNT_SCAN_INFO,
-  SAVE_CURRENT_MOUNT_SCAN_INFO_LIST,
-  BACK_PAGE_MOUNT,
-  NFC_FOR_MOUNTING,
-  NEXT_PAGE_MOUNT,
+  MARKING,
+  MARKING_CURRENT_ID,
+  MARKING_ERROR,
+  MARKING_ERROR_DONE,
+  MARKING_SEARCH,
   MOUNT_CAMERA_LIST,
-  CHANGE_IS_MULTYPLE,
-  LOCATION_MAIN,
-  LOCATTION_LOC,
-  SET_ITEM_QTY,
+  MOUNT_SCAN,
+  MY_CURRENT_INFO_ID,
+  NEXT_PAGE_MOUNT,
+  NFC,
+  NFC_FOR_MOUNTING,
+  PUT_ERROR_SEND_SERVICES,
+  PUT_ERROR_WRITE_OFF,
+  RESET_PASS_INFO,
+  SAVE_CURRENT_INVENTORY_USER,
+  SAVE_CURRENT_MOUNT_SCAN_INFO_LIST,
+  SAVE_CURRENT_SCAN,
+  SAVE_CURRENT_SCAN_INFO,
   SAVE_CURRENT_SEARCH,
   SAVE_CURRENT_SEARCH_ERROR,
+  SAVE_GIVE_ITEM_INFO_LIST,
+  SAVE_INVENTORY_SCANS,
+  SAVE_USER_ACCEPT_BID,
+  SEND_COMMENT,
+  SEND_COMMENT_ERROR,
+  SET_ITEM_QTY,
+  START_PAGE,
+  SUCCES_IN_SERVICES,
+  SUCCES_WRITE_OFF,
+  TRANSACTIONS_ERROR,
+  TRANSACTIONS_LIST,
+  TRANSFER,
+  TRANSFERS_ERROR,
+  TRANSFERS_ID,
+  TRANSFERS_LIST,
+  TRANSFERS_UPDATE,
+  TRANSFERS_UPDATE_ERROR,
+  UPDATE_SCAN_GIVE_LIST,
+  USER_CURRENT_ID,
 } from '../actions/actionsType.js';
 
 // Settings
@@ -354,7 +354,7 @@ export const dialogInput = status => dispatch => {
   });
 };
 
-export const getSearchItem = id => dispatch => {
+export const getSearchItem = (id, isSearchForGiveItem = false) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
       .get(`${API_URL}/company/${company}/item/${id}/detailed`)
@@ -363,24 +363,48 @@ export const getSearchItem = id => dispatch => {
           let checkErrors = actionCheckError(resp.data);
           if (checkErrors) {
             dispatch({
-              type: SAVE_CURRENT_SEARCH_ERROR,
+              type: ERROR_CURRENT_SCAN_INFO,
               payload: {
-                mountError: checkErrors,
+                scanInfoError: checkErrors,
+                selectGiveId: resp.data._id,
+                scanInfo: resp.data,
               },
             });
           } else {
-            dispatch({
-              type: SAVE_CURRENT_SEARCH,
-              payload: {
-                scanInfo: resp.data,
-                scanInfoError: false,
-                selectGiveId: resp.data._id,
-                isInfoOpen: true,
-              },
-            });
+            if (isSearchForGiveItem) {
+              let role = resp.data.person ? resp.data.person.role : 'none';
+              dispatch({
+                type: SAVE_GIVE_ITEM_INFO_LIST,
+                payload: {
+                  scanGiveList: resp.data,
+                  scanUserRole: role,
+                  selectGiveId: resp.data._id,
+                  scanInfoError: false,
+                },
+              });
+            } else {
+              dispatch({
+                type: SAVE_CURRENT_SEARCH,
+                payload: {
+                  scanInfo: resp.data,
+                  scanInfoError: false,
+                  selectGiveId: resp.data._id,
+                  isInfoOpen: true,
+                },
+              });
+            }
           }
           dispatch(loader(false));
         }
+      })
+      .catch(e => {
+        dispatch({
+          type: SAVE_CURRENT_SEARCH_ERROR,
+          payload: {
+            mountError: e.response.data.message.name,
+          },
+        });
+        dispatch(loader(false));
       });
   });
 };
@@ -432,7 +456,7 @@ export const scanInfo = (
               } else {
                 let role = resp.data.person ? resp.data.person.role : 'none';
                 dispatch({
-                  type: SAVE_CURRENT_SCAN_INFO_LIST,
+                  type: SAVE_GIVE_ITEM_INFO_LIST,
                   payload: {
                     scanGiveList: resp.data,
                     scanUserRole: role,

@@ -5,7 +5,7 @@ import {
   ERROR_CURRENT_SCAN_INFO,
   DIALOG_INPUT,
   CHANGE_ALL_IS_OPEN,
-  SAVE_CURRENT_SCAN_INFO_LIST,
+  SAVE_GIVE_ITEM_INFO_LIST,
   CLEAR_SCAN_GIVE_LIST,
   UPDATE_SCAN_GIVE_LIST,
   MOUNT_SCAN,
@@ -72,7 +72,7 @@ const scanReducer = (state = initialState, action) => {
         ...state,
         ...action.payload,
       };
-    case SAVE_CURRENT_SCAN_INFO_LIST:
+    case SAVE_GIVE_ITEM_INFO_LIST:
       return {
         ...state,
         ...action.payload,
