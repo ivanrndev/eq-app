@@ -1,16 +1,20 @@
 import React, {useEffect, useState} from 'react';
 import {Dimensions, FlatList, StyleSheet, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
 import {Card, Paragraph, Searchbar} from 'react-native-paper';
 import T from '../../i18n';
 import {getSearchItem, loader, searchMyItem} from '../../actions/actions';
 import {actionCheckError} from '../../utils/helpers';
 import ItemListCard from '../ItemListCard';
 
-const Search = props => {
+const Search = ({isSearchForGiveItem, pageToChosenItem, setIsSearchOpen}) => {
   const dispatch = useDispatch();
-  const onMe = useSelector(state => state.onMe);
-
+  const [onMe, itemsLimit] = useSelector(({onMe, auth}) => [
+    onMe,
+    auth.currentCompany.itemsLimit,
+  ]);
+  const navigation = useNavigation();
   const [search, setSearch] = useState('');
   const [searchList, setSearchList] = useState([]);
   const showEmptyError = !onMe.myList.length && search.length !== 0;
@@ -23,15 +27,15 @@ const Search = props => {
 
   const handleItemSearch = query => {
     setSearch(query);
-    dispatch(searchMyItem(query, 0, true));
+    dispatch(searchMyItem(query, 0, true, itemsLimit));
   };
 
   const handleCurrentScan = item => {
     actionCheckError(item);
     dispatch(loader(true));
-    dispatch(getSearchItem(item._id, props.isSearchForGiveItem));
-    props.nav.navigate(props.pageSearchItem);
-    props.setIsSearchOpen(false);
+    dispatch(getSearchItem(item._id, isSearchForGiveItem));
+    navigation.navigate(pageToChosenItem);
+    setIsSearchOpen(false);
     setSearch('');
   };
   const renderItem = ({item}) => (

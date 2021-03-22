@@ -1615,7 +1615,6 @@ export const deleteTransfer = (nav, id, route) => dispatch => {
 export const getLocations = props => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios.get(`/company/${company}/locations`).then(resp => {
-      console.log('resp', resp);
       if (resp.status === 200) {
         dispatch({
           type: LOCATIONS,
@@ -1634,7 +1633,6 @@ export const unMountItemFromParent = (
   nav,
   page,
 ) => dispatch => {
-  console.log(parent, items, code, page);
   AsyncStorage.getItem('company').then(company => {
     return axios
       .put(`${API_URL}/company/${company}/item/unmount`, {parent, items})

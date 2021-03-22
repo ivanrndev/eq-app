@@ -26,7 +26,7 @@ const Service = props => {
         switch={true}
         typeSwitchNFC={true}
         search={true}
-        page="ServiceInfo"
+        pageToChosenItem="ServiceInfo"
       />
       <SafeAreaView />
       <View style={styles.body}>

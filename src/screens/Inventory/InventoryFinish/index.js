@@ -26,7 +26,7 @@ export const InventoryFinish = props => {
   const [error, setError] = useState();
   const alreadyScan = inventory.inventoryScanList.filter(Boolean);
   const width = Dimensions.get('window').width;
-  console.log('INV', useSelector(state => state));
+
   const more = () => {
     props.navigation.navigate(settings.startPageInventory);
     dispatch(allowNewScan(true));

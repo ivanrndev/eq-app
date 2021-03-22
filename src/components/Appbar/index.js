@@ -132,10 +132,9 @@ const AppbarCustom = props => {
       </Appbar.Header>
       {isSearchOpen && (
         <Search
-          nav={props.navigation}
-          pageSearchItem={props.page}
-          setIsSearchOpen={setIsSearchOpen}
+          pageToChosenItem={props.pageToChosenItem}
           isSearchForGiveItem={props.isSearchForGiveItem}
+          setIsSearchOpen={setIsSearchOpen}
         />
       )}
       <View style={styles.borderRadius} />

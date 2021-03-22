@@ -31,7 +31,7 @@ const Transactions = props => {
   let error = getProperErrorMessage(transactions.transactionError);
   let showEmptyError = !transactions.transactionList.length;
   const dispatch = useDispatch();
-  console.log('STR', useSelector(state => state), transactions);
+
   const getRole = async () => {
     try {
       const value = await AsyncStorage.getItem('role');

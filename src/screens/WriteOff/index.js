@@ -28,7 +28,7 @@ const WriteOff = props => {
         switch={true}
         typeSwitchNFC={true}
         search={true}
-        page="WriteOffInfo"
+        pageToChosenItem="WriteOffInfo"
       />
       <SafeAreaView />
       <View style={styles.body}>

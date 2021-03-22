@@ -76,6 +76,14 @@ export const ServiceInfo = props => {
     setReason('');
     setStockroom('');
   };
+  console.log(
+    'SERV',
+    store.scanInfo._id,
+    reason,
+    stockroom,
+    quantityToService,
+    props.navigation,
+  );
   const getRole = async () => {
     try {
       const value = await AsyncStorage.getItem('role');

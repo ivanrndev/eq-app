@@ -20,7 +20,6 @@ export const getUserName = (user: any) => {
   return name;
 };
 export const getDescription = (tx, role, id, parent) => {
-  console.log('TX', tx);
   switch (+tx.type) {
     case 0:
       return T.t('transaction_add');

@@ -12,6 +12,7 @@ import {
   ERROR_CURRENT_MOUNT_SCAN_INFO,
   SAVE_CURRENT_MOUNT_SCAN_INFO_LIST,
   SAVE_CURRENT_SEARCH,
+  SAVE_CURRENT_SEARCH_ERROR,
 } from '../../../actions/actionsType.js';
 
 const initialState = {
@@ -94,6 +95,11 @@ const scanReducer = (state = initialState, action) => {
         ...action.payload,
       };
     case SAVE_CURRENT_SEARCH:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case SAVE_CURRENT_SEARCH_ERROR:
       return {
         ...state,
         ...action.payload,

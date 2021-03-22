@@ -170,7 +170,7 @@ const GiveListCheck = props => {
           <DarkButton text={T.t('add')} onPress={addMore} />
           {scan.scanGiveList.length > 0 && (
             <TransparentButton
-              text={T.t('apply_request')}
+              text={`${T.t('apply_request')} (${scan.scanGiveList.length})`}
               onPress={createTransfer}
             />
           )}

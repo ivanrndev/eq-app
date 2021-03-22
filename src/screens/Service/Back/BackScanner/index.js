@@ -26,7 +26,7 @@ const BackScanner = props => {
         switch={true}
         typeSwitchNFC={true}
         search={true}
-        page="BackInfo"
+        pageToChosenItem="BackInfo"
       />
       <SafeAreaView />
       <View style={styles.body}>

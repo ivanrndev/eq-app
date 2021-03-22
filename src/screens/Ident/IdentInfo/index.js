@@ -118,7 +118,7 @@ export const IdentInfo = props => {
 
   const personId = store.scanInfo.person ? store.scanInfo.person._id : null;
   const gaveAcess = userId === personId;
-  console.log('IDENTINFO', store);
+
   return (
     <>
       <Appbar

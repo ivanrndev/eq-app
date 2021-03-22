@@ -26,7 +26,7 @@ const GiveScaner = props => {
         switch={true}
         typeSwitchNFC={true}
         search={true}
-        page="GiveListCheck"
+        pageToChosenItem="GiveListCheck"
         isSearchForGiveItem={true}
       />
       <SafeAreaView />
