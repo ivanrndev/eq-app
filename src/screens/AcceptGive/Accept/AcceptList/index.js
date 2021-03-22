@@ -1,26 +1,26 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {useState, useEffect} from 'react';
-import {isEmpty, isEqual} from 'lodash';
+import React, {useEffect, useState} from 'react';
+import {useNavigation} from '@react-navigation/native';
+import {isEmpty} from 'lodash';
 import T from '../../../../i18n';
+import CheckBox from '@react-native-community/checkbox';
 import {
-  StyleSheet,
-  View,
   Dimensions,
   SafeAreaView,
   ScrollView,
-  // Picker,
+  StyleSheet,
+  View,
 } from 'react-native';
 import {Picker} from '@react-native-community/picker';
 import {
-  Card,
+  ActivityIndicator,
+  Button,
+  Dialog,
   IconButton,
   Paragraph,
-  Snackbar,
   Portal,
-  ActivityIndicator,
+  Snackbar,
   Text,
-  Dialog,
-  Button,
 } from 'react-native-paper';
 // components
 import Appbar from '../../../../components/Appbar';
@@ -29,34 +29,39 @@ import TransparentButton from '../../../../components/Buttons/TransparentButton'
 // redux and actions
 import {useDispatch, useSelector} from 'react-redux';
 import {
-  loader,
-  clearUserAcceptBid,
-  alreadyScannedBids,
-  makeAccept,
   allowNewScan,
-  changeLocationMain,
+  alreadyScannedBids,
   changeLocationLoc,
+  changeLocationMain,
+  clearUserAcceptBid,
+  loader,
+  makeAccept,
 } from '../../../../actions/actions.js';
+import ItemListCard from '../../../../components/ItemListCard';
 
-const AcceptList = props => {
+const AcceptList = () => {
+  const navigation = useNavigation();
   const dispatch = useDispatch();
-  const accept = useSelector(state => state.accept);
-  const settings = useSelector(state => state.settings);
-  const scan = useSelector(state => state.scan);
-  const alreadyScanned = accept.alreadyScannedBids;
-  const [error, setError] = useState('');
-  const [showModal, setShowModal] = useState(true);
-  let reject = [];
-  const objects = settings.locations ? settings.locations : [];
+  const [accept, settings, scan] = useSelector(({accept, settings, scan}) => [
+    accept,
+    settings,
+    scan,
+  ]);
 
   let bidItems = accept.acceptList.filter(item => {
     return item._id === accept.userAcceptBid;
   });
+  const [error, setError] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [rejectIds, setRejectIds] = useState(
+    bidItems[0] && bidItems[0].items.map(item => item._id),
+  );
 
-  const [acceptedIds, setAcceptedIds] = useState(alreadyScanned);
-  const [showButtonsScan, setShowButtonsScan] = useState(true);
+  const objects = settings.locations ? settings.locations : [];
 
-  // objects and locations, sort
+  const [acceptedIds, setAcceptedIds] = useState([]);
+  let showEmptyError = !isEmpty(bidItems) ? !bidItems[0].items.length : false;
+
   const selectedValue = settings.locationMain;
   const selectedValueLoc = settings.locationLoc;
 
@@ -65,6 +70,7 @@ const AcceptList = props => {
       return x;
     }
   });
+  const isItemSelected = id => acceptedIds.includes(id);
 
   useEffect(() => {
     if (!isEmpty(bidItems)) {
@@ -89,63 +95,59 @@ const AcceptList = props => {
     }
   }, [scan.currentScan]);
 
-  useEffect(() => {
-    if (!isEmpty(bidItems)) {
-      if (bidItems[0].items.length === accept.alreadyScannedBids.length) {
-        setShowButtonsScan(false);
-      } else {
-        setShowButtonsScan(true);
-      }
-    }
-    if (!isEqual(accept.alreadyScannedBids, acceptedIds)) {
-      setAcceptedIds(accept.alreadyScannedBids);
-    }
-  }, [accept.alreadyScannedBids, accept.userAcceptBid]);
-
   const makeAcceptBid = () => {
-    let scannde = accept.alreadyScannedBids;
-    let allBids = bidItems[0].items;
-    if (scannde.length === 0) {
-      reject = allBids;
-    }
-    if (allBids.length === scannde.length) {
-      reject = [];
-    }
-    if (scannde.length > 0 && scannde.length < allBids.length) {
-      reject = allBids
-        .filter(x => !scannde.includes(x))
-        .concat(scannde.filter(x => !allBids.includes(x)));
-    }
-    let rejectIds = reject.map(item => item._id);
     dispatch(loader(true));
     dispatch(
       makeAccept(
         accept.userAcceptBid,
         rejectIds,
-        props.navigation,
+        navigation,
         selectedValue,
         selectedValueLoc,
       ),
     );
   };
+  useEffect(() => {
+    if (scan.selectGiveId.length > 0) {
+      setAcceptedIds([...acceptedIds, scan.selectGiveId]);
+      setRejectIds(rejectIds.filter(item => item !== scan.selectGiveId));
+    }
+  }, [scan.selectGiveId]);
 
   const makeScan = () => {
-    props.navigation.navigate(settings.startPageAccept);
+    navigation.navigate(settings.startPageAccept);
     dispatch(allowNewScan(true));
   };
 
   const cancelScan = () => {
-    props.navigation.navigate('Accept');
+    navigation.navigate('Accept');
     dispatch(allowNewScan(true));
     dispatch(clearUserAcceptBid());
     dispatch(alreadyScannedBids([]));
   };
+  const handleSelectCheckbox = (isChecked, id) => {
+    if (!isChecked) {
+      setAcceptedIds(acceptedIds.filter(item => item !== id));
+      setRejectIds([...rejectIds, id]);
+    } else {
+      !isItemSelected(id) && setAcceptedIds([...acceptedIds, id]);
+      setRejectIds(rejectIds.filter(item => item !== id));
+    }
+  };
+  const handleSelecttAll = () => {
+    if (rejectIds.length === 0) {
+      setRejectIds(bidItems[0] && bidItems[0].items.map(item => item._id));
+      setAcceptedIds([]);
+    } else {
+      setAcceptedIds(bidItems[0] && bidItems[0].items.map(item => item._id));
+      setRejectIds([]);
+    }
+  };
 
-  let showEmptyError = !isEmpty(bidItems) ? !bidItems[0].items.length : false;
   return (
     <>
       <Appbar
-        navigation={props.navigation}
+        navigation={navigation}
         arrow={true}
         newScan={true}
         clearUserAcceptBid={true}
@@ -155,6 +157,15 @@ const AcceptList = props => {
         clearlocationMain={true}
         clearlocationLoc={true}
       />
+
+      <IconButton
+        icon={rejectIds.length === 0 ? 'select-inverse' : 'select-all'}
+        size={35}
+        color="#22215B"
+        onPress={handleSelecttAll}
+        style={{position: 'absolute', zIndex: 10000, right: 10, top: 45}}
+      />
+
       <SafeAreaView />
       <Portal>
         {settings.loader && (
@@ -175,29 +186,33 @@ const AcceptList = props => {
               {T.t('accept_not_added')}
             </Paragraph>
           )}
-          {!isEmpty(bidItems)
-            ? bidItems[0].items.map((item, index) => (
-                <Card.Title
-                  key={index}
-                  style={styles.card}
-                  title={`${item.metadata.brand} / ${item.code}`}
-                  subtitle={
-                    item.metadata.title
-                      ? item.metadata.title
-                      : `${item.type} ${item.brand} ${item.model} ${
-                          item.serial
-                        }`
-                  }
-                  right={props =>
-                    alreadyScanned.map(i => i._id).includes(item._id) ? (
-                      <IconButton {...props} icon="check" onPress={() => {}} />
-                    ) : (
-                      <IconButton {...props} icon="close" onPress={() => {}} />
-                    )
-                  }
-                />
-              ))
-            : null}
+
+          {!isEmpty(bidItems) &&
+            bidItems[0].items.map(item => (
+              <View style={styles.card}>
+                <ItemListCard isPriceShown={false} item={item} />
+                {!item.is_marked || isItemSelected(item._id) ? (
+                  <CheckBox
+                    value={isItemSelected(item._id)}
+                    tintColor="#22215B"
+                    onCheckColor="#22215B"
+                    disabled={false}
+                    boxType="square"
+                    style={styles.checkBox}
+                    lineWidth={1}
+                    onValueChange={isChecked =>
+                      handleSelectCheckbox(isChecked, item._id)
+                    }
+                  />
+                ) : (
+                  <IconButton
+                    icon="qrcode-scan"
+                    color="#22215B"
+                    onPress={() => makeScan(item._id)}
+                  />
+                )}
+              </View>
+            ))}
         </ScrollView>
         <>
           <View style={styles.buttonObject}>
@@ -207,22 +222,14 @@ const AcceptList = props => {
             />
           </View>
           <View style={styles.buttons}>
-            {showButtonsScan && (
-              <View style={styles.buttonBlock}>
-                <DarkButton
-                  text={T.t('title_continued_accept')}
-                  onPress={makeScan}
-                />
-              </View>
-            )}
-            {!showButtonsScan && (
-              <View style={styles.buttonBlock}>
-                <DarkButton
-                  text={T.t('title_accept_bid')}
-                  onPress={() => makeAcceptBid()}
-                />
-              </View>
-            )}
+            <View style={styles.buttonBlock}>
+              <DarkButton
+                text={`${T.t('title_accept_bid')}(${acceptedIds.length})`}
+                disabled={acceptedIds.length === 0}
+                onPress={() => makeAcceptBid()}
+              />
+            </View>
+
             <View style={styles.buttonBlock}>
               <TransparentButton text={T.t('cancel')} onPress={cancelScan} />
             </View>
@@ -312,32 +319,34 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height / 15,
   },
   buttonBlock: {
-    width: Dimensions.get('window').height / 4.3,
+    width: Dimensions.get('window').width / 2.4,
     textAlign: 'center',
+  },
+  selectAllButton: {
+    position: 'absolute',
+    zIndex: 100,
+    right: 10,
+    top: 45,
   },
   buttonObject: {
     display: 'flex',
-    width: Dimensions.get('window').height / 2,
-    marginBottom: -30,
-    paddingLeft: 13,
-    paddingRight: 13,
+    width: Dimensions.get('window').width / 1.1,
   },
   load: {
     marginTop: 10,
   },
   card: {
-    display: 'flex',
-    justifyContent: 'center',
-    width: Dimensions.get('window').width / 1.1,
-    marginBottom: 15,
+    flexDirection: 'row',
+    flexWrap: 'nowrap',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     borderRadius: 10,
+    padding: 5,
+    marginVertical: 10,
+    width: Dimensions.get('window').width / 1.1,
     backgroundColor: '#EDF6FF',
   },
-  cardTitle: {
-    fontSize: 14,
-    textTransform: 'uppercase',
-    textAlign: 'center',
-  },
+
   title: {
     fontSize: 14,
     paddingLeft: 15,
@@ -355,6 +364,7 @@ const styles = StyleSheet.create({
     marginBottom: -95,
     marginLeft: 20,
   },
+  checkBox: {height: 20, marginRight: 3},
   buttons: {
     marginTop: 15,
     display: 'flex',
@@ -362,11 +372,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     textAlign: 'center',
     justifyContent: 'space-around',
-    width: Dimensions.get('window').width,
+    width: Dimensions.get('window').width / 1.1,
     marginBottom: 70,
-  },
-  button: {
-    width: Dimensions.get('window').width / 2,
   },
   buttonTwo: {
     width: Dimensions.get('window').width / 2.4,
