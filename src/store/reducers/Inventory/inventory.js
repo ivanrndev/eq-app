@@ -3,6 +3,9 @@ import {
   SAVE_INVENTORY_SCANS,
   MAKE_STOCKTAKING,
   MAKE_STOCKTAKING_ERROR,
+  SET_GIVE_ITEM_QTY,
+  SET_INVENTORY_ITEM_QTY,
+  CLEAR_INVENTORY,
 } from '../../../actions/actionsType.js';
 
 const initialState = {
@@ -10,6 +13,7 @@ const initialState = {
   currentInventoryUser: '',
   inventoryError: false,
   makeStocktaking: '',
+  inventoryQuantityList: [],
 };
 
 const inventoryReducer = (state = initialState, action) => {
@@ -34,6 +38,28 @@ const inventoryReducer = (state = initialState, action) => {
         ...state,
         ...action.payload,
       };
+
+    case SET_INVENTORY_ITEM_QTY:
+      const existedItem = [...state.inventoryQuantityList].filter(
+        item => item.id !== action.payload.id,
+      );
+      const newList = [
+        ...existedItem,
+        {
+          id: action.payload.id,
+          quantity: action.payload.quantity,
+        },
+      ];
+      return {
+        ...state,
+        inventoryQuantityList: newList,
+      };
+    case CLEAR_INVENTORY: {
+      return {
+        ...state,
+        ...action.payload,
+      };
+    }
     default:
       return state;
   }

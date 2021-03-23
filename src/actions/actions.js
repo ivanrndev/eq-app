@@ -79,7 +79,8 @@ import {
   SAVE_USER_ACCEPT_BID,
   SEND_COMMENT,
   SEND_COMMENT_ERROR,
-  SET_ITEM_QTY,
+  SET_INVENTORY_ITEM_QTY,
+  SET_GIVE_ITEM_QTY,
   START_PAGE,
   SUCCES_IN_SERVICES,
   SUCCES_WRITE_OFF,
@@ -93,6 +94,9 @@ import {
   TRANSFERS_UPDATE_ERROR,
   UPDATE_SCAN_GIVE_LIST,
   USER_CURRENT_ID,
+  CLEAR_INVENTORY,
+  GET_MY_COMPANY_ITEMS,
+  GET_MY_COMPANY_ITEMS_ERROR,
 } from '../actions/actionsType.js';
 
 // Settings
@@ -982,9 +986,9 @@ export const loadMoreTransactions = status => dispatch => {
 };
 
 // Give actions
-export const setItemsQty = (id, quantity) => dispatch => {
+export const setGiveItemsQty = (id, quantity) => dispatch => {
   dispatch({
-    type: SET_ITEM_QTY,
+    type: SET_GIVE_ITEM_QTY,
     payload: {id, quantity},
   });
 };
@@ -1349,6 +1353,25 @@ export const makeAccept = (
 };
 
 // inventory actions
+export const setInventoryItemsQty = (id, quantity) => dispatch => {
+  dispatch({
+    type: SET_INVENTORY_ITEM_QTY,
+    payload: {id, quantity},
+  });
+};
+export const clearInventory = () => dispatch => {
+  dispatch({
+    type: CLEAR_INVENTORY,
+    payload: {
+      inventoryScanList: [],
+      currentInventoryUser: '',
+      inventoryError: false,
+      makeStocktaking: '',
+      inventoryQuantityList: [],
+    },
+  });
+};
+
 export const saveCurrentUserInventory = (id, nav, startPage) => dispatch => {
   dispatch({
     type: SAVE_CURRENT_INVENTORY_USER,
@@ -1377,12 +1400,18 @@ export const alreadyScanned = arr => dispatch => {
   });
 };
 
-export const makeStocktaking = (array, userId, nav) => dispatch => {
+export const makeStocktaking = (
+  userId,
+  idQtyArray,
+  addedItemsArray,
+  nav,
+) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
       .post(`${API_URL}/company/${company}/stocktaking/`, {
-        item_ids: array,
+        item_ids: idQtyArray,
         target: userId,
+        added_items: addedItemsArray,
       })
       .then(resp => {
         if (resp.status === 200) {
@@ -1669,6 +1698,41 @@ export const mountItemFromParent = (
       .catch(e => {
         if (!e.response.data.success) {
           dispatch(loader(false));
+        }
+      });
+  });
+};
+
+//company
+export const searchMyCompanyItems = (query, offset, limit) => dispatch => {
+  AsyncStorage.getItem('company').then(company => {
+    return axios
+      .get(`${API_URL}/company/${company}/item`, {
+        params: {search: query, offset, limit},
+      })
+      .then(resp => {
+        if (resp.status === 200) {
+          let data = resp.data.data ? resp.data.data : resp.data;
+          dispatch({
+            type: GET_MY_COMPANY_ITEMS,
+            payload: {
+              offSet: offset,
+              myloadMore: true,
+              myCompanyList: data,
+            },
+          });
+        }
+      })
+      .catch(e => {
+        if (!e.response.data.success) {
+          let error = getProperError(e.response.data.message.name);
+          dispatch({
+            type: GET_MY_COMPANY_ITEMS_ERROR,
+            payload: {
+              myError: error,
+              myloadMore: false,
+            },
+          });
         }
       });
   });

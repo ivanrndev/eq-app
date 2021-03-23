@@ -26,17 +26,17 @@ const InventoryScaner = props => {
         search={true}
         goTo={'Inventory'}
         clearGiveList={true}
-        title={T.t('inventorization')}
+        title={T.t('inventori')}
         switch={true}
         typeSwitchNFC={true}
-        pageToChosenItem="InventoryFinish"
+        pageToChosenItem="InventoryChooseMode"
       />
       <SafeAreaView />
       <View style={styles.body}>
         {scaner && (
           <Scanner
             nav={props.navigation}
-            page={'InventoryFinish'}
+            page={'InventoryChooseMode'}
             saveItems={true}
           />
         )}

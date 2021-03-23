@@ -1,12 +1,12 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
-  StyleSheet,
-  View,
   Dimensions,
   SafeAreaView,
   ScrollView,
+  StyleSheet,
+  View,
 } from 'react-native';
-import {Card, Title, Paragraph, Checkbox} from 'react-native-paper';
+import {Card, Paragraph, Title} from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
 import T from '../../i18n';
 // components
@@ -14,18 +14,16 @@ import Appbar from '../../components/Appbar';
 import {getProperErrorMessage} from '../../utils/helpers.js';
 // redux and actions
 import {useDispatch, useSelector} from 'react-redux';
-import {saveCurrentUserInventory} from '../../actions/actions.js';
+import {getUserList, saveCurrentUserInventory} from '../../actions/actions.js';
 
 const Inventory = props => {
   const dispatch = useDispatch();
-  const [checked, setChecked] = useState(false);
-  const settings = useSelector(state => state.settings);
   const users = useSelector(state => state.give);
   let showEmptyError = !users.userList.length;
   let error = getProperErrorMessage(users.getUsetError);
   const [userLists, setUserLists] = useState(users.userList);
   const [showText, setShowText] = useState(true);
-
+  useEffect(() => dispatch(getUserList(props.nav, '', 'Inventory')), []);
   useEffect(() => {
     AsyncStorage.getItem('role').then(role => {
       if (role === 'worker') {
@@ -62,24 +60,6 @@ const Inventory = props => {
               {showEmptyError && (
                 <Paragraph style={styles.text}>{T.t('no_users')}</Paragraph>
               )}
-              {/* {showText && (
-                <>
-                  <Paragraph style={styles.text}>
-                    По какому МОЛу провести инвентаризацию?
-                  </Paragraph>
-                  <Checkbox
-                    uncheckedColor={'#888'}
-                    color={'#3a6fdb'}
-                    status={checked ? 'checked' : 'unchecked'}
-                    onPress={() => {
-                      setChecked(!checked);
-                    }}
-                  />
-                  <Paragraph style={styles.textCheckbox}>
-                    Выбрать всех
-                  </Paragraph>
-                </>
-              )} */}
               {!error &&
                 userLists.map((item, index) => (
                   <Card
@@ -90,7 +70,7 @@ const Inventory = props => {
                         saveCurrentUserInventory(
                           item._id,
                           props.navigation,
-                          settings.startPageInventory,
+                          'InventoryChooseMode',
                         ),
                       );
                     }}>

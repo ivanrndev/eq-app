@@ -42,8 +42,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 15,
-    marginTop: 10,
+    marginBottom: 5,
+    marginTop: 5,
   },
   textContainer: {
     display: 'flex',

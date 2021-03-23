@@ -35,16 +35,16 @@ export const InventoryDone = props => {
         newScan={true}
         arrow={true}
         goTo={'Inventory'}
-        title={T.t('inventorization')}
+        title={T.t('inventori')}
         alreadyScannedBids={true}
         clearBidList={true}
       />
       <SafeAreaView />
       <View style={styles.body}>
         <View style={styles.container}>
-          <Title style={styles.title}>{T.t('inventorization_finished')}</Title>
+          <Title style={styles.title}>{T.t('inventori_finished')}</Title>
           {!!error && (
-            <Title style={styles.title}>{T.t('inventorization_error')}</Title>
+            <Title style={styles.title}>{T.t('inventori_error')}</Title>
           )}
           <View style={styles.buttonBlock}>
             <DarkButton text={T.t('menu')} onPress={endInventory} />

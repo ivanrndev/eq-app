@@ -8,6 +8,7 @@ import Scanner from '../../../../components/Scanner';
 
 const BackScanner = props => {
   const [scaner, setScaner] = useState(false);
+
   useFocusEffect(
     useCallback(() => {
       setScaner(true);
@@ -26,7 +27,7 @@ const BackScanner = props => {
         switch={true}
         typeSwitchNFC={true}
         search={true}
-        pageToChosenItem="BackInfo"
+        backFromService={true}
       />
       <SafeAreaView />
       <View style={styles.body}>

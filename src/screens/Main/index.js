@@ -96,7 +96,7 @@ const Main = props => {
             <CopilotText>
               <Button
                 nav={props.navigation}
-                text={T.t('inventorization')}
+                text={T.t('inventori')}
                 getUserList={true}
                 svg={'inventory'}
                 onPress={() => dispatch(changeIsMultiple(true))}

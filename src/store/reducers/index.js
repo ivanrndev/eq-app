@@ -12,6 +12,7 @@ import acceptReducer from './Accept/accept';
 import inventoryReducer from './Inventory/inventory';
 import commentsReducer from './Comments/comments';
 import settingsReducer from './Settings/settings.js';
+import companyItemsReducer from './CompanyItems/companyItems';
 
 export default combineReducers({
   auth: authReducer,
@@ -27,4 +28,5 @@ export default combineReducers({
   inventory: inventoryReducer,
   comments: commentsReducer,
   settings: settingsReducer,
+  companyItems: companyItemsReducer,
 });

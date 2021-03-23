@@ -72,7 +72,7 @@ export const InventoryFinish = props => {
         newScan={true}
         arrow={true}
         goTo={settings.startPageInventory}
-        title={T.t('inventorization')}
+        title={T.t('inventori')}
         alreadyScanned={true}
         clearBidList={true}
       />

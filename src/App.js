@@ -61,6 +61,8 @@ import MountList from './screens/Ident/MountList';
 import MountNoMarking from './screens/Ident/MountNoMarking';
 import GiveSetQuantity from './screens/AcceptGive/Give/GiveListCheck/GiveSetQuantity';
 import Search from './components/Search';
+import InventoryChooseMode from './screens/Inventory/InventoryChooseMode';
+import SetInventoryQty from './screens/Inventory/SetInventoryQty';
 
 const theme = {
   ...DefaultTheme,
@@ -126,6 +128,10 @@ const App = () => {
                 <Drawer.Screen name="AcceptFinish" component={AcceptFinish} />
                 <Drawer.Screen name="Inventory" component={Inventory} />
                 <Drawer.Screen
+                  name="InventoryChooseMode"
+                  component={InventoryChooseMode}
+                />
+                <Drawer.Screen
                   name="InventoryScaner"
                   component={InventoryScaner}
                 />
@@ -134,6 +140,10 @@ const App = () => {
                   component={InventoryFinish}
                 />
                 <Drawer.Screen name="InventoryDone" component={InventoryDone} />
+                <Drawer.Screen
+                  name="SetInventoryQty"
+                  component={SetInventoryQty}
+                />
                 <Drawer.Screen name="Comments" component={Comments} />
                 <Drawer.Screen name="Settings" component={Settings} />
                 <Drawer.Screen name="TransfersEdit" component={TransfersEdit} />

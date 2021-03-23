@@ -1,33 +1,29 @@
-import React, {useEffect, useState} from 'react';
 import {Dimensions, FlatList, StyleSheet, View} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import {useNavigation} from '@react-navigation/native';
 import {Card, Paragraph, Searchbar} from 'react-native-paper';
 import T from '../../i18n';
-import {getSearchItem, loader, searchMyItem} from '../../actions/actions';
-import {actionCheckError} from '../../utils/helpers';
+import React, {useState} from 'react';
 import ItemListCard from '../ItemListCard';
+import {actionCheckError} from '../../utils/helpers';
+import {getSearchItem, loader, myloadMore} from '../../actions/actions';
+import {useNavigation} from '@react-navigation/native';
+import {useDispatch} from 'react-redux';
 
-const Search = ({isSearchForGiveItem, pageToChosenItem, setIsSearchOpen}) => {
-  const dispatch = useDispatch();
-  const [onMe, itemsLimit] = useSelector(({onMe, auth}) => [
-    onMe,
-    auth.currentCompany.itemsLimit,
-  ]);
+const Search = ({
+  list,
+  listAction,
+  pageToChosenItem,
+  setIsSearchOpen,
+  isSearchForGiveItem = true,
+}) => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const [search, setSearch] = useState('');
-  const [searchList, setSearchList] = useState([]);
-  const showEmptyError = !onMe.myList.length && search.length !== 0;
-
-  useEffect(
-    () =>
-      search.length === 0 ? setSearchList([]) : setSearchList(onMe.myList),
-    [search],
-  );
+  const showEmptyError = !list.length && search.length !== 0;
 
   const handleItemSearch = query => {
     setSearch(query);
-    dispatch(searchMyItem(query, 0, true, itemsLimit));
+    dispatch(myloadMore(true));
+    dispatch(listAction(query, 0, true));
   };
 
   const handleCurrentScan = item => {
@@ -38,6 +34,7 @@ const Search = ({isSearchForGiveItem, pageToChosenItem, setIsSearchOpen}) => {
     setIsSearchOpen(false);
     setSearch('');
   };
+
   const renderItem = ({item}) => (
     <Card style={styles.card} onPress={() => handleCurrentScan(item)}>
       <ItemListCard item={item} />
@@ -48,7 +45,7 @@ const Search = ({isSearchForGiveItem, pageToChosenItem, setIsSearchOpen}) => {
     <View style={styles.body}>
       <Searchbar
         placeholder={T.t('search')}
-        onChangeText={query => handleItemSearch(query)}
+        onChangeText={val => handleItemSearch(val)}
         value={search}
         style={styles.search}
       />
@@ -59,7 +56,7 @@ const Search = ({isSearchForGiveItem, pageToChosenItem, setIsSearchOpen}) => {
         )}
         <FlatList
           renderItem={item => renderItem(item)}
-          data={searchList}
+          data={list}
           keyExtractor={item => item._id}
         />
       </View>

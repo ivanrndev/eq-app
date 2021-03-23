@@ -5,7 +5,7 @@ import {
   SUCCES_TRANSFER,
   TRANSFER,
   CLEAR_USER_LIST,
-  SET_ITEM_QTY,
+  SET_GIVE_ITEM_QTY,
 } from '../../../actions/actionsType.js';
 
 const initialState = {
@@ -50,7 +50,7 @@ const giveReducer = (state = initialState, action) => {
         ...state,
         ...action.payload,
       };
-    case SET_ITEM_QTY:
+    case SET_GIVE_ITEM_QTY:
       const existedItem = [...state.giveList].filter(
         item => item.id !== action.payload.id,
       );

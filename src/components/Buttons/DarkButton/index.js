@@ -1,6 +1,12 @@
 /* eslint-disable prettier/prettier */
 import React, {useState} from 'react';
-import {Dimensions, TouchableHighlight, StyleSheet, View, Text} from 'react-native';
+import {
+  Dimensions,
+  TouchableHighlight,
+  StyleSheet,
+  View,
+  Text,
+} from 'react-native';
 
 const DarkButton = props => {
   const [pressed, setPressed] = useState(false);
@@ -44,8 +50,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 15,
-    marginTop: 10,
+    marginBottom: 5,
+    marginTop: 5,
   },
   textContainer: {
     display: 'flex',

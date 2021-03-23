@@ -15,6 +15,7 @@ import {
   clearBidList,
   clearComments,
   clearGiveList,
+  clearInventory,
   clearMarking,
   clearTransaction,
   clearTransfer,
@@ -24,6 +25,8 @@ import {
   switchStartPage,
 } from '../../actions/actions.js';
 import Search from '../Search';
+import BackSearch from '../../screens/Service/Back/BackSearch';
+import GiveSearch from '../../screens/AcceptGive/Give/GiveScaner/GiveSearch';
 
 const AppbarCustom = props => {
   const dispatch = useDispatch();
@@ -40,6 +43,14 @@ const AppbarCustom = props => {
       setIsConnection(true);
     }
   });
+  const SearchComponent = () => {
+    if (props.backFromService) {
+      return <BackSearch setIsSearchOpen={setIsSearchOpen} />;
+    }
+    if (props.giveSearch) {
+      return <GiveSearch setIsSearchOpen={setIsSearchOpen} />;
+    }
+  };
 
   return (
     <>
@@ -88,6 +99,9 @@ const AppbarCustom = props => {
             if (props.clearMarking) {
               dispatch(clearMarking());
             }
+            if (props.clearInventory) {
+              dispatch(clearInventory());
+            }
             if (props.menu) {
               props.navigation.openDrawer();
             }
@@ -130,13 +144,7 @@ const AppbarCustom = props => {
           />
         )}
       </Appbar.Header>
-      {isSearchOpen && (
-        <Search
-          pageToChosenItem={props.pageToChosenItem}
-          isSearchForGiveItem={props.isSearchForGiveItem}
-          setIsSearchOpen={setIsSearchOpen}
-        />
-      )}
+      {isSearchOpen && <SearchComponent />}
       <View style={styles.borderRadius} />
       <Portal>
         <Snackbar
