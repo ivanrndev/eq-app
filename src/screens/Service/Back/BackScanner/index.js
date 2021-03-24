@@ -51,12 +51,6 @@ const styles = StyleSheet.create({
   title: {
     color: '#fff',
   },
-  input: {
-    marginBottom: 10,
-    marginTop: 10,
-    width: Dimensions.get('window').width / 1.3,
-    backgroundColor: '#fff',
-  },
   text: {
     fontSize: 13,
     color: '#fff',

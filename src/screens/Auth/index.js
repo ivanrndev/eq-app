@@ -15,7 +15,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {isEmpty} from 'lodash';
 import T from '../../i18n';
 // utils
-import {validateEmail, validatePhone} from '../../utils/validateEmail.js';
+import {validateEmail, validatePhone} from '../../utils/validation.js';
 import {getForgotEmailMesage} from '../../utils/helpers.js';
 import DarkButton from '../../components/Buttons/DarkButton';
 // redux
