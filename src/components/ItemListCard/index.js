@@ -5,11 +5,11 @@ import T from '../../i18n';
 import {getTotalLotPrice} from '../../utils/helpers';
 import {useQuantityUnitsAndCurrency} from '../../hooks/useQuantityUnitsAndCurrency';
 
-const ItemListCard = ({item, isPriceShown = true, children}) => {
+const ItemListCard = ({item, width, isPriceShown = true, children}) => {
   const {currency} = useQuantityUnitsAndCurrency();
 
   return (
-    <Card.Content>
+    <Card.Content style={{width}}>
       {item.metadata.title ? (
         <Title style={styles.cardTitle}>
           {T.t('detail_title')}: {item.metadata.title}

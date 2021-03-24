@@ -11,7 +11,7 @@ import DarkButton from '../../components/Buttons/DarkButton';
 import TransparentButton from '../../components/Buttons/TransparentButton';
 import ItemSetQuantityArea from '../../components/ItemSetQuantityArea';
 
-const SetItemQuantity = ({actionName, pageToRedirect, title}) => {
+const SetItemQuantity = ({actionName, pageToRedirect, title, mode}) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [id, metaData] = useSelector(({scan}) => [
@@ -57,7 +57,7 @@ const SetItemQuantity = ({actionName, pageToRedirect, title}) => {
             </Text>
             <ItemSetQuantityArea
               isEnteredQuantityValid={isEnteredQuantityValid}
-              mode="title_give_quantity"
+              mode={mode}
               quantity={quantity}
               units={units}
               value={selectedQuantity}

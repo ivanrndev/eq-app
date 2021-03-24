@@ -71,6 +71,7 @@ const AcceptList = () => {
     }
   });
   const isItemSelected = id => acceptedIds.includes(id);
+  const acceptItemsCount = accept.length > 0 ? `(${acceptedIds.length})` : '';
 
   useEffect(() => {
     if (!isEmpty(bidItems)) {
@@ -190,7 +191,7 @@ const AcceptList = () => {
           {!isEmpty(bidItems) &&
             bidItems[0].items.map(item => (
               <View style={styles.card}>
-                <ItemListCard isPriceShown={false} item={item} />
+                <ItemListCard isPriceShown={false} item={item} width="70%" />
                 {!item.is_marked || isItemSelected(item._id) ? (
                   <CheckBox
                     value={isItemSelected(item._id)}
@@ -224,7 +225,7 @@ const AcceptList = () => {
           <View style={styles.buttons}>
             <View style={styles.buttonBlock}>
               <DarkButton
-                text={`${T.t('title_accept_bid')}(${acceptedIds.length})`}
+                text={`${T.t('title_accept_bid')}${acceptItemsCount}`}
                 disabled={acceptedIds.length === 0}
                 onPress={() => makeAcceptBid()}
               />

@@ -71,6 +71,7 @@
     "title_service_quantity": "Specify quantity of items which need to go to the service center",
     "title_write_off_quantity": "Specify quantity of items which need to be wrote off",
     "title_give_quantity": "Specify quantity of items which you want to give:",
+    "title_inventory_quantity": "Specify current quantity of items:",
     "error_service_quantity": "The specified value exceeds\navailable balance, operation cannot\nbe committed",
     "send": "Send",
     "menu": "Menu",

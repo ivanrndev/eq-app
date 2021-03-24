@@ -1,13 +1,24 @@
 import React, {useCallback, useState} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
-import {StyleSheet, View, Dimensions, SafeAreaView} from 'react-native';
+import {Dimensions, SafeAreaView, StyleSheet, View} from 'react-native';
 import T from '../../../i18n';
 // components
 import Appbar from '../../../components/Appbar';
 import Scanner from '../../../components/Scanner';
+import {useSelector} from 'react-redux';
+import {searchMyCompanyItems} from '../../../actions/actions';
 
 const InventoryScaner = props => {
   const [scaner, setScaner] = useState(false);
+  const [companyItemList, currentInventoryUser] = useSelector(
+    ({companyItems, inventory}) => [
+      companyItems.myCompanyList,
+      inventory.currentInventoryUser,
+    ],
+  );
+  const list = companyItemList.filter(
+    item => item.responsible === currentInventoryUser,
+  );
   useFocusEffect(
     useCallback(() => {
       setScaner(true);
@@ -24,6 +35,8 @@ const InventoryScaner = props => {
         newScan={true}
         arrow={true}
         search={true}
+        list={list}
+        listAction={searchMyCompanyItems}
         goTo={'Inventory'}
         clearGiveList={true}
         title={T.t('inventori')}

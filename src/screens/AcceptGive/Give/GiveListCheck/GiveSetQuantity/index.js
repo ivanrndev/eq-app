@@ -8,6 +8,7 @@ const GiveSetQuantity = () => (
     actionName={setGiveItemsQty}
     pageToRedirect="GiveListCheck"
     title={T.t('give_title')}
+    mode="title_give_quantity"
   />
 );
 

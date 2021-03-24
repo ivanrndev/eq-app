@@ -1,14 +1,19 @@
 import React, {useCallback, useState} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
-import {StyleSheet, View, Dimensions, SafeAreaView} from 'react-native';
+import {Dimensions, SafeAreaView, StyleSheet, View} from 'react-native';
 import T from '../../../../i18n';
 // components
 import Appbar from '../../../../components/Appbar';
 import Scanner from '../../../../components/Scanner';
+import {useSelector} from 'react-redux';
+import {searchMyCompanyItems} from '../../../../actions/actions';
 
 const BackScanner = props => {
   const [scaner, setScaner] = useState(false);
-
+  const companyItemList = useSelector(
+    ({companyItems}) => companyItems.myCompanyList,
+  );
+  const list = companyItemList.filter(item => item.repair);
   useFocusEffect(
     useCallback(() => {
       setScaner(true);
@@ -28,6 +33,9 @@ const BackScanner = props => {
         typeSwitchNFC={true}
         search={true}
         backFromService={true}
+        list={list}
+        listAction={searchMyCompanyItems}
+        pageToChosenItem="BackInfo"
       />
       <SafeAreaView />
       <View style={styles.body}>

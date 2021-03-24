@@ -1,12 +1,12 @@
-import {Dimensions, FlatList, StyleSheet, View} from 'react-native';
+import React, {useState} from 'react';
+import {useDispatch} from 'react-redux';
+import {Dimensions, FlatList, StyleSheet, View, ScrollView} from 'react-native';
 import {Card, Paragraph, Searchbar} from 'react-native-paper';
 import T from '../../i18n';
-import React, {useState} from 'react';
+import {useNavigation} from '@react-navigation/native';
 import ItemListCard from '../ItemListCard';
 import {actionCheckError} from '../../utils/helpers';
 import {getSearchItem, loader, myloadMore} from '../../actions/actions';
-import {useNavigation} from '@react-navigation/native';
-import {useDispatch} from 'react-redux';
 
 const Search = ({
   list,
@@ -19,7 +19,7 @@ const Search = ({
   const dispatch = useDispatch();
   const [search, setSearch] = useState('');
   const showEmptyError = !list.length && search.length !== 0;
-
+  const renderedList = search.length === 0 ? [] : list;
   const handleItemSearch = query => {
     setSearch(query);
     dispatch(myloadMore(true));
@@ -43,23 +43,23 @@ const Search = ({
 
   return (
     <View style={styles.body}>
-      <Searchbar
-        placeholder={T.t('search')}
-        onChangeText={val => handleItemSearch(val)}
-        value={search}
-        style={styles.search}
-      />
+      <ScrollView style={styles.wrap}>
+        <Searchbar
+          placeholder={T.t('search')}
+          onChangeText={val => handleItemSearch(val)}
+          value={search}
+          style={styles.search}
+        />
 
-      <View>
         {showEmptyError && (
           <Paragraph style={styles.text}>{T.t('error_not_found')}</Paragraph>
         )}
         <FlatList
           renderItem={item => renderItem(item)}
-          data={list}
+          data={renderedList}
           keyExtractor={item => item._id}
         />
-      </View>
+      </ScrollView>
     </View>
   );
 };
@@ -67,13 +67,15 @@ const Search = ({
 const styles = StyleSheet.create({
   body: {
     zIndex: 1,
-    marginTop: -10,
     display: 'flex',
     paddingTop: 30,
-    paddingBottom: 20,
+    paddingBottom: 30,
     alignItems: 'center',
     backgroundColor: '#D3E3F2',
     height: Dimensions.get('window').height,
+  },
+  wrap: {
+    marginBottom: 100,
   },
   search: {
     backgroundColor: '#EDF6FF',
@@ -91,7 +93,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     paddingBottom: 5,
     color: '#7A7A9D',
-    width: Dimensions.get('window').width / 1.3,
+    width: Dimensions.get('window').width / 1.1,
   },
 });
 

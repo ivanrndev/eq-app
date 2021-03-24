@@ -25,8 +25,6 @@ import {
   switchStartPage,
 } from '../../actions/actions.js';
 import Search from '../Search';
-import BackSearch from '../../screens/Service/Back/BackSearch';
-import GiveSearch from '../../screens/AcceptGive/Give/GiveScaner/GiveSearch';
 
 const AppbarCustom = props => {
   const dispatch = useDispatch();
@@ -43,14 +41,6 @@ const AppbarCustom = props => {
       setIsConnection(true);
     }
   });
-  const SearchComponent = () => {
-    if (props.backFromService) {
-      return <BackSearch setIsSearchOpen={setIsSearchOpen} />;
-    }
-    if (props.giveSearch) {
-      return <GiveSearch setIsSearchOpen={setIsSearchOpen} />;
-    }
-  };
 
   return (
     <>
@@ -114,6 +104,9 @@ const AppbarCustom = props => {
             if (props.clearlocationLoc) {
               dispatch(changeLocationLoc(''));
             }
+            if (props.search) {
+              setIsSearchOpen(false);
+            }
           }}
         />
         <Appbar.Content title={props.title} titleStyle={styles.content} />
@@ -144,7 +137,15 @@ const AppbarCustom = props => {
           />
         )}
       </Appbar.Header>
-      {isSearchOpen && <SearchComponent />}
+      {isSearchOpen && (
+        <Search
+          list={props.list}
+          listAction={props.listAction}
+          pageToChosenItem={props.pageToChosenItem}
+          setIsSearchOpen={setIsSearchOpen}
+          isSearchForGiveItem={props.isSearchForGiveItem}
+        />
+      )}
       <View style={styles.borderRadius} />
       <Portal>
         <Snackbar

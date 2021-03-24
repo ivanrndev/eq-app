@@ -8,6 +8,7 @@ const SetInventoryQty = () => (
     actionName={setInventoryItemsQty}
     pageToRedirect="InventoryChooseMode"
     title={T.t('inventori')}
+    mode="title_inventory_quantity"
   />
 );
 
