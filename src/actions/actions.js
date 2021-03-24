@@ -1392,7 +1392,7 @@ export const saveCurrentUserInventory = (id, nav, startPage) => dispatch => {
   nav.navigate(startPage);
 };
 
-export const alreadyScanned = arr => dispatch => {
+export const saveInventoryItem = arr => dispatch => {
   dispatch({
     type: SAVE_INVENTORY_SCANS,
     payload: {

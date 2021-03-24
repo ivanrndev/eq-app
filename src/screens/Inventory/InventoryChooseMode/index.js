@@ -19,7 +19,7 @@ import ItemListCard from '../../../components/ItemListCard';
 
 import {
   allowNewScan,
-  alreadyScanned,
+  saveInventoryItem,
   clearGiveList,
   loader,
   makeStocktaking,
@@ -47,17 +47,17 @@ const InventoryChooseMode = () => {
       : '';
 
   useEffect(() => {
-    let isDuplicate = false;
-    isDuplicate = isAlreadyScaned(scan.selectGiveId);
+    let isDuplicate = isAlreadyScaned(scan.selectGiveId);
     if (isDuplicate) {
       setError(getInventoryMesageError('Duplicate', scan.currentScan));
     }
-
     if (
       !isAlreadyScaned(scan.selectGiveId) &&
       Object.keys(scan.scanInfo).length > 0
     ) {
-      dispatch(alreadyScanned([...inventory.inventoryScanList, scan.scanInfo]));
+      dispatch(
+        saveInventoryItem([...inventory.inventoryScanList, scan.scanInfo]),
+      );
     }
   }, [scan.selectGiveId]);
 
@@ -157,7 +157,7 @@ const InventoryChooseMode = () => {
           text={`${T.t('search')} ${T.t('qr_code')}`}
         />
         <TransparentButton
-          onPress={() => {}}
+          onPress={() => navigation.navigate('CreateItem')}
           text={`${T.t('create')} ${T.t('qr_code')}`}
         />
         <DarkButton

@@ -7,7 +7,7 @@ import T from '../../i18n';
 
 import {
   allowNewScan,
-  alreadyScanned,
+  saveInventoryItem,
   alreadyScannedBids,
   changeIsMultiple,
   changeLocationLoc,
@@ -84,7 +84,7 @@ const AppbarCustom = props => {
               dispatch(clearGiveList());
             }
             if (props.alreadyScanned) {
-              dispatch(alreadyScanned([]));
+              dispatch(saveInventoryItem([]));
             }
             if (props.clearMarking) {
               dispatch(clearMarking());

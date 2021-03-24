@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {useDispatch} from 'react-redux';
-import {Dimensions, FlatList, StyleSheet, View, ScrollView} from 'react-native';
+import {Dimensions, FlatList, ScrollView, StyleSheet, View} from 'react-native';
 import {Card, Paragraph, Searchbar} from 'react-native-paper';
 import T from '../../i18n';
 import {useNavigation} from '@react-navigation/native';

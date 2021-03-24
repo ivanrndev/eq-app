@@ -118,7 +118,7 @@ const GiveListCheck = props => {
             <Paragraph style={styles.text}>{T.t('no_item_transfer')}</Paragraph>
           )}
           {scan.scanGiveList.map(item => (
-            <Card style={styles.card}>
+            <Card style={styles.card} key={item._id}>
               <ItemListCard item={item} isPriceShown={false}>
                 {setItemQty(item._id) && (
                   <View style={styles.giveArea}>

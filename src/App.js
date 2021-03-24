@@ -62,6 +62,7 @@ import GiveSetQuantity from './screens/AcceptGive/Give/GiveListCheck/GiveSetQuan
 import Search from './components/Search';
 import InventoryChooseMode from './screens/Inventory/InventoryChooseMode';
 import SetInventoryQty from './screens/Inventory/SetInventoryQty';
+import CreateItem from './screens/Inventory/InventoryChooseMode/CreateItem';
 
 const theme = {
   ...DefaultTheme,
@@ -139,6 +140,7 @@ const App = () => {
                   name="SetInventoryQty"
                   component={SetInventoryQty}
                 />
+                <Drawer.Screen name="CreateItem" component={CreateItem} />
                 <Drawer.Screen name="Comments" component={Comments} />
                 <Drawer.Screen name="Settings" component={Settings} />
                 <Drawer.Screen name="TransfersEdit" component={TransfersEdit} />

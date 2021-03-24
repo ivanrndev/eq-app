@@ -11,7 +11,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   clearGiveList,
   allowNewScan,
-  alreadyScanned,
+  saveInventoryItem,
   changeIsMultiple,
 } from '../../../actions/actions.js';
 
@@ -25,7 +25,7 @@ export const InventoryDone = props => {
     props.navigation.navigate('Home');
     dispatch(clearGiveList());
     dispatch(allowNewScan(true));
-    dispatch(alreadyScanned([]));
+    dispatch(saveInventoryItem([]));
   };
 
   return (
