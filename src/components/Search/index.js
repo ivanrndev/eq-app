@@ -13,13 +13,14 @@ const Search = ({
   listAction,
   pageToChosenItem,
   setIsSearchOpen,
-  isSearchForGiveItem = true,
+  isSearchForGiveItem,
 }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [search, setSearch] = useState('');
   const showEmptyError = !list.length && search.length !== 0;
   const renderedList = search.length === 0 ? [] : list;
+
   const handleItemSearch = query => {
     setSearch(query);
     dispatch(myloadMore(true));

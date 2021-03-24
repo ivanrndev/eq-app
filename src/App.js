@@ -48,7 +48,6 @@ import AcceptScaner from './screens/AcceptGive/Accept/AcceptScaner';
 import AcceptFinish from './screens/AcceptGive/Accept/AcceptFinish';
 import Inventory from './screens/Inventory';
 import InventoryScaner from './screens/Inventory/InventoryScaner';
-import InventoryFinish from './screens/Inventory/InventoryFinish';
 import InventoryDone from './screens/Inventory/InventoryDone';
 import Comments from './screens/Сomments/';
 import CustomDrawer from './components/Drawer';
@@ -134,10 +133,6 @@ const App = () => {
                 <Drawer.Screen
                   name="InventoryScaner"
                   component={InventoryScaner}
-                />
-                <Drawer.Screen
-                  name="InventoryFinish"
-                  component={InventoryFinish}
                 />
                 <Drawer.Screen name="InventoryDone" component={InventoryDone} />
                 <Drawer.Screen

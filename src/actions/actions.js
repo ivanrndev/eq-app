@@ -365,6 +365,7 @@ export const getSearchItem = (id, isSearchForGiveItem = false) => dispatch => {
       .then(resp => {
         if (resp.status === 200) {
           let checkErrors = actionCheckError(resp.data);
+
           if (checkErrors) {
             dispatch({
               type: ERROR_CURRENT_SCAN_INFO,

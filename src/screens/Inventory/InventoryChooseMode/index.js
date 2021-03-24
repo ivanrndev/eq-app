@@ -4,13 +4,13 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  View,
   TouchableOpacity,
+  View,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import T from '../../../i18n';
-import {Card, Snackbar, Title} from 'react-native-paper';
+import {Card, Snackbar} from 'react-native-paper';
 
 import TransparentButton from '../../../components/Buttons/TransparentButton';
 import Appbar from '../../../components/Appbar';
@@ -21,10 +21,8 @@ import {
   allowNewScan,
   alreadyScanned,
   clearGiveList,
-  clearInventory,
   loader,
   makeStocktaking,
-  setInventoryItemsQty,
 } from '../../../actions/actions';
 import {
   getInventoryMesageError,
@@ -47,11 +45,8 @@ const InventoryChooseMode = () => {
     inventory.inventoryScanList.length > 0
       ? `(${inventory.inventoryScanList.length})`
       : '';
-  useEffect(() => {
-    if (scan.scanInfoError !== 'InRepair' && scan.scanInfoError !== 'IsBan') {
-      setError(getInventoryMesageError(scan.scanInfoError, scan.currentScan));
-    }
 
+  useEffect(() => {
     let isDuplicate = false;
     isDuplicate = isAlreadyScaned(scan.selectGiveId);
     if (isDuplicate) {
@@ -60,12 +55,11 @@ const InventoryChooseMode = () => {
 
     if (
       !isAlreadyScaned(scan.selectGiveId) &&
-      scan.scanInfoError !== 'NotFound' &&
       Object.keys(scan.scanInfo).length > 0
     ) {
       dispatch(alreadyScanned([...inventory.inventoryScanList, scan.scanInfo]));
     }
-  }, [scan.scanGiveList, scan.scanInfoError]);
+  }, [scan.selectGiveId]);
 
   const findInventoryItem = () => {
     navigation.navigate(settings.startPageInventory);
@@ -109,6 +103,7 @@ const InventoryChooseMode = () => {
         goTo={'Inventory'}
         isMutiple={true}
         title={T.t('inventori')}
+        isSearchForGiveItem={false}
       />
 
       <ScrollView contentContainerStyle={styles.cards}>

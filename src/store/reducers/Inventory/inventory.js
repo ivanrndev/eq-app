@@ -3,7 +3,6 @@ import {
   SAVE_INVENTORY_SCANS,
   MAKE_STOCKTAKING,
   MAKE_STOCKTAKING_ERROR,
-  SET_GIVE_ITEM_QTY,
   SET_INVENTORY_ITEM_QTY,
   CLEAR_INVENTORY,
 } from '../../../actions/actionsType.js';
