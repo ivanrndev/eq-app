@@ -14,6 +14,7 @@ import {
   CHANGE_STATUS_MY_LOAD_MORE,
   CLEAR_BID_LIST,
   CLEAR_COMMENTS,
+  CLEAR_INVENTORY,
   CLEAR_MARKING,
   CLEAR_SCAN_GIVE_LIST,
   CLEAR_TRANSACTIONS_LIST,
@@ -33,6 +34,8 @@ import {
   GET_COMMENTS_ERROR,
   GET_COMPANY_INFO,
   GET_COMPANY_INFO_ERROR,
+  GET_COUNT_MY_COMPANY_ITEMS,
+  GET_COUNT_MY_COMPANY_ITEMS_ERROR,
   GET_MY_ITEMS,
   GET_MY_ITEMS_ERROR,
   GET_MY_ITEMS_SEARCH,
@@ -75,12 +78,15 @@ import {
   SAVE_CURRENT_SEARCH,
   SAVE_CURRENT_SEARCH_ERROR,
   SAVE_GIVE_ITEM_INFO_LIST,
+  SAVE_INVENTORY_CREATED_ITEM,
   SAVE_INVENTORY_SCANS,
   SAVE_USER_ACCEPT_BID,
+  SEARCH_MY_COMPANY_ITEMS,
+  SEARCH_MY_COMPANY_ITEMS_ERROR,
   SEND_COMMENT,
   SEND_COMMENT_ERROR,
-  SET_INVENTORY_ITEM_QTY,
   SET_GIVE_ITEM_QTY,
+  SET_INVENTORY_ITEM_QTY,
   START_PAGE,
   SUCCES_IN_SERVICES,
   SUCCES_WRITE_OFF,
@@ -94,10 +100,7 @@ import {
   TRANSFERS_UPDATE_ERROR,
   UPDATE_SCAN_GIVE_LIST,
   USER_CURRENT_ID,
-  CLEAR_INVENTORY,
-  GET_MY_COMPANY_ITEMS,
-  GET_MY_COMPANY_ITEMS_ERROR,
-} from '../actions/actionsType.js';
+} from './actionsType';
 
 // Settings
 export const nfc = (
@@ -261,7 +264,7 @@ export const logOut = (nav, ifNav = true) => dispatch => {
   }
 };
 
-export const currentUser = props => dispatch => {
+export const currentUser = () => dispatch => {
   return axios.get('/users/me').then(resp => {
     if (resp.status === 200) {
       // dispatch(getCompanyInfo());
@@ -698,7 +701,6 @@ export const getMarkingList = (status, nav, page = true) => dispatch => {
       })
       .catch(e => {
         if (!e.response.data.success) {
-          console.log('Ошибка', e.response.data);
           let error = getProperError(e.response.data.message.name);
           dispatch({
             type: MARKING_ERROR,
@@ -995,6 +997,7 @@ export const setGiveItemsQty = (id, quantity) => dispatch => {
 };
 
 export const getUserList = (nav, search = '', page = '') => dispatch => {
+  dispatch(loader(true));
   AsyncStorage.getItem('company').then(company => {
     return axios
       .get(`${API_URL}/company/${company}/user`, {
@@ -1400,6 +1403,17 @@ export const saveInventoryItem = arr => dispatch => {
     },
   });
 };
+export const saveCreatedInventoryItem = obj => dispatch => {
+  dispatch({
+    type: SAVE_INVENTORY_CREATED_ITEM,
+    payload: {
+      scanInfo: obj,
+      scanInfoError: false,
+      selectGiveId: obj._id,
+      isInfoOpen: true,
+    },
+  });
+};
 
 export const makeStocktaking = (
   userId,
@@ -1565,7 +1579,7 @@ export const forgotPassword = key => dispatch => {
     });
 };
 
-export const resetPassInfo = status => dispatch => {
+export const resetPassInfo = () => dispatch => {
   dispatch({
     type: RESET_PASS_INFO,
     payload: {
@@ -1642,7 +1656,7 @@ export const deleteTransfer = (nav, id, route) => dispatch => {
 };
 
 // locations
-export const getLocations = props => dispatch => {
+export const getLocations = () => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios.get(`/company/${company}/locations`).then(resp => {
       if (resp.status === 200) {
@@ -1705,7 +1719,7 @@ export const mountItemFromParent = (
 };
 
 //company
-export const searchMyCompanyItems = (query, offset, limit) => dispatch => {
+export const searchMyCompanyItems = (query = '', offset, limit) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
       .get(`${API_URL}/company/${company}/item`, {
@@ -1715,7 +1729,7 @@ export const searchMyCompanyItems = (query, offset, limit) => dispatch => {
         if (resp.status === 200) {
           let data = resp.data.data ? resp.data.data : resp.data;
           dispatch({
-            type: GET_MY_COMPANY_ITEMS,
+            type: SEARCH_MY_COMPANY_ITEMS,
             payload: {
               offSet: offset,
               myloadMore: true,
@@ -1728,7 +1742,38 @@ export const searchMyCompanyItems = (query, offset, limit) => dispatch => {
         if (!e.response.data.success) {
           let error = getProperError(e.response.data.message.name);
           dispatch({
-            type: GET_MY_COMPANY_ITEMS_ERROR,
+            type: SEARCH_MY_COMPANY_ITEMS_ERROR,
+            payload: {
+              myError: error,
+              myloadMore: false,
+            },
+          });
+        }
+      });
+  });
+};
+export const getTotalCountMyCompanyItems = () => dispatch => {
+  AsyncStorage.getItem('company').then(company => {
+    return axios
+      .get(`${API_URL}/company/${company}/item`, {
+        params: {offset: 0, limit: 1},
+      })
+      .then(resp => {
+        if (resp.status === 200) {
+          dispatch({
+            type: GET_COUNT_MY_COMPANY_ITEMS,
+            payload: {
+              myloadMore: true,
+              totalItemsCount: resp.data.count,
+            },
+          });
+        }
+      })
+      .catch(e => {
+        if (!e.response.data.success) {
+          let error = getProperError(e.response.data.message.name);
+          dispatch({
+            type: GET_COUNT_MY_COMPANY_ITEMS_ERROR,
             payload: {
               myError: error,
               myloadMore: false,

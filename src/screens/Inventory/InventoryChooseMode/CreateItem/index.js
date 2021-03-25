@@ -1,5 +1,5 @@
-import React from 'react';
-import {Dimensions, FlatList, StyleSheet, View, Text} from 'react-native';
+import React, {useState} from 'react';
+import {Dimensions, FlatList, StyleSheet, Text, View} from 'react-native';
 import T from '../../../../i18n';
 import {useNavigation} from '@react-navigation/native';
 
@@ -8,6 +8,9 @@ import {Button, Card, Menu, TextInput} from 'react-native-paper';
 import DarkButton from '../../../../components/Buttons/DarkButton';
 import TransparentButton from '../../../../components/Buttons/TransparentButton';
 import {validateFloatNumbers} from '../../../../utils/validation';
+import {saveCreatedInventoryItem} from '../../../../actions/actions';
+import {useDispatch} from 'react-redux';
+
 const initialFormValues = {
   type: '',
   title: '',
@@ -21,12 +24,14 @@ const initialErrors = {
   quantity: '',
 };
 const units = [T.t('piece'), T.t('kg'), T.t('litre'), T.t('tons')];
+
 const CreateItem = () => {
   const navigation = useNavigation();
-  const [visible, setVisible] = React.useState(false);
-  const [selectedUnits, setSelectedUnits] = React.useState(T.t('piece'));
-  const [formValues, setFormValues] = React.useState(initialFormValues);
-  const [errors, setErrors] = React.useState(initialErrors);
+  const dispatch = useDispatch();
+  const [visible, setVisible] = useState(false);
+  const [selectedUnits, setSelectedUnits] = useState(T.t('piece'));
+  const [formValues, setFormValues] = useState(initialFormValues);
+  const [errors, setErrors] = useState(initialErrors);
 
   const handleChoseMenu = item => {
     setVisible(false);
@@ -53,10 +58,21 @@ const CreateItem = () => {
         : setErrors({...errors, type: ''});
     }
   };
+  const id = '6054885e718d18001759703';
+  const normalizedData = {
+    metadata: {...formValues, _id: id},
+    batch: {quantity: formValues.quantity, units: selectedUnits},
+    _id: id,
+  };
+
   const handleCreate = () => {
     formValues.type.length === 0
       ? setErrors({...errors, type: T.t('error_required')})
       : setErrors({...errors, type: ''});
+    if (errors.type.length === 0 && errors.quantity.length === 0) {
+      dispatch(saveCreatedInventoryItem(normalizedData));
+      navigation.navigate('InventoryChooseMode');
+    }
   };
   return (
     <View style={styles.body}>

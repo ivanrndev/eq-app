@@ -1,13 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState} from 'react';
-import {
-  Dimensions,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {Dimensions, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Card, IconButton, Paragraph, Snackbar} from 'react-native-paper';
 import T from '../../../../i18n';
 // components
@@ -23,20 +16,27 @@ import TransparentButton from '../../../../components/Buttons/TransparentButton'
 import {useDispatch, useSelector} from 'react-redux';
 import {
   allowNewScan,
+  getTotalCountMyCompanyItems,
   makeTransfer,
   updateGiveList,
 } from '../../../../actions/actions.js';
 import ItemListCard from '../../../../components/ItemListCard';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import TariffLimitModal from '../../../../components/TariffLimitModal';
 
 const GiveListCheck = props => {
   const dispatch = useDispatch();
-  const [scan, give, settings] = useSelector(({scan, give, settings}) => [
-    scan,
-    give,
-    settings,
-  ]);
+  const [scan, give, settings, limit, totalItemsCount] = useSelector(
+    ({scan, give, settings, auth, companyItems}) => [
+      scan,
+      give,
+      settings,
+      auth.currentCompany.plan.items,
+      companyItems.totalItemsCount,
+    ],
+  );
   const [error, setError] = useState('');
+  const [isModalShown, setIsModalShown] = useState(false);
   let showEmptyError = !scan.scanGiveList.length;
   const userCurrentId = give.userCurrentId;
   const errorId = !!scan.currentScan
@@ -45,7 +45,7 @@ const GiveListCheck = props => {
 
   const list = scan.scanGiveList
     .filter(item => give.giveList.find(pc => pc.id !== item._id))
-    .map(item => ({id: item._id, quantity: item.batch.quantity}));
+    .map(item => ({id: item._id, quantity: item.batch && item.batch.quantity}));
   const createTransfer = () => {
     dispatch(
       makeTransfer(
@@ -55,7 +55,22 @@ const GiveListCheck = props => {
       ),
     );
   };
+  useEffect(() => dispatch(getTotalCountMyCompanyItems()), [totalItemsCount]);
   const setItemQty = itemId => give.giveList.find(pc => pc.id === itemId);
+
+  const handleChangeQty = item => {
+    if (limit > totalItemsCount) {
+      handleNavigateToSingleItemPage(
+        item.code,
+        props.navigation,
+        item._id,
+        'GiveSetQuantity',
+        dispatch,
+      );
+    } else {
+      setIsModalShown(true);
+    }
+  };
 
   useEffect(() => {
     const correctItem = scan.scanGiveList.find(
@@ -108,10 +123,11 @@ const GiveListCheck = props => {
         navigation={props.navigation}
         arrow={true}
         newScan={true}
+        clearGiveList={true}
         goTo={'GiveList'}
         title={T.t('create_request')}
       />
-      <SafeAreaView />
+      {isModalShown && <TariffLimitModal handleClose={setIsModalShown} />}
       <View style={styles.body}>
         <ScrollView>
           {showEmptyError && (
@@ -125,16 +141,7 @@ const GiveListCheck = props => {
                     <Text style={styles.cardTitle}>
                       {T.t('give')}: {setItemQty(item._id).quantity}
                     </Text>
-                    <TouchableOpacity
-                      onPress={() =>
-                        handleNavigateToSingleItemPage(
-                          item.code,
-                          props.navigation,
-                          item._id,
-                          'GiveSetQuantity',
-                          dispatch,
-                        )
-                      }>
+                    <TouchableOpacity onPress={() => handleChangeQty(item)}>
                       <Text style={styles.edit}>Edit</Text>
                     </TouchableOpacity>
                   </View>
@@ -143,15 +150,7 @@ const GiveListCheck = props => {
                   <View style={styles.setQtyBtn}>
                     {+item.batch.quantity !== 1 && !setItemQty(item._id) && (
                       <DarkButton
-                        onPress={() =>
-                          handleNavigateToSingleItemPage(
-                            item.code,
-                            props.navigation,
-                            item._id,
-                            'GiveSetQuantity',
-                            dispatch,
-                          )
-                        }
+                        onPress={() => handleChangeQty(item)}
                         text={T.t('set_quantity')}
                       />
                     )}

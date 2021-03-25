@@ -1,14 +1,13 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
-  StyleSheet,
-  View,
   Dimensions,
-  SafeAreaView,
-  Text,
   KeyboardAvoidingView,
+  StyleSheet,
+  Text,
+  View,
 } from 'react-native';
 import T from '../../../i18n';
-import {Title, TextInput, Portal, ActivityIndicator} from 'react-native-paper';
+import {ActivityIndicator, Portal, TextInput, Title} from 'react-native-paper';
 // components
 import Appbar from '../../../components/Appbar';
 import DarkButton from '../../../components/Buttons/DarkButton';
@@ -16,26 +15,31 @@ import DarkButton from '../../../components/Buttons/DarkButton';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   allowNewScan,
-  sendToServices,
+  getTotalCountMyCompanyItems,
   loader,
+  sendToServices,
 } from '../../../actions/actions.js';
-import {getStatus, getProperErrorMessage} from '../../../utils/helpers.js';
+import {getProperErrorMessage, getStatus} from '../../../utils/helpers.js';
 import AsyncStorage from '@react-native-community/async-storage';
 import ItemSetQuantityArea from '../../../components/ItemSetQuantityArea';
+import TariffLimitModal from '../../../components/TariffLimitModal';
 
 export const ServiceInfo = props => {
   const dispatch = useDispatch();
-  const [store, settings, show] = useSelector(({scan, settings}) => [
-    scan,
-    settings,
-    scan.isInfoOpen,
-  ]);
+  const [store, settings, show, limit, totalItemsCount] = useSelector(
+    ({scan, settings, auth, companyItems}) => [
+      scan,
+      settings,
+      scan.isInfoOpen,
+      auth.currentCompany.plan.items,
+      companyItems.totalItemsCount,
+    ],
+  );
   const quantity = store.scanInfo.batch ? store.scanInfo.batch.quantity : 1;
   const units = store.scanInfo.batch
     ? store.scanInfo.batch.units
     : T.t('piece');
   const error = getProperErrorMessage(store.scanInfoError, store.currentScan);
-  // const keyboardMarginTop = Dimensions.get('window').height / 15;
   const keyboardMarginTop = 50;
   const metaData = store.scanInfo.metadata;
   const [role, setRole] = useState();
@@ -44,6 +48,7 @@ export const ServiceInfo = props => {
   const [quantityToService, setQuantityForService] = useState(
     store.scanInfo.batch ? store.scanInfo.batch.quantity : 1,
   );
+  const [isModalShown, setIsModalShown] = useState(false);
   const isEnteredQuantityValid =
     quantityToService <= quantity || quantityToService <= 0;
   const isFormValid = !!reason && !!stockroom && isEnteredQuantityValid;
@@ -56,6 +61,7 @@ export const ServiceInfo = props => {
           metaData.serial
         }`;
   }
+  useEffect(() => dispatch(getTotalCountMyCompanyItems()), [totalItemsCount]);
 
   const againScan = () => {
     props.navigation.navigate('ServiceMenu');
@@ -63,18 +69,22 @@ export const ServiceInfo = props => {
   };
 
   const sendSercive = () => {
-    dispatch(loader(true));
-    dispatch(
-      sendToServices(
-        store.scanInfo._id,
-        reason,
-        stockroom,
-        quantityToService,
-        props.navigation,
-      ),
-    );
-    setReason('');
-    setStockroom('');
+    if (limit > totalItemsCount) {
+      dispatch(loader(true));
+      dispatch(
+        sendToServices(
+          store.scanInfo._id,
+          reason,
+          stockroom,
+          quantityToService,
+          props.navigation,
+        ),
+      );
+      setReason('');
+      setStockroom('');
+    } else {
+      setIsModalShown(true);
+    }
   };
 
   const getRole = async () => {
@@ -98,7 +108,7 @@ export const ServiceInfo = props => {
         goTo={settings.startPageService}
         title={T.t('send_service')}
       />
-      <SafeAreaView />
+      {isModalShown && <TariffLimitModal handleClose={setIsModalShown} />}
       <Portal>
         {settings.loader && (
           <View style={styles.loader}>

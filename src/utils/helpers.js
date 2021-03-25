@@ -201,9 +201,6 @@ export const getProperErrorMessage = (error, id) => {
         'error_not_found',
       )}`;
       break;
-    case 'NotMarked':
-      errorMessage = T.t('error_not_marked');
-      break;
     case 'IsBan':
       errorMessage = `${T.t('item')} ${id} ${T.t('error_write_off')}`;
       break;
@@ -344,9 +341,6 @@ export const actionCheckError = item => {
   }
   if (item.transfer) {
     return 'InTransfer';
-  }
-  if (!item.is_marked) {
-    return 'NotMarked';
   }
 };
 

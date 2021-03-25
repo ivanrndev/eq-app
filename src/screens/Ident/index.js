@@ -1,13 +1,16 @@
 import React, {useCallback, useState} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
-import {StyleSheet, View, Dimensions, SafeAreaView} from 'react-native';
+import {Dimensions, StyleSheet, View} from 'react-native';
 import T from '../../i18n';
 // components
 import Appbar from '../../components/Appbar';
 import Scanner from '../../components/Scanner';
+import {useSelector} from 'react-redux';
+import {searchMyItem} from '../../actions/actions';
 
 const Ident = props => {
   const [scaner, setScaner] = useState(false);
+  const onMeList = useSelector(({onMe}) => onMe.myList);
   useFocusEffect(
     useCallback(() => {
       setScaner(true);
@@ -25,8 +28,12 @@ const Ident = props => {
         title={T.t('title_scan')}
         switch={true}
         typeSwitchNFC={true}
+        search={true}
+        list={onMeList}
+        listAction={searchMyItem}
+        pageToChosenItem="IdentInfo"
       />
-      <SafeAreaView />
+
       <View style={styles.body}>
         {scaner && (
           <Scanner
@@ -50,6 +57,7 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width / 1.3,
     backgroundColor: '#fff',
   },
+
   text: {
     fontSize: 13,
     color: '#fff',

@@ -7,7 +7,6 @@ import T from '../../i18n';
 
 import {
   allowNewScan,
-  saveInventoryItem,
   alreadyScannedBids,
   changeIsMultiple,
   changeLocationLoc,
@@ -22,6 +21,7 @@ import {
   clearUserAcceptBid,
   clearUserList,
   NFCforMounting,
+  saveInventoryItem,
   switchStartPage,
 } from '../../actions/actions.js';
 import Search from '../Search';
@@ -175,6 +175,7 @@ const styles = StyleSheet.create({
   content: {
     color: '#22215B',
     fontWeight: 'bold',
+    textAlign: 'center',
   },
   snackbar: {
     zIndex: 100,

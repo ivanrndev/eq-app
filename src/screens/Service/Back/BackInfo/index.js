@@ -39,7 +39,7 @@ export const BackInfo = props => {
     dispatch(loader(true));
     dispatch(backFromServices(arrayIds, props.navigation));
   };
-  console.log('ids', arrayIds);
+
   const againScan = () => {
     props.navigation.navigate('ServiceMenu');
     dispatch(allowNewScan(true));

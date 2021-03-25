@@ -28,7 +28,7 @@ const CustomDrawer = props => {
     setFirstName(myFirstName),
   );
 
-  const ifRole = role === 'user' || role === 'worker' ? false : true;
+  const ifRole = !(role === 'user' || role === 'worker');
 
   const handelShare = async () => {
     try {
