@@ -19,7 +19,7 @@ import T from '../../i18n';
 import Appbar from '../../components/Appbar';
 import {
   getProperErrorMessage,
-  handleNavigateToSingleItemPage,
+  handleNavigateToMySingleItem,
 } from '../../utils/helpers.js';
 // redux and actions
 import {useDispatch, useSelector} from 'react-redux';
@@ -79,7 +79,7 @@ const OnMe = props => {
                           style={styles.card}
                           key={item._id}
                           onPress={() =>
-                            handleNavigateToSingleItemPage(
+                            handleNavigateToMySingleItem(
                               item.code,
                               props.navigation,
                               item._id,

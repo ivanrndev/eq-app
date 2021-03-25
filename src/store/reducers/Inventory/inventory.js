@@ -5,6 +5,7 @@ import {
   MAKE_STOCKTAKING_ERROR,
   SET_INVENTORY_ITEM_QTY,
   CLEAR_INVENTORY,
+  SAVE_INVENTORY_CREATED_ITEM,
 } from '../../../actions/actionsType.js';
 
 const initialState = {
@@ -13,6 +14,7 @@ const initialState = {
   inventoryError: false,
   makeStocktaking: '',
   inventoryQuantityList: [],
+  addedItems: [],
 };
 
 const inventoryReducer = (state = initialState, action) => {
@@ -59,6 +61,11 @@ const inventoryReducer = (state = initialState, action) => {
         ...action.payload,
       };
     }
+    case SAVE_INVENTORY_CREATED_ITEM:
+      return {
+        ...state,
+        addedItems: [...state.addedItems, action.payload.addedItems],
+      };
     default:
       return state;
   }

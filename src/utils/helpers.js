@@ -1,6 +1,11 @@
 /* eslint-disable prettier/prettier */
 import T from '../i18n';
-import {currentScan, loader, saveCurrentMyItem} from '../actions/actions';
+import {
+  currentScan,
+  getSearchItem,
+  loader,
+  saveCurrentMyItem,
+} from '../actions/actions';
 
 export const getUserName = (user: any) => {
   let name = '';
@@ -394,6 +399,20 @@ export const getTotalLotPrice = (quantity, price) => {
 };
 
 export const handleNavigateToSingleItemPage = (
+  code,
+  navigation,
+  id,
+  page,
+  dispatch,
+) => {
+  if (code) {
+    dispatch(loader(true));
+    dispatch(currentScan(code, navigation, page));
+  }
+  dispatch(getSearchItem(id, navigation, page));
+};
+
+export const handleNavigateToMySingleItem = (
   code,
   navigation,
   id,

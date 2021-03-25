@@ -182,8 +182,7 @@ export const ServiceInfo = props => {
                       )}
 
                       <Text style={styles.text}>
-                        {T.t('detail_quantity')}: {quantity}{' '}
-                        {store.scanInfo.batch.units}
+                        {T.t('detail_quantity')}: {quantity} {units}
                       </Text>
                     </View>
                   )}

@@ -27,9 +27,7 @@ export const WriteOffInfo = props => {
     ? store.scanInfo.batch.units
     : T.t('piece');
   const [role, setRole] = useState();
-  const [quantityToWireOff, setQuantityToWireOff] = useState(
-    store.scanInfo.batch ? store.scanInfo.batch.quantity : 1,
-  );
+  const [quantityToWireOff, setQuantityToWireOff] = useState(1);
   const isEnteredQuantityValid =
     quantityToWireOff <= quantity || quantityToWireOff <= 0;
 
@@ -145,8 +143,7 @@ export const WriteOffInfo = props => {
                       </Text>
                     )}
                     <Text style={styles.text}>
-                      {T.t('detail_quantity')}: {quantity}{' '}
-                      {store.scanInfo.batch.units}
+                      {T.t('detail_quantity')}: {quantity} {units}
                     </Text>
                   </View>
                 )}

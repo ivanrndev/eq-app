@@ -30,8 +30,14 @@ const Search = ({
   const handleCurrentScan = item => {
     actionCheckError(item);
     dispatch(loader(true));
-    dispatch(getSearchItem(item._id, isSearchForGiveItem));
-    navigation.navigate(pageToChosenItem);
+    dispatch(
+      getSearchItem(
+        item._id,
+        navigation,
+        pageToChosenItem,
+        isSearchForGiveItem,
+      ),
+    );
     setIsSearchOpen(false);
     setSearch('');
   };

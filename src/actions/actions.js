@@ -361,15 +361,21 @@ export const dialogInput = status => dispatch => {
   });
 };
 
-export const getSearchItem = (id, isSearchForGiveItem = false) => dispatch => {
+export const getSearchItem = (
+  id,
+  nav,
+  page,
+  isSearchForGiveItem = false,
+) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
       .get(`${API_URL}/company/${company}/item/${id}/detailed`)
       .then(resp => {
         if (resp.status === 200) {
           let checkErrors = actionCheckError(resp.data);
-
-          if (checkErrors) {
+          const isRepairItem =
+            page === 'BackInfo' && checkErrors === 'InRepair';
+          if (checkErrors && !isRepairItem) {
             dispatch({
               type: ERROR_CURRENT_SCAN_INFO,
               payload: {
@@ -403,6 +409,7 @@ export const getSearchItem = (id, isSearchForGiveItem = false) => dispatch => {
             }
           }
           dispatch(loader(false));
+          nav.navigate(page);
         }
       })
       .catch(e => {
@@ -470,6 +477,7 @@ export const scanInfo = (
                     scanUserRole: role,
                     selectGiveId: resp.data._id,
                     scanInfoError: false,
+                    scanInfo: resp.data,
                   },
                 });
                 dispatch(loader(false));
@@ -1371,6 +1379,7 @@ export const clearInventory = () => dispatch => {
       inventoryError: false,
       makeStocktaking: '',
       inventoryQuantityList: [],
+      addedItems: [],
     },
   });
 };
@@ -1406,10 +1415,7 @@ export const saveCreatedInventoryItem = obj => dispatch => {
   dispatch({
     type: SAVE_INVENTORY_CREATED_ITEM,
     payload: {
-      scanInfo: obj,
-      scanInfoError: false,
-      selectGiveId: obj._id,
-      isInfoOpen: true,
+      addedItems: obj,
     },
   });
 };

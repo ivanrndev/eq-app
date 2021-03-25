@@ -14,7 +14,11 @@ import Appbar from '../../components/Appbar';
 import {getProperErrorMessage} from '../../utils/helpers.js';
 // redux and actions
 import {useDispatch, useSelector} from 'react-redux';
-import {getUserList, saveCurrentUserInventory} from '../../actions/actions.js';
+import {
+  clearInventory,
+  getUserList,
+  saveCurrentUserInventory,
+} from '../../actions/actions.js';
 
 const Inventory = props => {
   const dispatch = useDispatch();
@@ -23,7 +27,10 @@ const Inventory = props => {
   let error = getProperErrorMessage(users.getUsetError);
   const [userLists, setUserLists] = useState(users.userList);
   const [showText, setShowText] = useState(true);
-  useEffect(() => dispatch(getUserList(props.nav, '', 'Inventory')), []);
+  useEffect(() => {
+    dispatch(getUserList(props.nav, '', 'Inventory'));
+    dispatch(clearInventory());
+  }, []);
   useEffect(() => {
     AsyncStorage.getItem('role').then(role => {
       if (role === 'worker') {

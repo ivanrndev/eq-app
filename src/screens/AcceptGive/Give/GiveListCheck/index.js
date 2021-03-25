@@ -46,6 +46,8 @@ const GiveListCheck = props => {
   const list = scan.scanGiveList
     .filter(item => give.giveList.find(pc => pc.id !== item._id))
     .map(item => ({id: item._id, quantity: item.batch && item.batch.quantity}));
+  const isQtyBtnShow = item =>
+    item.batch && +item.batch.quantity !== 1 && !setItemQty(item._id);
   const createTransfer = () => {
     dispatch(
       makeTransfer(
@@ -139,7 +141,9 @@ const GiveListCheck = props => {
                 {setItemQty(item._id) && (
                   <View style={styles.giveArea}>
                     <Text style={styles.cardTitle}>
-                      {T.t('give')}: {setItemQty(item._id).quantity}
+                      {T.t('give')}:{' '}
+                      {setItemQty(item._id).batch &&
+                        setItemQty(item._id).batch.quantity}
                     </Text>
                     <TouchableOpacity onPress={() => handleChangeQty(item)}>
                       <Text style={styles.edit}>Edit</Text>
@@ -148,7 +152,7 @@ const GiveListCheck = props => {
                 )}
                 <View style={styles.cardBottom}>
                   <View style={styles.setQtyBtn}>
-                    {+item.batch.quantity !== 1 && !setItemQty(item._id) && (
+                    {isQtyBtnShow(item) && (
                       <DarkButton
                         onPress={() => handleChangeQty(item)}
                         text={T.t('set_quantity')}

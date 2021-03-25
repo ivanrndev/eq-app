@@ -190,7 +190,7 @@ const AcceptList = () => {
 
           {!isEmpty(bidItems) &&
             bidItems[0].items.map(item => (
-              <View style={styles.card}>
+              <View style={styles.card} key={item._id}>
                 <ItemListCard isPriceShown={false} item={item} width="70%" />
                 {!item.is_marked || isItemSelected(item._id) ? (
                   <CheckBox

@@ -52,7 +52,8 @@ export const OnMeInfo = props => {
   const info = metaData.metadata;
   const show = !isEmpty(metaData);
   let nameOfProduct = '';
-
+  const quantity = metaData.batch ? metaData.batch.quantity : 1;
+  const units = metaData.batch ? metaData.batch.units : T.t('piece');
   if (info) {
     nameOfProduct = info.title
       ? info.title
@@ -175,9 +176,9 @@ export const OnMeInfo = props => {
                       </Text>
                     )}
                     <ItemCardQuantityAndPrice
-                      quantity={metaData.batch.quantity}
+                      quantity={quantity}
                       price={info.price}
-                      units={metaData.batch.units}
+                      units={units}
                       styles={styles}
                     />
 
