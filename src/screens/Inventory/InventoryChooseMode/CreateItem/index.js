@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {Dimensions, FlatList, StyleSheet, Text, View} from 'react-native';
 import T from '../../../../i18n';
 import {useNavigation} from '@react-navigation/native';
+import uuid from 'react-native-uuid';
 
 import Appbar from '../../../../components/Appbar';
 import {Button, Card, Menu, TextInput} from 'react-native-paper';
@@ -58,13 +59,13 @@ const CreateItem = () => {
         : setErrors({...errors, type: ''});
     }
   };
-  const id = '6054885e718d18001759703';
+  const id = uuid.v4();
   const normalizedData = {
     metadata: {...formValues, _id: id},
     batch: {quantity: formValues.quantity, units: selectedUnits},
     _id: id,
   };
-
+  console.log('LLL', normalizedData, errors);
   const handleCreate = () => {
     formValues.type.length === 0
       ? setErrors({...errors, type: T.t('error_required')})
@@ -72,6 +73,7 @@ const CreateItem = () => {
     if (errors.type.length === 0 && errors.quantity.length === 0) {
       dispatch(saveCreatedInventoryItem(normalizedData));
       navigation.navigate('InventoryChooseMode');
+      setFormValues(initialFormValues);
     }
   };
   return (

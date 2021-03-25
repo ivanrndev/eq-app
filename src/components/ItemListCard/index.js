@@ -26,21 +26,21 @@ const ItemListCard = ({item, width, isPriceShown = true, children}) => {
           {item.code && '/ ' + item.code}
         </Paragraph>
       )}
-      {item.metadata.brand && (
+      {item.metadata.brand ? (
         <Paragraph style={styles.paragraph}>
           {T.t('detail_brand')}: {item.metadata.brand}
         </Paragraph>
-      )}
-      {item.metadata.model && (
+      ) : null}
+      {item.metadata.model ? (
         <Paragraph style={styles.paragraph}>
           {T.t('detail_model')}: {item.metadata.model}
         </Paragraph>
-      )}
-      {item.metadata.serial && (
+      ) : null}
+      {item.metadata.serial ? (
         <Paragraph style={styles.paragraph}>
           {T.t('detail_serial')}: {item.metadata.serial}
         </Paragraph>
-      )}
+      ) : null}
       {item.batch && (
         <>
           <Paragraph style={styles.paragraph}>

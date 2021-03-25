@@ -997,7 +997,6 @@ export const setGiveItemsQty = (id, quantity) => dispatch => {
 };
 
 export const getUserList = (nav, search = '', page = '') => dispatch => {
-  dispatch(loader(true));
   AsyncStorage.getItem('company').then(company => {
     return axios
       .get(`${API_URL}/company/${company}/user`, {
