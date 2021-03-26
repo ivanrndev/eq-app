@@ -49,8 +49,7 @@ const ItemListCard = ({item, width, isPriceShown = true, children}) => {
           {isPriceShown && (
             <>
               <Paragraph style={styles.paragraph}>
-                {T.t('detail_price_per_item')}: {item.metadata.price}
-                {currency}
+                {T.t('detail_price_per_item')}: {item.metadata.price} {currency}
               </Paragraph>
               {+item.batch.quantity !== 1 && (
                 <Paragraph style={styles.paragraph}>

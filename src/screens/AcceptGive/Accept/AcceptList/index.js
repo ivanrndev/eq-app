@@ -164,7 +164,7 @@ const AcceptList = () => {
         size={35}
         color="#22215B"
         onPress={handleSelecttAll}
-        style={{position: 'absolute', zIndex: 10000, right: 10, top: 45}}
+        style={styles.selectAllButton}
       />
 
       <SafeAreaView />
@@ -327,7 +327,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: 100,
     right: 10,
-    top: 45,
+    bottom: Dimensions.get('window').height / 1.1 - 22,
   },
   buttonObject: {
     display: 'flex',

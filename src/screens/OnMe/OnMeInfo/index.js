@@ -242,48 +242,39 @@ export const OnMeInfo = props => {
                   {!isEmpty(scan.scanInfo) && (
                     <View>
                       {!isEmpty(scan.scanInfo.parent) ? (
-                        <View style={styles.marginBtn}>
-                          <DarkButton
-                            text={T.t('dismantle')}
-                            onPress={unmount}
-                          />
-                        </View>
+                        <DarkButton text={T.t('dismantle')} onPress={unmount} />
                       ) : (
-                        <View style={styles.marginBtn}>
-                          <DarkButton
-                            text={T.t('setupItem')}
-                            onPress={() => {
-                              dispatch(backPageMount('OnMeInfo'));
-                              dispatch(nextPageMount('MountList'));
-                              dispatch(
-                                nfc(
-                                  'MountList',
-                                  'MountList',
-                                  false,
-                                  'MountList',
-                                  'startPageMountList',
-                                  true,
-                                ),
-                              );
-                              props.navigation.navigate('MountList');
-                            }}
-                          />
-                        </View>
+                        <DarkButton
+                          text={T.t('setupItem')}
+                          onPress={() => {
+                            dispatch(backPageMount('OnMeInfo'));
+                            dispatch(nextPageMount('MountList'));
+                            dispatch(
+                              nfc(
+                                'MountList',
+                                'MountList',
+                                false,
+                                'MountList',
+                                'startPageMountList',
+                                true,
+                              ),
+                            );
+                            props.navigation.navigate('MountList');
+                          }}
+                        />
                       )}
                     </View>
                   )}
-                  <View style={styles.marginBtn}>
-                    <DarkButton
-                      text={T.t('title_comments')}
-                      onPress={getAllComments}
-                    />
-                  </View>
-                  <View style={styles.marginBtn}>
-                    <DarkButton
-                      text={T.t('title_history_of_transaction')}
-                      onPress={handleTransactions}
-                    />
-                  </View>
+
+                  <DarkButton
+                    text={T.t('title_comments')}
+                    onPress={getAllComments}
+                  />
+
+                  <DarkButton
+                    text={T.t('title_history_of_transaction')}
+                    onPress={handleTransactions}
+                  />
                 </View>
               </View>
             </>
@@ -411,9 +402,6 @@ const styles = StyleSheet.create({
   },
   dialog: {
     backgroundColor: '#EDF6FF',
-  },
-  marginBtn: {
-    marginBottom: -20,
   },
 });
 

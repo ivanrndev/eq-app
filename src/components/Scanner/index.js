@@ -57,7 +57,6 @@ const Scanner = props => {
   });
 
   useEffect(() => {
-    console.log('customId', isEmpty(customId));
     // let regular = /^[a-z]{1,2}[0-9]{4,5}$/g;
     // let filterId = regular.exec(customId);
     if (!isEmpty(customId)) {

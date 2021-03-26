@@ -154,6 +154,7 @@ const InventoryChooseMode = () => {
                 <Card.Content style={styles.editArea}>
                   <Text style={styles.cardTitle}>
                     {T.t('current_inventori_qty')}:{' '}
+                    {setQtyItem(item._id).quantity}
                   </Text>
                   <TouchableOpacity
                     onPress={() =>

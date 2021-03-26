@@ -19,6 +19,7 @@ const InventoryScaner = props => {
   const list = companyItemList.filter(
     item => item.responsible === currentInventoryUser,
   );
+
   useFocusEffect(
     useCallback(() => {
       setScaner(true);

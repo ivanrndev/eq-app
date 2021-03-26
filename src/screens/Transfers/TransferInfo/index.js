@@ -18,6 +18,7 @@ import TransparentButton from '../../../components/Buttons/TransparentButton';
 import {useSelector, useDispatch} from 'react-redux';
 import {loader} from '../../../actions/actions.js';
 import {deleteTransfer} from '../../../actions/actions.js';
+import ItemListCard from '../../../components/ItemListCard';
 
 const TransferInfo = props => {
   const dispatch = useDispatch();
@@ -68,12 +69,9 @@ const TransferInfo = props => {
             )}
             {infoList &&
               infoList.items.map((item, index) => (
-                <Card.Title
-                  key={index}
-                  style={styles.card}
-                  title={`${item.metadata.brand} / ${item.code}`}
-                  subtitle={`${item.metadata.serial} / ${item.metadata.model}`}
-                />
+                <Card style={styles.card} key={item._id}>
+                  <ItemListCard item={item} isPriceShown={false} />
+                </Card>
               ))}
           </ScrollView>
           <View style={styles.buttons}>

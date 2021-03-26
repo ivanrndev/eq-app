@@ -268,7 +268,7 @@ const Auth = props => {
             onChangeText={e => handelLogin(e)}
             style={styles.input}
             label={T.t('login')}
-            error={loginError ? true : false}
+            error={loginError}
             mode="outlined"
             onFocus={() => setEmailFocus(true)}
           />
@@ -281,7 +281,7 @@ const Auth = props => {
             secureTextEntry={true}
             style={styles.input}
             label={T.t('password')}
-            error={passwordError ? true : false}
+            error={passwordError}
             mode="outlined"
             onFocus={() => setEmailFocus(false)}
           />
@@ -366,7 +366,7 @@ const Auth = props => {
                 </Text>
                 {!infoEmail && (
                   <TextInput
-                    error={emailForgotError ? true : false}
+                    error={emailForgotError}
                     onChangeText={e => {
                       setEmailForgotError(false);
                       setChahgeEmail(e.trim().toLowerCase());

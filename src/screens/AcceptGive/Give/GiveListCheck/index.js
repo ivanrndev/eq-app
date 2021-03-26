@@ -45,34 +45,23 @@ const GiveListCheck = props => {
 
   const list = scan.scanGiveList
     .filter(item => give.giveList.find(pc => pc.id !== item._id))
-    .map(item => ({id: item._id, quantity: item.batch && item.batch.quantity}));
+    .map(item => ({
+      id: item._id,
+      quantity: item.batch ? item.batch.quantity : 1,
+    }));
+  const normalizedList =
+    give.giveList > 0
+      ? list
+      : scan.scanGiveList.map(item => ({
+          id: item._id,
+          quantity: item.batch ? item.batch.quantity : 1,
+        }));
+
   const isQtyBtnShow = item =>
     item.batch && +item.batch.quantity !== 1 && !setItemQty(item._id);
-  const createTransfer = () => {
-    dispatch(
-      makeTransfer(
-        props.navigation,
-        [...list, ...give.giveList],
-        userCurrentId,
-      ),
-    );
-  };
+
   useEffect(() => dispatch(getTotalCountMyCompanyItems()), [totalItemsCount]);
   const setItemQty = itemId => give.giveList.find(pc => pc.id === itemId);
-
-  const handleChangeQty = item => {
-    if (limit > totalItemsCount) {
-      handleNavigateToSingleItemPage(
-        item.code,
-        props.navigation,
-        item._id,
-        'GiveSetQuantity',
-        dispatch,
-      );
-    } else {
-      setIsModalShown(true);
-    }
-  };
 
   useEffect(() => {
     const correctItem = scan.scanGiveList.find(
@@ -109,6 +98,19 @@ const GiveListCheck = props => {
     }
   }, [scan.scanGiveList, scan.currentScan, scan.scanInfoError]);
 
+  const handleChangeQty = item => {
+    if (limit > totalItemsCount) {
+      handleNavigateToSingleItemPage(
+        item.code,
+        props.navigation,
+        item._id,
+        'GiveSetQuantity',
+        dispatch,
+      );
+    } else {
+      setIsModalShown(true);
+    }
+  };
   const deleteItem = id => {
     let updateList = scan.scanGiveList.filter(item => item._id !== id);
     dispatch(updateGiveList(updateList));
@@ -118,6 +120,15 @@ const GiveListCheck = props => {
     props.navigation.navigate(settings.startPageGive);
     dispatch(allowNewScan(true));
   };
+
+  const createTransfer = () =>
+    dispatch(
+      makeTransfer(
+        props.navigation,
+        [...normalizedList, ...give.giveList],
+        userCurrentId,
+      ),
+    );
 
   return (
     <>
@@ -142,8 +153,7 @@ const GiveListCheck = props => {
                   <View style={styles.giveArea}>
                     <Text style={styles.cardTitle}>
                       {T.t('give')}:{' '}
-                      {setItemQty(item._id).batch &&
-                        setItemQty(item._id).batch.quantity}
+                      {setItemQty(item._id) && setItemQty(item._id).quantity}
                     </Text>
                     <TouchableOpacity onPress={() => handleChangeQty(item)}>
                       <Text style={styles.edit}>Edit</Text>

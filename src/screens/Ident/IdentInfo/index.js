@@ -264,52 +264,46 @@ export const IdentInfo = props => {
                 {gaveAcess && (
                   <View>
                     {!isEmpty(store.scanInfo.parent) ? (
-                      <View style={styles.marginBtn}>
-                        <DarkButton
-                          size={fontSizer(width)}
-                          text={T.t('dismantle')}
-                          onPress={unmount}
-                        />
-                      </View>
+                      <DarkButton
+                        size={fontSizer(width)}
+                        text={T.t('dismantle')}
+                        onPress={unmount}
+                      />
                     ) : (
-                      <View style={styles.marginBtn}>
-                        <DarkButton
-                          size={fontSizer(width)}
-                          text={T.t('setupItem')}
-                          onPress={() => {
-                            dispatch(backPageMount('IdentInfo'));
-                            dispatch(nextPageMount('MountList'));
-                            dispatch(
-                              nfc(
-                                settings.nfcBack,
-                                settings.nfcNext,
-                                false,
-                                'Ident',
-                                'startPageMountList',
-                                true,
-                              ),
-                            );
-                            props.navigation.navigate('MountList');
-                          }}
-                        />
-                      </View>
+                      <DarkButton
+                        size={fontSizer(width)}
+                        text={T.t('setupItem')}
+                        onPress={() => {
+                          dispatch(backPageMount('IdentInfo'));
+                          dispatch(nextPageMount('MountList'));
+                          dispatch(
+                            nfc(
+                              settings.nfcBack,
+                              settings.nfcNext,
+                              false,
+                              'Ident',
+                              'startPageMountList',
+                              true,
+                            ),
+                          );
+                          props.navigation.navigate('MountList');
+                        }}
+                      />
                     )}
                   </View>
                 )}
-                <View style={styles.marginBtn}>
-                  <DarkButton
-                    size={fontSizer(width)}
-                    text={T.t('title_comments')}
-                    onPress={getAllComments}
-                  />
-                </View>
-                <View style={styles.marginBtn}>
-                  <DarkButton
-                    size={fontSizer(width)}
-                    text={T.t('title_history_of_transaction')}
-                    onPress={handleTransactions}
-                  />
-                </View>
+
+                <DarkButton
+                  size={fontSizer(width)}
+                  text={T.t('title_comments')}
+                  onPress={getAllComments}
+                />
+
+                <DarkButton
+                  size={fontSizer(width)}
+                  text={T.t('title_history_of_transaction')}
+                  onPress={handleTransactions}
+                />
               </View>
             </View>
           </>
@@ -333,9 +327,6 @@ export const IdentInfo = props => {
 };
 
 const styles = StyleSheet.create({
-  marginBtn: {
-    marginBottom: -20,
-  },
   dialog: {
     backgroundColor: '#EDF6FF',
   },
