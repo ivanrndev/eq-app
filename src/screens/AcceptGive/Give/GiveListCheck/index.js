@@ -31,7 +31,7 @@ const GiveListCheck = props => {
       scan,
       give,
       settings,
-      auth.currentCompany.plan.items,
+      auth.currentCompany.plan && auth.currentCompany.plan.items,
       companyItems.totalItemsCount,
     ],
   );

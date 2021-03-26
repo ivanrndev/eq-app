@@ -31,7 +31,7 @@ export const ServiceInfo = props => {
       scan,
       settings,
       scan.isInfoOpen,
-      auth.currentCompany.plan.items,
+      auth.currentCompany.plan && auth.currentCompany.plan.items,
       companyItems.totalItemsCount,
     ],
   );
@@ -214,20 +214,17 @@ export const ServiceInfo = props => {
                     value={stockroom}
                     onChangeText={text => setStockroom(text)}
                   />
-                  <View style={styles.buttonsBlock}>
-                    <View style={styles.buttonBlock}>
-                      <DarkButton
-                        text={T.t('send')}
-                        disabled={!isFormValid}
-                        onPress={sendSercive}
-                      />
-                    </View>
+                  <View style={styles.buttonBlock}>
+                    <DarkButton
+                      text={T.t('send')}
+                      disabled={!isFormValid}
+                      onPress={sendSercive}
+                    />
                   </View>
                 </>
               )}
-              <View style={styles.buttonBlock}>
-                <DarkButton text={T.t('cancel')} onPress={againScan} />
-              </View>
+
+              <DarkButton text={T.t('cancel')} onPress={againScan} />
             </View>
           </View>
         </KeyboardAvoidingView>
@@ -256,14 +253,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#EDF6FF',
   },
   buttonBlock: {
-    width: Dimensions.get('window').height / 3.3,
-    textAlign: 'center',
-    display: 'flex',
-    alignSelf: 'center',
-    marginTop: 10,
-  },
-  buttonsBlock: {
-    marginBottom: -20,
+    marginTop: 30,
   },
   info: {
     display: 'flex',
