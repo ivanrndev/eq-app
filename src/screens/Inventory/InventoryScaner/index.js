@@ -42,7 +42,6 @@ const InventoryScaner = props => {
         title={T.t('inventori')}
         switch={true}
         typeSwitchNFC={true}
-        clearInventory={true}
         pageToChosenItem="InventoryChooseMode"
       />
       <SafeAreaView />

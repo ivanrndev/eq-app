@@ -197,7 +197,7 @@ PODS:
     - React-Core
   - react-native-netinfo (5.9.10):
     - React-Core
-  - react-native-nfc-manager (2.3.0):
+  - react-native-nfc-manager (2.3.1):
     - React
   - react-native-safe-area-context (0.7.3):
     - React
@@ -441,7 +441,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 58aef7155bc9a9683f5b60b35eccea8722a4f53a
   react-native-camera: f432fcf1b32b528bbf7c3543d3e3b1deb0c5b72a
   react-native-netinfo: 30fb89fa913c342be82a887b56e96be6d71201dd
-  react-native-nfc-manager: f2de215e2a46dbf3d920df87ac9f9caa2091af13
+  react-native-nfc-manager: c792b9d484af4a8a82f0ae9b4a0fdf14567510dc
   react-native-safe-area-context: e200d4433aba6b7e60b52da5f37af11f7a0b0392
   React-RCTActionSheet: 89a0ca9f4a06c1f93c26067af074ccdce0f40336
   React-RCTAnimation: 1bde3ecc0c104c55df246eda516e0deb03c4e49b

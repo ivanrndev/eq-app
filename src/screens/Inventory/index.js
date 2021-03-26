@@ -31,6 +31,7 @@ const Inventory = props => {
     dispatch(getUserList(props.nav, '', 'Inventory'));
     dispatch(clearInventory());
   }, []);
+
   useEffect(() => {
     AsyncStorage.getItem('role').then(role => {
       if (role === 'worker') {
