@@ -16,8 +16,6 @@ import TransparentButton from '../../../../components/Buttons/TransparentButton'
 import {useDispatch, useSelector} from 'react-redux';
 import {
   allowNewScan,
-  clearGiveItemQty,
-  clearGiveList,
   getTotalCountMyCompanyItems,
   loader,
   makeTransfer,

@@ -1,11 +1,10 @@
 /* eslint-disable radix */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-undef */
-import React, {useState, useCallback} from 'react';
-import {View, Text, Platform, SafeAreaView, StyleSheet} from 'react-native';
+import React, {useCallback, useState} from 'react';
+import {Platform, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import NfcManager, {NfcTech} from 'react-native-nfc-manager';
-import {useFocusEffect} from '@react-navigation/native';
-import Appbar from '../../components/Appbar';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import DarkButton from '../../components/Buttons/DarkButton';
 import T from '../../i18n';
 
@@ -13,7 +12,8 @@ import T from '../../i18n';
 import {useDispatch, useSelector} from 'react-redux';
 import {currentScan, loader} from '../../actions/actions.js';
 
-const NFC = props => {
+const NFC = () => {
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const settings = useSelector(state => state.settings);
   const [log, setLog] = useState(T.t('hold_nfc'));
@@ -47,7 +47,6 @@ const NFC = props => {
 
       resp = await cmd([0x3a, 4, 4]);
       resp = await cmd([0x3a, 5, 8]);
-      bytes = resp.toString().split(',');
 
       function removeElement(arrayName, arrayElement) {
         for (var i = 0; i < arrayName.length; i++) {
@@ -80,7 +79,7 @@ const NFC = props => {
         dispatch(
           currentScan(
             codeFormat[0],
-            props.navigation,
+            navigation,
             settings.NFCforMounting ? settings.nextPageMount : settings.nfcNext,
             settings.isMultiple,
             settings.NFCforMounting,
@@ -98,26 +97,14 @@ const NFC = props => {
   };
 
   return (
-    <>
-      <Appbar
-        navigation={props.navigation}
-        arrow={true}
-        newScan={true}
-        clearMarking={true}
-        goTo={settings.nfcBack}
-        title={'NFC'}
-        switch={true}
-        typeSwitchCamera={true}
-      />
-      <SafeAreaView style={styles.container}>
-        <View style={styles.log}>
-          <Text style={styles.info}>{log}</Text>
-        </View>
-        <View style={styles.button}>
-          <DarkButton text={T.t('again_short')} onPress={readData} />
-        </View>
-      </SafeAreaView>
-    </>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.log}>
+        <Text style={styles.info}>{log}</Text>
+      </View>
+      <View style={styles.button}>
+        <DarkButton text={T.t('again_short')} onPress={readData} />
+      </View>
+    </SafeAreaView>
   );
 };
 
@@ -127,17 +114,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     backgroundColor: '#D3E3F2',
-  },
-  textInput: {
-    marginLeft: 20,
-    marginRight: 20,
-    marginBottom: 10,
-    height: 50,
-    textAlign: 'center',
-    color: 'black',
-  },
-  buttonText: {
-    color: '#ffffff',
   },
   log: {
     marginTop: 30,

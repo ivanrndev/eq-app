@@ -33,6 +33,7 @@ const SetItemQuantity = ({actionName, pageToRedirect, title, mode}) => {
   const handleSave = () => {
     dispatch(actionName(id, selectedQuantity));
     navigation.navigate(pageToRedirect);
+    setSelectedQuantity(quantity);
   };
   return (
     <>

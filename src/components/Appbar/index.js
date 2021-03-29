@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Appbar, IconButton, Portal, Snackbar} from 'react-native-paper';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {StyleSheet, View} from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import T from '../../i18n';
@@ -22,17 +22,16 @@ import {
   clearUserList,
   NFCforMounting,
   saveInventoryItem,
-  switchStartPage,
 } from '../../actions/actions.js';
 import Search from '../Search';
+import NFC from '../../screens/NFC';
 
 const AppbarCustom = props => {
   const dispatch = useDispatch();
   const icon = props.arrow ? 'arrow-left' : 'menu';
   const [isConnection, setIsConnection] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const iconSwitch = props.typeSwitchCamera ? 'camera' : 'cast';
-  const settings = useSelector(state => state.settings);
+  const [isNFCOpen, setIsNFCOpen] = useState(false);
 
   NetInfo.fetch().then(state => {
     if (state.isConnected) {
@@ -107,23 +106,23 @@ const AppbarCustom = props => {
             if (props.search) {
               setIsSearchOpen(false);
             }
+            if (props.switch) {
+              setIsNFCOpen(false);
+            }
           }}
         />
-        <Appbar.Content title={props.title} titleStyle={styles.content} />
+        <Appbar.Content
+          title={isNFCOpen ? 'NFC' : props.title}
+          titleStyle={styles.content}
+        />
         {props.switch && (
-          <Appbar.Action
-            icon={iconSwitch}
+          <IconButton
+            icon={isNFCOpen ? 'camera' : 'cast'}
+            size={30}
+            color="#22215B"
             onPress={() => {
-              if (props.typeSwitchNFC) {
-                dispatch(switchStartPage(settings.nameOfType, 'NFC'));
-                props.navigation.navigate('NFC');
-              }
-              if (props.typeSwitchCamera) {
-                dispatch(
-                  switchStartPage(settings.nameOfType, settings.swithCamera),
-                );
-                props.navigation.navigate(settings.swithCamera);
-              }
+              setIsNFCOpen(!isNFCOpen);
+              setIsSearchOpen(false);
             }}
           />
         )}
@@ -141,7 +140,7 @@ const AppbarCustom = props => {
             icon={
               props.rejectIds.length === 0 ? 'select-inverse' : 'select-all'
             }
-            size={35}
+            size={25}
             color="#22215B"
             onPress={props.handleSelect}
             style={styles.selectBtn}
@@ -157,6 +156,7 @@ const AppbarCustom = props => {
           isSearchForGiveItem={props.isSearchForGiveItem}
         />
       )}
+      {isNFCOpen && <NFC />}
       <View style={styles.borderRadius} />
       <Portal>
         <Snackbar

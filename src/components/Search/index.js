@@ -1,6 +1,13 @@
 import React, {useState} from 'react';
 import {useDispatch} from 'react-redux';
-import {Dimensions, FlatList, ScrollView, StyleSheet, View} from 'react-native';
+import {
+  Dimensions,
+  FlatList,
+  KeyboardAvoidingView,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
 import {Card, Paragraph, Searchbar} from 'react-native-paper';
 import T from '../../i18n';
 import {useNavigation} from '@react-navigation/native';
@@ -22,7 +29,7 @@ const Search = ({
   const renderedList = search.length === 0 ? [] : list;
 
   const handleItemSearch = query => {
-    setSearch(query);
+    setSearch(query.trim());
     dispatch(myloadMore(true));
     dispatch(listAction(query, 0, true));
   };
@@ -51,21 +58,23 @@ const Search = ({
   return (
     <View style={styles.body}>
       <ScrollView style={styles.wrap}>
-        <Searchbar
-          placeholder={T.t('search')}
-          onChangeText={val => handleItemSearch(val)}
-          value={search}
-          style={styles.search}
-        />
+        <KeyboardAvoidingView style={styles.container} behavior="padding">
+          <Searchbar
+            placeholder={T.t('search')}
+            onChangeText={val => handleItemSearch(val)}
+            value={search}
+            style={styles.search}
+          />
 
-        {showEmptyError && (
-          <Paragraph style={styles.text}>{T.t('error_not_found')}</Paragraph>
-        )}
-        <FlatList
-          renderItem={item => renderItem(item)}
-          data={renderedList}
-          keyExtractor={item => item._id}
-        />
+          {showEmptyError && (
+            <Paragraph style={styles.text}>{T.t('error_not_found')}</Paragraph>
+          )}
+          <FlatList
+            renderItem={item => renderItem(item)}
+            data={renderedList}
+            keyExtractor={item => item._id}
+          />
+        </KeyboardAvoidingView>
       </ScrollView>
     </View>
   );
@@ -80,6 +89,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#D3E3F2',
     height: Dimensions.get('window').height,
+  },
+  container: {
+    flex: 1,
   },
   wrap: {
     marginBottom: 100,
