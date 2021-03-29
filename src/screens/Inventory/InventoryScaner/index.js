@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
 import {Dimensions, SafeAreaView, StyleSheet, View} from 'react-native';
 import T from '../../../i18n';
@@ -16,8 +16,17 @@ const InventoryScaner = props => {
       inventory.currentInventoryUser,
     ],
   );
-  const list = companyItemList.filter(
-    item => item.responsible === currentInventoryUser,
+  const [list, setList] = useState([]);
+
+  useEffect(
+    () =>
+      setList(
+        companyItemList.filter(item =>
+          item.person ? item.person._id === currentInventoryUser : '',
+        ),
+      ),
+
+    [companyItemList],
   );
 
   useFocusEffect(

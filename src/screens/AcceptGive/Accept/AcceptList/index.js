@@ -157,14 +157,8 @@ const AcceptList = () => {
         title={T.t('accept')}
         clearlocationMain={true}
         clearlocationLoc={true}
-      />
-
-      <IconButton
-        icon={rejectIds.length === 0 ? 'select-inverse' : 'select-all'}
-        size={35}
-        color="#22215B"
-        onPress={handleSelecttAll}
-        style={styles.selectAllButton}
+        handleSelect={handleSelecttAll}
+        rejectIds={rejectIds}
       />
 
       <SafeAreaView />

@@ -136,6 +136,17 @@ const AppbarCustom = props => {
             onPress={() => setIsSearchOpen(true)}
           />
         )}
+        {props.handleSelect && (
+          <IconButton
+            icon={
+              props.rejectIds.length === 0 ? 'select-inverse' : 'select-all'
+            }
+            size={35}
+            color="#22215B"
+            onPress={props.handleSelect}
+            style={styles.selectBtn}
+          />
+        )}
       </Appbar.Header>
       {isSearchOpen && (
         <Search
@@ -187,6 +198,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     color: '#ffffff',
     fontSize: 15,
+  },
+  selectBtn: {
+    marginRight: 15,
   },
 });
 

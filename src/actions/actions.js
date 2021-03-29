@@ -843,7 +843,7 @@ export const getItemsOnMe = nav => dispatch => {
           dispatch({
             type: GET_MY_ITEMS,
             payload: {
-              myloadMore: false,
+              myloadMore: true,
               offSet: 6,
               myList: resp.data.data,
               myError: false,
@@ -1724,7 +1724,7 @@ export const mountItemFromParent = (
 };
 
 //company
-export const searchMyCompanyItems = (query = '', offset, limit) => dispatch => {
+export const searchMyCompanyItems = (query, offset, limit) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
       .get(`${API_URL}/company/${company}/item`, {
