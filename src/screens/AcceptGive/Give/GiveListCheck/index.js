@@ -16,7 +16,10 @@ import TransparentButton from '../../../../components/Buttons/TransparentButton'
 import {useDispatch, useSelector} from 'react-redux';
 import {
   allowNewScan,
+  clearGiveItemQty,
+  clearGiveList,
   getTotalCountMyCompanyItems,
+  loader,
   makeTransfer,
   updateGiveList,
 } from '../../../../actions/actions.js';
@@ -37,21 +40,21 @@ const GiveListCheck = props => {
   );
   const [error, setError] = useState('');
   const [isModalShown, setIsModalShown] = useState(false);
+
   let showEmptyError = !scan.scanGiveList.length;
   const userCurrentId = give.userCurrentId;
   const errorId = !!scan.currentScan
     ? scan.currentScan
     : scan.scanInfo.metadata && scan.scanInfo.metadata.title;
-
-  const list = scan.scanGiveList
-    .filter(item => give.giveList.find(pc => pc.id !== item._id))
-    .map(item => ({
-      id: item._id,
-      quantity: item.batch ? item.batch.quantity : 1,
-    }));
-  const normalizedList =
-    give.giveList > 0
-      ? list
+  const givenListsId = give.giveList.map(item => item.id);
+  const list =
+    give.giveList.length > 0
+      ? scan.scanGiveList
+          .filter(item => !givenListsId.includes(item._id))
+          .map(item => ({
+            id: item._id,
+            quantity: item.batch ? item.batch.quantity : 1,
+          }))
       : scan.scanGiveList.map(item => ({
           id: item._id,
           quantity: item.batch ? item.batch.quantity : 1,
@@ -89,8 +92,9 @@ const GiveListCheck = props => {
       const uniqueList = Array.from(new Set(editGiveList.map(a => a._id))).map(
         id => editGiveList.find(a => a._id === id),
       );
+
       dispatch(updateGiveList(uniqueList));
-      setError(getProperErrorTransfer('Copy', scan.currentScan));
+      setError(getProperErrorTransfer('Copy', errorId));
     } else {
       if (scan.scanInfoError) {
         setError(getProperErrorTransfer(scan.scanInfoError, errorId));
@@ -121,14 +125,16 @@ const GiveListCheck = props => {
     dispatch(allowNewScan(true));
   };
 
-  const createTransfer = () =>
+  const createTransfer = () => {
+    dispatch(loader(true));
     dispatch(
       makeTransfer(
         props.navigation,
-        [...normalizedList, ...give.giveList],
+        [...list, ...give.giveList],
         userCurrentId,
       ),
     );
+  };
 
   return (
     <>

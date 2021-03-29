@@ -14,6 +14,7 @@ import {
   CHANGE_STATUS_MY_LOAD_MORE,
   CLEAR_BID_LIST,
   CLEAR_COMMENTS,
+  CLEAR_GIVE_ITEM_QTY,
   CLEAR_INVENTORY,
   CLEAR_MARKING,
   CLEAR_SCAN_GIVE_LIST,
@@ -1051,6 +1052,11 @@ export const clearUserList = () => dispatch => {
     },
   });
 };
+export const clearGiveItemQty = () => dispatch => {
+  dispatch({
+    type: CLEAR_GIVE_ITEM_QTY,
+  });
+};
 
 export const saveCurrentUser = (id, role, nav, startPage) => dispatch => {
   dispatch({
@@ -1113,6 +1119,10 @@ export const makeTransfer = (nav, list, user) => dispatch => {
           nav.navigate('GiveFinish');
           dispatch(loader(false));
         }
+      })
+      .then(() => {
+        dispatch(clearGiveList());
+        dispatch(clearGiveItemQty());
       })
       .catch(e => {
         if (!e.response.data) {

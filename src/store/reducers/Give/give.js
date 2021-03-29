@@ -6,6 +6,7 @@ import {
   TRANSFER,
   CLEAR_USER_LIST,
   SET_GIVE_ITEM_QTY,
+  CLEAR_GIVE_ITEM_QTY,
 } from '../../../actions/actionsType.js';
 
 const initialState = {
@@ -65,6 +66,11 @@ const giveReducer = (state = initialState, action) => {
       return {
         ...state,
         giveList: newGiveList,
+      };
+    case CLEAR_GIVE_ITEM_QTY:
+      return {
+        ...state,
+        giveList: [],
       };
     default:
       return state;
