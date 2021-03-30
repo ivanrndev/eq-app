@@ -1,15 +1,9 @@
 import React, {useState} from 'react';
 import {useDispatch} from 'react-redux';
-import {
-  Dimensions,
-  FlatList,
-  KeyboardAvoidingView,
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native';
+import {Dimensions, FlatList, StyleSheet, View} from 'react-native';
 import {Card, Paragraph, Searchbar} from 'react-native-paper';
 import T from '../../i18n';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 import {useNavigation} from '@react-navigation/native';
 import ItemListCard from '../ItemListCard';
 import {actionCheckError} from '../../utils/helpers';
@@ -57,25 +51,22 @@ const Search = ({
 
   return (
     <View style={styles.body}>
-      <ScrollView style={styles.wrap}>
-        <KeyboardAvoidingView style={styles.container} behavior="padding">
-          <Searchbar
-            placeholder={T.t('search')}
-            onChangeText={val => handleItemSearch(val)}
-            value={search}
-            style={styles.search}
-          />
-
-          {showEmptyError && (
-            <Paragraph style={styles.text}>{T.t('error_not_found')}</Paragraph>
-          )}
-          <FlatList
-            renderItem={item => renderItem(item)}
-            data={renderedList}
-            keyExtractor={item => item._id}
-          />
-        </KeyboardAvoidingView>
-      </ScrollView>
+      <Searchbar
+        placeholder={T.t('search')}
+        onChangeText={val => handleItemSearch(val)}
+        value={search}
+        style={styles.search}
+      />
+      <KeyboardAwareScrollView style={styles.container}>
+        {showEmptyError && (
+          <Paragraph style={styles.text}>{T.t('error_not_found')}</Paragraph>
+        )}
+        <FlatList
+          renderItem={item => renderItem(item)}
+          data={renderedList}
+          keyExtractor={item => item._id}
+        />
+      </KeyboardAwareScrollView>
     </View>
   );
 };

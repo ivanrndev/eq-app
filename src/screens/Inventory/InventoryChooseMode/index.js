@@ -215,7 +215,6 @@ const styles = StyleSheet.create({
     paddingTop: 25,
     alignItems: 'center',
     justifyContent: 'center',
-    maxHeight: Dimensions.get('window').height - 100,
   },
   card: {
     justifyContent: 'center',

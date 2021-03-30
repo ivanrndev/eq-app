@@ -1,16 +1,8 @@
 import React, {useState} from 'react';
-import {
-  Dimensions,
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  KeyboardAvoidingView,
-} from 'react-native';
+import {Dimensions, FlatList, StyleSheet, Text, View} from 'react-native';
 import T from '../../../../i18n';
 import {useNavigation} from '@react-navigation/native';
-
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 import Appbar from '../../../../components/Appbar';
 import {Button, Card, Menu, TextInput} from 'react-native-paper';
 import DarkButton from '../../../../components/Buttons/DarkButton';
@@ -90,82 +82,80 @@ const CreateItem = () => {
         goTo={'InventoryChooseMode'}
         title={T.t('create_item')}
       />
-      <Card style={styles.card}>
-        <ScrollView>
-          <KeyboardAvoidingView style={styles.container} behavior="padding">
+      <KeyboardAwareScrollView style={styles.container}>
+        <Card style={styles.card}>
+          <TextInput
+            value={formValues.type}
+            style={styles.input}
+            label={`${T.t('detail_type')}*`}
+            mode="outlined"
+            error={errors.type}
+            onChangeText={text => handleTextChange(text, 'type')}
+          />
+          <Text style={styles.err}>{errors.type}</Text>
+          <TextInput
+            value={formValues.title}
+            style={[styles.input, styles.secondInput]}
+            label={T.t('detail_title')}
+            mode="outlined"
+            onChangeText={text => handleTextChange(text, 'title')}
+          />
+          <TextInput
+            value={formValues.brand}
+            style={styles.input}
+            label={T.t('detail_brand')}
+            mode="outlined"
+            onChangeText={text => handleTextChange(text, 'brand')}
+          />
+          <TextInput
+            value={formValues.model}
+            style={styles.input}
+            label={T.t('detail_model')}
+            mode="outlined"
+            onChangeText={text => handleTextChange(text, 'model')}
+          />
+          <TextInput
+            value={formValues.serial}
+            style={styles.input}
+            label={T.t('detail_serial')}
+            mode="outlined"
+            onChangeText={text => handleTextChange(text, 'serial')}
+          />
+          <View style={styles.qty}>
             <TextInput
-              value={formValues.type}
-              style={styles.input}
-              label={`${T.t('detail_type')}*`}
+              value={`${formValues.quantity}`}
+              style={styles.qtyInput}
+              label={T.t('detail_quantity')}
+              keyboardType="numeric"
               mode="outlined"
-              error={errors.type}
-              onChangeText={text => handleTextChange(text, 'type')}
+              error={errors.quantity}
+              onChangeText={text => handleTextChange(text, 'quantity')}
             />
-            <Text style={styles.err}>{errors.type}</Text>
-            <TextInput
-              value={formValues.title}
-              style={[styles.input, styles.secondInput]}
-              label={T.t('detail_title')}
-              mode="outlined"
-              onChangeText={text => handleTextChange(text, 'title')}
-            />
-            <TextInput
-              value={formValues.brand}
-              style={styles.input}
-              label={T.t('detail_brand')}
-              mode="outlined"
-              onChangeText={text => handleTextChange(text, 'brand')}
-            />
-            <TextInput
-              value={formValues.model}
-              style={styles.input}
-              label={T.t('detail_model')}
-              mode="outlined"
-              onChangeText={text => handleTextChange(text, 'model')}
-            />
-            <TextInput
-              value={formValues.serial}
-              style={styles.input}
-              label={T.t('detail_serial')}
-              mode="outlined"
-              onChangeText={text => handleTextChange(text, 'serial')}
-            />
-            <View style={styles.qty}>
-              <TextInput
-                value={`${formValues.quantity}`}
-                style={styles.qtyInput}
-                label={T.t('detail_quantity')}
-                keyboardType="numeric"
-                mode="outlined"
-                error={errors.quantity}
-                onChangeText={text => handleTextChange(text, 'quantity')}
-              />
 
-              <Menu
-                visible={visible}
-                anchor={
-                  <Button onPress={() => setVisible(true)}>
-                    {selectedUnits}
-                  </Button>
-                }>
-                <FlatList
-                  data={units}
-                  keyExtractor={item => item}
-                  renderItem={renderItem}
-                />
-              </Menu>
-              <Text style={styles.qtyError}>{errors.quantity}</Text>
-            </View>
-            <View style={styles.btns}>
-              <DarkButton text={T.t('create_item')} onPress={handleCreate} />
-              <TransparentButton
-                text={T.t('cancel')}
-                onPress={handleCancelCreate}
+            <Menu
+              visible={visible}
+              anchor={
+                <Button onPress={() => setVisible(true)}>
+                  {selectedUnits}
+                </Button>
+              }>
+              <FlatList
+                data={units}
+                keyExtractor={item => item}
+                renderItem={renderItem}
               />
-            </View>
-          </KeyboardAvoidingView>
-        </ScrollView>
-      </Card>
+            </Menu>
+            <Text style={styles.qtyError}>{errors.quantity}</Text>
+          </View>
+          <View style={styles.btns}>
+            <DarkButton text={T.t('create_item')} onPress={handleCreate} />
+            <TransparentButton
+              text={T.t('cancel')}
+              onPress={handleCancelCreate}
+            />
+          </View>
+        </Card>
+      </KeyboardAwareScrollView>
     </View>
   );
 };

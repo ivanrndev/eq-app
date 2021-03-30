@@ -109,6 +109,10 @@ const AppbarCustom = props => {
             if (props.switch) {
               setIsNFCOpen(false);
             }
+            if (isNFCOpen) {
+              dispatch(allowNewScan(true));
+              dispatch(clearMarking());
+            }
           }}
         />
         <Appbar.Content

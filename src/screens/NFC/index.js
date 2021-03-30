@@ -2,7 +2,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-undef */
 import React, {useCallback, useState} from 'react';
-import {Platform, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {
+  Dimensions,
+  Platform,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import NfcManager, {NfcTech} from 'react-native-nfc-manager';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import DarkButton from '../../components/Buttons/DarkButton';
@@ -47,6 +54,7 @@ const NFC = () => {
 
       resp = await cmd([0x3a, 4, 4]);
       resp = await cmd([0x3a, 5, 8]);
+      bytes = resp.toString().split(',');
 
       function removeElement(arrayName, arrayElement) {
         for (var i = 0; i < arrayName.length; i++) {
@@ -97,18 +105,24 @@ const NFC = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.log}>
-        <Text style={styles.info}>{log}</Text>
-      </View>
-      <View style={styles.button}>
-        <DarkButton text={T.t('again_short')} onPress={readData} />
-      </View>
-    </SafeAreaView>
+    <View style={styles.wrap}>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.log}>
+          <Text style={styles.info}>{log}</Text>
+        </View>
+        <View style={styles.button}>
+          <DarkButton text={T.t('again_short')} onPress={readData} />
+        </View>
+      </SafeAreaView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  wrap: {
+    height: Dimensions.get('window').height,
+    backgroundColor: '#D3E3F2',
+  },
   container: {
     flex: 1,
     flexDirection: 'column',
