@@ -39,7 +39,7 @@ const GoogleAuth = () => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      console.log('POPOPO', userInfo.idToken);
+
       await dispatch(authWithGoogleAccount(userInfo.idToken));
 
       setUserInfo({userInfo});

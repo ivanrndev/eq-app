@@ -144,7 +144,7 @@ const Auth = props => {
         dispatch(logOut(props.navigation, false));
       }
     });
-  }, [store.isLoad, store.isError]);
+  }, [store.isLoad, store.isError, store.isLogin, store.isLogOut]);
 
   // detected keyboard
   const [isOpen, setIsOpen] = useState(false);

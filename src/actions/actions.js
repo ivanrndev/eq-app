@@ -261,7 +261,7 @@ export const logOut = (nav, ifNav = true) => dispatch => {
   }
 };
 export const authWithGoogleAccount = token => dispatch => {
-  console.log('Ir!!!!', {token});
+  dispatch(loader(true));
   return axios
     .post(LOGIN_GOOGLE_URL, {token})
     .then(resp => {
@@ -280,12 +280,11 @@ export const authWithGoogleAccount = token => dispatch => {
         // first open help
         AsyncStorage.setItem('help', '1');
         dispatch(helps(1));
-
         dispatch(currentUser());
+        dispatch(loader(false));
       }
     })
     .catch(e => {
-      console.log('ERR', e);
       if (!e.response.data.success) {
         dispatch({
           type: LOGIN_WITH_GOOGLE_ACCOUNT_ERROR,
@@ -294,6 +293,7 @@ export const authWithGoogleAccount = token => dispatch => {
             isLoad: false,
           },
         });
+        dispatch(loader(false));
       }
     });
 };
