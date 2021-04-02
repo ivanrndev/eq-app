@@ -8,12 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* EqManTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* EqManTests.m */; };
-		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		232C2DC3467FA6110E5187B6 /* libPods-EqMan-EqManTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 52E192B2409B53C18C13FFDA /* libPods-EqMan-EqManTests.a */; };
-		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		902807BE2615E104003CDC67 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 902807BD2615E104003CDC67 /* GoogleService-Info.plist */; };
+		902808CD261723E0003CDC67 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 902808CC261723E0003CDC67 /* AppDelegate.m */; };
+		902808D3261724A6003CDC67 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 902808D2261724A6003CDC67 /* LaunchScreen.storyboard */; };
 		ECB1EE095EC592AD118735AE /* libPods-EqMan.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 333ED9C241AF57819CB39FDB /* libPods-EqMan.a */; };
 /* End PBXBuildFile section */
 
@@ -32,8 +32,6 @@
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* EqManTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EqManTests.m; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* EqMan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EqMan.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = EqMan/AppDelegate.h; sourceTree = "<group>"; };
-		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = EqMan/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = EqMan/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = EqMan/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = EqMan/main.m; sourceTree = "<group>"; };
@@ -41,8 +39,10 @@
 		52E192B2409B53C18C13FFDA /* libPods-EqMan-EqManTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-EqMan-EqManTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		66291A23AB9F0D2FA5E3A013 /* Pods-EqMan-EqManTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EqMan-EqManTests.debug.xcconfig"; path = "Target Support Files/Pods-EqMan-EqManTests/Pods-EqMan-EqManTests.debug.xcconfig"; sourceTree = "<group>"; };
 		7EB50710D1D1C45E468E4007 /* Pods-EqMan.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EqMan.release.xcconfig"; path = "Target Support Files/Pods-EqMan/Pods-EqMan.release.xcconfig"; sourceTree = "<group>"; };
-		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = EqMan/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		902807BD2615E104003CDC67 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		902808CB261723D7003CDC67 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = EqMan/AppDelegate.h; sourceTree = "<group>"; };
+		902808CC261723E0003CDC67 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = EqMan/AppDelegate.m; sourceTree = "<group>"; };
+		902808D2261724A6003CDC67 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BF6ED59C88F378758475437C /* Pods-EqMan.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EqMan.debug.xcconfig"; path = "Target Support Files/Pods-EqMan/Pods-EqMan.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F88BF516ADB5E30C73957B72 /* Pods-EqMan-EqManTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EqMan-EqManTests.release.xcconfig"; path = "Target Support Files/Pods-EqMan-EqManTests/Pods-EqMan-EqManTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -99,12 +99,12 @@
 		13B07FAE1A68108700A75B9A /* EqMan */ = {
 			isa = PBXGroup;
 			children = (
+				902808D2261724A6003CDC67 /* LaunchScreen.storyboard */,
+				902808CC261723E0003CDC67 /* AppDelegate.m */,
 				902807BD2615E104003CDC67 /* GoogleService-Info.plist */,
-				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
-				13B07FB01A68108700A75B9A /* AppDelegate.m */,
+				902808CB261723D7003CDC67 /* AppDelegate.h */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
-				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
 			name = EqMan;
@@ -245,7 +245,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
+				902808D3261724A6003CDC67 /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				902807BE2615E104003CDC67 /* GoogleService-Info.plist in Resources */,
 			);
@@ -414,7 +414,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				902808CD261723E0003CDC67 /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
