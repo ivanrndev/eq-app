@@ -1,13 +1,32 @@
 /* eslint-disable prettier/prettier */
 import React, {useState} from 'react';
-import {StyleSheet, View, Dimensions, SafeAreaView, ScrollView} from 'react-native';
-import {Card, IconButton, Searchbar, Button, ActivityIndicator, Dialog, Portal} from 'react-native-paper';
+import {
+  StyleSheet,
+  View,
+  Dimensions,
+  SafeAreaView,
+  ScrollView,
+} from 'react-native';
+import {
+  Card,
+  IconButton,
+  Searchbar,
+  Button,
+  ActivityIndicator,
+  Dialog,
+  Portal,
+} from 'react-native-paper';
 import {isEmpty} from 'lodash';
 // components
 import Appbar from '../../../components/Appbar';
 // redux and actions
 import {useDispatch, useSelector} from 'react-redux';
-import {loader, loadMore, searchItem, mountItemFromParent} from '../../../actions/actions.js';
+import {
+  loader,
+  loadMore,
+  searchItem,
+  mountItemFromParent,
+} from '../../../actions/actions.js';
 import T from '../../../i18n';
 
 export const MountNoMarking = props => {
@@ -34,13 +53,15 @@ export const MountNoMarking = props => {
   const addItem = item => {
     // setIsOpen(true);
     dispatch(loader(true));
-    dispatch(mountItemFromParent(
-      store.scanInfo._id,
-      item,
-      store.scanInfo.code,
-      props.navigation,
-      'MountNoMarking'
-    ));
+    dispatch(
+      mountItemFromParent(
+        store.scanInfo._id,
+        item,
+        store.scanInfo.code,
+        props.navigation,
+        'MountNoMarking',
+      ),
+    );
   };
 
   return (
@@ -52,70 +73,85 @@ export const MountNoMarking = props => {
         goTo={'back'}
         title={T.t('edit')}
       />
-      <SafeAreaView/>
-        <View style={styles.container}>
+      <SafeAreaView />
+      <View style={styles.container}>
         <Searchbar
-            placeholder={T.t('search')}
-            onChangeText={query => itemSearch(query)}
-            value={search}
-            style={styles.search}
-          />
-            <ScrollView style={styles.scroll}>
-              <View style={styles.cardBlock}>
-              {!isEmpty(editItems) && editItems.map((item, index) => (
-                        <Card.Title
-                        key={index}
-                        style={styles.card}
-                        title={`${item.metadata.title ? item.metadata.title : ''}`}
-                        subtitle={`${item.metadata.type ? item.metadata.type + ',' : ''} ${item.metadata.brand ? item.metadata.brand + ',' : ''} ${item.metadata.model ? item.metadata.model + ',' : ''} ${item.metadata.serial ? item.metadata.serial : ''}`}
-                        right={props =>
-                          !isEmpty(originalList) && originalList.map(i => i._id).includes(item._id) ? (
-                            <IconButton {...props} icon="check" onPress={() => {}} />
-                          ) : (
-                            !item.parent && ( <IconButton {...props} icon="plus" onPress={() => addItem(item._id)} /> )
-                          )
-                        }
-                    />
+          placeholder={T.t('search')}
+          onChangeText={query => itemSearch(query)}
+          value={search}
+          style={styles.search}
+        />
+        <ScrollView style={styles.scroll}>
+          <View style={styles.cardBlock}>
+            {!isEmpty(editItems) &&
+              editItems.map((item, index) => (
+                <Card.Title
+                  key={index}
+                  style={styles.card}
+                  title={`${item.metadata.title ? item.metadata.title : ''}`}
+                  subtitle={`${
+                    item.metadata.type ? item.metadata.type + ',' : ''
+                  } ${item.metadata.brand ? item.metadata.brand + ',' : ''} ${
+                    item.metadata.model ? item.metadata.model + ',' : ''
+                  } ${item.metadata.serial ? item.metadata.serial : ''}`}
+                  right={props =>
+                    !isEmpty(originalList) &&
+                    originalList.map(i => i._id).includes(item._id) ? (
+                      <IconButton {...props} icon="check" onPress={() => {}} />
+                    ) : (
+                      !item.parent && (
+                        <IconButton
+                          {...props}
+                          icon="plus"
+                          onPress={() => addItem(item._id)}
+                        />
+                      )
+                    )
+                  }
+                />
               ))}
-              </View>
-            </ScrollView>
-            {!marking.loadMore && (
-              <Button
-                style={styles.button}
-                mode="Text"
-                color="#22215B"
-                onPress={getMoreItems}>
-                 {T.t('load_more')}
-              </Button>
-            )}
-            {marking.loadMore && (
-              <ActivityIndicator
-                style={styles.load}
-                size={'large'}
-                animating={true}
-                color={'#EDF6FF'}
-              />
-            )}
-        </View>
-        <Portal>
-          <Dialog style={styles.dialog} visible={isOpen} onDismiss={() => setIsOpen(!isOpen)}>
-            <Dialog.Title>{T.t('add')}</Dialog.Title>
-            <Dialog.Actions>
-              <Button onPress={() => setIsOpen(!isOpen)}>Done</Button>
-            </Dialog.Actions>
-          </Dialog>
-        </Portal>
+          </View>
+        </ScrollView>
+        {!marking.loadMore && (
+          <Button
+            style={styles.button}
+            mode="Text"
+            color="#22215B"
+            onPress={getMoreItems}>
+            {T.t('load_more')}
+          </Button>
+        )}
+        {marking.loadMore && (
+          <ActivityIndicator
+            style={styles.load}
+            size={'large'}
+            animating={true}
+            color={'#EDF6FF'}
+          />
+        )}
+      </View>
+      <Portal>
+        <Dialog
+          style={styles.dialog}
+          visible={isOpen}
+          onDismiss={() => setIsOpen(!isOpen)}>
+          <Dialog.Title>{T.t('add')}</Dialog.Title>
+          <Dialog.Actions>
+            <Button onPress={() => setIsOpen(!isOpen)}>Done</Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
     </>
   );
 };
 
 const styles = StyleSheet.create({
-search: {
+  search: {
     backgroundColor: '#EDF6FF',
     width: Dimensions.get('window').width / 1.1,
     marginBottom: 10,
     alignSelf: 'center',
-    },
+  },
   container: {
     backgroundColor: '#D3E3F2',
     paddingTop: 20,

@@ -63,6 +63,7 @@ import Search from './components/Search';
 import InventoryChooseMode from './screens/Inventory/InventoryChooseMode';
 import SetInventoryQty from './screens/Inventory/SetInventoryQty';
 import CreateItem from './screens/Inventory/InventoryChooseMode/CreateItem';
+import MountItemSetQty from './screens/Ident/MountList/MountItemSetQty';
 
 const theme = {
   ...DefaultTheme,
@@ -151,6 +152,10 @@ const App = () => {
                 <Drawer.Screen name="Subscribe" component={Subscribe} />
                 <Drawer.Screen name="NFC" component={NFC} />
                 <Drawer.Screen name="MountList" component={MountList} />
+                <Drawer.Screen
+                  name="MountItemQty"
+                  component={MountItemSetQty}
+                />
                 <Drawer.Screen name="Search" component={Search} />
                 <Drawer.Screen
                   name="MountNoMarking"

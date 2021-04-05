@@ -254,5 +254,9 @@
     "operation_unmount_parent": "Unmounting items:",
     "operation_return_service": "returned from service",
     "operation_location_from": "Item was locate from",
-    "operation_location_to": "to place"
+    "operation_location_to": "to place",
+    "error_already_mounted": "This item is already mounted",
+    "error_has_mounted_items": "The item should not have mounted items",
+    "error_has_already_mounted": "Item already added to the list",
+
 }

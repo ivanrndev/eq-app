@@ -158,6 +158,7 @@ const AppbarCustom = props => {
           pageToChosenItem={props.pageToChosenItem}
           setIsSearchOpen={setIsSearchOpen}
           isSearchForGiveItem={props.isSearchForGiveItem}
+          onSelectAction={props.onSelectAction}
         />
       )}
       {isNFCOpen && <NFC />}

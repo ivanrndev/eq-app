@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {isEmpty} from 'lodash';
 import {
   Dimensions,
@@ -26,6 +26,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   backPageMount,
   getComments,
+  getSearchItem,
   getTransactions,
   loader,
   nextPageMount,
@@ -48,6 +49,7 @@ export const OnMeInfo = props => {
   const myList = store.myList.filter(item => {
     return item._id === store.myCurrentId;
   });
+
   const metaData = myList.length ? myList[0] : {};
   const info = metaData.metadata;
   const show = !isEmpty(metaData);

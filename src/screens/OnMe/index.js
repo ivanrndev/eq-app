@@ -25,6 +25,7 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import {myloadMore, searchMyItem} from '../../actions/actions.js';
 import ItemListCard from '../../components/ItemListCard';
+import {addMountParent} from '../../actions/mountActions';
 
 const OnMe = props => {
   const dispatch = useDispatch();
@@ -43,7 +44,16 @@ const OnMe = props => {
     dispatch(myloadMore(true));
     dispatch(searchMyItem(search, onMe.offSet, false, 6));
   };
-
+  const handleItemPress = item => {
+    handleNavigateToMySingleItem(
+      item.code,
+      props.navigation,
+      item._id,
+      'OnMeInfo',
+      dispatch,
+    );
+    dispatch(addMountParent(item._id));
+  };
   return (
     <>
       <Appbar
@@ -78,15 +88,7 @@ const OnMe = props => {
                         <Card
                           style={styles.card}
                           key={item._id}
-                          onPress={() =>
-                            handleNavigateToMySingleItem(
-                              item.code,
-                              props.navigation,
-                              item._id,
-                              'OnMeInfo',
-                              dispatch,
-                            )
-                          }>
+                          onPress={() => handleItemPress(item)}>
                           <ItemListCard item={item} />
                         </Card>
                       ))

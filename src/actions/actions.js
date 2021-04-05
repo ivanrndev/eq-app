@@ -3,6 +3,7 @@ import axios from '../utils/axios';
 import {API_URL, LOGIN_URL, PORGOT_PASS} from '../constants/auth.js';
 import {actionCheckError, getProperError} from '../utils/helpers.js';
 import {
+  ADD_ITEM_TO_MOUNT_LIST,
   ALLOW_NEW_SCAN,
   ALREADY_SCANNED_BIDS,
   BACK_PAGE_MOUNT,
@@ -449,11 +450,8 @@ export const scanInfo = (
               dispatch(loader(false));
             } else {
               dispatch({
-                type: SAVE_CURRENT_MOUNT_SCAN_INFO_LIST,
-                payload: {
-                  mountScanInfo: resp.data,
-                  mountError: false,
-                },
+                type: ADD_ITEM_TO_MOUNT_LIST,
+                payload: resp.data,
               });
               dispatch(loader(false));
             }
@@ -518,7 +516,7 @@ export const scanInfo = (
           dispatch({
             type: ERROR_CURRENT_MOUNT_SCAN_INFO,
             payload: {
-              mountError: e.response.data.message.name,
+              mountError: e.response.data.message,
             },
           });
           dispatch(loader(false));
@@ -1718,7 +1716,10 @@ export const mountItemFromParent = (
 ) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
-      .put(`${API_URL}/company/${company}/item/mount`, {parent, items})
+      .put(`${API_URL}/company/${company}/item/mount`, {
+        items: [{id: items}],
+        parent,
+      })
       .then(resp => {
         if (resp.status === 200) {
           dispatch(loader(false));

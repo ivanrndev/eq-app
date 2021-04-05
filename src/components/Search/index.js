@@ -15,6 +15,7 @@ const Search = ({
   pageToChosenItem,
   setIsSearchOpen,
   isSearchForGiveItem,
+  onSelectAction,
 }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -38,6 +39,7 @@ const Search = ({
         pageToChosenItem,
         isSearchForGiveItem,
       ),
+      !!onSelectAction && dispatch(onSelectAction(item)),
     );
     setIsSearchOpen(false);
     setSearch('');
