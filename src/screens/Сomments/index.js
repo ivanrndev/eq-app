@@ -31,9 +31,10 @@ const Comments = props => {
   const [text, setText] = useState('');
   let scrollView = useRef();
   let showEmptyError = !comments.commentsList.length;
-
+  let commentData = new FormData();
+  commentData.append('message', text);
   const sendComment = () => {
-    dispatch(sendComments(comments.itemId, text));
+    dispatch(sendComments(comments.itemId, commentData));
   };
 
   useEffect(() => {

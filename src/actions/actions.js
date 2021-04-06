@@ -1536,7 +1536,7 @@ export const clearComments = () => dispatch => {
 export const sendComments = (itemId, message) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
-      .post(`${API_URL}/company/${company}/item/${itemId}/comments/`, {message})
+      .post(`${API_URL}/company/${company}/item/${itemId}/comments/`, message)
       .then(resp => {
         if (resp.status === 200) {
           dispatch({
