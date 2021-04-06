@@ -74,7 +74,6 @@ import {
   PUT_ERROR_WRITE_OFF,
   RESET_PASS_INFO,
   SAVE_CURRENT_INVENTORY_USER,
-  SAVE_CURRENT_MOUNT_SCAN_INFO_LIST,
   SAVE_CURRENT_SCAN,
   SAVE_CURRENT_SCAN_INFO,
   SAVE_CURRENT_SEARCH,
@@ -292,30 +291,28 @@ export const currentUser = () => dispatch => {
 };
 
 export const getCompanyInfo = () => dispatch => {
-  AsyncStorage.getItem('company').then(company => {
-    return axios
-      .get(`${API_URL}/company/my`)
-      .then(resp => {
-        if (resp.status === 200) {
-          dispatch({
-            type: GET_COMPANY_INFO,
-            payload: {
-              currentCompany: resp.data.company,
-            },
-          });
-        }
-      })
-      .catch(e => {
-        if (!e.response.data.success) {
-          dispatch({
-            type: GET_COMPANY_INFO_ERROR,
-            payload: {
-              currentCompany: e.response.data.message.name,
-            },
-          });
-        }
-      });
-  });
+  return axios
+    .get(`${API_URL}/company/my`)
+    .then(resp => {
+      if (resp.status === 200) {
+        dispatch({
+          type: GET_COMPANY_INFO,
+          payload: {
+            currentCompany: resp.data.company,
+          },
+        });
+      }
+    })
+    .catch(e => {
+      if (!e.response.data.success) {
+        dispatch({
+          type: GET_COMPANY_INFO_ERROR,
+          payload: {
+            currentCompany: e.response.data.message.name,
+          },
+        });
+      }
+    });
 };
 
 export const statusError = status => dispatch => {
@@ -1656,6 +1653,9 @@ export const deleteTransfer = (nav, id, route) => dispatch => {
       }
     })
     .catch(e => {
+      AsyncStorage.getItem('userId').then(id => {
+        dispatch(getTransfers(nav, id, 0, true, route));
+      });
       if (!e.response.data.success) {
         dispatch({
           type: TRANSFERS_UPDATE_ERROR,
