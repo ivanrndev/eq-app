@@ -10,7 +10,6 @@
 		00E356F31AD99517003FC87E /* EqManTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* EqManTests.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		232C2DC3467FA6110E5187B6 /* libPods-EqMan-EqManTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 52E192B2409B53C18C13FFDA /* libPods-EqMan-EqManTests.a */; };
 		902807BE2615E104003CDC67 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 902807BD2615E104003CDC67 /* GoogleService-Info.plist */; };
 		902808CD261723E0003CDC67 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 902808CC261723E0003CDC67 /* AppDelegate.m */; };
 		902808D3261724A6003CDC67 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 902808D2261724A6003CDC67 /* LaunchScreen.storyboard */; };
@@ -36,16 +35,14 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = EqMan/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = EqMan/main.m; sourceTree = "<group>"; };
 		333ED9C241AF57819CB39FDB /* libPods-EqMan.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-EqMan.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		52E192B2409B53C18C13FFDA /* libPods-EqMan-EqManTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-EqMan-EqManTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		66291A23AB9F0D2FA5E3A013 /* Pods-EqMan-EqManTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EqMan-EqManTests.debug.xcconfig"; path = "Target Support Files/Pods-EqMan-EqManTests/Pods-EqMan-EqManTests.debug.xcconfig"; sourceTree = "<group>"; };
 		7EB50710D1D1C45E468E4007 /* Pods-EqMan.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EqMan.release.xcconfig"; path = "Target Support Files/Pods-EqMan/Pods-EqMan.release.xcconfig"; sourceTree = "<group>"; };
 		902807BD2615E104003CDC67 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		902808CB261723D7003CDC67 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = EqMan/AppDelegate.h; sourceTree = "<group>"; };
 		902808CC261723E0003CDC67 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = EqMan/AppDelegate.m; sourceTree = "<group>"; };
 		902808D2261724A6003CDC67 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		9040C24E261D901B006BE3EF /* EqMan.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = EqMan.entitlements; path = EqMan/EqMan.entitlements; sourceTree = "<group>"; };
 		BF6ED59C88F378758475437C /* Pods-EqMan.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EqMan.debug.xcconfig"; path = "Target Support Files/Pods-EqMan/Pods-EqMan.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		F88BF516ADB5E30C73957B72 /* Pods-EqMan-EqManTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EqMan-EqManTests.release.xcconfig"; path = "Target Support Files/Pods-EqMan-EqManTests/Pods-EqMan-EqManTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,7 +50,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				232C2DC3467FA6110E5187B6 /* libPods-EqMan-EqManTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -90,8 +86,6 @@
 			children = (
 				BF6ED59C88F378758475437C /* Pods-EqMan.debug.xcconfig */,
 				7EB50710D1D1C45E468E4007 /* Pods-EqMan.release.xcconfig */,
-				66291A23AB9F0D2FA5E3A013 /* Pods-EqMan-EqManTests.debug.xcconfig */,
-				F88BF516ADB5E30C73957B72 /* Pods-EqMan-EqManTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -99,6 +93,7 @@
 		13B07FAE1A68108700A75B9A /* EqMan */ = {
 			isa = PBXGroup;
 			children = (
+				9040C24E261D901B006BE3EF /* EqMan.entitlements */,
 				902808D2261724A6003CDC67 /* LaunchScreen.storyboard */,
 				902808CC261723E0003CDC67 /* AppDelegate.m */,
 				902807BD2615E104003CDC67 /* GoogleService-Info.plist */,
@@ -115,7 +110,6 @@
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				333ED9C241AF57819CB39FDB /* libPods-EqMan.a */,
-				52E192B2409B53C18C13FFDA /* libPods-EqMan-EqManTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -158,12 +152,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "EqManTests" */;
 			buildPhases = (
-				4F4FE8B1C3A909CF691A9D7F /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				0872696A005C8E0584725D15 /* [CP] Embed Pods Frameworks */,
-				784023D98067ED43DD29B7C9 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -185,7 +176,6 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				88071C08D4A6AF1D2AFDC8E5 /* [CP] Embed Pods Frameworks */,
 				8641F589D4F52495D3BCD147 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
@@ -268,45 +258,6 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nexport NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
-		0872696A005C8E0584725D15 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-EqMan-EqManTests/Pods-EqMan-EqManTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-EqMan-EqManTests/Pods-EqMan-EqManTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-EqMan-EqManTests/Pods-EqMan-EqManTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		4F4FE8B1C3A909CF691A9D7F /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-EqMan-EqManTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 		71E02CFC4ED501EDACD5CCC5 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -329,23 +280,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		784023D98067ED43DD29B7C9 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-EqMan-EqManTests/Pods-EqMan-EqManTests-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-EqMan-EqManTests/Pods-EqMan-EqManTests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-EqMan-EqManTests/Pods-EqMan-EqManTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		8641F589D4F52495D3BCD147 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -361,23 +295,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-EqMan/Pods-EqMan-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		88071C08D4A6AF1D2AFDC8E5 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-EqMan/Pods-EqMan-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-EqMan/Pods-EqMan-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-EqMan/Pods-EqMan-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
@@ -432,7 +349,6 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 66291A23AB9F0D2FA5E3A013 /* Pods-EqMan-EqManTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -459,7 +375,6 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F88BF516ADB5E30C73957B72 /* Pods-EqMan-EqManTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -487,6 +402,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = EqMan/EqMan.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8G27Y4Z7P8;
 				ENABLE_BITCODE = NO;
@@ -514,6 +430,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = EqMan/EqMan.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8G27Y4Z7P8;
 				INFOPLIST_FILE = EqMan/Info.plist;
