@@ -1,6 +1,11 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from '../utils/axios';
-import {API_URL, LOGIN_URL, PORGOT_PASS} from '../constants/auth.js';
+import {
+  API_URL,
+  LOGIN_GOOGLE_URL,
+  LOGIN_URL,
+  PORGOT_PASS,
+} from '../constants/auth.js';
 import {actionCheckError, getProperError} from '../utils/helpers.js';
 import {
   ADD_ITEM_TO_MOUNT_LIST,
@@ -101,6 +106,8 @@ import {
   TRANSFERS_UPDATE_ERROR,
   UPDATE_SCAN_GIVE_LIST,
   USER_CURRENT_ID,
+  LOGIN_WITH_GOOGLE_ACCOUNT,
+  LOGIN_WITH_GOOGLE_ACCOUNT_ERROR,
 } from './actionsType';
 
 // Settings
@@ -263,6 +270,43 @@ export const logOut = (nav, ifNav = true) => dispatch => {
   if (ifNav) {
     nav.navigate('Auth');
   }
+};
+export const authWithGoogleAccount = token => dispatch => {
+  dispatch(loader(true));
+  return axios
+    .post(LOGIN_GOOGLE_URL, {token})
+    .then(resp => {
+      console.log('Resp', resp);
+      if (resp.status === 200) {
+        AsyncStorage.setItem('token', resp.data.token);
+        AsyncStorage.setItem('role', resp.data.role);
+        dispatch({
+          type: LOGIN_WITH_GOOGLE_ACCOUNT,
+          payload: {
+            isLogin: true,
+            isLoad: false,
+            isLogOut: false,
+          },
+        });
+        // first open help
+        AsyncStorage.setItem('help', '1');
+        dispatch(helps(1));
+        dispatch(currentUser());
+        dispatch(loader(false));
+      }
+    })
+    .catch(e => {
+      if (!e.response.data.success) {
+        dispatch({
+          type: LOGIN_WITH_GOOGLE_ACCOUNT_ERROR,
+          payload: {
+            isError: e.response.data.message.name,
+            isLoad: false,
+          },
+        });
+        dispatch(loader(false));
+      }
+    });
 };
 
 export const currentUser = () => dispatch => {
