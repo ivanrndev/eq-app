@@ -227,10 +227,7 @@ export const MountList = props => {
             <DarkButton
               size={fontSizer(width)}
               text={T.t('done')}
-              onPress={() => {
-                handleMount();
-                props.navigation.navigate(settings.backPageMount);
-              }}
+              onPress={handleMount}
             />
           </View>
           <View style={styles.cardBlock}>

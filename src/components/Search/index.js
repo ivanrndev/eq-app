@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {useDispatch} from 'react-redux';
-import {Dimensions, FlatList, StyleSheet, View} from 'react-native';
+import {Dimensions, StyleSheet, View} from 'react-native';
 import {Card, Paragraph, Searchbar} from 'react-native-paper';
 import T from '../../i18n';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
@@ -45,12 +45,6 @@ const Search = ({
     setSearch('');
   };
 
-  const renderItem = ({item}) => (
-    <Card style={styles.card} onPress={() => handleCurrentScan(item)}>
-      <ItemListCard item={item} />
-    </Card>
-  );
-
   return (
     <View style={styles.body}>
       <Searchbar
@@ -63,11 +57,14 @@ const Search = ({
         {showEmptyError && (
           <Paragraph style={styles.text}>{T.t('error_not_found')}</Paragraph>
         )}
-        <FlatList
-          renderItem={item => renderItem(item)}
-          data={renderedList}
-          keyExtractor={item => item._id}
-        />
+        {renderedList.map(item => (
+          <Card
+            style={styles.card}
+            onPress={() => handleCurrentScan(item)}
+            key={item._id}>
+            <ItemListCard item={item} />
+          </Card>
+        ))}
       </KeyboardAwareScrollView>
     </View>
   );
