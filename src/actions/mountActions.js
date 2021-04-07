@@ -10,7 +10,7 @@ import {
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from '../utils/axios';
 import {API_URL} from '../constants/auth';
-import {currentScan, loader} from './actions';
+import {getSearchItem, loader} from './actions';
 
 export const addMountParent = parentId => dispatch => {
   dispatch({
@@ -38,7 +38,7 @@ export const deleteItemFromMountList = id => dispatch => {
   });
 };
 
-export const mountItems = (parent, items) => dispatch => {
+export const mountItems = (parent, items, navigation, page) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
       .put(`${API_URL}/company/${company}/item/mount`, {
@@ -52,6 +52,10 @@ export const mountItems = (parent, items) => dispatch => {
             type: MOUNT_ITEMS,
           });
         }
+      })
+      .then(() => {
+        dispatch(cleanMountItemsList());
+        dispatch(getSearchItem(parent, navigation, page));
       })
       .catch(e => {
         if (!e.response.data.success) {

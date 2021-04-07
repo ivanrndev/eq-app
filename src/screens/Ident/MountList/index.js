@@ -25,7 +25,6 @@ import MountScanner from '../../../components/MountScanner';
 // redux and actions
 import {useDispatch, useSelector} from 'react-redux';
 import {
-  getSearchItem,
   loader,
   mountCameraList,
   mountItemFromParent,
@@ -42,7 +41,6 @@ import {
 import AsyncStorage from '@react-native-community/async-storage';
 import {
   addItemToMountList,
-  cleanMountItemsList,
   deleteItemFromMountList,
   mountItems,
 } from '../../../actions/mountActions';
@@ -187,9 +185,14 @@ export const MountList = props => {
 
   const handleMount = () => {
     dispatch(loader(true));
-    dispatch(mountItems(store.currentParent, [...list, ...mountListWithQty]));
-    dispatch(cleanMountItemsList());
-    dispatch(getSearchItem(store.currentParent, props.navigation, 'OnMeInfo'));
+    dispatch(
+      mountItems(
+        store.currentParent,
+        [...list, ...mountListWithQty],
+        props.navigation,
+        settings.backPageMount,
+      ),
+    );
   };
 
   return (

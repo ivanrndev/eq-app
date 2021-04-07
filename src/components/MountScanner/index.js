@@ -1,31 +1,31 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
-  View,
-  StyleSheet,
   Dimensions,
-  KeyboardAvoidingView,
   Keyboard,
+  KeyboardAvoidingView,
+  StyleSheet,
+  View,
 } from 'react-native';
 import T from '../../i18n';
 import {RNCamera} from 'react-native-camera';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {
-  TextInput,
-  Portal,
-  Dialog,
-  Snackbar,
   ActivityIndicator,
+  Dialog,
+  Portal,
+  Snackbar,
+  TextInput,
 } from 'react-native-paper';
-import {minY, maxY, minX, maxX} from '../../utils/mountMarkerParams.js';
+import {maxX, maxY, minX, minY} from '../../utils/mountMarkerParams.js';
 import DarkButton from '../Buttons/DarkButton';
 import TransparentButton from '../Buttons/TransparentButton';
 import {fontSizer} from '../../utils/helpers.js';
 import {isEmpty} from 'lodash';
 import {
   currentScan,
+  dialogInput,
   loader,
   mountCameraList,
-  dialogInput,
 } from '../../actions/actions.js';
 // redux and actions
 import {useDispatch, useSelector} from 'react-redux';
@@ -178,7 +178,7 @@ const MountScanner = props => {
               </Portal>
               <View style={styles.buttons}>
                 <View style={styles.buttonBlock}>
-                  <View style={{marginBottom: -15}}>
+                  <View>
                     <DarkButton
                       size={fontSizer(width)}
                       text={T.t('input_code')}

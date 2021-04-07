@@ -54,7 +54,10 @@ export const IdentInfo = props => {
   }
 
   let itemId = store.scanInfo._id;
-
+  const quantity = store.scanInfo.batch ? store.scanInfo.batch.quantity : 1;
+  const units = store.scanInfo.batch
+    ? store.scanInfo.batch.units
+    : T.t('piece');
   const getAllComments = () => {
     dispatch(loader(true));
     dispatch(getComments(props.navigation, itemId, 0, 'IdentInfo'));
@@ -193,9 +196,9 @@ export const IdentInfo = props => {
                       </Text>
                     )}
                     <ItemCardQuantityAndPrice
-                      quantity={store.scanInfo.batch.quantity}
+                      quantity={quantity}
                       price={store.scanInfo.metadata.price}
-                      units={store.scanInfo.batch.units}
+                      units={units}
                       styles={styles}
                     />
                     {!isEmpty(store.scanInfo.items) && (
