@@ -25,6 +25,7 @@ import {
 } from '../../actions/actions.js';
 import Search from '../Search';
 import NFC from '../../screens/NFC';
+import {cleanMountItemsList} from '../../actions/mountActions';
 
 const AppbarCustom = props => {
   const dispatch = useDispatch();
@@ -112,6 +113,9 @@ const AppbarCustom = props => {
             if (isNFCOpen) {
               dispatch(allowNewScan(true));
               dispatch(clearMarking());
+            }
+            if (props.clearMountList) {
+              dispatch(cleanMountItemsList());
             }
           }}
         />

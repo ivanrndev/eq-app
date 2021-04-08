@@ -34,6 +34,7 @@ import {
 import T from '../../../i18n';
 import DarkButton from '../../../components/Buttons/DarkButton';
 import {
+  actionCheckError,
   fontSizer,
   handleNavigateToSingleItemPage,
 } from '../../../utils/helpers.js';
@@ -72,6 +73,7 @@ export const MountList = props => {
     item._id !== store.currentParent &&
     (isEmpty(mountList) || mountList.find(pc => pc._id !== item._id)) &&
     !item.parent &&
+    !actionCheckError(item) &&
     isEmpty(item.items);
   useEffect(
     () =>
@@ -79,7 +81,6 @@ export const MountList = props => {
     [companyItemList],
   );
 
-  console.log('SEARCHLIGHT2', searchList);
   const setItemQty = itemId => mountListWithQty.find(pc => pc.id === itemId);
   const isQtyBtnShow = item =>
     item.batch && +item.batch.quantity !== 1 && !setItemQty(item._id);
@@ -143,7 +144,7 @@ export const MountList = props => {
         ),
       );
     }
-  }, [store.mountScanInfo, store.mountError]);
+  }, [store.mountScanInfo, store.mountError, store.mountScan]);
 
   const [scaner, setScaner] = useState(false);
   useFocusEffect(
@@ -211,6 +212,7 @@ export const MountList = props => {
         list={searchList}
         listAction={searchMyCompanyItems}
         onSelectAction={addItemToMountList}
+        clearMountList={true}
       />
       <SafeAreaView />
       <View style={styles.container}>

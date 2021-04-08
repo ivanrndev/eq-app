@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {isEmpty} from 'lodash';
 import {
   Dimensions,
@@ -26,7 +26,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   backPageMount,
   getComments,
-  getSearchItem,
   getTransactions,
   loader,
   nextPageMount,
@@ -241,7 +240,7 @@ export const OnMeInfo = props => {
             <>
               <View style={styles.buttonsBlock}>
                 <View style={styles.buttonBlock}>
-                  {!isEmpty(scan.scanInfo) && (
+                  {!isEmpty(scan.scanInfo) && scan.scanInfo.transfer === null && (
                     <View>
                       {!isEmpty(scan.scanInfo.parent) ? (
                         <DarkButton text={T.t('dismantle')} onPress={unmount} />

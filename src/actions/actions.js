@@ -459,7 +459,7 @@ export const getSearchItem = (
         dispatch({
           type: SAVE_CURRENT_SEARCH_ERROR,
           payload: {
-            mountError: e.response.data.message.name,
+            mountError: e.response.data.message,
           },
         });
         dispatch(loader(false));
@@ -557,7 +557,7 @@ export const scanInfo = (
           dispatch({
             type: ERROR_CURRENT_MOUNT_SCAN_INFO,
             payload: {
-              mountError: e.response.data.message,
+              mountError: e.response.data.message.message,
             },
           });
           dispatch(loader(false));
@@ -883,7 +883,7 @@ export const getItemsOnMe = nav => dispatch => {
           dispatch({
             type: GET_MY_ITEMS,
             payload: {
-              myloadMore: true,
+              myloadMore: false,
               offSet: 6,
               myList: resp.data.data,
               myError: false,
@@ -924,7 +924,7 @@ export const searchMyItem = (query, offset, isNew, limit) => dispatch => {
               type: GET_MY_ITEMS,
               payload: {
                 offSet: offset,
-                myloadMore: true,
+                myloadMore: false,
                 myList: data,
               },
             });
@@ -933,7 +933,7 @@ export const searchMyItem = (query, offset, isNew, limit) => dispatch => {
               type: GET_MY_ITEMS_SEARCH,
               payload: {
                 offSet: 6,
-                myloadMore: true,
+                myloadMore: false,
                 myList: data,
               },
             });

@@ -50,7 +50,7 @@ const Search = ({
         pageToChosenItem,
         isSearchForGiveItem,
       ),
-      !!onSelectAction && onSelectAction(item),
+      !!onSelectAction && dispatch(onSelectAction(item)),
       editTransfer &&
         dispatch(
           updateTransfer(
