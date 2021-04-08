@@ -59,6 +59,8 @@ import {
   LOCATTION_LOC,
   LOGIN_USER,
   LOGIN_USER_ERROR,
+  LOGIN_WITH_GOOGLE_ACCOUNT,
+  LOGIN_WITH_GOOGLE_ACCOUNT_ERROR,
   LOGUT,
   MAKE_ACCEPT,
   MAKE_ACCEPT_ERROR,
@@ -106,8 +108,6 @@ import {
   TRANSFERS_UPDATE_ERROR,
   UPDATE_SCAN_GIVE_LIST,
   USER_CURRENT_ID,
-  LOGIN_WITH_GOOGLE_ACCOUNT,
-  LOGIN_WITH_GOOGLE_ACCOUNT_ERROR,
 } from './actionsType';
 
 // Settings
@@ -1645,6 +1645,7 @@ export const resetPassInfo = () => dispatch => {
 
 // Update Transfer
 export const updateTransfer = (nav, id, items, route) => dispatch => {
+  dispatch(loader(true));
   return axios
     .patch(`${API_URL}/transfer/${id}/edit`, {
       item_ids: items.map(item => ({
@@ -1671,7 +1672,6 @@ export const updateTransfer = (nav, id, items, route) => dispatch => {
       }
     })
     .catch(e => {
-      console.log('ee', e);
       if (!e.response.data.success) {
         dispatch({
           type: TRANSFERS_UPDATE_ERROR,

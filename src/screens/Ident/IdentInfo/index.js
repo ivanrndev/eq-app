@@ -8,7 +8,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import {Button, Dialog, IconButton, Portal, Title} from 'react-native-paper';
+import {Button, Dialog, IconButton, Portal} from 'react-native-paper';
 import {isEmpty} from 'lodash';
 // components
 import Appbar from '../../../components/Appbar';
@@ -24,11 +24,7 @@ import {
   unMountItemFromParent,
 } from '../../../actions/actions.js';
 import T from '../../../i18n';
-import {
-  fontSizer,
-  getProperErrorMessage,
-  getStatus,
-} from '../../../utils/helpers.js';
+import {fontSizer, getStatus} from '../../../utils/helpers.js';
 import AsyncStorage from '@react-native-community/async-storage';
 import DarkButton from '../../../components/Buttons/DarkButton';
 import ItemCardQuantityAndPrice from '../../../components/ItemCardQuantityAndPrice';
@@ -36,8 +32,6 @@ import ItemCardQuantityAndPrice from '../../../components/ItemCardQuantityAndPri
 export const IdentInfo = props => {
   const dispatch = useDispatch();
   const [settings, store] = useSelector(({settings, scan}) => [settings, scan]);
-  const error = getProperErrorMessage(store.scanInfoError, store.currentScan);
-  const show = store.isInfoOpen;
   const metaData = store.scanInfo.metadata;
   const width = Dimensions.get('window').width;
   const [isOpen, setIsOpen] = useState(false);
@@ -55,6 +49,7 @@ export const IdentInfo = props => {
 
   let itemId = store.scanInfo._id;
   const quantity = store.scanInfo.batch ? store.scanInfo.batch.quantity : 1;
+  const price = store.scanInfo.metadata && store.scanInfo.metadata.price;
   const units = store.scanInfo.batch
     ? store.scanInfo.batch.units
     : T.t('piece');
@@ -135,26 +130,19 @@ export const IdentInfo = props => {
       <View style={styles.body}>
         <View style={styles.container}>
           <ScrollView>
-            {store.scanInfoError && (
+            <View style={styles.info}>
               <View style={styles.info}>
-                <Title style={styles.titleError}>{error}</Title>
-              </View>
-            )}
-            {!store.scanInfoError && (
-              <View style={styles.info}>
-                {show && (
-                  <View style={styles.info}>
-                    {store.scanInfo && (
-                      <Text style={styles.text}>
-                        {T.t('transfer_status')}:{' '}
-                        {getStatus(store.scanInfo, role)}
-                      </Text>
-                    )}
-                    {metaData && (
-                      <Text style={styles.text}>
-                        {T.t('detail_title')}: {nameOfProduct}
-                      </Text>
-                    )}
+                {store.scanInfo && (
+                  <Text style={styles.text}>
+                    {T.t('transfer_status')}: {getStatus(store.scanInfo, role)}
+                  </Text>
+                )}
+                {metaData && (
+                  <>
+                    <Text style={styles.text}>
+                      {T.t('detail_title')}: {nameOfProduct}
+                    </Text>
+
                     {metaData.brand && (
                       <Text style={styles.text}>
                         {T.t('detail_brand')}: {metaData.brand}
@@ -195,106 +183,107 @@ export const IdentInfo = props => {
                         {store.scanInfo.person.lastName}
                       </Text>
                     )}
-                    <ItemCardQuantityAndPrice
-                      quantity={quantity}
-                      price={store.scanInfo.metadata.price}
-                      units={units}
-                      styles={styles}
-                    />
-                    {!isEmpty(store.scanInfo.items) && (
-                      <>
-                        <Text style={styles.textTmc}>
-                          {T.t('om_this_setup')}
-                        </Text>
-                        {store.scanInfo.items.map((item, index) => {
-                          return (
-                            <View key={index}>
-                              <Text key={index} style={styles.textInfo}>
-                                {item.metadata.title}
-                                {'\n'}
-                                {item.metadata.type}
-                                {'\n'}
-                                {item.metadata.brand}
-                                {'\n'}
-                                {item.metadata.serial}
-                                {'\n'}
-                                {item.metadata.model}
-                                {'\n'}
-                                {item.code}
-                              </Text>
-                              <Button
-                                style={styles.deleteBtn}
-                                mode="text"
-                                contentStyle={styles.buttonContentStyle}>
-                                {gaveAcess && (
-                                  <IconButton
-                                    {...props}
-                                    icon="delete"
-                                    size={35}
-                                    color="#22215B"
-                                    onPress={() => {
-                                      setDeleteId(item._id);
-                                      setIsOpen(true);
-                                    }}
-                                  />
-                                )}
-                              </Button>
-                              <View style={styles.border} />
-                            </View>
-                          );
-                        })}
-                      </>
-                    )}
-                    {store.scanInfo.parent && (
-                      <>
-                        <Text style={styles.textTmc}>{T.t('this_setup')}</Text>
-                        <Text style={styles.text}>
-                          {store.scanInfo.parent.metadata.title},{' '}
-                          {store.scanInfo.parent.metadata.brand},{' '}
-                          {store.scanInfo.parent.metadata.model},{' '}
-                          {store.scanInfo.parent.metadata.serial}
-                        </Text>
-                      </>
-                    )}
-                  </View>
+                  </>
+                )}
+                <ItemCardQuantityAndPrice
+                  quantity={quantity}
+                  price={price}
+                  units={units}
+                  styles={styles}
+                />
+                {!isEmpty(store.scanInfo.items) && (
+                  <>
+                    <Text style={styles.textTmc}>{T.t('om_this_setup')}</Text>
+                    {store.scanInfo.items.map((item, index) => {
+                      return (
+                        <View key={index}>
+                          <Text key={index} style={styles.textInfo}>
+                            {item.metadata.title}
+                            {'\n'}
+                            {item.metadata.type}
+                            {'\n'}
+                            {item.metadata.brand}
+                            {'\n'}
+                            {item.metadata.serial}
+                            {'\n'}
+                            {item.metadata.model}
+                            {'\n'}
+                            {item.code}
+                          </Text>
+                          <Button
+                            style={styles.deleteBtn}
+                            mode="text"
+                            contentStyle={styles.buttonContentStyle}>
+                            {gaveAcess && (
+                              <IconButton
+                                {...props}
+                                icon="delete"
+                                size={35}
+                                color="#22215B"
+                                onPress={() => {
+                                  setDeleteId(item._id);
+                                  setIsOpen(true);
+                                }}
+                              />
+                            )}
+                          </Button>
+                          <View style={styles.border} />
+                        </View>
+                      );
+                    })}
+                  </>
+                )}
+                {store.scanInfo.parent && (
+                  <>
+                    <Text style={styles.textTmc}>{T.t('this_setup')}</Text>
+                    <Text style={styles.text}>
+                      {store.scanInfo.parent.metadata.title},{' '}
+                      {store.scanInfo.parent.metadata.brand},{' '}
+                      {store.scanInfo.parent.metadata.model},{' '}
+                      {store.scanInfo.parent.metadata.serial}
+                    </Text>
+                  </>
                 )}
               </View>
-            )}
+            </View>
           </ScrollView>
           <>
             <View style={styles.buttonsBlock}>
               <View style={styles.buttonBlock}>
-                {gaveAcess && (
-                  <View>
-                    {!isEmpty(store.scanInfo.parent) ? (
-                      <DarkButton
-                        size={fontSizer(width)}
-                        text={T.t('dismantle')}
-                        onPress={unmount}
-                      />
-                    ) : (
-                      <DarkButton
-                        size={fontSizer(width)}
-                        text={T.t('setupItem')}
-                        onPress={() => {
-                          dispatch(backPageMount('IdentInfo'));
-                          dispatch(nextPageMount('MountList'));
-                          dispatch(
-                            nfc(
-                              settings.nfcBack,
-                              settings.nfcNext,
-                              false,
-                              'Ident',
-                              'startPageMountList',
-                              true,
-                            ),
-                          );
-                          props.navigation.navigate('MountList');
-                        }}
-                      />
-                    )}
-                  </View>
-                )}
+                {gaveAcess &&
+                  !isEmpty(store.scanInfo) &&
+                  store.scanInfo.transfer === null &&
+                  !store.scanInfo.repair && (
+                    <View>
+                      {!isEmpty(store.scanInfo.parent) ? (
+                        <DarkButton
+                          size={fontSizer(width)}
+                          text={T.t('dismantle')}
+                          onPress={unmount}
+                        />
+                      ) : (
+                        <DarkButton
+                          size={fontSizer(width)}
+                          text={T.t('setupItem')}
+                          onPress={() => {
+                            dispatch(backPageMount('IdentInfo'));
+                            dispatch(nextPageMount('MountList'));
+                            dispatch(
+                              nfc(
+                                settings.nfcBack,
+                                settings.nfcNext,
+                                false,
+                                'Ident',
+                                'startPageMountList',
+                                true,
+                              ),
+                            );
+                            props.navigation.navigate('MountList');
+                          }}
+                        />
+                      )}
+                    </View>
+                  )}
 
                 <DarkButton
                   size={fontSizer(width)}
