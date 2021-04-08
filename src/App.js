@@ -64,6 +64,7 @@ import InventoryChooseMode from './screens/Inventory/InventoryChooseMode';
 import SetInventoryQty from './screens/Inventory/SetInventoryQty';
 import CreateItem from './screens/Inventory/InventoryChooseMode/CreateItem';
 import MountItemSetQty from './screens/Ident/MountList/MountItemSetQty';
+import TransferSetQuantity from './screens/Transfers/TransferSetQty';
 
 const theme = {
   ...DefaultTheme,
@@ -148,6 +149,10 @@ const App = () => {
                 <Drawer.Screen
                   name="TransferScaner"
                   component={TransferScaner}
+                />
+                <Drawer.Screen
+                  name="TransferSetQty"
+                  component={TransferSetQuantity}
                 />
                 <Drawer.Screen name="Subscribe" component={Subscribe} />
                 <Drawer.Screen name="NFC" component={NFC} />

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState} from 'react';
-import {Dimensions, ScrollView, StyleSheet, Text, View} from 'react-native';
-import {Card, IconButton, Paragraph, Snackbar} from 'react-native-paper';
+import {Dimensions, ScrollView, StyleSheet, View} from 'react-native';
+import {Paragraph, Snackbar} from 'react-native-paper';
 import T from '../../../../i18n';
 // components
 import Appbar from '../../../../components/Appbar';
@@ -21,9 +21,8 @@ import {
   makeTransfer,
   updateGiveList,
 } from '../../../../actions/actions.js';
-import ItemListCard from '../../../../components/ItemListCard';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import TariffLimitModal from '../../../../components/TariffLimitModal';
+import SetQtyCard from '../../../../components/SetQtyCard';
 
 const GiveListCheck = props => {
   const dispatch = useDispatch();
@@ -57,9 +56,6 @@ const GiveListCheck = props => {
           id: item._id,
           quantity: item.batch ? item.batch.quantity : 1,
         }));
-
-  const isQtyBtnShow = item =>
-    item.batch && +item.batch.quantity !== 1 && !setItemQty(item._id);
 
   useEffect(() => dispatch(getTotalCountMyCompanyItems()), [totalItemsCount]);
   const setItemQty = itemId => give.giveList.find(pc => pc.id === itemId);
@@ -151,36 +147,12 @@ const GiveListCheck = props => {
             <Paragraph style={styles.text}>{T.t('no_item_transfer')}</Paragraph>
           )}
           {scan.scanGiveList.map(item => (
-            <Card style={styles.card} key={item._id}>
-              <ItemListCard item={item} isPriceShown={false}>
-                {setItemQty(item._id) && (
-                  <View style={styles.giveArea}>
-                    <Text style={styles.cardTitle}>
-                      {T.t('give')}:{' '}
-                      {setItemQty(item._id) && setItemQty(item._id).quantity}
-                    </Text>
-                    <TouchableOpacity onPress={() => handleChangeQty(item)}>
-                      <Text style={styles.edit}>Edit</Text>
-                    </TouchableOpacity>
-                  </View>
-                )}
-                <View style={styles.cardBottom}>
-                  <View style={styles.setQtyBtn}>
-                    {isQtyBtnShow(item) && (
-                      <DarkButton
-                        onPress={() => handleChangeQty(item)}
-                        text={T.t('set_quantity')}
-                      />
-                    )}
-                  </View>
-                  <IconButton
-                    {...props}
-                    icon="delete"
-                    onPress={() => deleteItem(item._id)}
-                  />
-                </View>
-              </ItemListCard>
-            </Card>
+            <SetQtyCard
+              item={item}
+              deleteItem={() => deleteItem(item._id)}
+              handleChangeQty={handleChangeQty}
+              setItemQty={setItemQty}
+            />
           ))}
         </ScrollView>
         <View style={styles.buttons}>
@@ -221,39 +193,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#D3E3F2',
     height: Dimensions.get('window').height / 1.1,
   },
-  card: {
-    justifyContent: 'center',
-    width: Dimensions.get('window').width / 1.1,
-    marginBottom: 15,
-    backgroundColor: '#EDF6FF',
-    color: '#22215B',
-    borderRadius: 10,
-  },
   load: {
     marginTop: 10,
   },
-  giveArea: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginVertical: 10,
-  },
-  cardTitle: {
-    fontSize: 14,
-    textTransform: 'uppercase',
-    textAlign: 'center',
-    color: '#22215B',
-  },
-  cardBottom: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  setQtyBtn: {
-    width: Dimensions.get('window').width / 2.2,
-  },
-  edit: {
-    color: '#8c03fc',
-  },
+
   title: {
     fontSize: 14,
     textAlign: 'center',

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {Dimensions, StyleSheet, View} from 'react-native';
 import {Card, Paragraph, Searchbar} from 'react-native-paper';
 import T from '../../i18n';
@@ -7,7 +7,12 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 import {useNavigation} from '@react-navigation/native';
 import ItemListCard from '../ItemListCard';
 import {actionCheckError} from '../../utils/helpers';
-import {getSearchItem, loader, myloadMore} from '../../actions/actions';
+import {
+  getSearchItem,
+  loader,
+  myloadMore,
+  updateTransfer,
+} from '../../actions/actions';
 
 const Search = ({
   list,
@@ -16,13 +21,19 @@ const Search = ({
   setIsSearchOpen,
   isSearchForGiveItem,
   onSelectAction,
+  editTransfer,
 }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const [transfersList, transferId] = useSelector(({transfers}) => [
+    transfers.transferList,
+    transfers.transferId,
+  ]);
+
   const [search, setSearch] = useState('');
   const showEmptyError = !list.length && search.length !== 0;
   const renderedList = search.length === 0 ? [] : list;
-
+  const transferredItems = transfersList.find(item => item._id === transferId);
   const handleItemSearch = query => {
     setSearch(query.trim());
     dispatch(myloadMore(true));
@@ -39,7 +50,16 @@ const Search = ({
         pageToChosenItem,
         isSearchForGiveItem,
       ),
-      !!onSelectAction && dispatch(onSelectAction(item)),
+      !!onSelectAction && onSelectAction(item),
+      editTransfer &&
+        dispatch(
+          updateTransfer(
+            navigation,
+            transferId,
+            [...transferredItems.items, item],
+            'TransfersEdit',
+          ),
+        ),
     );
     setIsSearchOpen(false);
     setSearch('');

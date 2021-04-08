@@ -22,6 +22,7 @@ import {
   UPDATE_SCAN_GIVE_LIST,
 } from '../../../actions/actionsType.js';
 import T from '../../../i18n';
+import {getMountTransferError} from '../../../utils/helpers';
 
 const initialState = {
   currentScan: '',
@@ -121,6 +122,7 @@ const scanReducer = (state = initialState, action) => {
         currentParent: action.payload,
       };
     case ADD_ITEM_TO_MOUNT_LIST:
+      const transferErr = getMountTransferError(action.payload);
       const isItemAdded = [...state.mountList].find(
         item => item._id === action.payload._id,
       );
@@ -143,6 +145,11 @@ const scanReducer = (state = initialState, action) => {
         return {
           ...state,
           mountError: 'Impossible mount item on itself',
+        };
+      } else if (!!transferErr && transferErr.length > 0) {
+        return {
+          ...state,
+          mountError: transferErr,
         };
       } else {
         return {

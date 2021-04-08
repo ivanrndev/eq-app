@@ -289,7 +289,7 @@ export const getProperTransferStatus = error => {
   return errorMessage;
 };
 
-export const getProperErrorTransfer = (error, id) => {
+export const getProperErrorTransfer = (error, id, isGive = true) => {
   let errorMessage = '';
   switch (error) {
     case 'IsBan':
@@ -299,7 +299,9 @@ export const getProperErrorTransfer = (error, id) => {
       errorMessage = `${T.t('item')} "${id}" ${T.t('error_services')}`;
       break;
     case 'InTransfer':
-      errorMessage = `${T.t('item')} "${id}" ${T.t('error_another')}.`;
+      if (!isGive) {
+        errorMessage = `${T.t('item')} "${id}" ${T.t('error_another')}.`;
+      }
       break;
     case 'AccessDenied':
       errorMessage = `${T.t('error_owner')} "${id}". ${T.t(
@@ -346,6 +348,17 @@ export const actionCheckError = item => {
   }
   if (item.transfer) {
     return 'InTransfer';
+  }
+};
+export const getMountTransferError = item => {
+  if (!!item.is_ban) {
+    return `${T.t('item')} "${item._id}" ${T.t('error_write_off')}`;
+  }
+  if (!!item.repair) {
+    return `${T.t('item')} "${item._id}" ${T.t('error_services')}`;
+  }
+  if (!!item.transfer) {
+    return `${T.t('item')} "${item._id}" ${T.t('error_another')}.`;
   }
 };
 

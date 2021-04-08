@@ -68,7 +68,7 @@ const TransferInfo = props => {
               <Text style={styles.infoText}>{T.t('empty_transfer')}</Text>
             )}
             {infoList &&
-              infoList.items.map((item, index) => (
+              infoList.items.map(item => (
                 <Card style={styles.card} key={item._id}>
                   <ItemListCard item={item} isPriceShown={false} />
                 </Card>

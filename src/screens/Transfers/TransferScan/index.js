@@ -1,13 +1,19 @@
-import React, {useState, useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
-import {StyleSheet, View, Dimensions, SafeAreaView} from 'react-native';
+import {Dimensions, SafeAreaView, StyleSheet, View} from 'react-native';
 import T from '../../../i18n';
 // components
 import Appbar from '../../../components/Appbar';
 import Scanner from '../../../components/Scanner';
+import {useSelector} from 'react-redux';
+import {searchMyItem} from '../../../actions/actions';
 
 const TransferScaner = props => {
   const [scaner, setScaner] = useState(false);
+  const [onMeList] = useSelector(({onMe, transfers}) => [onMe.myList]);
+
+  const searchList = onMeList.filter(item => item.transfer === null);
+
   useFocusEffect(
     useCallback(() => {
       setScaner(true);
@@ -25,6 +31,13 @@ const TransferScaner = props => {
         title={T.t('title_scan')}
         switch={true}
         typeSwitchNFC={true}
+        search={true}
+        list={searchList}
+        listAction={searchMyItem}
+        pageToChosenItem="TransfersEdit"
+        isSearchForGiveItem={true}
+        giveSearch={true}
+        editTransfer={true}
       />
       <SafeAreaView />
       <View style={styles.body}>

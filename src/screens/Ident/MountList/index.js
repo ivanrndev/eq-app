@@ -35,7 +35,6 @@ import T from '../../../i18n';
 import DarkButton from '../../../components/Buttons/DarkButton';
 import {
   fontSizer,
-  getProperErrorTransfer,
   handleNavigateToSingleItemPage,
 } from '../../../utils/helpers.js';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -68,6 +67,19 @@ export const MountList = props => {
   const editItems = store.scanInfo.items;
   const [isText, setIsText] = useState('');
   const [userId, setUserId] = useState();
+  const [searchList, setSearchList] = useState([]);
+  const isAvailableToMount = item =>
+    item._id !== store.currentParent &&
+    (isEmpty(mountList) || mountList.find(pc => pc._id !== item._id)) &&
+    !item.parent &&
+    isEmpty(item.items);
+  useEffect(
+    () =>
+      setSearchList(companyItemList.filter(item => isAvailableToMount(item))),
+    [companyItemList],
+  );
+
+  console.log('SEARCHLIGHT2', searchList);
   const setItemQty = itemId => mountListWithQty.find(pc => pc.id === itemId);
   const isQtyBtnShow = item =>
     item.batch && +item.batch.quantity !== 1 && !setItemQty(item._id);
@@ -104,10 +116,6 @@ export const MountList = props => {
     const gaveAcess = userId === personId;
 
     const newItem = store.mountScanInfo._id;
-    const checkInArray =
-      !isEmpty(editItems) && editItems.map(i => i._id).includes(newItem)
-        ? 'DuplicateMount'
-        : false;
 
     const inComplect =
       (store.mountScanInfo.items && !isEmpty(store.mountScanInfo.items)) ||
@@ -124,14 +132,6 @@ export const MountList = props => {
     if (store.mountError.length > 0) {
       setIsText(store.mountError);
     }
-    const itemError = getProperErrorTransfer(
-      store.mountError || checkInArray,
-      store.mountScan,
-    );
-    if (!isEmpty(itemError)) {
-      setIsText(itemError);
-    }
-
     if (!isText && gaveAcess) {
       dispatch(
         mountItemFromParent(
@@ -191,6 +191,7 @@ export const MountList = props => {
         [...list, ...mountListWithQty],
         props.navigation,
         settings.backPageMount,
+        store.scanInfoError,
       ),
     );
   };
@@ -207,7 +208,7 @@ export const MountList = props => {
         switch={true}
         typeSwitchNFC={true}
         search={true}
-        list={companyItemList}
+        list={searchList}
         listAction={searchMyCompanyItems}
         onSelectAction={addItemToMountList}
       />

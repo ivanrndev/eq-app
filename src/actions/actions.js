@@ -276,7 +276,6 @@ export const authWithGoogleAccount = token => dispatch => {
   return axios
     .post(LOGIN_GOOGLE_URL, {token})
     .then(resp => {
-      console.log('Resp', resp);
       if (resp.status === 200) {
         AsyncStorage.setItem('token', resp.data.token);
         AsyncStorage.setItem('role', resp.data.role);
@@ -411,6 +410,7 @@ export const getSearchItem = (
   isSearchForGiveItem = false,
 ) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
+    dispatch(loader(true));
     return axios
       .get(`${API_URL}/company/${company}/item/${id}/detailed`)
       .then(resp => {
@@ -924,7 +924,7 @@ export const searchMyItem = (query, offset, isNew, limit) => dispatch => {
               type: GET_MY_ITEMS,
               payload: {
                 offSet: offset,
-                myloadMore: false,
+                myloadMore: true,
                 myList: data,
               },
             });
@@ -933,7 +933,7 @@ export const searchMyItem = (query, offset, isNew, limit) => dispatch => {
               type: GET_MY_ITEMS_SEARCH,
               payload: {
                 offSet: 6,
-                myloadMore: false,
+                myloadMore: true,
                 myList: data,
               },
             });
@@ -1647,7 +1647,10 @@ export const resetPassInfo = () => dispatch => {
 export const updateTransfer = (nav, id, items, route) => dispatch => {
   return axios
     .patch(`${API_URL}/transfer/${id}/edit`, {
-      item_ids: items.map(item => item._id),
+      item_ids: items.map(item => ({
+        id: item._id,
+        quantity: item.batch ? item.batch.quantity : 1,
+      })),
     })
     .then(resp => {
       if (resp.status === 200) {
@@ -1659,13 +1662,16 @@ export const updateTransfer = (nav, id, items, route) => dispatch => {
               resp.data.errors.length > 0 ? resp.data.errors[0] : '',
           },
         });
-        dispatch(loader(false));
-        AsyncStorage.getItem('userId').then(id => {
-          dispatch(getTransfers(nav, id, 0, true, route));
-        });
+
+        AsyncStorage.getItem('userId')
+          .then(id => {
+            dispatch(getTransfers(nav, id, 0, true, route));
+          })
+          .then(() => dispatch(loader(false)));
       }
     })
     .catch(e => {
+      console.log('ee', e);
       if (!e.response.data.success) {
         dispatch({
           type: TRANSFERS_UPDATE_ERROR,
@@ -1767,7 +1773,7 @@ export const mountItemFromParent = (
       .then(resp => {
         if (resp.status === 200) {
           dispatch(loader(false));
-          dispatch(currentScan(code, nav, page, false));
+          dispatch(currentScan(code, nav, page, false, true));
         }
       })
       .catch(e => {

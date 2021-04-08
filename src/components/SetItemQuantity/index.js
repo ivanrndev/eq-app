@@ -11,7 +11,7 @@ import DarkButton from '../../components/Buttons/DarkButton';
 import TransparentButton from '../../components/Buttons/TransparentButton';
 import ItemSetQuantityArea from '../../components/ItemSetQuantityArea';
 
-const SetItemQuantity = ({actionName, pageToRedirect, title, mode}) => {
+const SetItemQuantity = ({actionName, pageToRedirect, title, mode, onSave}) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [id, metaData] = useSelector(({scan}) => [
@@ -31,7 +31,9 @@ const SetItemQuantity = ({actionName, pageToRedirect, title, mode}) => {
         }`;
   }
   const handleSave = () => {
-    dispatch(actionName(id, selectedQuantity));
+    !!onSave
+      ? onSave(id, selectedQuantity)
+      : dispatch(actionName(id, selectedQuantity));
     navigation.navigate(pageToRedirect);
     setSelectedQuantity(quantity);
   };

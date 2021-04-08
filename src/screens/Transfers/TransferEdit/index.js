@@ -1,36 +1,45 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
-  StyleSheet,
-  View,
   Dimensions,
   SafeAreaView,
   ScrollView,
+  StyleSheet,
+  View,
 } from 'react-native';
 import {
-  Card,
-  IconButton,
-  Portal,
-  Dialog,
-  Title,
   Button,
-  Text,
+  Dialog,
+  Portal,
   Snackbar,
+  Text,
+  Title,
 } from 'react-native-paper';
 import T from '../../../i18n';
 // components
 import Appbar from '../../../components/Appbar';
 import DarkButton from '../../../components/Buttons/DarkButton';
 import TransparentButton from '../../../components/Buttons/TransparentButton';
-import {getProperErrorTransfer} from '../../../utils/helpers.js';
+import {
+  getProperErrorTransfer,
+  handleNavigateToSingleItemPage,
+} from '../../../utils/helpers.js';
 // redux and actions
-import {useSelector, useDispatch} from 'react-redux';
-import {loader, updateTransfer, nfc} from '../../../actions/actions.js';
+import {useDispatch, useSelector} from 'react-redux';
+import {loader, nfc, updateTransfer} from '../../../actions/actions.js';
+import SetQtyCard from '../../../components/SetQtyCard';
 
 const TransferEdit = props => {
   const dispatch = useDispatch();
-  const transfers = useSelector(state => state.transfers);
-  const scan = useSelector(state => state.scan);
+  const [transfers, scan, transfersList, transferId] = useSelector(
+    ({transfers, scan}) => [
+      transfers,
+      scan,
+      transfers.transferList,
+      transfers.transferId,
+    ],
+  );
+
   const [infoList, setInfoList] = useState([]);
   const [isModal, setIsModal] = useState(false);
   const [error, setError] = useState('');
@@ -41,12 +50,14 @@ const TransferEdit = props => {
       return;
     }
     if (scan.scanInfoError) {
-      setError(getProperErrorTransfer(scan.scanInfoError, scan.currentScan));
+      setError(
+        getProperErrorTransfer(scan.scanInfoError, scan.currentScan, true),
+      );
     } else {
       const valueArr = infoList.map(item => item._id);
       const isDuplicate = valueArr.includes(scan.selectGiveId);
       if (isDuplicate) {
-        setError(getProperErrorTransfer('Copy', scan.currentScan));
+        setError(getProperErrorTransfer('Copy', scan.currentScan, true));
       } else {
         infoList.push(scan.scanInfo);
         let updateList = infoList.filter(item => {
@@ -78,38 +89,35 @@ const TransferEdit = props => {
         getProperErrorTransfer(
           transfers.transferUpdateError.type,
           scan.currentScan,
+          true,
         ),
       );
     }
   }, [transfers]);
 
-  // delete + undo item
-  const editItem = (id, status) => {
-    let undoList = infoList.map(item => {
-      if (item._id === id) {
-        item.willDelete = status;
-      }
-      return item;
-    });
-    setInfoList(undoList);
-  };
+  const transferredItems = transfersList.find(item => item._id === transferId);
 
   // confirm delete
-  const deleteItem = () => {
-    setIsModal(false);
-    let updateList = infoList.filter(item => {
-      if (!item.willDelete) {
-        return item;
-      }
-    });
+  const deleteItem = id => {
+    const unUpdatedItems = transferredItems.items.filter(pc => pc._id !== id);
+
     dispatch(loader(true));
     dispatch(
       updateTransfer(
         props.navigation,
         transfers.transferId,
-        updateList,
+        unUpdatedItems,
         'TransfersEdit',
       ),
+    );
+  };
+  const handleChangeQty = item => {
+    handleNavigateToSingleItemPage(
+      item.code,
+      props.navigation,
+      item._id,
+      'TransferSetQty',
+      dispatch,
     );
   };
 
@@ -130,33 +138,12 @@ const TransferEdit = props => {
               <Text style={styles.infoText}>{T.t('empty_transfer')}</Text>
             )}
             {infoList &&
-              infoList.map((item, index) => (
-                <Card.Title
-                  key={index}
-                  style={item.willDelete ? styles.cardDelete : styles.card}
-                  title={
-                    item.metadata ? `${item.metadata.brand} / ${item.code}` : ''
-                  }
-                  subtitle={
-                    item.metadata
-                      ? `${item.metadata.serial} / ${item.metadata.model}`
-                      : ''
-                  }
-                  right={props =>
-                    item.willDelete ? (
-                      <IconButton
-                        {...props}
-                        icon="undo"
-                        onPress={() => editItem(item._id, false)}
-                      />
-                    ) : (
-                      <IconButton
-                        {...props}
-                        icon="delete"
-                        onPress={() => editItem(item._id, true)}
-                      />
-                    )
-                  }
+              infoList.map(item => (
+                <SetQtyCard
+                  item={item}
+                  deleteItem={() => deleteItem(item._id)}
+                  handleChangeQty={() => handleChangeQty(item)}
+                  setItemQty={() => false}
                 />
               ))}
           </ScrollView>
