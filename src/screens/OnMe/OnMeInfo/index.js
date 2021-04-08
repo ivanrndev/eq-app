@@ -240,32 +240,37 @@ export const OnMeInfo = props => {
             <>
               <View style={styles.buttonsBlock}>
                 <View style={styles.buttonBlock}>
-                  {!isEmpty(scan.scanInfo) && scan.scanInfo.transfer === null && (
-                    <View>
-                      {!isEmpty(scan.scanInfo.parent) ? (
-                        <DarkButton text={T.t('dismantle')} onPress={unmount} />
-                      ) : (
-                        <DarkButton
-                          text={T.t('setupItem')}
-                          onPress={() => {
-                            dispatch(backPageMount('OnMeInfo'));
-                            dispatch(nextPageMount('MountList'));
-                            dispatch(
-                              nfc(
-                                'MountList',
-                                'MountList',
-                                false,
-                                'MountList',
-                                'startPageMountList',
-                                true,
-                              ),
-                            );
-                            props.navigation.navigate('MountList');
-                          }}
-                        />
-                      )}
-                    </View>
-                  )}
+                  {!isEmpty(scan.scanInfo) &&
+                    scan.scanInfo.transfer === null &&
+                    !scan.scanInfo.repair && (
+                      <View>
+                        {!isEmpty(scan.scanInfo.parent) ? (
+                          <DarkButton
+                            text={T.t('dismantle')}
+                            onPress={unmount}
+                          />
+                        ) : (
+                          <DarkButton
+                            text={T.t('setupItem')}
+                            onPress={() => {
+                              dispatch(backPageMount('OnMeInfo'));
+                              dispatch(nextPageMount('MountList'));
+                              dispatch(
+                                nfc(
+                                  'MountList',
+                                  'MountList',
+                                  false,
+                                  'MountList',
+                                  'startPageMountList',
+                                  true,
+                                ),
+                              );
+                              props.navigation.navigate('MountList');
+                            }}
+                          />
+                        )}
+                      </View>
+                    )}
 
                   <DarkButton
                     text={T.t('title_comments')}
