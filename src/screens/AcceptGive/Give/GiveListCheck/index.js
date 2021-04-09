@@ -148,6 +148,7 @@ const GiveListCheck = props => {
           )}
           {scan.scanGiveList.map(item => (
             <SetQtyCard
+              key={item._id}
               item={item}
               deleteItem={() => deleteItem(item._id)}
               handleChangeQty={handleChangeQty}

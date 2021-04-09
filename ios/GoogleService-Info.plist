@@ -4,12 +4,12 @@
     <plist version="1.0">
     <dict>
       <key>CLIENT_ID</key>
-      <string>908140090319-lfe3ht8gs5v6f4el9e2g6dt2m0re86a3.apps.googleusercontent.com</string>
+      <string>753194651551-4kve0pmjfbacv0n67gps9da8jkt3quc1.apps.googleusercontent.com</string>
       <key>REVERSED_CLIENT_ID</key>
-      <string>com.googleusercontent.apps.908140090319-lfe3ht8gs5v6f4el9e2g6dt2m0re86a3</string>
+      <string>com.googleusercontent.apps.753194651551-4kve0pmjfbacv0n67gps9da8jkt3quc1</string>
       <key>PLIST_VERSION</key>
       <string>1</string>
       <key>BUNDLE_ID</key>
-      <string>eqman</string>
+      <string>org.reactjs.native.example.EqMan</string>
     </dict>
     </plist>

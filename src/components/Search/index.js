@@ -13,6 +13,7 @@ import {
   myloadMore,
   updateTransfer,
 } from '../../actions/actions';
+import {addMountParent} from '../../actions/mountActions';
 
 const Search = ({
   list,
@@ -22,6 +23,7 @@ const Search = ({
   isSearchForGiveItem,
   onSelectAction,
   editTransfer,
+  identInfoScreen,
 }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -61,6 +63,7 @@ const Search = ({
           ),
         ),
     );
+    !!identInfoScreen && dispatch(addMountParent(item._id));
     setIsSearchOpen(false);
     setSearch('');
   };

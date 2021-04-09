@@ -14,14 +14,14 @@ const GoogleAuth = () => {
     GoogleSignin.configure({
       scopes: ['https://www.googleapis.com/auth/drive.readonly'],
       webClientId:
-        '1064200412468-8tnqiudluds5bljqp4k0v2c60797keds.apps.googleusercontent.com',
+        '753194651551-aaktfmil1qvflej2usc24t65d7r4fk67.apps.googleusercontent.com',
       offlineAccess: true,
       hostedDomain: '',
       loginHint: '',
       forceCodeForRefreshToken: true,
-      accountName: '',
+      accountName: 'EqMan',
       iosClientId:
-        '1064200412468-ojo80v2sod3kve8r6bul6gvlqss2p9ca.apps.googleusercontent.com',
+        '753194651551-4kve0pmjfbacv0n67gps9da8jkt3quc1.apps.googleusercontent.com',
       googleServicePlistPath: '',
     });
   }, []);

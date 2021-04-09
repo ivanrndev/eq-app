@@ -27,7 +27,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.1064200412468-ojo80v2sod3kve8r6bul6gvlqss2p9ca</string>
+				<string>com.googleusercontent.apps.753194651551-4kve0pmjfbacv0n67gps9da8jkt3quc1</string>
 			</array>
 		</dict>
 	</array>
@@ -36,7 +36,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NFCReaderUsageDescription</key>
-    <string>YOUR_PRIVACY_DESCRIPTION</string>
+	<string>YOUR_PRIVACY_DESCRIPTION</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSExceptionDomains</key>

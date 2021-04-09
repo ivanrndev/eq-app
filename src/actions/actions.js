@@ -1443,7 +1443,7 @@ export const saveCurrentUserInventory = (id, nav, startPage) => dispatch => {
   dispatch(
     nfc(
       'Inventory',
-      'InventoryFinish',
+      'InventoryChooseMode',
       true,
       'InventoryScaner',
       'startPageInventory',
