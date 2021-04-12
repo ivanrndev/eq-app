@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {
   Dimensions,
   KeyboardAvoidingView,
+  ScrollView,
   StyleSheet,
   Text,
   View,
@@ -122,112 +123,114 @@ export const ServiceInfo = props => {
         )}
       </Portal>
       <View style={styles.body}>
-        <KeyboardAvoidingView
-          behavior="position"
-          keyboardVerticalOffset={keyboardMarginTop}>
-          <View style={styles.container}>
-            <View style={styles.info}>
-              {store.scanInfoError && (
-                <View style={styles.info}>
-                  <Title style={styles.titleError}>{error}</Title>
-                </View>
-              )}
-              {!store.scanInfoError && (
-                <View style={styles.info}>
-                  {/* <Title style={styles.title}>{T.t('send_service')}</Title> */}
-                  {show && (
-                    <View style={styles.info}>
-                      {store.scanInfo && (
-                        <Text style={styles.text}>
-                          {T.t('transfer_status')}:{' '}
-                          {getStatus(store.scanInfo, role)}
-                        </Text>
-                      )}
-                      {metaData && (
-                        <Text style={styles.text}>
-                          {T.t('detail_title')}: {nameOfProduct}
-                        </Text>
-                      )}
-                      {metaData.brand && (
-                        <Text style={styles.text}>
-                          {T.t('detail_brand')}: {metaData.brand}
-                        </Text>
-                      )}
-                      {metaData.model && (
-                        <Text style={styles.text}>
-                          {T.t('detail_model')}: {metaData.model}
-                        </Text>
-                      )}
-                      {metaData.capacity && (
-                        <Text style={styles.text}>
-                          {T.t('detail_capacity')}: {metaData.capacity}
-                        </Text>
-                      )}
-                      {metaData.serial && (
-                        <Text style={styles.text}>
-                          {T.t('detail_serial')}: {metaData.serial}
-                        </Text>
-                      )}
-                      {metaData.type && (
-                        <Text style={styles.text}>
-                          {T.t('detail_type')}: {metaData.type}
-                        </Text>
-                      )}
-                      {store.scanInfo.person && (
-                        <Text style={styles.text}>
-                          {T.t('detail_person')}:{' '}
-                          {store.scanInfo.person.firstName}{' '}
-                          {store.scanInfo.person.lastName}
-                        </Text>
-                      )}
+        <ScrollView>
+          <KeyboardAvoidingView
+            behavior="position"
+            keyboardVerticalOffset={keyboardMarginTop}>
+            <View style={styles.container}>
+              <View style={styles.info}>
+                {store.scanInfoError && (
+                  <View style={styles.info}>
+                    <Title style={styles.titleError}>{error}</Title>
+                  </View>
+                )}
+                {!store.scanInfoError && (
+                  <View style={styles.info}>
+                    {/* <Title style={styles.title}>{T.t('send_service')}</Title> */}
+                    {show && (
+                      <View style={styles.info}>
+                        {store.scanInfo && (
+                          <Text style={styles.text}>
+                            {T.t('transfer_status')}:{' '}
+                            {getStatus(store.scanInfo, role)}
+                          </Text>
+                        )}
+                        {metaData && (
+                          <Text style={styles.text}>
+                            {T.t('detail_title')}: {nameOfProduct}
+                          </Text>
+                        )}
+                        {metaData.brand && (
+                          <Text style={styles.text}>
+                            {T.t('detail_brand')}: {metaData.brand}
+                          </Text>
+                        )}
+                        {metaData.model && (
+                          <Text style={styles.text}>
+                            {T.t('detail_model')}: {metaData.model}
+                          </Text>
+                        )}
+                        {metaData.capacity && (
+                          <Text style={styles.text}>
+                            {T.t('detail_capacity')}: {metaData.capacity}
+                          </Text>
+                        )}
+                        {metaData.serial && (
+                          <Text style={styles.text}>
+                            {T.t('detail_serial')}: {metaData.serial}
+                          </Text>
+                        )}
+                        {metaData.type && (
+                          <Text style={styles.text}>
+                            {T.t('detail_type')}: {metaData.type}
+                          </Text>
+                        )}
+                        {store.scanInfo.person && (
+                          <Text style={styles.text}>
+                            {T.t('detail_person')}:{' '}
+                            {store.scanInfo.person.firstName}{' '}
+                            {store.scanInfo.person.lastName}
+                          </Text>
+                        )}
 
-                      <Text style={styles.text}>
-                        {T.t('detail_quantity')}: {quantity} {units}
-                      </Text>
-                    </View>
-                  )}
-                  <ItemSetQuantityArea
-                    quantity={quantity}
-                    units={units}
-                    isEnteredQuantityValid={isEnteredQuantityValid}
-                    value={quantityToService}
-                    setQuantity={setQuantityForService}
-                    mode="title_service_quantity"
-                  />
-                </View>
-              )}
-            </View>
-            <View style={styles.buttons}>
-              {!store.scanInfoError && (
-                <>
-                  <TextInput
-                    style={styles.textInput}
-                    mode="outlined"
-                    label={T.t('title_service_reason')}
-                    value={reason}
-                    onChangeText={text => setReason(text)}
-                  />
-                  <TextInput
-                    style={styles.textInput}
-                    mode="outlined"
-                    label={T.t('title_service_place')}
-                    value={stockroom}
-                    onChangeText={text => setStockroom(text)}
-                  />
-                  <View style={styles.buttonBlock}>
-                    <DarkButton
-                      text={T.t('send')}
-                      disabled={!isFormValid}
-                      onPress={sendSercive}
+                        <Text style={styles.text}>
+                          {T.t('detail_quantity')}: {quantity} {units}
+                        </Text>
+                      </View>
+                    )}
+                    <ItemSetQuantityArea
+                      quantity={quantity}
+                      units={units}
+                      isEnteredQuantityValid={isEnteredQuantityValid}
+                      value={quantityToService}
+                      setQuantity={setQuantityForService}
+                      mode="title_service_quantity"
                     />
                   </View>
-                </>
-              )}
+                )}
+              </View>
+              <View style={styles.buttons}>
+                {!store.scanInfoError && (
+                  <>
+                    <TextInput
+                      style={styles.textInput}
+                      mode="outlined"
+                      label={T.t('title_service_reason')}
+                      value={reason}
+                      onChangeText={text => setReason(text)}
+                    />
+                    <TextInput
+                      style={styles.textInput}
+                      mode="outlined"
+                      label={T.t('title_service_place')}
+                      value={stockroom}
+                      onChangeText={text => setStockroom(text)}
+                    />
+                    <View style={styles.buttonBlock}>
+                      <DarkButton
+                        text={T.t('send')}
+                        disabled={!isFormValid}
+                        onPress={sendSercive}
+                      />
+                    </View>
+                  </>
+                )}
 
-              <DarkButton text={T.t('cancel')} onPress={againScan} />
+                <DarkButton text={T.t('cancel')} onPress={againScan} />
+              </View>
             </View>
-          </View>
-        </KeyboardAvoidingView>
+          </KeyboardAvoidingView>
+        </ScrollView>
       </View>
     </>
   );
@@ -246,7 +249,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     borderRadius: 10,
-    height: Dimensions.get('window').height / 1.3,
     paddingBottom: 10,
     paddingTop: 25,
     width: Dimensions.get('window').width / 1.1,

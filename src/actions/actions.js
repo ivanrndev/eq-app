@@ -16,10 +16,8 @@ import {
   CHANGE_STATUS_ERROR,
   CHANGE_STATUS_LOAD,
   CHANGE_STATUS_LOAD_MORE,
-  CHANGE_STATUS_LOAD_MORE_COMMENTS,
   CHANGE_STATUS_MY_LOAD_MORE,
   CLEAR_BID_LIST,
-  CLEAR_COMMENTS,
   CLEAR_GIVE_ITEM_QTY,
   CLEAR_INVENTORY,
   CLEAR_MARKING,
@@ -37,8 +35,6 @@ import {
   FORGOT_PASS_SUCESS,
   GET_BID_LIST,
   GET_BID_LIST_ERROR,
-  GET_COMMENTS,
-  GET_COMMENTS_ERROR,
   GET_COMPANY_INFO,
   GET_COMPANY_INFO_ERROR,
   GET_COUNT_MY_COMPANY_ITEMS,
@@ -91,8 +87,6 @@ import {
   SAVE_USER_ACCEPT_BID,
   SEARCH_MY_COMPANY_ITEMS,
   SEARCH_MY_COMPANY_ITEMS_ERROR,
-  SEND_COMMENT,
-  SEND_COMMENT_ERROR,
   SET_GIVE_ITEM_QTY,
   SET_INVENTORY_ITEM_QTY,
   START_PAGE,
@@ -1507,100 +1501,6 @@ export const makeStocktaking = (
           });
           nav.navigate('InventoryDone');
           dispatch(loader(false));
-        }
-      });
-  });
-};
-
-// comments
-export const getComments = (nav, itemId, offset, page) => dispatch => {
-  AsyncStorage.getItem('company').then(company => {
-    return axios
-      .get(`${API_URL}/company/${company}/item/${itemId}/comments/`, {
-        params: {limit: 0, offset: offset},
-      })
-      .then(resp => {
-        if (resp.status === 200) {
-          dispatch({
-            type: GET_COMMENTS,
-            payload: {
-              itemId: itemId,
-              commentsList: resp.data.data.reverse(),
-              offSet: 6,
-              commentsloadMore: false,
-              commentsError: false,
-              isInfoOpen: true,
-              page: page,
-            },
-          });
-          nav.navigate('Comments');
-          dispatch(loader(false));
-        }
-      })
-      .catch(e => {
-        if (!e.response.data.success) {
-          let error = getProperError(e.response.data.message.name);
-          dispatch({
-            type: GET_COMMENTS_ERROR,
-            payload: {
-              commentsError: error,
-              commentsloadMore: false,
-              page: page,
-            },
-          });
-          nav.navigate('Comments');
-          dispatch(loader(false));
-        }
-      });
-  });
-};
-
-export const loadMoreComments = status => dispatch => {
-  dispatch({
-    type: CHANGE_STATUS_LOAD_MORE_COMMENTS,
-    payload: {commentsloadMore: status},
-  });
-};
-
-export const clearComments = () => dispatch => {
-  dispatch({
-    type: CLEAR_COMMENTS,
-    payload: {
-      commentsList: [],
-      commentsloadMore: false,
-      offSet: 0,
-      isInfoOpen: false,
-      commentsError: false,
-      addNewComment: false,
-      addNewCommentError: '',
-    },
-  });
-};
-
-export const sendComments = (itemId, message) => dispatch => {
-  AsyncStorage.getItem('company').then(company => {
-    return axios
-      .post(`${API_URL}/company/${company}/item/${itemId}/comments/`, message)
-      .then(resp => {
-        if (resp.status === 200) {
-          dispatch({
-            type: SEND_COMMENT,
-            payload: {
-              addNewComment: true,
-            },
-          });
-        }
-      })
-      .catch(e => {
-        if (!e.response.data.success) {
-          let error = getProperError(e.response.data.message.name);
-          dispatch({
-            type: SEND_COMMENT_ERROR,
-            payload: {
-              addNewComment: false,
-              addNewCommentError: error,
-            },
-          });
         }
       });
   });

@@ -1,55 +1,106 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {useState, useEffect, useCallback, useRef} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {isEmpty} from 'lodash';
 import moment from 'moment';
 import {
-  StyleSheet,
-  View,
   Dimensions,
+  Image,
+  KeyboardAvoidingView,
   SafeAreaView,
   ScrollView,
-  KeyboardAvoidingView,
+  StyleSheet,
+  View,
 } from 'react-native';
 import T from '../../i18n';
-import {Card, Title, Paragraph, TextInput, Button} from 'react-native-paper';
+import {
+  Button,
+  Card,
+  IconButton,
+  Paragraph,
+  TextInput,
+  Title,
+} from 'react-native-paper';
+import {useNavigation} from '@react-navigation/native';
+
 // components
 import Appbar from '../../components/Appbar';
 import {getProperErrorMessage} from '../../utils/helpers.js';
 // redux and actions
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import Gallery from '../../components/Gallery';
 import {
+  clearComments,
   getComments,
   sendComments,
-  clearComments,
-} from '../../actions/actions.js';
+} from '../../actions/commentsAction';
 
-const Comments = props => {
+const Comments = () => {
   const dispatch = useDispatch();
-  const comments = useSelector(state => state.comments);
-  const scan = useSelector(state => state.scan);
+  const navigation = useNavigation();
+  const [comments, scan, newPhotos] = useSelector(({comments, scan}) => [
+    comments,
+    scan,
+    comments.photos,
+  ]);
+
   let error = getProperErrorMessage(comments.commentsError);
   const [text, setText] = useState('');
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const [chosenPhoto, setChosenPhoto] = useState('');
+  const [commentId, setCommentId] = useState('');
+  const photosInGallery = comments.commentsList.find(
+    item => item._id === commentId,
+  );
+  const bigPhoto =
+    photosInGallery &&
+    photosInGallery.photos.find(item => item.name === chosenPhoto);
   let scrollView = useRef();
   let showEmptyError = !comments.commentsList.length;
   let commentData = new FormData();
   commentData.append('message', text);
+
+  if (!isEmpty(newPhotos)) {
+    newPhotos.forEach(file => {
+      commentData.append('file', {
+        uri: `file:///${file.path}`,
+        type: file.mime,
+        name: file.filename,
+      });
+    });
+  }
+
   const sendComment = () => {
     dispatch(sendComments(comments.itemId, commentData));
   };
 
   useEffect(() => {
     dispatch(clearComments());
-    dispatch(getComments(props.navigation, comments.itemId, 0, comments.page));
+    dispatch(getComments(navigation, comments.itemId, 0, comments.page));
     setText('');
   }, [comments.addNewComment]);
 
   const test = useCallback(() => {
     scrollView.current.scrollToEnd({animated: true});
   }, [scrollView]);
+
+  const handleAddPhoto = () => navigation.navigate('ChoosePhotoMode');
+  const handlePressPhoto = (commentId, photoId) => {
+    setIsGalleryOpen(true);
+    setCommentId(commentId);
+    setChosenPhoto(photoId);
+  };
+  const handleCloseGallery = () => {
+    setIsGalleryOpen(false);
+    setChosenPhoto('');
+    setCommentId('');
+  };
+  console.log('PPPOK', newPhotos);
   return (
     <>
       <Appbar
-        navigation={props.navigation}
+        navigation={navigation}
         arrow={true}
         clearComments={true}
         newScan={false}
@@ -58,41 +109,77 @@ const Comments = props => {
       />
       <SafeAreaView />
       <View style={styles.body}>
-        <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={90}>
-          <View style={styles.container}>
-            {!error && (
-              <ScrollView ref={scrollView} onContentSizeChange={test}>
-                {showEmptyError && (
-                  <Paragraph style={styles.text}>
-                    {T.t('format_comments_empty_first')} {scan.currentScan}{' '}
-                    {T.t('format_comments_empty_second')}
-                  </Paragraph>
-                )}
-                {!error
-                  ? comments.commentsList.map(item => (
-                      <Card
-                        style={styles.card}
-                        key={item._id}
-                        onPress={() => {}}>
-                        <Card.Content>
-                          <Paragraph style={styles.paragraph}>
-                            {T.t('transfer_from')}: {item.user.firstName}{' '}
-                            {item.user.lastName}
-                          </Paragraph>
-                          <Paragraph style={styles.paragraph}>
-                            {T.t('title_date')}:{' '}
-                            {moment(item.updatedAt).format('YYYY-MM-DD HH:mm')}
-                          </Paragraph>
+        <View style={styles.container}>
+          {!error && (
+            <ScrollView ref={scrollView} onContentSizeChange={test}>
+              {showEmptyError && (
+                <Paragraph style={styles.text}>
+                  {T.t('format_comments_empty_first')} {scan.currentScan}{' '}
+                  {T.t('format_comments_empty_second')}
+                </Paragraph>
+              )}
+              {!error
+                ? comments.commentsList.map(item => (
+                    <Card style={styles.card} key={item._id} onPress={() => {}}>
+                      <Card.Content>
+                        <Paragraph style={styles.paragraph}>
+                          {T.t('transfer_from')}: {item.user.firstName}{' '}
+                          {item.user.lastName}
+                        </Paragraph>
+                        <Paragraph style={styles.paragraph}>
+                          {T.t('title_date')}:{' '}
+                          {moment(item.updatedAt).format('YYYY-MM-DD HH:mm')}
+                        </Paragraph>
+                        {item.message.length > 0 && (
                           <Paragraph style={styles.paragraph}>
                             {T.t('title_comment')}: "{item.message}"
                           </Paragraph>
-                        </Card.Content>
-                      </Card>
-                    ))
-                  : null}
-              </ScrollView>
-            )}
-            {error ? <Title style={styles.title}>{error}</Title> : null}
+                        )}
+                        <View style={styles.smallImgWrap}>
+                          {!isEmpty(item.photos) &&
+                            item.photos.map(photo => (
+                              <TouchableWithoutFeedback
+                                onPress={() =>
+                                  handlePressPhoto(item._id, photo.name)
+                                }>
+                                <Image
+                                  style={styles.smallImg}
+                                  source={{
+                                    uri: photo.url,
+                                  }}
+                                />
+                              </TouchableWithoutFeedback>
+                            ))}
+                        </View>
+                      </Card.Content>
+                    </Card>
+                  ))
+                : null}
+            </ScrollView>
+          )}
+          {error ? <Title style={styles.title}>{error}</Title> : null}
+          <KeyboardAvoidingView
+            behavior="position"
+            keyboardVerticalOffset={140}>
+            <View style={styles.send}>
+              {newPhotos.length > 0 &&
+                newPhotos.map(photo => (
+                  <Image
+                    style={styles.smallImg}
+                    source={{
+                      uri: photo.path,
+                    }}
+                  />
+                ))}
+              <IconButton
+                icon="paperclip"
+                size={35}
+                style={styles.addPhotoBtn}
+                color="#22215B"
+                onPress={handleAddPhoto}
+                disabled={newPhotos.length >= 3}
+              />
+            </View>
             <View style={styles.send}>
               <TextInput
                 multiline={true}
@@ -102,9 +189,10 @@ const Comments = props => {
                 value={text}
                 onChangeText={text => setText(text)}
               />
+
               <Button
                 icon="send"
-                disabled={isEmpty(text.trim()) ? true : false}
+                disabled={isEmpty(text.trim()) && isEmpty(newPhotos)}
                 style={styles.button}
                 contentStyle={styles.buttonSend}
                 mode="contained"
@@ -112,9 +200,16 @@ const Comments = props => {
                 onPress={() => sendComment()}
               />
             </View>
-          </View>
-        </KeyboardAvoidingView>
+          </KeyboardAvoidingView>
+        </View>
       </View>
+      <Gallery
+        bigPhoto={bigPhoto}
+        photoList={photosInGallery ? photosInGallery.photos : []}
+        handleChoosePhoto={setChosenPhoto}
+        handlePortalClose={handleCloseGallery}
+        isPortalOpen={isGalleryOpen}
+      />
     </>
   );
 };
@@ -123,7 +218,6 @@ const styles = StyleSheet.create({
   body: {
     zIndex: 1,
     marginTop: -10,
-    display: 'flex',
     paddingTop: 30,
     paddingBottom: 20,
     alignItems: 'center',
@@ -132,7 +226,6 @@ const styles = StyleSheet.create({
   },
   container: {
     zIndex: 1,
-    display: 'flex',
     alignItems: 'center',
     borderRadius: 10,
     height: Dimensions.get('window').height / 1.3,
@@ -147,7 +240,6 @@ const styles = StyleSheet.create({
   },
   card: {
     zIndex: 1,
-    display: 'flex',
     justifyContent: 'center',
     width: Dimensions.get('window').width / 1.2,
     marginBottom: 0,
@@ -167,41 +259,58 @@ const styles = StyleSheet.create({
     lineHeight: 15,
     color: '#7A7A9D',
   },
+  btns: {
+    marginLeft: 10,
+    alignSelf: 'flex-end',
+    marginBottom: 10,
+  },
   button: {
     textAlign: 'center',
-    height: 56,
-    width: 50,
+    height: 70,
+    width: 40,
+    marginBottom: 10,
+    marginLeft: 10,
   },
   buttonSend: {
-    height: 56,
+    height: 70,
     width: 80,
   },
   textInput: {
-    display: 'flex',
     justifyContent: 'center',
-    height: 56,
+    height: 70,
     color: '#7A7A9D',
-    marginTop: -6,
     marginBottom: 10,
     backgroundColor: '#EDF6FF',
-    width: Dimensions.get('window').width / 1.77,
+    flex: 1,
   },
   send: {
-    display: 'flex',
     alignSelf: 'center',
     flexDirection: 'row',
-    textAlign: 'center',
+    alignItems: 'flex-end',
     justifyContent: 'space-between',
     width: Dimensions.get('window').width - 40,
     paddingLeft: 13,
     paddingRight: 13,
     marginTop: 20,
   },
+  addPhotoBtn: {
+    alignSelf: 'flex-end',
+  },
   text: {
     fontSize: 15,
     textAlign: 'center',
     paddingBottom: 20,
     width: Dimensions.get('window').width / 1.2,
+  },
+  smallImgWrap: {
+    flexDirection: 'row',
+    paddingVertical: 10,
+    flexWrap: 'wrap',
+  },
+  smallImg: {
+    marginRight: 5,
+    height: 70,
+    width: 70,
   },
 });
 

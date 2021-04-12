@@ -25,7 +25,6 @@ import Appbar from '../../../components/Appbar';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   backPageMount,
-  getComments,
   getTransactions,
   loader,
   nextPageMount,
@@ -33,6 +32,8 @@ import {
   unMountItemFromParent,
 } from '../../../actions/actions.js';
 import ItemCardQuantityAndPrice from '../../../components/ItemCardQuantityAndPrice';
+import PhotoWidget from '../../../components/Gallery/PhotoWidget';
+import {getComments} from '../../../actions/commentsAction';
 
 export const OnMeInfo = props => {
   const [scan, store, settings] = useSelector(({scan, onMe, settings}) => [
@@ -123,6 +124,7 @@ export const OnMeInfo = props => {
       <View style={styles.body}>
         <View style={styles.container}>
           <ScrollView>
+            <PhotoWidget />
             {store.myError && (
               <View style={styles.info}>
                 <Title style={styles.titleError}>ТМЦ не найден</Title>

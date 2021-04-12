@@ -16,7 +16,6 @@ import Appbar from '../../../components/Appbar';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   backPageMount,
-  getComments,
   getTransactions,
   loader,
   nextPageMount,
@@ -28,6 +27,7 @@ import {fontSizer, getStatus} from '../../../utils/helpers.js';
 import AsyncStorage from '@react-native-community/async-storage';
 import DarkButton from '../../../components/Buttons/DarkButton';
 import ItemCardQuantityAndPrice from '../../../components/ItemCardQuantityAndPrice';
+import {getComments} from '../../../actions/commentsAction';
 
 export const IdentInfo = props => {
   const dispatch = useDispatch();

@@ -12,7 +12,6 @@ import {
   changeLocationLoc,
   changeLocationMain,
   clearBidList,
-  clearComments,
   clearGiveList,
   clearInventory,
   clearMarking,
@@ -26,6 +25,7 @@ import {
 import Search from '../Search';
 import NFC from '../../screens/NFC';
 import {cleanMountItemsList} from '../../actions/mountActions';
+import {clearComments} from '../../actions/commentsAction';
 
 const AppbarCustom = props => {
   const dispatch = useDispatch();

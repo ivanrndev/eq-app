@@ -5,6 +5,7 @@ import {
   CLEAR_COMMENTS,
   SEND_COMMENT,
   SEND_COMMENT_ERROR,
+  ADD_PHOTOS_TO_COMMENT,
 } from '../../../actions/actionsType.js';
 
 const initialState = {
@@ -17,6 +18,7 @@ const initialState = {
   addNewComment: false,
   addNewCommentError: '',
   page: '',
+  photos: [],
 };
 
 const commentsReducer = (state = initialState, action) => {
@@ -52,6 +54,11 @@ const commentsReducer = (state = initialState, action) => {
         ...action.payload,
         // commentsList: state.commentsList.concat(action.payload.commentsList),
         // offSet: state.offSet + action.payload.offSet,
+      };
+    case ADD_PHOTOS_TO_COMMENT:
+      return {
+        ...state,
+        photos: [...state.photos, ...action.payload],
       };
     default:
       return state;
