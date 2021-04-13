@@ -9,9 +9,9 @@ import {
 } from 'react-native';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import React, {useRef} from 'react';
-import Carousel, {ParallaxImage} from 'react-native-snap-carousel';
+import Carousel from 'react-native-snap-carousel';
 
-const {width: screenWidth} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 const image = require('./../../assets/svg/empty.png');
 
 const Gallery = ({
@@ -28,15 +28,13 @@ const Gallery = ({
     carouselRef.current.snapToItem(index, true, true);
     setChosenPhoto(index);
   };
-  const renderItem = ({item, index}, parallaxProps) => {
+  const renderItem = ({item}) => {
     return (
       <View style={styles.item}>
-        <ParallaxImage
+        <Image
           source={{uri: item.illustration}}
           containerStyle={styles.imageContainer}
           style={styles.bigImg}
-          parallaxFactor={0.4}
-          {...parallaxProps}
         />
       </View>
     );
@@ -57,14 +55,15 @@ const Gallery = ({
             <View style={styles.container}>
               <Carousel
                 ref={carouselRef}
-                sliderWidth={screenWidth}
-                sliderHeight={screenWidth}
-                itemWidth={screenWidth - 60}
                 data={entries}
+                sliderWidth={width - 10}
+                itemWidth={width - 10}
+                inactiveSlideShift={0}
                 renderItem={renderItem}
-                hasParallaxImages={true}
                 onSnapToItem={slideIndex => setChosenPhoto(slideIndex)}
                 firstItem={chosenPhoto}
+                containerCustomStyle={{flex: 1}}
+                slideStyle={{flex: 1}}
               />
             </View>
 
@@ -104,7 +103,7 @@ const styles = StyleSheet.create({
   },
   bigImg: {
     ...StyleSheet.absoluteFillObject,
-    resizeMode: 'cover',
+    resizeMode: 'contain',
   },
   smallImgWrap: {
     flexDirection: 'row',
@@ -136,8 +135,7 @@ const styles = StyleSheet.create({
     maxHeight: Dimensions.get('window').height - 300,
   },
   item: {
-    width: Dimensions.get('window').width - 60,
-    height: Dimensions.get('window').height - 350,
+    flex: 1,
   },
   imageContainer: {
     flex: 1,

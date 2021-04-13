@@ -67,7 +67,7 @@ const Comments = () => {
       commentData.append('file', {
         uri: `file:///${file.path}`,
         type: file.mime,
-        name: file.filename,
+        name: file.filename ?? 'file.path',
       });
     });
   }
@@ -112,115 +112,114 @@ const Comments = () => {
       />
       <SafeAreaView />
       <View style={styles.body}>
-        <View style={styles.container}>
-          {!error && (
-            <ScrollView ref={scrollView} onContentSizeChange={test}>
-              {showEmptyError && (
-                <Paragraph style={styles.text}>
-                  {T.t('format_comments_empty_first')} {scan.currentScan}{' '}
-                  {T.t('format_comments_empty_second')}
-                </Paragraph>
-              )}
-              {!error
-                ? comments.commentsList.map(item => (
-                    <Card style={styles.card} key={item._id} onPress={() => {}}>
-                      <Card.Content>
+        {!error && (
+          <ScrollView ref={scrollView} onContentSizeChange={test}>
+            {showEmptyError && (
+              <Paragraph style={styles.text}>
+                {T.t('format_comments_empty_first')} {scan.currentScan}{' '}
+                {T.t('format_comments_empty_second')}
+              </Paragraph>
+            )}
+            {!error
+              ? comments.commentsList.map(item => (
+                  <Card style={styles.card} key={item._id} onPress={() => {}}>
+                    <Card.Content>
+                      <Paragraph style={styles.paragraph}>
+                        {T.t('transfer_from')}: {item.user.firstName}{' '}
+                        {item.user.lastName}
+                      </Paragraph>
+                      <Paragraph style={styles.paragraph}>
+                        {T.t('title_date')}:{' '}
+                        {moment(item.updatedAt).format('YYYY-MM-DD HH:mm')}
+                      </Paragraph>
+                      {item.message.length > 0 && (
                         <Paragraph style={styles.paragraph}>
-                          {T.t('transfer_from')}: {item.user.firstName}{' '}
-                          {item.user.lastName}
+                          {T.t('title_comment')}: "{item.message}"
                         </Paragraph>
-                        <Paragraph style={styles.paragraph}>
-                          {T.t('title_date')}:{' '}
-                          {moment(item.updatedAt).format('YYYY-MM-DD HH:mm')}
-                        </Paragraph>
-                        {item.message.length > 0 && (
-                          <Paragraph style={styles.paragraph}>
-                            {T.t('title_comment')}: "{item.message}"
-                          </Paragraph>
-                        )}
-                        <View style={styles.smallImgWrap}>
-                          {!isEmpty(item.photos) &&
-                            item.photos.map((photo, index) => (
-                              <TouchableWithoutFeedback
-                                onPress={() =>
-                                  handlePressPhoto(item._id, index)
-                                }>
-                                <ImageBackground
-                                  source={image}
-                                  style={styles.bgSvg}>
-                                  <Image
-                                    style={styles.smallImg}
-                                    source={{
-                                      uri: photo.url,
-                                    }}
-                                  />
-                                </ImageBackground>
-                              </TouchableWithoutFeedback>
-                            ))}
-                        </View>
-                      </Card.Content>
-                    </Card>
-                  ))
-                : null}
-            </ScrollView>
-          )}
-          {error ? <Title style={styles.title}>{error}</Title> : null}
-          <KeyboardAvoidingView
-            behavior="position"
-            keyboardVerticalOffset={140}
-            style={styles.bottom}>
-            <View style={styles.send}>
-              <View style={styles.chosenImg}>
-                {newPhotos.length > 0 &&
-                  newPhotos.map(photo => (
-                    <View style={styles.imgWrap}>
-                      <IconButton
-                        icon="close-box"
-                        color="#000"
-                        onPress={() => handleDeletePhoto(photo.path)}
-                        size={25}
-                        style={styles.delImg}
-                      />
-                      <Image
-                        style={styles.smallImg}
-                        source={{
-                          uri: photo.path,
-                        }}
-                      />
-                    </View>
-                  ))}
-              </View>
-              <IconButton
-                icon="paperclip"
-                size={35}
-                style={styles.addPhotoBtn}
-                color="#22215B"
-                onPress={handleAddPhoto}
-                disabled={newPhotos.length >= 3}
-              />
-            </View>
-            <View style={styles.send}>
-              <TextInput
-                multiline={true}
-                style={styles.textInput}
-                mode="outlined"
-                label={T.t('title_comment_new')}
-                value={text}
-                onChangeText={text => setText(text)}
-              />
+                      )}
+                      <View style={styles.smallImgWrap}>
+                        {!isEmpty(item.photos) &&
+                          item.photos.map((photo, index) => (
+                            <TouchableWithoutFeedback
+                              onPress={() => handlePressPhoto(item._id, index)}>
+                              <ImageBackground
+                                source={image}
+                                style={styles.bgSvg}>
+                                <Image
+                                  style={styles.smallImg}
+                                  source={{
+                                    uri: photo.url,
+                                  }}
+                                />
+                              </ImageBackground>
+                            </TouchableWithoutFeedback>
+                          ))}
+                      </View>
+                    </Card.Content>
+                  </Card>
+                ))
+              : null}
+          </ScrollView>
+        )}
+        {error ? <Title style={styles.title}>{error}</Title> : null}
 
-              <Button
-                icon="send"
-                disabled={isEmpty(text.trim()) && isEmpty(newPhotos)}
-                style={styles.button}
-                contentStyle={styles.buttonSend}
-                mode="contained"
-                color="#D3E3F2"
-                onPress={() => sendComment()}
-              />
+        <KeyboardAvoidingView
+          behavior="position"
+          keyboardVerticalOffset={10}
+          style={[
+            styles.bottom,
+            newPhotos.length > 0 ? {height: 270} : {height: 200},
+          ]}>
+          <View style={styles.send}>
+            <View style={styles.chosenImg}>
+              {newPhotos.length > 0 &&
+                newPhotos.map(photo => (
+                  <View style={styles.imgWrap}>
+                    <IconButton
+                      icon="close-box"
+                      color="#000"
+                      onPress={() => handleDeletePhoto(photo.path)}
+                      size={25}
+                      style={styles.delImg}
+                    />
+                    <Image
+                      style={styles.smallImg}
+                      source={{
+                        uri: photo.path,
+                      }}
+                    />
+                  </View>
+                ))}
             </View>
-          </KeyboardAvoidingView>
-        </View>
+          </View>
+          <View style={styles.send}>
+            <IconButton
+              icon="paperclip"
+              size={35}
+              style={styles.addPhotoBtn}
+              color="#22215B"
+              onPress={handleAddPhoto}
+              disabled={newPhotos.length >= 3}
+            />
+            <TextInput
+              multiline={true}
+              style={styles.textInput}
+              mode="outlined"
+              label={T.t('title_comment_new')}
+              value={text}
+              onChangeText={text => setText(text)}
+            />
+            <Button
+              icon="send"
+              disabled={isEmpty(text.trim()) && isEmpty(newPhotos)}
+              style={styles.button}
+              contentStyle={styles.buttonSend}
+              mode="contained"
+              color="#D3E3F2"
+              onPress={() => sendComment()}
+            />
+          </View>
+        </KeyboardAvoidingView>
       </View>
       <Gallery
         photoList={photosInGallery ? photosInGallery.photos : []}
@@ -242,6 +241,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#D3E3F2',
     height: Dimensions.get('window').height,
+    borderRadius: 8,
   },
   chosenImg: {
     flexDirection: 'row',
@@ -249,17 +249,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: '#EDF6FF',
   },
-  container: {
-    zIndex: 1,
-    alignItems: 'center',
-    borderRadius: 10,
-    height: Dimensions.get('window').height / 1.3,
-    paddingBottom: 10,
-    paddingTop: 20,
-    marginLeft: 11,
-    marginRight: 11,
-    backgroundColor: '#EDF6FF',
-  },
+
   load: {
     marginTop: 10,
   },
@@ -313,14 +303,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    width: Dimensions.get('window').width - 40,
+    width: Dimensions.get('window').width,
     paddingLeft: 13,
     paddingRight: 13,
-    marginTop: 10,
+    paddingTop: 10,
+    backgroundColor: '#EDF6FF',
   },
-  addPhotoBtn: {
-    alignSelf: 'flex-end',
-  },
+  addPhotoBtn: {},
   text: {
     fontSize: 15,
     textAlign: 'center',
@@ -349,8 +338,8 @@ const styles = StyleSheet.create({
   bottom: {
     backgroundColor: '#EDF6FF',
     width: Dimensions.get('window').width,
-    position: 'relative',
-    zIndex: 100,
+    zIndex: 10,
+    marginBottom: 20,
   },
   imgWrap: {
     position: 'relative',

@@ -18,8 +18,8 @@ const ChoosePhotoMode = () => {
 
   const handleChoosePhoto = () => {
     ImagePicker.openPicker({
-      compressImageMaxWidth: 600,
-      compressImageMaxHeight: 600,
+      compressImageMaxWidth: 400,
+      compressImageMaxHeight: 400,
       multiple: true,
       maxFiles: maxChoosePhotoCount,
     })
@@ -32,8 +32,8 @@ const ChoosePhotoMode = () => {
   const handleTakePhoto = () =>
     ImagePicker.openCamera({
       multiple: true,
-      compressImageMaxWidth: 600,
-      compressImageMaxHeight: 600,
+      compressImageMaxWidth: 400,
+      compressImageMaxHeight: 400,
       maxFiles: maxChoosePhotoCount,
     })
       .then(images => {
