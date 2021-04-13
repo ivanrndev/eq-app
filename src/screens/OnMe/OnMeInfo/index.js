@@ -32,7 +32,6 @@ import {
   unMountItemFromParent,
 } from '../../../actions/actions.js';
 import ItemCardQuantityAndPrice from '../../../components/ItemCardQuantityAndPrice';
-import PhotoWidget from '../../../components/Gallery/PhotoWidget';
 import {getComments} from '../../../actions/commentsAction';
 
 export const OnMeInfo = props => {
@@ -124,7 +123,6 @@ export const OnMeInfo = props => {
       <View style={styles.body}>
         <View style={styles.container}>
           <ScrollView>
-            <PhotoWidget />
             {store.myError && (
               <View style={styles.info}>
                 <Title style={styles.titleError}>ТМЦ не найден</Title>

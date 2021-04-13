@@ -247,6 +247,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    backgroundColor: '#EDF6FF',
   },
   container: {
     zIndex: 1,
@@ -348,6 +349,8 @@ const styles = StyleSheet.create({
   bottom: {
     backgroundColor: '#EDF6FF',
     width: Dimensions.get('window').width,
+    position: 'relative',
+    zIndex: 100,
   },
   imgWrap: {
     position: 'relative',
@@ -359,7 +362,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -20,
     right: -20,
-
     zIndex: 10000,
   },
 });
