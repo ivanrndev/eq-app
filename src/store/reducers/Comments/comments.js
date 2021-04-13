@@ -1,11 +1,12 @@
 import {
-  GET_COMMENTS,
-  GET_COMMENTS_ERROR,
+  ADD_PHOTOS_TO_COMMENT,
   CHANGE_STATUS_LOAD_MORE_COMMENTS,
   CLEAR_COMMENTS,
+  DELETE_PHOTOS_FROM_COMMENT,
+  GET_COMMENTS,
+  GET_COMMENTS_ERROR,
   SEND_COMMENT,
   SEND_COMMENT_ERROR,
-  ADD_PHOTOS_TO_COMMENT,
 } from '../../../actions/actionsType.js';
 
 const initialState = {
@@ -52,13 +53,19 @@ const commentsReducer = (state = initialState, action) => {
       return {
         ...state,
         ...action.payload,
-        // commentsList: state.commentsList.concat(action.payload.commentsList),
-        // offSet: state.offSet + action.payload.offSet,
       };
     case ADD_PHOTOS_TO_COMMENT:
       return {
         ...state,
         photos: [...state.photos, ...action.payload],
+      };
+    case DELETE_PHOTOS_FROM_COMMENT:
+      const newPhoto = state.photos.filter(
+        photo => photo.path !== action.payload,
+      );
+      return {
+        ...state,
+        photos: newPhoto,
       };
     default:
       return state;

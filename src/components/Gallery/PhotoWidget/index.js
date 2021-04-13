@@ -12,12 +12,9 @@ const PhotoWidget = () => {
       multiple: true,
       maxFiles: maxChoosePhotoCount,
     }).then(images => {
-      console.log(images);
       setPhotos(images);
     });
   };
-
-  console.log('PHOTO', photos);
 
   return (
     <View>

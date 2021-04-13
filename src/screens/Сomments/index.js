@@ -5,6 +5,7 @@ import moment from 'moment';
 import {
   Dimensions,
   Image,
+  ImageBackground,
   KeyboardAvoidingView,
   SafeAreaView,
   ScrollView,
@@ -32,9 +33,12 @@ import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import Gallery from '../../components/Gallery';
 import {
   clearComments,
+  deletePhotoFromComment,
   getComments,
   sendComments,
 } from '../../actions/commentsAction';
+
+const image = require('./../../assets/svg/empty.png');
 
 const Comments = () => {
   const dispatch = useDispatch();
@@ -48,14 +52,11 @@ const Comments = () => {
   let error = getProperErrorMessage(comments.commentsError);
   const [text, setText] = useState('');
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
-  const [chosenPhoto, setChosenPhoto] = useState('');
+  const [chosenPhoto, setChosenPhoto] = useState(0);
   const [commentId, setCommentId] = useState('');
   const photosInGallery = comments.commentsList.find(
     item => item._id === commentId,
   );
-  const bigPhoto =
-    photosInGallery &&
-    photosInGallery.photos.find(item => item.name === chosenPhoto);
   let scrollView = useRef();
   let showEmptyError = !comments.commentsList.length;
   let commentData = new FormData();
@@ -86,17 +87,19 @@ const Comments = () => {
   }, [scrollView]);
 
   const handleAddPhoto = () => navigation.navigate('ChoosePhotoMode');
-  const handlePressPhoto = (commentId, photoId) => {
+  const handlePressPhoto = (commentId, index) => {
     setIsGalleryOpen(true);
     setCommentId(commentId);
-    setChosenPhoto(photoId);
+    setChosenPhoto(index);
   };
   const handleCloseGallery = () => {
     setIsGalleryOpen(false);
-    setChosenPhoto('');
+    setChosenPhoto(0);
     setCommentId('');
   };
-  console.log('PPPOK', newPhotos);
+  const handleDeletePhoto = photoName =>
+    dispatch(deletePhotoFromComment(photoName));
+
   return (
     <>
       <Appbar
@@ -137,17 +140,21 @@ const Comments = () => {
                         )}
                         <View style={styles.smallImgWrap}>
                           {!isEmpty(item.photos) &&
-                            item.photos.map(photo => (
+                            item.photos.map((photo, index) => (
                               <TouchableWithoutFeedback
                                 onPress={() =>
-                                  handlePressPhoto(item._id, photo.name)
+                                  handlePressPhoto(item._id, index)
                                 }>
-                                <Image
-                                  style={styles.smallImg}
-                                  source={{
-                                    uri: photo.url,
-                                  }}
-                                />
+                                <ImageBackground
+                                  source={image}
+                                  style={styles.bgSvg}>
+                                  <Image
+                                    style={styles.smallImg}
+                                    source={{
+                                      uri: photo.url,
+                                    }}
+                                  />
+                                </ImageBackground>
                               </TouchableWithoutFeedback>
                             ))}
                         </View>
@@ -160,17 +167,29 @@ const Comments = () => {
           {error ? <Title style={styles.title}>{error}</Title> : null}
           <KeyboardAvoidingView
             behavior="position"
-            keyboardVerticalOffset={140}>
+            keyboardVerticalOffset={140}
+            style={styles.bottom}>
             <View style={styles.send}>
-              {newPhotos.length > 0 &&
-                newPhotos.map(photo => (
-                  <Image
-                    style={styles.smallImg}
-                    source={{
-                      uri: photo.path,
-                    }}
-                  />
-                ))}
+              <View style={styles.chosenImg}>
+                {newPhotos.length > 0 &&
+                  newPhotos.map(photo => (
+                    <View style={styles.imgWrap}>
+                      <IconButton
+                        icon="close-box"
+                        color="#000"
+                        onPress={() => handleDeletePhoto(photo.path)}
+                        size={25}
+                        style={styles.delImg}
+                      />
+                      <Image
+                        style={styles.smallImg}
+                        source={{
+                          uri: photo.path,
+                        }}
+                      />
+                    </View>
+                  ))}
+              </View>
               <IconButton
                 icon="paperclip"
                 size={35}
@@ -204,11 +223,11 @@ const Comments = () => {
         </View>
       </View>
       <Gallery
-        bigPhoto={bigPhoto}
         photoList={photosInGallery ? photosInGallery.photos : []}
-        handleChoosePhoto={setChosenPhoto}
+        chosenPhoto={chosenPhoto}
         handlePortalClose={handleCloseGallery}
         isPortalOpen={isGalleryOpen}
+        setChosenPhoto={setChosenPhoto}
       />
     </>
   );
@@ -223,6 +242,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#D3E3F2',
     height: Dimensions.get('window').height,
+  },
+  chosenImg: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   container: {
     zIndex: 1,
@@ -286,12 +310,12 @@ const styles = StyleSheet.create({
   send: {
     alignSelf: 'center',
     flexDirection: 'row',
-    alignItems: 'flex-end',
+    alignItems: 'center',
     justifyContent: 'space-between',
     width: Dimensions.get('window').width - 40,
     paddingLeft: 13,
     paddingRight: 13,
-    marginTop: 20,
+    marginTop: 10,
   },
   addPhotoBtn: {
     alignSelf: 'flex-end',
@@ -311,6 +335,32 @@ const styles = StyleSheet.create({
     marginRight: 5,
     height: 70,
     width: 70,
+    position: 'relative',
+    zIndex: 100,
+  },
+  bgSvg: {
+    marginRight: 5,
+    height: 70,
+    width: 70,
+    position: 'relative',
+    zIndex: 1,
+  },
+  bottom: {
+    backgroundColor: '#EDF6FF',
+    width: Dimensions.get('window').width,
+  },
+  imgWrap: {
+    position: 'relative',
+    height: 70,
+    width: 70,
+    marginRight: 10,
+  },
+  delImg: {
+    position: 'absolute',
+    top: -20,
+    right: -20,
+
+    zIndex: 10000,
   },
 });
 

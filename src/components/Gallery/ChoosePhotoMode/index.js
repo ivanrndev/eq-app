@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, Dimensions} from 'react-native';
+import {Dimensions, StyleSheet, View} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import DarkButton from '../../Buttons/DarkButton';
 import {Card} from 'react-native-paper';
@@ -24,7 +24,6 @@ const ChoosePhotoMode = () => {
       maxFiles: maxChoosePhotoCount,
     })
       .then(images => {
-        console.log('IMAGES', images);
         dispatch(addPhotoToComment(images));
       })
       .then(navigation.navigate('Comments'));
@@ -35,12 +34,9 @@ const ChoosePhotoMode = () => {
       multiple: true,
       compressImageMaxWidth: 600,
       compressImageMaxHeight: 600,
-      height: 300,
-      width: 300,
       maxFiles: maxChoosePhotoCount,
     })
       .then(images => {
-        console.log(images);
         dispatch(addPhotoToComment([images]));
       })
       .then(navigation.navigate('Comments'));

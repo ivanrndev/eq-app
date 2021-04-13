@@ -5,6 +5,7 @@ import {
   ADD_PHOTOS_TO_COMMENT,
   CHANGE_STATUS_LOAD_MORE_COMMENTS,
   CLEAR_COMMENTS,
+  DELETE_PHOTOS_FROM_COMMENT,
   GET_COMMENTS,
   GET_COMMENTS_ERROR,
   SEND_COMMENT,
@@ -79,7 +80,6 @@ export const clearComments = () => dispatch => {
 };
 
 export const sendComments = (itemId, message) => dispatch => {
-  console.log('ACTION', message);
   AsyncStorage.getItem('company').then(company => {
     return axios
       .post(`${API_URL}/company/${company}/item/${itemId}/comments/`, message)
@@ -112,5 +112,11 @@ export const addPhotoToComment = photoArr => dispatch => {
   dispatch({
     type: ADD_PHOTOS_TO_COMMENT,
     payload: photoArr,
+  });
+};
+export const deletePhotoFromComment = photoName => dispatch => {
+  dispatch({
+    type: DELETE_PHOTOS_FROM_COMMENT,
+    payload: photoName,
   });
 };
