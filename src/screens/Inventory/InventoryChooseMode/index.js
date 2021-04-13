@@ -98,7 +98,9 @@ const InventoryChooseMode = () => {
     brand: item.metadata.brand,
     model: item.metadata.model,
     serial: item.metadata.serial,
+    quantity: item.batch.quantity,
   }));
+
   const handleEndInventory = () => {
     navigation.navigate('Home');
     dispatch(clearGiveList());
