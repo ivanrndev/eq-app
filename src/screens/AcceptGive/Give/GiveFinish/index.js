@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     borderRadius: 10,
-    height: Dimensions.get('window').height / 2.1,
+    minHeight: Dimensions.get('window').height / 2.1,
     paddingBottom: 10,
     paddingTop: 20,
     width: Dimensions.get('window').width / 1.1,
