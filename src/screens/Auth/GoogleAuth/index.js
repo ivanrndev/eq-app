@@ -12,17 +12,12 @@ const GoogleAuth = () => {
 
   useEffect(() => {
     GoogleSignin.configure({
-      scopes: ['https://www.googleapis.com/auth/drive.readonly'],
       webClientId:
         '753194651551-aaktfmil1qvflej2usc24t65d7r4fk67.apps.googleusercontent.com',
-      offlineAccess: true,
-      hostedDomain: '',
-      loginHint: '',
-      forceCodeForRefreshToken: true,
+
       accountName: 'EqMan',
       iosClientId:
         '753194651551-4kve0pmjfbacv0n67gps9da8jkt3quc1.apps.googleusercontent.com',
-      googleServicePlistPath: '',
     });
   }, []);
 
