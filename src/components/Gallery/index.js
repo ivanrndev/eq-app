@@ -72,11 +72,10 @@ const Gallery = ({
                 <TouchableWithoutFeedback onPress={() => handleChose(index)}>
                   <ImageBackground source={image} style={styles.bgSvg}>
                     <Image
-                      style={
-                        index === chosenPhoto
-                          ? styles.smallChosen
-                          : styles.smallImg
-                      }
+                      style={[
+                        styles.smallImg,
+                        index === chosenPhoto && styles.smallChosen,
+                      ]}
                       source={{
                         uri: photo.url,
                       }}
@@ -116,11 +115,9 @@ const styles = StyleSheet.create({
     width: 70,
     marginRight: 5,
     borderColor: 'transparent',
+    marginBottom: 10,
   },
   smallChosen: {
-    height: 70,
-    width: 70,
-    marginRight: 5,
     borderWidth: 3,
     borderColor: '#137CDF',
   },

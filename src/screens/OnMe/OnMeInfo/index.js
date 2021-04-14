@@ -1,13 +1,6 @@
 import React, {useState} from 'react';
 import {isEmpty} from 'lodash';
-import {
-  Dimensions,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {Dimensions, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {
   ActivityIndicator,
   Button,
@@ -33,6 +26,8 @@ import {
 } from '../../../actions/actions.js';
 import ItemCardQuantityAndPrice from '../../../components/ItemCardQuantityAndPrice';
 import {getComments} from '../../../actions/commentsAction';
+import Gallery from '../../../components/Gallery';
+import GalleryForItem from '../../../components/Gallery/GalleryForItem';
 
 export const OnMeInfo = props => {
   const [scan, store, settings] = useSelector(({scan, onMe, settings}) => [
@@ -40,11 +35,13 @@ export const OnMeInfo = props => {
     onMe,
     settings,
   ]);
+  const itemPhotos = scan.scanInfo.photos ?? [];
 
   const dispatch = useDispatch();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isDeleteItemModalOpen, setIsDeleteItemModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(false);
-
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const [chosenPhoto, setChosenPhoto] = useState(0);
   const myList = store.myList.filter(item => {
     return item._id === store.myCurrentId;
   });
@@ -85,7 +82,7 @@ export const OnMeInfo = props => {
   };
 
   const deleteItem = () => {
-    setIsOpen(false);
+    setIsDeleteItemModalOpen(false);
     dispatch(loader(true));
     dispatch(
       unMountItemFromParent(
@@ -97,6 +94,10 @@ export const OnMeInfo = props => {
       ),
     );
   };
+  const handleCloseGallery = () => {
+    setIsGalleryOpen(false);
+    setChosenPhoto(0);
+  };
 
   return (
     <>
@@ -107,7 +108,6 @@ export const OnMeInfo = props => {
         goTo={'OnMe'}
         title={T.t('detail_info')}
       />
-      <SafeAreaView />
       <Portal>
         {settings.loader && (
           <View style={styles.loader}>
@@ -123,6 +123,10 @@ export const OnMeInfo = props => {
       <View style={styles.body}>
         <View style={styles.container}>
           <ScrollView>
+            <GalleryForItem
+              setChosenPhoto={setChosenPhoto}
+              setIsGalleryOpen={setIsGalleryOpen}
+            />
             {store.myError && (
               <View style={styles.info}>
                 <Title style={styles.titleError}>ТМЦ не найден</Title>
@@ -210,7 +214,7 @@ export const OnMeInfo = props => {
                                   color="#22215B"
                                   onPress={() => {
                                     setDeleteId(item._id);
-                                    setIsOpen(true);
+                                    setIsDeleteItemModalOpen(true);
                                   }}
                                 />
                               </Button>
@@ -290,9 +294,9 @@ export const OnMeInfo = props => {
       <Portal>
         <Dialog
           style={styles.dialog}
-          visible={isOpen}
+          visible={isDeleteItemModalOpen}
           onDismiss={() => {
-            setIsOpen(!isOpen);
+            setIsDeleteItemModalOpen(!isDeleteItemModalOpen);
           }}>
           <Dialog.Title>{T.t('delete_item')}</Dialog.Title>
           <Dialog.Actions>
@@ -300,6 +304,13 @@ export const OnMeInfo = props => {
           </Dialog.Actions>
         </Dialog>
       </Portal>
+      <Gallery
+        photoList={itemPhotos}
+        chosenPhoto={chosenPhoto}
+        handlePortalClose={handleCloseGallery}
+        isPortalOpen={isGalleryOpen}
+        setChosenPhoto={setChosenPhoto}
+      />
     </>
   );
 };
