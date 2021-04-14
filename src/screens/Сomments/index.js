@@ -7,7 +7,6 @@ import {
   Image,
   ImageBackground,
   KeyboardAvoidingView,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   View,
