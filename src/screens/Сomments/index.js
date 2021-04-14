@@ -110,117 +110,118 @@ const Comments = () => {
         goTo={comments.page}
         title={T.t('title_comments')}
       />
-      <SafeAreaView />
-      <View style={styles.body}>
-        {!error && (
-          <ScrollView ref={scrollView} onContentSizeChange={test}>
-            {showEmptyError && (
-              <Paragraph style={styles.text}>
-                {T.t('format_comments_empty_first')} {scan.currentScan}{' '}
-                {T.t('format_comments_empty_second')}
-              </Paragraph>
-            )}
-            {!error
-              ? comments.commentsList.map(item => (
-                  <Card style={styles.card} key={item._id} onPress={() => {}}>
-                    <Card.Content>
-                      <Paragraph style={styles.paragraph}>
-                        {T.t('transfer_from')}: {item.user.firstName}{' '}
-                        {item.user.lastName}
-                      </Paragraph>
-                      <Paragraph style={styles.paragraph}>
-                        {T.t('title_date')}:{' '}
-                        {moment(item.updatedAt).format('YYYY-MM-DD HH:mm')}
-                      </Paragraph>
-                      {item.message.length > 0 && (
+      <KeyboardAvoidingView behavior="position" style={{flex: 1}}>
+        <View style={styles.body}>
+          {!error && (
+            <ScrollView ref={scrollView} onContentSizeChange={test}>
+              {showEmptyError && (
+                <Paragraph style={styles.text}>
+                  {T.t('format_comments_empty_first')} {scan.currentScan}{' '}
+                  {T.t('format_comments_empty_second')}
+                </Paragraph>
+              )}
+              {!error
+                ? comments.commentsList.map(item => (
+                    <Card style={styles.card} key={item._id} onPress={() => {}}>
+                      <Card.Content>
                         <Paragraph style={styles.paragraph}>
-                          {T.t('title_comment')}: "{item.message}"
+                          {T.t('transfer_from')}: {item.user.firstName}{' '}
+                          {item.user.lastName}
                         </Paragraph>
-                      )}
-                      <View style={styles.smallImgWrap}>
-                        {!isEmpty(item.photos) &&
-                          item.photos.map((photo, index) => (
-                            <TouchableWithoutFeedback
-                              onPress={() => handlePressPhoto(item._id, index)}>
-                              <ImageBackground
-                                source={image}
-                                style={styles.bgSvg}>
-                                <Image
-                                  style={styles.smallImg}
-                                  source={{
-                                    uri: photo.url,
-                                  }}
-                                />
-                              </ImageBackground>
-                            </TouchableWithoutFeedback>
-                          ))}
-                      </View>
-                    </Card.Content>
-                  </Card>
-                ))
-              : null}
-          </ScrollView>
-        )}
-        {error ? <Title style={styles.title}>{error}</Title> : null}
+                        <Paragraph style={styles.paragraph}>
+                          {T.t('title_date')}:{' '}
+                          {moment(item.updatedAt).format('YYYY-MM-DD HH:mm')}
+                        </Paragraph>
+                        {item.message.length > 0 && (
+                          <Paragraph style={styles.paragraph}>
+                            {T.t('title_comment')}: "{item.message}"
+                          </Paragraph>
+                        )}
+                        <View style={styles.smallImgWrap}>
+                          {!isEmpty(item.photos) &&
+                            item.photos.map((photo, index) => (
+                              <TouchableWithoutFeedback
+                                onPress={() =>
+                                  handlePressPhoto(item._id, index)
+                                }>
+                                <ImageBackground
+                                  source={image}
+                                  style={styles.bgSvg}>
+                                  <Image
+                                    style={styles.smallImg}
+                                    source={{
+                                      uri: photo.url,
+                                    }}
+                                  />
+                                </ImageBackground>
+                              </TouchableWithoutFeedback>
+                            ))}
+                        </View>
+                      </Card.Content>
+                    </Card>
+                  ))
+                : null}
+            </ScrollView>
+          )}
+          {error ? <Title style={styles.title}>{error}</Title> : null}
 
-        <KeyboardAvoidingView
-          behavior="position"
-          keyboardVerticalOffset={10}
-          style={[
-            styles.bottom,
-            newPhotos.length > 0 ? {height: 270} : {height: 200},
-          ]}>
-          <View style={styles.send}>
-            <View style={styles.chosenImg}>
-              {newPhotos.length > 0 &&
-                newPhotos.map(photo => (
-                  <View style={styles.imgWrap}>
-                    <IconButton
-                      icon="close-box"
-                      color="#000"
-                      onPress={() => handleDeletePhoto(photo.path)}
-                      size={25}
-                      style={styles.delImg}
-                    />
-                    <Image
-                      style={styles.smallImg}
-                      source={{
-                        uri: photo.path,
-                      }}
-                    />
-                  </View>
-                ))}
+          <View
+            style={[
+              styles.bottom,
+              newPhotos.length > 0 ? {height: 270} : {height: 200},
+            ]}>
+            <View style={styles.photos}>
+              <View style={styles.chosenImg}>
+                {newPhotos.length > 0 &&
+                  newPhotos.map(photo => (
+                    <View style={styles.imgWrap}>
+                      <IconButton
+                        icon="close-box"
+                        color="#000"
+                        onPress={() => handleDeletePhoto(photo.path)}
+                        size={25}
+                        style={styles.delImg}
+                      />
+                      <Image
+                        style={styles.smallImg}
+                        source={{
+                          uri: photo.path,
+                        }}
+                      />
+                    </View>
+                  ))}
+              </View>
+            </View>
+            <View style={styles.send}>
+              <IconButton
+                icon="paperclip"
+                size={40}
+                style={styles.addPhotoBtn}
+                color="#22215B"
+                onPress={handleAddPhoto}
+                disabled={newPhotos.length >= 3}
+              />
+              <TextInput
+                multiline={true}
+                style={styles.textInput}
+                mode="outlined"
+                label={T.t('title_comment_new')}
+                value={text}
+                onChangeText={text => setText(text)}
+              />
+              <Button
+                icon="send"
+                disabled={isEmpty(text.trim()) && isEmpty(newPhotos)}
+                style={styles.button}
+                contentStyle={styles.buttonSend}
+                mode="contained"
+                color="#D3E3F2"
+                onPress={() => sendComment()}
+              />
             </View>
           </View>
-          <View style={styles.send}>
-            <IconButton
-              icon="paperclip"
-              size={40}
-              style={styles.addPhotoBtn}
-              color="#22215B"
-              onPress={handleAddPhoto}
-              disabled={newPhotos.length >= 3}
-            />
-            <TextInput
-              multiline={true}
-              style={styles.textInput}
-              mode="outlined"
-              label={T.t('title_comment_new')}
-              value={text}
-              onChangeText={text => setText(text)}
-            />
-            <Button
-              icon="send"
-              disabled={isEmpty(text.trim()) && isEmpty(newPhotos)}
-              style={styles.button}
-              contentStyle={styles.buttonSend}
-              mode="contained"
-              color="#D3E3F2"
-              onPress={() => sendComment()}
-            />
-          </View>
-        </KeyboardAvoidingView>
-      </View>
+        </View>
+      </KeyboardAvoidingView>
       <Gallery
         photoList={photosInGallery ? photosInGallery.photos : []}
         chosenPhoto={chosenPhoto}
@@ -299,15 +300,26 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: -15,
   },
+  photos: {
+    alignSelf: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: Dimensions.get('window').width,
+    paddingLeft: 10,
+    paddingRight: 20,
+    paddingTop: 10,
+    backgroundColor: '#EDF6FF',
+  },
   send: {
     alignSelf: 'center',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     width: Dimensions.get('window').width,
-    paddingLeft: 13,
-    paddingRight: 13,
-    paddingTop: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingBottom: 40,
     backgroundColor: '#EDF6FF',
   },
   addPhotoBtn: {
@@ -342,7 +354,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#EDF6FF',
     width: Dimensions.get('window').width,
     zIndex: 10,
-    marginBottom: 20,
   },
   imgWrap: {
     position: 'relative',
