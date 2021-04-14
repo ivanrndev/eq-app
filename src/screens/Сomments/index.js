@@ -195,7 +195,7 @@ const Comments = () => {
           <View style={styles.send}>
             <IconButton
               icon="paperclip"
-              size={35}
+              size={40}
               style={styles.addPhotoBtn}
               color="#22215B"
               onPress={handleAddPhoto}
@@ -297,6 +297,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     backgroundColor: '#EDF6FF',
     flex: 1,
+    marginLeft: -15,
   },
   send: {
     alignSelf: 'center',
@@ -309,7 +310,9 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     backgroundColor: '#EDF6FF',
   },
-  addPhotoBtn: {},
+  addPhotoBtn: {
+    marginLeft: -10,
+  },
   text: {
     fontSize: 15,
     textAlign: 'center',

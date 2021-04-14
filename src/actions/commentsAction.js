@@ -80,7 +80,7 @@ export const clearComments = () => dispatch => {
 };
 
 export const sendComments = (itemId, message) => dispatch => {
-  console.log('ACTION', itemId, message);
+  dispatch(loader(true));
   AsyncStorage.getItem('company').then(company => {
     return axios
       .post(`${API_URL}/company/${company}/item/${itemId}/comments/`, message)
@@ -94,6 +94,7 @@ export const sendComments = (itemId, message) => dispatch => {
           });
         }
       })
+
       .catch(e => {
         if (!e.response.data.success) {
           let error = getProperError(e.response.data.message.name);

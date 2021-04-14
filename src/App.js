@@ -54,7 +54,6 @@ import CustomDrawer from './components/Drawer';
 import Settings from './screens/Settings';
 import TransfersEdit from './screens/Transfers/TransferEdit';
 import TransferScaner from './screens/Transfers/TransferScan';
-import Subscribe from './screens/Subscribe';
 import NFC from './screens/NFC';
 import MountList from './screens/Ident/MountList';
 import MountNoMarking from './screens/Ident/MountNoMarking';
@@ -155,7 +154,6 @@ const App = () => {
                   name="TransferSetQty"
                   component={TransferSetQuantity}
                 />
-                <Drawer.Screen name="Subscribe" component={Subscribe} />
                 <Drawer.Screen name="NFC" component={NFC} />
                 <Drawer.Screen name="MountList" component={MountList} />
                 <Drawer.Screen

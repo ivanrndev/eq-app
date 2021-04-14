@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import useAuth from '../../hooks/useAuth';
-import Subscribe from '../../screens/Subscribe/index.js';
 import {ActivityIndicator} from 'react-native-paper';
-import {View, Dimensions, StyleSheet} from 'react-native';
+import {Dimensions, StyleSheet, View} from 'react-native';
 
 const Layout = props => {
   const auth = useAuth(props);
@@ -26,18 +25,7 @@ const Layout = props => {
           />
         </View>
       ) : (
-        <>
-          {auth.currentCompany && (
-            <>
-              {new Date(auth.currentCompany.subscriptionEndDate) <
-              new Date() ? (
-                <Subscribe {...props} />
-              ) : (
-                props.children
-              )}
-            </>
-          )}
-        </>
+        props.children
       )}
     </>
   );
