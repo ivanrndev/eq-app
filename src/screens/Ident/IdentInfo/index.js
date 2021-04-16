@@ -1,13 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, {useState} from 'react';
-import {
-  Dimensions,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {Dimensions, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Button, Dialog, IconButton, Portal} from 'react-native-paper';
 import {isEmpty} from 'lodash';
 // components
@@ -33,7 +26,9 @@ import Gallery from '../../../components/Gallery';
 
 export const IdentInfo = props => {
   const dispatch = useDispatch();
-  const [settings, store] = useSelector(({settings, scan}) => [settings, scan]);
+  const [settings, store, currentCompany] = useSelector(
+    ({settings, scan, auth}) => [settings, scan, auth.currentCompany],
+  );
   const metaData = store.scanInfo.metadata;
   const width = Dimensions.get('window').width;
   const [isOpen, setIsOpen] = useState(false);
@@ -51,7 +46,9 @@ export const IdentInfo = props => {
           metaData.serial
         }`;
   }
-
+  const plan = currentCompany.plan ? currentCompany.plan.title : '';
+  const isNotFreePlan =
+    plan === 'optimal' || plan === 'optimal +' || plan === 'premium';
   let itemId = store.scanInfo._id;
   const quantity = store.scanInfo.batch ? store.scanInfo.batch.quantity : 1;
   const price = store.scanInfo.metadata && store.scanInfo.metadata.price;
@@ -67,7 +64,6 @@ export const IdentInfo = props => {
     dispatch(loader(true));
     dispatch(getTransactions(itemId, props.navigation, 0));
   };
-
   const getRole = async () => {
     try {
       const value = await AsyncStorage.getItem('role');
@@ -139,11 +135,13 @@ export const IdentInfo = props => {
       <View style={styles.body}>
         <View style={styles.container}>
           <ScrollView>
-            <GalleryForItem
-              setChosenPhoto={setChosenPhoto}
-              setIsGalleryOpen={setIsGalleryOpen}
-              page="IdentInfo"
-            />
+            {isNotFreePlan && (
+              <GalleryForItem
+                setChosenPhoto={setChosenPhoto}
+                setIsGalleryOpen={setIsGalleryOpen}
+                page="IdentInfo"
+              />
+            )}
             <View style={styles.info}>
               <View style={styles.info}>
                 {store.scanInfo && (

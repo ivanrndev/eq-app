@@ -30,11 +30,14 @@ import Gallery from '../../../components/Gallery';
 import GalleryForItem from '../../../components/Gallery/GalleryForItem';
 
 export const OnMeInfo = props => {
-  const [scan, store, settings] = useSelector(({scan, onMe, settings}) => [
-    scan,
-    onMe,
-    settings,
-  ]);
+  const [scan, store, settings, currentCompany] = useSelector(
+    ({scan, onMe, settings, auth}) => [
+      scan,
+      onMe,
+      settings,
+      auth.currentCompany,
+    ],
+  );
   const itemPhotos = scan.scanInfo.photos ?? [];
 
   const dispatch = useDispatch();
@@ -45,7 +48,9 @@ export const OnMeInfo = props => {
   const myList = store.myList.filter(item => {
     return item._id === store.myCurrentId;
   });
-
+  const plan = currentCompany && currentCompany.plan.title;
+  const isNotFreePlan =
+    plan === 'optimal' || plan === 'optimal +' || plan === 'premium';
   const metaData = myList.length ? myList[0] : {};
   const info = metaData.metadata;
   const show = !isEmpty(metaData);
@@ -122,11 +127,13 @@ export const OnMeInfo = props => {
       <View style={styles.body}>
         <View style={styles.container}>
           <ScrollView>
-            <GalleryForItem
-              setChosenPhoto={setChosenPhoto}
-              setIsGalleryOpen={setIsGalleryOpen}
-              page="OnMeInfo"
-            />
+            {isNotFreePlan && (
+              <GalleryForItem
+                setChosenPhoto={setChosenPhoto}
+                setIsGalleryOpen={setIsGalleryOpen}
+                page="OnMeInfo"
+              />
+            )}
             {store.myError && (
               <View style={styles.info}>
                 <Title style={styles.titleError}>ТМЦ не найден</Title>
