@@ -5,9 +5,7 @@ export const useQuantityUnitsAndCurrency = (key = 'scan') => {
   const [quantity, units, currency] = useSelector(({scan, auth}) => [
     scan.scanInfo.batch ? scan.scanInfo.batch.quantity : 1,
     scan.scanInfo.batch ? scan.scanInfo.batch.units : `${T.t('piece')}`,
-    auth.currentCompany.payment
-      ? auth.currentCompany.payment.response.actual_currency
-      : '',
+    auth.currentCompany.currency ?? auth.currentCompany.currency,
   ]);
 
   return {quantity, units, currency};

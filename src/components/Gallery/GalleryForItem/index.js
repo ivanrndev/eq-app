@@ -72,6 +72,7 @@ const GalleryForItem = ({page, setIsGalleryOpen, setChosenPhoto}) => {
                 size={25}
                 color="#22215B"
                 onPress={handleAddPhoto}
+                style={styles.plusBtn}
               />
             )}
           </View>
@@ -158,9 +159,8 @@ const styles = StyleSheet.create({
     width: 50,
     borderRadius: 5,
     backgroundColor: '#D3E3F2',
-    flex: 1,
     alignSelf: 'flex-start',
-    marginVertical: 0,
+    margin: 0,
   },
   link: {
     color: '#22215B',

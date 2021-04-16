@@ -48,7 +48,7 @@ export const OnMeInfo = props => {
   const myList = store.myList.filter(item => {
     return item._id === store.myCurrentId;
   });
-  const plan = currentCompany && currentCompany.plan.title;
+  const plan = currentCompany.plan ? currentCompany.plan.title : '';
   const isNotFreePlan =
     plan === 'optimal' || plan === 'optimal +' || plan === 'premium';
   const metaData = myList.length ? myList[0] : {};
