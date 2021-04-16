@@ -11,59 +11,71 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import {Divider, IconButton, Text} from 'react-native-paper';
+import {useNavigation} from '@react-navigation/native';
+import T from '../../../i18n';
 
 const image = require('./../../../assets/svg/empty.png');
 
 const GalleryForItem = ({setIsGalleryOpen, setChosenPhoto}) => {
+  const navigation = useNavigation();
   const itemInfo = useSelector(({scan}) => scan.scanInfo);
   const itemPhotos = itemInfo.photos ?? [];
   const bigPhoto = !isEmpty(itemPhotos) && itemPhotos[0];
   const smallPhotos = itemPhotos.length > 1 ? itemPhotos.slice(1) : [];
-  const dispatch = useDispatch();
-  const isShown = isEmpty(itemPhotos) || isEmpty(smallPhotos);
-  console.log('::::', isShown);
-  const handlePressPhoto = index => {
+
+  const handlePressPhoto = (index = 0) => {
     setIsGalleryOpen(true);
     setChosenPhoto(index);
   };
+
+  const handleAddPhoto = () => navigation.navigate('ChooseItemPhotoMode');
 
   return (
     <View style={styles.wrap}>
       {!isEmpty(itemPhotos) ? (
         <>
-          <TouchableWithoutFeedback onPress={() => handlePressPhoto(index)}>
-            <ImageBackground source={image} style={styles.bgSvgBig}>
+          <ImageBackground source={image} style={styles.bgSvgBig}>
+            <TouchableWithoutFeedback onPress={handlePressPhoto}>
               <Image
                 style={styles.bigImg}
                 source={{
                   uri: bigPhoto.url,
                 }}
               />
-            </ImageBackground>
-          </TouchableWithoutFeedback>
+            </TouchableWithoutFeedback>
+          </ImageBackground>
           <View style={styles.smallTable}>
             {smallPhotos.map((photo, index) => (
               <TouchableWithoutFeedback
                 onPress={() => handlePressPhoto(index)}
                 key={photo.name}>
-                <ImageBackground source={image} style={styles.bgSvg}>
-                  <Image
-                    style={styles.smallImg}
-                    source={{
-                      uri: photo.url,
-                    }}
-                  />
-                </ImageBackground>
+                <View>
+                  <ImageBackground source={image} style={styles.bgSvg}>
+                    <Image
+                      style={styles.smallImg}
+                      source={{
+                        uri: photo.url,
+                      }}
+                    />
+                  </ImageBackground>
+                </View>
               </TouchableWithoutFeedback>
             ))}
-            <IconButton icon="plus" size={25} color="#22215B" />
+            {itemPhotos.length < 8 && (
+              <IconButton
+                icon="plus"
+                size={25}
+                color="#22215B"
+                onPress={handleAddPhoto}
+              />
+            )}
           </View>
         </>
       ) : (
         <>
           <ImageBackground source={image} style={styles.emptyBgSvg}>
-            <TouchableOpacity onPress={() => {}}>
-              <Text style={styles.link}>Upload your photo</Text>
+            <TouchableOpacity onPress={handleAddPhoto}>
+              <Text style={styles.link}>{T.t('upload_photo')}</Text>
               <Divider style={styles.divider} />
             </TouchableOpacity>
           </ImageBackground>
@@ -72,6 +84,7 @@ const GalleryForItem = ({setIsGalleryOpen, setChosenPhoto}) => {
             size={25}
             color="#22215B"
             style={styles.plusBtn}
+            onPress={handleAddPhoto}
           />
         </>
       )}
@@ -112,11 +125,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   bigImg: {
-    marginRight: 5,
     width: Dimensions.get('window').width / 2.2,
     height: 230,
-    position: 'relative',
-    zIndex: 100,
     borderRadius: 5,
   },
   bgSvgBig: {
@@ -124,8 +134,6 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     width: Dimensions.get('window').width / 2.2,
     height: 230,
-    position: 'relative',
-    zIndex: 1,
     justifyContent: 'center',
     borderRadius: 5,
   },

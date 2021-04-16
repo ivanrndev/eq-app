@@ -9,7 +9,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {addPhotoToComment} from '../../../actions/commentsAction';
 
-const ChoosePhotoMode = () => {
+const ChooseCommentPhotoMode = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const photos = useSelector(({comments}) => comments.photos);
@@ -83,4 +83,4 @@ const styles = StyleSheet.create({
   btns: {},
 });
 
-export default ChoosePhotoMode;
+export default ChooseCommentPhotoMode;

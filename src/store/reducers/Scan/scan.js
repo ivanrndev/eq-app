@@ -1,5 +1,7 @@
 import {
   ADD_ITEM_TO_MOUNT_LIST,
+  ADD_PHOTO_TO_ITEM,
+  ADD_PHOTO_TO_ITEM_ERROR,
   ALLOW_NEW_SCAN,
   CHANGE_ALL_IS_OPEN,
   CLEAN_MOUNT_ITEMS_LIST,
@@ -203,6 +205,16 @@ const scanReducer = (state = initialState, action) => {
         mountError: false,
       };
     }
+    case ADD_PHOTO_TO_ITEM:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case ADD_PHOTO_TO_ITEM_ERROR:
+      return {
+        ...state,
+        ...action.payload,
+      };
     default:
       return state;
   }

@@ -57,7 +57,6 @@ export const OnMeInfo = props => {
       ? info.title
       : `${info.type} ${info.brand} ${info.model} ${info.serial}`;
   }
-
   const handleTransactions = () => {
     dispatch(loader(true));
     dispatch(getTransactions(metaData._id, props.navigation, 0));

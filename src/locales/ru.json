@@ -267,5 +267,6 @@
     "error_has_mounted_items": "ТМЦ должно не иметь установленных деталей",
     "error_has_already_mounted": "Это ТМЦ уже выбрано",
     "take_a_photo": "Сделать фото",
-    "choose_from_gallery": "Выбрать фото с галереи"
+    "choose_from_gallery": "Выбрать фото с галереи",
+    "upload_photo": "Загрузить фото"
 }

@@ -106,8 +106,10 @@ const styles = StyleSheet.create({
   },
   smallImgWrap: {
     flexDirection: 'row',
+    justifyContent: 'center',
     paddingVertical: 10,
     flexWrap: 'wrap',
+    marginBottom: 40,
   },
   smallImg: {
     borderWidth: 3,
@@ -115,7 +117,14 @@ const styles = StyleSheet.create({
     width: 70,
     marginRight: 5,
     borderColor: 'transparent',
-    marginBottom: 10,
+  },
+  bgSvg: {
+    marginRight: 5,
+    height: 70,
+    width: 70,
+    position: 'relative',
+    zIndex: 1,
+    marginTop: 10,
   },
   smallChosen: {
     borderWidth: 3,
@@ -139,13 +148,6 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     backgroundColor: 'white',
     borderRadius: 8,
-  },
-  bgSvg: {
-    marginRight: 5,
-    height: 70,
-    width: 70,
-    position: 'relative',
-    zIndex: 1,
   },
 });
 

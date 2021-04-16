@@ -64,7 +64,8 @@ import SetInventoryQty from './screens/Inventory/SetInventoryQty';
 import CreateItem from './screens/Inventory/InventoryChooseMode/CreateItem';
 import MountItemSetQty from './screens/Ident/MountList/MountItemSetQty';
 import TransferSetQuantity from './screens/Transfers/TransferSetQty';
-import ChoosePhotoMode from './components/Gallery/ChoosePhotoMode';
+import ChooseCommentPhotoMode from './components/Gallery/ChooseCommentPhotoMode';
+import ChooseItemPhotoMode from './components/Gallery/ChooseItemPhotoMode';
 
 const theme = {
   ...DefaultTheme,
@@ -162,8 +163,12 @@ const App = () => {
                 />
                 <Drawer.Screen name="Search" component={Search} />
                 <Drawer.Screen
-                  name="ChoosePhotoMode"
-                  component={ChoosePhotoMode}
+                  name="ChooseCommentPhotoMode"
+                  component={ChooseCommentPhotoMode}
+                />
+                <Drawer.Screen
+                  name="ChooseItemPhotoMode"
+                  component={ChooseItemPhotoMode}
                 />
                 <Drawer.Screen
                   name="MountNoMarking"

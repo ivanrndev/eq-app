@@ -437,4 +437,5 @@ export const handleNavigateToMySingleItem = (
     dispatch(currentScan(code, navigation, page));
   }
   dispatch(saveCurrentMyItem(id, code, navigation, page));
+  dispatch(getSearchItem(id, navigation, page));
 };

@@ -259,5 +259,6 @@
     "error_has_mounted_items": "The item should not have mounted items",
     "error_has_already_mounted": "Item already added to the list",
     "take_a_photo": "Take a photo",
-    "choose_from_gallery": "Choose from gallery"
+    "choose_from_gallery": "Choose from gallery",
+    "upload_photo": "Upload photo"
 }

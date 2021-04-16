@@ -85,7 +85,7 @@ const Comments = () => {
     scrollView.current.scrollToEnd({animated: true});
   }, [scrollView]);
 
-  const handleAddPhoto = () => navigation.navigate('ChoosePhotoMode');
+  const handleAddPhoto = () => navigation.navigate('ChooseCommentPhotoMode');
   const handlePressPhoto = (commentId, index) => {
     setIsGalleryOpen(true);
     setCommentId(commentId);
