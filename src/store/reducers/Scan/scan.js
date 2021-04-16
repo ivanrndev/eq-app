@@ -20,6 +20,7 @@ import {
   SAVE_CURRENT_SEARCH_ERROR,
   SAVE_GIVE_ITEM_INFO_LIST,
   SET_CURRENT_MOUNT_PARENT,
+  SET_GO_BACK_PAGE_GALLERY,
   SET_ITEM_QTY_FOR_MOUNT,
   UPDATE_SCAN_GIVE_LIST,
 } from '../../../actions/actionsType.js';
@@ -43,6 +44,7 @@ const initialState = {
   mountList: [],
   mountListWithQty: [],
   mountError: false,
+  goBackPageGallery: null,
 };
 
 const scanReducer = (state = initialState, action) => {
@@ -211,6 +213,11 @@ const scanReducer = (state = initialState, action) => {
         ...action.payload,
       };
     case ADD_PHOTO_TO_ITEM_ERROR:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case SET_GO_BACK_PAGE_GALLERY:
       return {
         ...state,
         ...action.payload,

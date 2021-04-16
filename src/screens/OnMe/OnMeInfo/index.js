@@ -75,7 +75,7 @@ export const OnMeInfo = props => {
         scan.scanInfo._id,
         scan.scanInfo.code,
         scan.navigation,
-        'IdentInfo',
+        'OnMeInfo',
       ),
     );
   };
@@ -125,6 +125,7 @@ export const OnMeInfo = props => {
             <GalleryForItem
               setChosenPhoto={setChosenPhoto}
               setIsGalleryOpen={setIsGalleryOpen}
+              page="OnMeInfo"
             />
             {store.myError && (
               <View style={styles.info}>

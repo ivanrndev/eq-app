@@ -1,7 +1,11 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from '../utils/axios';
 import {API_URL} from '../constants/auth';
-import {ADD_PHOTO_TO_ITEM, ADD_PHOTO_TO_ITEM_ERROR} from './actionsType';
+import {
+  ADD_PHOTO_TO_ITEM,
+  ADD_PHOTO_TO_ITEM_ERROR,
+  SET_GO_BACK_PAGE_GALLERY,
+} from './actionsType';
 import {getProperError} from '../utils/helpers';
 import {getSearchItem, loader} from './actions';
 
@@ -32,3 +36,9 @@ export const addItemsPhoto = (id, photos, page, nav) => dispatch => {
       });
   });
 };
+
+export const setGoBackPageGallery = page => dispatch =>
+  dispatch({
+    type: SET_GO_BACK_PAGE_GALLERY,
+    payload: {goBackPageGallery: page},
+  });

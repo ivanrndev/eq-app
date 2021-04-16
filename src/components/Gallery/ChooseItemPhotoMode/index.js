@@ -15,9 +15,10 @@ const ChooseItemPhotoMode = () => {
   const dispatch = useDispatch();
   const didMount = useRef(true);
   const [newPhoto, setNewPhoto] = useState([]);
-  const [itemInfo, id] = useSelector(({scan}) => [
+  const [itemInfo, id, goBackPageGallery] = useSelector(({scan}) => [
     scan.scanInfo,
     scan.currentParent,
+    scan.goBackPageGallery,
   ]);
   const itemPhotos = itemInfo.photos ?? [];
   const maxPhotoCount = 8;
@@ -39,7 +40,7 @@ const ChooseItemPhotoMode = () => {
       return;
     }
     if (!isEmpty(newPhoto)) {
-      dispatch(addItemsPhoto(id, photos, 'OnMeInfo', navigation));
+      dispatch(addItemsPhoto(id, photos, goBackPageGallery, navigation));
       setNewPhoto([]);
     }
   }, [newPhoto]);
@@ -74,9 +75,8 @@ const ChooseItemPhotoMode = () => {
     <>
       <Appbar
         navigation={navigation}
-        newScan={true}
         arrow={true}
-        goTo={'OnMeInfo'}
+        goTo={goBackPageGallery}
         title={T.t('detail_info')}
       />
       <View style={styles.wrap}>

@@ -28,6 +28,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 import DarkButton from '../../../components/Buttons/DarkButton';
 import ItemCardQuantityAndPrice from '../../../components/ItemCardQuantityAndPrice';
 import {getComments} from '../../../actions/commentsAction';
+import GalleryForItem from '../../../components/Gallery/GalleryForItem';
+import Gallery from '../../../components/Gallery';
 
 export const IdentInfo = props => {
   const dispatch = useDispatch();
@@ -38,6 +40,9 @@ export const IdentInfo = props => {
   const [deleteId, setDeleteId] = useState(false);
   const [role, setRole] = useState();
   const [userId, setUserId] = useState();
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const [chosenPhoto, setChosenPhoto] = useState(0);
+  const itemPhotos = store.scanInfo.photos ?? [];
   let nameOfProduct = '';
   if (metaData) {
     nameOfProduct = metaData.title
@@ -117,6 +122,10 @@ export const IdentInfo = props => {
   const personId = store.scanInfo.person ? store.scanInfo.person._id : null;
   const gaveAcess = userId === personId;
 
+  const handleCloseGallery = () => {
+    setIsGalleryOpen(false);
+    setChosenPhoto(0);
+  };
   return (
     <>
       <Appbar
@@ -126,10 +135,15 @@ export const IdentInfo = props => {
         goTo={settings.startPageIdent}
         title={T.t('detail_info')}
       />
-      <SafeAreaView />
+
       <View style={styles.body}>
         <View style={styles.container}>
           <ScrollView>
+            <GalleryForItem
+              setChosenPhoto={setChosenPhoto}
+              setIsGalleryOpen={setIsGalleryOpen}
+              page="IdentInfo"
+            />
             <View style={styles.info}>
               <View style={styles.info}>
                 {store.scanInfo && (
@@ -314,6 +328,13 @@ export const IdentInfo = props => {
           </Dialog>
         </Portal>
       </View>
+      <Gallery
+        photoList={itemPhotos}
+        chosenPhoto={chosenPhoto}
+        handlePortalClose={handleCloseGallery}
+        isPortalOpen={isGalleryOpen}
+        setChosenPhoto={setChosenPhoto}
+      />
     </>
   );
 };

@@ -5,19 +5,21 @@ import {
   Dimensions,
   Image,
   ImageBackground,
-  View,
   StyleSheet,
   TouchableOpacity,
   TouchableWithoutFeedback,
+  View,
 } from 'react-native';
 import {Divider, IconButton, Text} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import T from '../../../i18n';
+import {setGoBackPageGallery} from '../../../actions/addItemPhotoActions';
 
 const image = require('./../../../assets/svg/empty.png');
 
-const GalleryForItem = ({setIsGalleryOpen, setChosenPhoto}) => {
+const GalleryForItem = ({page, setIsGalleryOpen, setChosenPhoto}) => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const itemInfo = useSelector(({scan}) => scan.scanInfo);
   const itemPhotos = itemInfo.photos ?? [];
   const bigPhoto = !isEmpty(itemPhotos) && itemPhotos[0];
@@ -28,7 +30,10 @@ const GalleryForItem = ({setIsGalleryOpen, setChosenPhoto}) => {
     setChosenPhoto(index);
   };
 
-  const handleAddPhoto = () => navigation.navigate('ChooseItemPhotoMode');
+  const handleAddPhoto = () => {
+    navigation.navigate('ChooseItemPhotoMode');
+    dispatch(setGoBackPageGallery(page));
+  };
 
   return (
     <View style={styles.wrap}>
@@ -95,6 +100,7 @@ const GalleryForItem = ({setIsGalleryOpen, setChosenPhoto}) => {
 const styles = StyleSheet.create({
   wrap: {
     flex: 1,
+    marginTop: 10,
     alignSelf: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
