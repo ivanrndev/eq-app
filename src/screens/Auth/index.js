@@ -39,6 +39,7 @@ import {
   Title,
 } from 'react-native-paper';
 import GoogleAuth from './GoogleAuth';
+import moment from 'moment';
 
 // import { GoogleSignin, GoogleSigninButton, statusCodes } from 'react-native-google-signin';
 const Auth = props => {
@@ -191,6 +192,7 @@ const Auth = props => {
     }
   };
 
+  const dueDate = 'April 18, 2021';
   return (
     <>
       <View style={styles.body}>
@@ -237,7 +239,7 @@ const Auth = props => {
               />
             </View>
           )}
-          <GoogleAuth />
+          {moment().format('LL') >= dueDate && <GoogleAuth />}
         </KeyboardAvoidingView>
         <Text style={styles.textRegister}>
           {T.t('registration_label')}{' '}
