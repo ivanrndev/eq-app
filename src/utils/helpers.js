@@ -434,8 +434,7 @@ export const handleNavigateToMySingleItem = (
 ) => {
   if (code) {
     dispatch(loader(true));
-    dispatch(currentScan(code, navigation, page));
+    dispatch(getSearchItem(id, navigation, page));
   }
   dispatch(saveCurrentMyItem(id, code, navigation, page));
-  dispatch(getSearchItem(id, navigation, page));
 };

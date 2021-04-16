@@ -15,11 +15,13 @@ const ChooseItemPhotoMode = () => {
   const dispatch = useDispatch();
   const didMount = useRef(true);
   const [newPhoto, setNewPhoto] = useState([]);
-  const [itemInfo, id, goBackPageGallery] = useSelector(({scan}) => [
+  const [itemInfo, currentParent, goBackPageGallery] = useSelector(({scan}) => [
     scan.scanInfo,
     scan.currentParent,
     scan.goBackPageGallery,
   ]);
+
+  const id = itemInfo._id ?? currentParent;
   const itemPhotos = itemInfo.photos ?? [];
   const maxPhotoCount = 8;
   const maxAddPhotoCount = maxPhotoCount - itemPhotos.length;
@@ -41,7 +43,6 @@ const ChooseItemPhotoMode = () => {
     }
     if (!isEmpty(newPhoto)) {
       dispatch(addItemsPhoto(id, photos, goBackPageGallery, navigation));
-      setNewPhoto([]);
     }
   }, [newPhoto]);
 
@@ -59,17 +60,7 @@ const ChooseItemPhotoMode = () => {
       compressImageMaxWidth: 400,
       compressImageMaxHeight: 400,
       maxFiles: maxAddPhotoCount,
-    })
-      .then(images => setNewPhoto([images]))
-      .then(
-        newPhoto.forEach(file => {
-          photos.append('file', {
-            uri: `file:///${file.path}`,
-            type: file.mime,
-            name: file.filename ?? 'file.path',
-          });
-        }),
-      );
+    }).then(images => setNewPhoto([images]));
 
   return (
     <>

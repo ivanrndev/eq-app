@@ -46,7 +46,8 @@ export const IdentInfo = props => {
           metaData.serial
         }`;
   }
-  const plan = currentCompany.plan ? currentCompany.plan.title : '';
+  const plan =
+    currentCompany && currentCompany.plan ? currentCompany.plan.title : '';
   const isNotFreePlan =
     plan === 'optimal' || plan === 'optimal +' || plan === 'premium';
   let itemId = store.scanInfo._id;
