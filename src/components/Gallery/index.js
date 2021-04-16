@@ -1,4 +1,11 @@
-import {Dialog, IconButton, Portal} from 'react-native-paper';
+import {
+  Button,
+  Dialog,
+  IconButton,
+  Portal,
+  Text,
+  Title,
+} from 'react-native-paper';
 import {isEmpty} from 'lodash';
 import {
   Dimensions,
@@ -8,8 +15,12 @@ import {
   View,
 } from 'react-native';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import Carousel from 'react-native-snap-carousel';
+import T from '../../i18n';
+import {useDispatch, useSelector} from 'react-redux';
+import {deleteItemsPhoto} from '../../actions/addItemPhotoActions';
+import {useNavigation} from '@react-navigation/native';
 
 const {width} = Dimensions.get('window');
 const image = require('./../../assets/svg/empty.png');
@@ -20,17 +31,38 @@ const Gallery = ({
   handlePortalClose,
   chosenPhoto,
   setChosenPhoto,
+  setPhotoDel,
+  photoDel,
 }) => {
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const [itemInfo, currentParent, goBackPageGallery] = useSelector(({scan}) => [
+    scan.scanInfo,
+    scan.currentParent,
+    scan.goBackPageGallery,
+  ]);
+
+  const id = itemInfo._id ?? currentParent;
   const entries = photoList.map(photo => ({illustration: photo.url}));
   const carouselRef = useRef(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleChose = index => {
+  const handleChose = (item, index) => {
     carouselRef.current.snapToItem(index, true, true);
     setChosenPhoto(index);
+    setIsModalOpen(false);
+    setPhotoDel(item.name);
   };
-  const renderItem = ({item}) => {
+
+  const handleDelete = () => {
+    dispatch(deleteItemsPhoto(id, photoDel, goBackPageGallery, navigation));
+    setIsModalOpen(false);
+    handlePortalClose();
+  };
+
+  const renderItem = ({item, index}) => {
     return (
-      <View style={styles.item}>
+      <View style={styles.item} onPress={() => handleChose(item, index)}>
         <Image
           source={{uri: item.illustration}}
           containerStyle={styles.imageContainer}
@@ -43,13 +75,35 @@ const Gallery = ({
   return (
     <Portal style={styles.gallery}>
       <Dialog style={styles.gallery} visible={isPortalOpen}>
-        <IconButton
-          icon="close-circle-outline"
-          color="#fff"
-          onPress={handlePortalClose}
-          style={styles.closeBtn}
-          size={35}
-        />
+        {photoDel ? (
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              width: width / 1.1,
+            }}>
+            <Button color="#fff" size={40} onPress={() => setIsModalOpen(true)}>
+              {T.t('delete_photo')}
+            </Button>
+
+            <IconButton
+              icon="close-circle-outline"
+              color="#fff"
+              onPress={handlePortalClose}
+              style={styles.closeBtn}
+              size={35}
+            />
+          </View>
+        ) : (
+          <IconButton
+            icon="close-circle-outline"
+            color="#fff"
+            onPress={handlePortalClose}
+            style={styles.closeBtn}
+            size={35}
+          />
+        )}
         {!isEmpty(photoList) && (
           <>
             <View style={styles.container}>
@@ -69,7 +123,8 @@ const Gallery = ({
 
             <View style={styles.smallImgWrap}>
               {photoList.map((photo, index) => (
-                <TouchableWithoutFeedback onPress={() => handleChose(index)}>
+                <TouchableWithoutFeedback
+                  onPress={() => handleChose(photo, index)}>
                   <ImageBackground source={image} style={styles.bgSvg}>
                     <Image
                       style={[
@@ -87,6 +142,26 @@ const Gallery = ({
           </>
         )}
       </Dialog>
+      <Portal>
+        <Dialog
+          style={styles.dialogOpen}
+          visible={isModalOpen}
+          onDismiss={() => setIsModalOpen(false)}>
+          <>
+            <Dialog.Title>
+              <Title style={styles.titleForgot}>{T.t('delete')}</Title>
+            </Dialog.Title>
+            <Dialog.Content>
+              <Text style={styles.titleForgotText}>
+                {T.t('delete_photo_confirm')}
+              </Text>
+            </Dialog.Content>
+            <Dialog.Actions>
+              <Button onPress={handleDelete}>{T.t('delete')}</Button>
+            </Dialog.Actions>
+          </>
+        </Dialog>
+      </Portal>
     </Portal>
   );
 };
@@ -148,6 +223,12 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     backgroundColor: 'white',
     borderRadius: 8,
+  },
+  delImg: {
+    position: 'absolute',
+    bottom: -15,
+    right: -20,
+    zIndex: 10000,
   },
 });
 

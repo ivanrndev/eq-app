@@ -37,6 +37,7 @@ export const IdentInfo = props => {
   const [userId, setUserId] = useState();
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [chosenPhoto, setChosenPhoto] = useState(0);
+
   const itemPhotos = store.scanInfo.photos ?? [];
   let nameOfProduct = '';
   if (metaData) {
@@ -46,6 +47,10 @@ export const IdentInfo = props => {
           metaData.serial
         }`;
   }
+  const [photoDel, setPhotoDel] = useState(
+    itemPhotos[0] ? itemPhotos[0].name : '',
+  );
+
   const plan =
     currentCompany && currentCompany.plan ? currentCompany.plan.title : '';
   const isNotFreePlan =
@@ -140,6 +145,7 @@ export const IdentInfo = props => {
               <GalleryForItem
                 setChosenPhoto={setChosenPhoto}
                 setIsGalleryOpen={setIsGalleryOpen}
+                setPhotoDel={setPhotoDel}
                 page="IdentInfo"
               />
             )}
@@ -333,6 +339,8 @@ export const IdentInfo = props => {
         handlePortalClose={handleCloseGallery}
         isPortalOpen={isGalleryOpen}
         setChosenPhoto={setChosenPhoto}
+        setPhotoDel={setPhotoDel}
+        photoDel={photoDel}
       />
     </>
   );

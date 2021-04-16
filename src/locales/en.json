@@ -260,5 +260,7 @@
     "error_has_already_mounted": "Item already added to the list",
     "take_a_photo": "Take a photo",
     "choose_from_gallery": "Choose from gallery",
-    "upload_photo": "Upload photo"
+    "upload_photo": "Upload photo",
+    "delete_photo_confirm": "Are you sure you want to delete this photo?",
+    "delete_photo": "Delete photo"
 }

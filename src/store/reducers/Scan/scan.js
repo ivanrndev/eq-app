@@ -7,6 +7,8 @@ import {
   CLEAN_MOUNT_ITEMS_LIST,
   CLEAR_SCAN_GIVE_LIST,
   DELETE_ITEM_FROM_MOUNT_LIST,
+  DELETE_PHOTO_FROM_ITEM,
+  DELETE_PHOTO_FROM_ITEM_ERROR,
   DIALOG_INPUT,
   ERROR_CURRENT_MOUNT_SCAN_INFO,
   ERROR_CURRENT_SCAN_INFO,
@@ -218,6 +220,16 @@ const scanReducer = (state = initialState, action) => {
         ...action.payload,
       };
     case SET_GO_BACK_PAGE_GALLERY:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case DELETE_PHOTO_FROM_ITEM:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case DELETE_PHOTO_FROM_ITEM_ERROR:
       return {
         ...state,
         ...action.payload,

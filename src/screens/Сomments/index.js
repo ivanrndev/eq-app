@@ -124,7 +124,8 @@ const Comments = () => {
                     <Card style={styles.card} key={item._id} onPress={() => {}}>
                       <Card.Content>
                         <Paragraph style={styles.paragraph}>
-                          {T.t('transfer_from')}: {item.user.firstName}{' '}
+                          {T.t('transfer_from')}:{' '}
+                          {item.user && item.user.firstName}{' '}
                           {item.user.lastName}
                         </Paragraph>
                         <Paragraph style={styles.paragraph}>

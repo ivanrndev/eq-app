@@ -100,7 +100,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#EDF6FF',
     padding: 15,
   },
-  btns: {},
 });
 
 export default ChooseItemPhotoMode;

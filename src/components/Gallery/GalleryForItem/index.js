@@ -17,7 +17,12 @@ import {setGoBackPageGallery} from '../../../actions/addItemPhotoActions';
 
 const image = require('./../../../assets/svg/empty.png');
 
-const GalleryForItem = ({page, setIsGalleryOpen, setChosenPhoto}) => {
+const GalleryForItem = ({
+  page,
+  setIsGalleryOpen,
+  setChosenPhoto,
+  setPhotoDel,
+}) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const itemInfo = useSelector(({scan}) => scan.scanInfo);
@@ -25,9 +30,10 @@ const GalleryForItem = ({page, setIsGalleryOpen, setChosenPhoto}) => {
   const bigPhoto = !isEmpty(itemPhotos) && itemPhotos[0];
   const smallPhotos = itemPhotos.length > 1 ? itemPhotos.slice(1) : [];
 
-  const handlePressPhoto = (index = 0) => {
+  const handlePressPhoto = (item, index = 0) => {
     setIsGalleryOpen(true);
     setChosenPhoto(index);
+    setPhotoDel(item.name);
   };
 
   const handleAddPhoto = () => {
@@ -40,7 +46,8 @@ const GalleryForItem = ({page, setIsGalleryOpen, setChosenPhoto}) => {
       {!isEmpty(itemPhotos) ? (
         <>
           <ImageBackground source={image} style={styles.bgSvgBig}>
-            <TouchableWithoutFeedback onPress={handlePressPhoto}>
+            <TouchableWithoutFeedback
+              onPress={() => handlePressPhoto(bigPhoto, 0)}>
               <Image
                 style={styles.bigImg}
                 source={{
@@ -52,7 +59,7 @@ const GalleryForItem = ({page, setIsGalleryOpen, setChosenPhoto}) => {
           <View style={styles.smallTable}>
             {smallPhotos.map((photo, index) => (
               <TouchableWithoutFeedback
-                onPress={() => handlePressPhoto(index)}
+                onPress={() => handlePressPhoto(photo, index + 1)}
                 key={photo.name}>
                 <View>
                   <ImageBackground source={image} style={styles.bgSvg}>

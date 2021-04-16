@@ -268,5 +268,7 @@
     "error_has_already_mounted": "Это ТМЦ уже выбрано",
     "take_a_photo": "Сделать фото",
     "choose_from_gallery": "Выбрать фото с галереи",
-    "upload_photo": "Загрузить фото"
+    "upload_photo": "Загрузить фото",
+    "delete_photo_confirm": "Вы действительно хотите удалить выбранную фотографию?",
+    "delete_photo": "Удалить  фотографию"
 }

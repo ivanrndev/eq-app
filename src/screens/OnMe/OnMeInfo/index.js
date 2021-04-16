@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {isEmpty} from 'lodash';
 import {Dimensions, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {
@@ -45,10 +45,17 @@ export const OnMeInfo = props => {
   const [deleteId, setDeleteId] = useState(false);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [chosenPhoto, setChosenPhoto] = useState(0);
+  const [photoDel, setPhotoDel] = useState(
+    itemPhotos[0] ? itemPhotos[0].name : '',
+  );
+  useEffect(() => itemPhotos.length && setPhotoDel(itemPhotos[0].name), [
+    itemPhotos,
+  ]);
   const myList = store.myList.filter(item => {
     return item._id === store.myCurrentId;
   });
-  const plan = currentCompany.plan ? currentCompany.plan.title : '';
+  const plan =
+    currentCompany && currentCompany.plan ? currentCompany.plan.title : '';
   const isNotFreePlan =
     plan === 'optimal' || plan === 'optimal +' || plan === 'premium';
   const metaData = myList.length ? myList[0] : {};
@@ -131,6 +138,7 @@ export const OnMeInfo = props => {
               <GalleryForItem
                 setChosenPhoto={setChosenPhoto}
                 setIsGalleryOpen={setIsGalleryOpen}
+                setPhotoDel={setPhotoDel}
                 page="OnMeInfo"
               />
             )}
@@ -317,6 +325,8 @@ export const OnMeInfo = props => {
         handlePortalClose={handleCloseGallery}
         isPortalOpen={isGalleryOpen}
         setChosenPhoto={setChosenPhoto}
+        setPhotoDel={setPhotoDel}
+        photoDel={photoDel}
       />
     </>
   );
