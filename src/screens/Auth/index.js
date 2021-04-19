@@ -5,12 +5,11 @@ import {
   Dimensions,
   Keyboard,
   KeyboardAvoidingView,
-  Linking,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
-import {useFocusEffect} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {isEmpty} from 'lodash';
 import T from '../../i18n';
@@ -44,6 +43,7 @@ import moment from 'moment';
 // import { GoogleSignin, GoogleSigninButton, statusCodes } from 'react-native-google-signin';
 const Auth = props => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   const store = useSelector(state => state.auth);
   const settings = useSelector(state => state.settings);
   const [email, setEmail] = useState('');
@@ -192,7 +192,8 @@ const Auth = props => {
     }
   };
 
-  const dueDate = 'April 18, 2021';
+  const dueDate = 'April 22, 2021';
+
   return (
     <>
       <View style={styles.body}>
@@ -244,9 +245,7 @@ const Auth = props => {
         <Text style={styles.textRegister}>
           {T.t('registration_label')}{' '}
           <Text
-            onPress={() => {
-              Linking.openURL('http://admin.eqman.co/auth/register');
-            }}
+            onPress={() => navigation.navigate('SignUpWeb')}
             style={styles.textBlue}>
             {T.t('registration_btn')}
           </Text>
