@@ -54,7 +54,7 @@ const CustomDrawer = props => {
       <SafeAreaView />
       {email && (
         <View style={styles.user}>
-          <Text style={styles.title}>{`${firstName} ${lastName}`}</Text>
+          <Text style={styles.title}>{`${firstName} ${lastName ?? ''}`}</Text>
           <Text style={styles.text}>{email}</Text>
         </View>
       )}
