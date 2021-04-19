@@ -1,6 +1,13 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Dimensions, SafeAreaView, Text} from 'react-native';
-import {Title, Portal, ActivityIndicator} from 'react-native-paper';
+import {
+  Dimensions,
+  Keyboard,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
+import {ActivityIndicator, Portal, Title} from 'react-native-paper';
 import T from '../../../i18n';
 // components
 import Appbar from '../../../components/Appbar';
@@ -8,11 +15,11 @@ import DarkButton from '../../../components/Buttons/DarkButton';
 // redux and actions
 import {useDispatch, useSelector} from 'react-redux';
 import {
-  loader,
   allowNewScan,
+  loader,
   sendToWriteOff,
 } from '../../../actions/actions.js';
-import {getStatus, getProperErrorMessage} from '../../../utils/helpers.js';
+import {getProperErrorMessage, getStatus} from '../../../utils/helpers.js';
 import AsyncStorage from '@react-native-community/async-storage';
 import ItemSetQuantityArea from '../../../components/ItemSetQuantityArea';
 
@@ -73,7 +80,6 @@ export const WriteOffInfo = props => {
         goTo={settings.startPageWriteOff}
         title={T.t('title_ban_question')}
       />
-      <SafeAreaView />
       <Portal>
         {settings.loader && (
           <View style={styles.loader}>
@@ -86,94 +92,98 @@ export const WriteOffInfo = props => {
           </View>
         )}
       </Portal>
-      <View style={styles.body}>
-        <View style={styles.container}>
-          <View style={styles.info}>
-            {store.scanInfoError && (
-              <View style={styles.info}>
-                <Title style={styles.titleError}>{error}</Title>
-              </View>
-            )}
-            {!store.scanInfoError && (
-              <View style={styles.info}>
-                <Title style={styles.title}>{T.t('title_ban_question')}?</Title>
-                {show && (
-                  <View style={styles.info}>
-                    {store.scanInfo && (
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <View style={styles.body}>
+          <View style={styles.container}>
+            <View style={styles.info}>
+              {store.scanInfoError && (
+                <View style={styles.info}>
+                  <Title style={styles.titleError}>{error}</Title>
+                </View>
+              )}
+              {!store.scanInfoError && (
+                <View style={styles.info}>
+                  <Title style={styles.title}>
+                    {T.t('title_ban_question')}?
+                  </Title>
+                  {show && (
+                    <View style={styles.info}>
+                      {store.scanInfo && (
+                        <Text style={styles.text}>
+                          {T.t('transfer_status')}:{' '}
+                          {getStatus(store.scanInfo, role)}
+                        </Text>
+                      )}
+                      {metaData && (
+                        <Text style={styles.text}>
+                          {T.t('detail_title')}: {nameOfProduct}
+                        </Text>
+                      )}
+                      {metaData.brand && (
+                        <Text style={styles.text}>
+                          {T.t('detail_brand')}: {metaData.brand}
+                        </Text>
+                      )}
+                      {metaData.model && (
+                        <Text style={styles.text}>
+                          {T.t('detail_model')}: {metaData.model}
+                        </Text>
+                      )}
+                      {metaData.capacity && (
+                        <Text style={styles.text}>
+                          {T.t('detail_capacity')}: {metaData.capacity}
+                        </Text>
+                      )}
+                      {metaData.serial && (
+                        <Text style={styles.text}>
+                          {T.t('detail_serial')}: {metaData.serial}
+                        </Text>
+                      )}
+                      {metaData.type && (
+                        <Text style={styles.text}>
+                          {T.t('detail_type')}: {metaData.type}
+                        </Text>
+                      )}
+                      {store.scanInfo.person && (
+                        <Text style={styles.text}>
+                          {T.t('detail_person')}:{' '}
+                          {store.scanInfo.person.firstName}{' '}
+                          {store.scanInfo.person.lastName}
+                        </Text>
+                      )}
                       <Text style={styles.text}>
-                        {T.t('transfer_status')}:{' '}
-                        {getStatus(store.scanInfo, role)}
+                        {T.t('detail_quantity')}: {quantity} {units}
                       </Text>
-                    )}
-                    {metaData && (
-                      <Text style={styles.text}>
-                        {T.t('detail_title')}: {nameOfProduct}
-                      </Text>
-                    )}
-                    {metaData.brand && (
-                      <Text style={styles.text}>
-                        {T.t('detail_brand')}: {metaData.brand}
-                      </Text>
-                    )}
-                    {metaData.model && (
-                      <Text style={styles.text}>
-                        {T.t('detail_model')}: {metaData.model}
-                      </Text>
-                    )}
-                    {metaData.capacity && (
-                      <Text style={styles.text}>
-                        {T.t('detail_capacity')}: {metaData.capacity}
-                      </Text>
-                    )}
-                    {metaData.serial && (
-                      <Text style={styles.text}>
-                        {T.t('detail_serial')}: {metaData.serial}
-                      </Text>
-                    )}
-                    {metaData.type && (
-                      <Text style={styles.text}>
-                        {T.t('detail_type')}: {metaData.type}
-                      </Text>
-                    )}
-                    {store.scanInfo.person && (
-                      <Text style={styles.text}>
-                        {T.t('detail_person')}:{' '}
-                        {store.scanInfo.person.firstName}{' '}
-                        {store.scanInfo.person.lastName}
-                      </Text>
-                    )}
-                    <Text style={styles.text}>
-                      {T.t('detail_quantity')}: {quantity} {units}
-                    </Text>
-                  </View>
-                )}
-                <ItemSetQuantityArea
-                  quantity={quantity}
-                  units={units}
-                  isEnteredQuantityValid={isEnteredQuantityValid}
-                  value={quantityToWireOff}
-                  setQuantity={setQuantityToWireOff}
-                  mode="title_write_off_quantity"
-                />
-              </View>
-            )}
-          </View>
-          <View style={styles.buttons}>
-            {!store.scanInfoError && (
+                    </View>
+                  )}
+                  <ItemSetQuantityArea
+                    quantity={quantity}
+                    units={units}
+                    isEnteredQuantityValid={isEnteredQuantityValid}
+                    value={quantityToWireOff}
+                    setQuantity={setQuantityToWireOff}
+                    mode="title_write_off_quantity"
+                  />
+                </View>
+              )}
+            </View>
+            <View style={styles.buttons}>
+              {!store.scanInfoError && (
+                <View style={styles.buttonBlock}>
+                  <DarkButton
+                    text={T.t('ban_btn')}
+                    onPress={writteOff}
+                    disabled={!isEnteredQuantityValid}
+                  />
+                </View>
+              )}
               <View style={styles.buttonBlock}>
-                <DarkButton
-                  text={T.t('ban_btn')}
-                  onPress={writteOff}
-                  disabled={!isEnteredQuantityValid}
-                />
+                <DarkButton text={T.t('cancel')} onPress={againScan} />
               </View>
-            )}
-            <View style={styles.buttonBlock}>
-              <DarkButton text={T.t('cancel')} onPress={againScan} />
             </View>
           </View>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     </>
   );
 };
@@ -191,14 +201,13 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     borderRadius: 10,
-    height: Dimensions.get('window').height / 1.3,
     paddingBottom: 10,
     paddingTop: 20,
     width: Dimensions.get('window').width / 1.1,
     backgroundColor: '#EDF6FF',
   },
   buttonBlock: {
-    width: Dimensions.get('window').height / 3.3,
+    width: Dimensions.get('window').height / 2.7,
     textAlign: 'center',
   },
   info: {
@@ -226,7 +235,7 @@ const styles = StyleSheet.create({
   buttons: {
     display: 'flex',
     alignItems: 'center',
-    width: Dimensions.get('window').width / 1.5,
+    width: Dimensions.get('window').width / 1.3,
   },
   loader: {
     backgroundColor: 'rgba(52, 52, 52, 0.8)',
