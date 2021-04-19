@@ -124,7 +124,8 @@ const Gallery = ({
             <View style={styles.smallImgWrap}>
               {photoList.map((photo, index) => (
                 <TouchableWithoutFeedback
-                  onPress={() => handleChose(photo, index)}>
+                  onPress={() => handleChose(photo, index)}
+                  key={photo.name}>
                   <ImageBackground source={image} style={styles.bgSvg}>
                     <Image
                       style={[

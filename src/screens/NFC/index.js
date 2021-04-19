@@ -78,15 +78,16 @@ const NFC = () => {
         text = text + String.fromCharCode(parseInt(bytes[i]));
       }
 
-      let checkFormat = /^[a-z]{1,2}[0-9]{4,5}$/g;
+      let checkFormat = /^[a-zA-Z0-9]+$/;
+
       let codeFormat = checkFormat.exec(text);
 
       if (codeFormat) {
-        setLog(codeFormat[0]);
+        setLog(text);
         dispatch(loader(true));
         dispatch(
           currentScan(
-            codeFormat[0],
+            text,
             navigation,
             settings.NFCforMounting ? settings.nextPageMount : settings.nfcNext,
             settings.isMultiple,
