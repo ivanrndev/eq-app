@@ -5,11 +5,12 @@ import {
   Dimensions,
   Keyboard,
   KeyboardAvoidingView,
+  Linking,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {isEmpty} from 'lodash';
 import T from '../../i18n';
@@ -43,7 +44,6 @@ import moment from 'moment';
 // import { GoogleSignin, GoogleSigninButton, statusCodes } from 'react-native-google-signin';
 const Auth = props => {
   const dispatch = useDispatch();
-  const navigation = useNavigation();
   const store = useSelector(state => state.auth);
   const settings = useSelector(state => state.settings);
   const [email, setEmail] = useState('');
@@ -242,15 +242,18 @@ const Auth = props => {
           )}
           {moment().format('LL') >= dueDate && <GoogleAuth />}
         </KeyboardAvoidingView>
-        <Text style={styles.textRegister}>
-          {T.t('registration_label')}{' '}
-          <Text
-            onPress={() => navigation.navigate('SignUpWeb')}
-            style={styles.textBlue}>
-            {T.t('registration_btn')}
+        {moment().format('LL') >= dueDate && (
+          <Text style={styles.textRegister}>
+            {T.t('registration_label')}{' '}
+            <Text
+              onPress={() => {
+                Linking.openURL('http://admin.eqman.co/auth/register');
+              }}
+              style={styles.textBlue}>
+              {T.t('registration_btn')}
+            </Text>
           </Text>
-        </Text>
-
+        )}
         <Snackbar
           style={styles.snackbar}
           visible={!!store.isError}

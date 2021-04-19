@@ -46,4 +46,5 @@ target 'EqMan' do
   pod 'Yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
 
 
+
 end

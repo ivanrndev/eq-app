@@ -66,7 +66,6 @@ import MountItemSetQty from './screens/Ident/MountList/MountItemSetQty';
 import TransferSetQuantity from './screens/Transfers/TransferSetQty';
 import ChooseCommentPhotoMode from './components/Gallery/ChooseCommentPhotoMode';
 import ChooseItemPhotoMode from './components/Gallery/ChooseItemPhotoMode';
-import WebViewPage from './screens/Auth/WebViewPage';
 
 const theme = {
   ...DefaultTheme,
@@ -92,7 +91,6 @@ const App = () => {
                 drawerContent={props => <CustomDrawer {...props} />}
                 initialRouteName="Auth">
                 <Drawer.Screen name="Auth" component={Auth} />
-                <Drawer.Screen name="SignUpWeb" component={WebViewPage} />
                 <Drawer.Screen name="Home" component={Main} />
                 <Drawer.Screen name="Ident" component={Ident} />
                 <Drawer.Screen name="IdentInfo" component={IdentInfo} />
