@@ -128,6 +128,7 @@ export const IdentInfo = props => {
     setIsGalleryOpen(false);
     setChosenPhoto(0);
   };
+
   return (
     <>
       <Appbar
@@ -139,70 +140,82 @@ export const IdentInfo = props => {
       />
 
       <View style={styles.body}>
-        <View style={styles.container}>
-          <ScrollView>
-            {isNotFreePlan && (
-              <GalleryForItem
-                setChosenPhoto={setChosenPhoto}
-                setIsGalleryOpen={setIsGalleryOpen}
-                setPhotoDel={setPhotoDel}
-                page="IdentInfo"
-              />
-            )}
-            <View style={styles.info}>
+        {store.scanInfoError === 'NotFound' && (
+          <View style={styles.notFoundContainer}>
+            <Text style={styles.notFoundText}>
+              {`${T.t('error_code_incorrect')} "${store.currentScan}" ${T.t(
+                'error_not_found',
+              )}`}
+            </Text>
+          </View>
+        )}
+        {metaData && (
+          <View style={styles.container}>
+            <ScrollView>
               <View style={styles.info}>
+                {store.scanInfoError === 'NotFound' && (
+                  <Text style={styles.notFoundText}>
+                    {`${T.t('error_code_incorrect')} "${
+                      store.currentScan
+                    }" ${T.t('error_not_found')}`}
+                  </Text>
+                )}
+
+                {isNotFreePlan && (
+                  <GalleryForItem
+                    setChosenPhoto={setChosenPhoto}
+                    setIsGalleryOpen={setIsGalleryOpen}
+                    setPhotoDel={setPhotoDel}
+                    page="IdentInfo"
+                  />
+                )}
                 {store.scanInfo && (
                   <Text style={styles.text}>
                     {T.t('transfer_status')}: {getStatus(store.scanInfo, role)}
                   </Text>
                 )}
-                {metaData && (
-                  <>
-                    <Text style={styles.text}>
-                      {T.t('detail_title')}: {nameOfProduct}
-                    </Text>
+                <Text style={styles.text}>
+                  {T.t('detail_title')}: {nameOfProduct}
+                </Text>
 
-                    {metaData.brand && (
-                      <Text style={styles.text}>
-                        {T.t('detail_brand')}: {metaData.brand}
+                {metaData.brand && (
+                  <Text style={styles.text}>
+                    {T.t('detail_brand')}: {metaData.brand}
+                  </Text>
+                )}
+                {metaData.model && (
+                  <Text style={styles.text}>
+                    {T.t('detail_model')}: {metaData.model}
+                  </Text>
+                )}
+                {metaData.capacity && (
+                  <Text style={styles.text}>
+                    {T.t('detail_capacity')}: {metaData.capacity}
+                  </Text>
+                )}
+                {metaData.serial && (
+                  <Text style={styles.text}>
+                    {T.t('detail_serial')}: {metaData.serial}
+                  </Text>
+                )}
+                {metaData.type && (
+                  <Text style={styles.text}>
+                    {T.t('detail_type')}: {metaData.type}
+                  </Text>
+                )}
+                {store.scanInfo.customFields &&
+                  store.scanInfo.customFields.map((item, index) => {
+                    return (
+                      <Text key={index} style={styles.text}>
+                        {item.label}: {item.value}
                       </Text>
-                    )}
-                    {metaData.model && (
-                      <Text style={styles.text}>
-                        {T.t('detail_model')}: {metaData.model}
-                      </Text>
-                    )}
-                    {metaData.capacity && (
-                      <Text style={styles.text}>
-                        {T.t('detail_capacity')}: {metaData.capacity}
-                      </Text>
-                    )}
-                    {metaData.serial && (
-                      <Text style={styles.text}>
-                        {T.t('detail_serial')}: {metaData.serial}
-                      </Text>
-                    )}
-                    {metaData.type && (
-                      <Text style={styles.text}>
-                        {T.t('detail_type')}: {metaData.type}
-                      </Text>
-                    )}
-                    {store.scanInfo.customFields &&
-                      store.scanInfo.customFields.map((item, index) => {
-                        return (
-                          <Text key={index} style={styles.text}>
-                            {item.label}: {item.value}
-                          </Text>
-                        );
-                      })}
-                    {store.scanInfo.person && (
-                      <Text style={styles.text}>
-                        {T.t('detail_person')}:{' '}
-                        {store.scanInfo.person.firstName}{' '}
-                        {store.scanInfo.person.lastName}
-                      </Text>
-                    )}
-                  </>
+                    );
+                  })}
+                {store.scanInfo.person && (
+                  <Text style={styles.text}>
+                    {T.t('detail_person')}: {store.scanInfo.person.firstName}{' '}
+                    {store.scanInfo.person.lastName}
+                  </Text>
                 )}
                 <ItemCardQuantityAndPrice
                   quantity={quantity}
@@ -210,6 +223,7 @@ export const IdentInfo = props => {
                   units={units}
                   styles={styles}
                 />
+
                 {!isEmpty(store.scanInfo.items) && (
                   <>
                     <Text style={styles.textTmc}>{T.t('om_this_setup')}</Text>
@@ -264,9 +278,8 @@ export const IdentInfo = props => {
                   </>
                 )}
               </View>
-            </View>
-          </ScrollView>
-          <>
+            </ScrollView>
+
             <View style={styles.buttonsBlock}>
               <View style={styles.buttonBlock}>
                 {gaveAcess &&
@@ -317,8 +330,8 @@ export const IdentInfo = props => {
                 />
               </View>
             </View>
-          </>
-        </View>
+          </View>
+        )}
         <Portal>
           <Dialog
             style={styles.dialog}
@@ -374,6 +387,12 @@ const styles = StyleSheet.create({
     marginTop: 35,
     paddingBottom: 20,
   },
+  notFoundContainer: {
+    borderRadius: 10,
+    margin: 20,
+    marginTop: 35,
+    paddingBottom: 20,
+  },
   info: {
     display: 'flex',
     alignItems: 'center',
@@ -389,6 +408,12 @@ const styles = StyleSheet.create({
     color: '#E40B67',
     textAlign: 'center',
     padding: 30,
+  },
+  notFoundText: {
+    color: '#E40B67',
+    fontSize: 20,
+    paddingBottom: 5,
+    width: Dimensions.get('window').width / 1.3,
   },
   text: {
     fontSize: 16,
