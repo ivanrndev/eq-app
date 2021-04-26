@@ -14,15 +14,15 @@ const TransferSetQuantity = () => {
     transfers.transferId,
   ]);
   const transferredItems = transfersList.find(item => item._id === transferId);
-  const unUpdatedItems = transferredItems.items.filter(
-    pc => pc._id !== item._id,
-  );
+  const unUpdatedItems =
+    transferredItems &&
+    transferredItems.items.filter(pc => pc._id !== item._id);
   const updateTransferQty = (id, selectedQuantity) =>
     dispatch(
       updateTransfer(
         navigation,
         transferId,
-        [...unUpdatedItems, {_id: id, butch: {quantity: selectedQuantity}}],
+        [...unUpdatedItems, {_id: id, batch: {quantity: selectedQuantity}}],
         'TransfersEdit',
       ),
     );

@@ -150,7 +150,7 @@ const GiveListCheck = props => {
             <SetQtyCard
               key={item._id}
               item={item}
-              deleteItem={() => deleteItem(item._id)}
+              deleteItem={deleteItem}
               handleChangeQty={handleChangeQty}
               setItemQty={setItemQty}
             />
