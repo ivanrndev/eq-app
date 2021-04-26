@@ -173,20 +173,16 @@ export const MountList = props => {
     dispatch(deleteItemFromMountList(id));
 
   const handleMount = () => {
-    if (!isMountingAllowed) {
-      setIsText(T.t('error_responsible'));
-    } else {
-      dispatch(loader(true));
-      dispatch(
-        mountItems(
-          store.currentParent,
-          [...list, ...mountListWithQty],
-          props.navigation,
-          settings.backPageMount,
-          store.scanInfoError,
-        ),
-      );
-    }
+    dispatch(loader(true));
+    dispatch(
+      mountItems(
+        store.currentParent,
+        [...list, ...mountListWithQty],
+        props.navigation,
+        settings.backPageMount,
+        store.scanInfoError,
+      ),
+    );
   };
 
   return (

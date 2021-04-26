@@ -101,18 +101,22 @@ const GalleryForItem = ({
       ) : (
         <>
           <ImageBackground source={image} style={styles.emptyBgSvg}>
-            <TouchableOpacity onPress={handleAddPhoto}>
-              <Text style={styles.link}>{T.t('upload_photo')}</Text>
-              <Divider style={styles.divider} />
-            </TouchableOpacity>
+            {isEditingPhotoAllowed && (
+              <TouchableOpacity onPress={handleAddPhoto}>
+                <Text style={styles.link}>{T.t('upload_photo')}</Text>
+                <Divider style={styles.divider} />
+              </TouchableOpacity>
+            )}
           </ImageBackground>
-          <IconButton
-            icon="plus"
-            size={25}
-            color="#22215B"
-            style={styles.plusBtn}
-            onPress={handleAddPhoto}
-          />
+          {isEditingPhotoAllowed && (
+            <IconButton
+              icon="plus"
+              size={25}
+              color="#22215B"
+              style={styles.plusBtn}
+              onPress={handleAddPhoto}
+            />
+          )}
         </>
       )}
     </View>
