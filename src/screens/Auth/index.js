@@ -192,7 +192,7 @@ const Auth = props => {
     }
   };
 
-  const dueDate = 'April 23, 2021';
+  const dueDate = 'April 28, 2021';
 
   return (
     <>
