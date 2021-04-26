@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {isEmpty} from 'lodash';
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -14,6 +14,7 @@ import {Divider, IconButton, Text} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import T from '../../../i18n';
 import {setGoBackPageGallery} from '../../../actions/addItemPhotoActions';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const image = require('./../../../assets/svg/empty.png');
 
@@ -26,8 +27,21 @@ const GalleryForItem = ({
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const itemInfo = useSelector(({scan}) => scan.scanInfo);
+
   const itemPhotos = itemInfo.photos ?? [];
   const bigPhoto = !isEmpty(itemPhotos) && itemPhotos[0];
+  const [role, setRole] = useState('');
+  const [userId, setUserId] = useState('');
+  const isEditingPhotoAllowed =
+    itemPhotos.length < 8 &&
+    (userId === itemInfo.person._id ||
+      (role === 'root' || role === 'stockman' || role === 'admin'));
+
+  useEffect(() => {
+    AsyncStorage.getItem('role').then(resp => setRole(resp));
+    AsyncStorage.getItem('userId').then(id => setUserId(id));
+  }, []);
+
   const smallPhotos = itemPhotos.length > 1 ? itemPhotos.slice(1) : [];
 
   const handlePressPhoto = (item, index = 0) => {
@@ -73,7 +87,7 @@ const GalleryForItem = ({
                 </View>
               </TouchableWithoutFeedback>
             ))}
-            {itemPhotos.length < 8 && (
+            {isEditingPhotoAllowed && (
               <IconButton
                 icon="plus"
                 size={25}

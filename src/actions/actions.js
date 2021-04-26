@@ -1621,14 +1621,18 @@ export const deleteTransfer = (nav, id, route) => dispatch => {
 // locations
 export const getLocations = () => dispatch => {
   AsyncStorage.getItem('company').then(company => {
-    return axios.get(`/company/${company}/locations`).then(resp => {
-      if (resp.status === 200) {
-        dispatch({
-          type: LOCATIONS,
-          payload: {locations: resp.data.data},
-        });
-      }
-    });
+    return axios
+      .get(`/company/${company}/locations`, {
+        params: {offset: 0, limit: 150},
+      })
+      .then(resp => {
+        if (resp.status === 200) {
+          dispatch({
+            type: LOCATIONS,
+            payload: {locations: resp.data.data},
+          });
+        }
+      });
   });
 };
 

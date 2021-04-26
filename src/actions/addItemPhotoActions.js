@@ -26,11 +26,10 @@ export const addItemsPhoto = (id, photos, page, nav) => dispatch => {
       .then(() => dispatch(getSearchItem(id, nav, page)))
       .catch(e => {
         if (!e.response.data.success) {
-          let error = getProperError(e.response.data.message.name);
           dispatch({
             type: ADD_PHOTO_TO_ITEM_ERROR,
             payload: {
-              scanInfoError: error,
+              scanInfoError: 'Error adding photo',
             },
           });
           dispatch(loader(false));
