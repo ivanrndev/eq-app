@@ -262,5 +262,6 @@
     "choose_from_gallery": "Choose from gallery",
     "upload_photo": "Upload photo",
     "delete_photo_confirm": "Are you sure you want to delete this photo?",
-    "delete_photo": "Delete photo"
+    "delete_photo": "Delete photo",
+    "error_responsible": "Not you responsible for this item"
 }

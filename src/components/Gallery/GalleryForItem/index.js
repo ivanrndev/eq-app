@@ -34,7 +34,7 @@ const GalleryForItem = ({
   const [userId, setUserId] = useState('');
   const isEditingPhotoAllowed =
     itemPhotos.length < 8 &&
-    (userId === itemInfo.person._id ||
+    ((itemInfo.person && userId === itemInfo.person._id) ||
       (role === 'root' || role === 'stockman' || role === 'admin'));
 
   useEffect(() => {

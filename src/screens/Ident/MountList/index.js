@@ -60,7 +60,12 @@ export const MountList = props => {
   const [deleteId, setDeleteId] = useState(false);
   const editItems = store.scanInfo.items;
   const [isText, setIsText] = useState('');
-  const [userId, setUserId] = useState();
+
+  const [userId, setUserId] = useState('');
+
+  useEffect(() => {
+    AsyncStorage.getItem('userId').then(id => setUserId(id));
+  }, []);
   const [searchList, setSearchList] = useState([]);
   const isAvailableToMount = item =>
     item._id !== store.currentParent &&
@@ -78,17 +83,6 @@ export const MountList = props => {
   const isQtyBtnShow = item =>
     item.batch && +item.batch.quantity !== 1 && !setItemQty(item._id);
 
-  const getUserId = async () => {
-    try {
-      const value = await AsyncStorage.getItem('userId');
-      if (value !== null) {
-        setUserId(value);
-      }
-    } catch (e) {
-      console.log('no role');
-    }
-  };
-  getUserId();
   const mountListWithQtyIds = mountListWithQty.map(item => item.id);
   const list =
     mountListWithQty.length > 0
@@ -126,6 +120,7 @@ export const MountList = props => {
     if (store.mountError.length > 0) {
       setIsText(store.mountError);
     }
+
     if (!isText && gaveAcess) {
       dispatch(
         mountItemFromParent(
@@ -178,16 +173,20 @@ export const MountList = props => {
     dispatch(deleteItemFromMountList(id));
 
   const handleMount = () => {
-    dispatch(loader(true));
-    dispatch(
-      mountItems(
-        store.currentParent,
-        [...list, ...mountListWithQty],
-        props.navigation,
-        settings.backPageMount,
-        store.scanInfoError,
-      ),
-    );
+    if (!isMountingAllowed) {
+      setIsText(T.t('error_responsible'));
+    } else {
+      dispatch(loader(true));
+      dispatch(
+        mountItems(
+          store.currentParent,
+          [...list, ...mountListWithQty],
+          props.navigation,
+          settings.backPageMount,
+          store.scanInfoError,
+        ),
+      );
+    }
   };
 
   return (

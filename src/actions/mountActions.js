@@ -11,6 +11,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import axios from '../utils/axios';
 import {API_URL} from '../constants/auth';
 import {getSearchItem, loader} from './actions';
+import {useEffect, useState} from 'react';
 
 export const addMountParent = parentId => dispatch => {
   dispatch({
@@ -39,6 +40,7 @@ export const deleteItemFromMountList = id => dispatch => {
 };
 
 export const mountItems = (parent, items, navigation, page) => dispatch => {
+  console.log('ACTION', parent, items);
   AsyncStorage.getItem('company').then(company => {
     return axios
       .put(`${API_URL}/company/${company}/item/mount`, {
@@ -46,6 +48,7 @@ export const mountItems = (parent, items, navigation, page) => dispatch => {
         parent,
       })
       .then(resp => {
+        console.log('ACTIONRTRETRET', resp);
         if (resp.status === 200) {
           dispatch(loader(false));
           dispatch({
