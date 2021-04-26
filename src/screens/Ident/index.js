@@ -32,7 +32,6 @@ const Ident = props => {
         list={onMeList}
         listAction={searchMyItem}
         pageToChosenItem="IdentInfo"
-        identInfoScreen={true}
       />
 
       <View style={styles.body}>

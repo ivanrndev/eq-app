@@ -77,6 +77,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     textTransform: 'uppercase',
     color: '#22215B',
+    marginRight: 25,
   },
   paragraph: {
     fontSize: 12,

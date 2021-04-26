@@ -25,7 +25,6 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import {myloadMore, searchMyItem} from '../../actions/actions.js';
 import ItemListCard from '../../components/ItemListCard';
-import {addMountParent} from '../../actions/mountActions';
 
 const OnMe = props => {
   const dispatch = useDispatch();
@@ -52,7 +51,6 @@ const OnMe = props => {
       'OnMeInfo',
       dispatch,
     );
-    dispatch(addMountParent(item._id));
   };
   return (
     <>

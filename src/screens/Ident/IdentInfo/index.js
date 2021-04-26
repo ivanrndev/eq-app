@@ -23,6 +23,7 @@ import ItemCardQuantityAndPrice from '../../../components/ItemCardQuantityAndPri
 import {getComments} from '../../../actions/commentsAction';
 import GalleryForItem from '../../../components/Gallery/GalleryForItem';
 import Gallery from '../../../components/Gallery';
+import {addMountParent} from '../../../actions/mountActions';
 
 export const IdentInfo = props => {
   const dispatch = useDispatch();
@@ -310,6 +311,8 @@ export const IdentInfo = props => {
                                 true,
                               ),
                             );
+
+                            dispatch(addMountParent(store.scanInfo._id));
                             props.navigation.navigate('MountList');
                           }}
                         />

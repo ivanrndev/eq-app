@@ -2,14 +2,7 @@
 /* eslint-disable prettier/prettier */
 import React, {useCallback, useEffect, useState} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
-import {
-  Dimensions,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {Dimensions, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {
   Button,
   Card,
@@ -214,7 +207,7 @@ export const MountList = props => {
         onSelectAction={addItemToMountList}
         clearMountList={true}
       />
-      <SafeAreaView />
+
       <View style={styles.container}>
         <View style={styles.scaner}>
           {scaner && (

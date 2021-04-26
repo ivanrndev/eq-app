@@ -164,7 +164,6 @@ const AppbarCustom = props => {
           isSearchForGiveItem={props.isSearchForGiveItem}
           onSelectAction={props.onSelectAction}
           editTransfer={props.editTransfer}
-          identInfoScreen={props.identInfoScreen}
         />
       )}
       {isNFCOpen && <NFC />}

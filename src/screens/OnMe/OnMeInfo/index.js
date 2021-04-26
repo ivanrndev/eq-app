@@ -28,6 +28,7 @@ import ItemCardQuantityAndPrice from '../../../components/ItemCardQuantityAndPri
 import {getComments} from '../../../actions/commentsAction';
 import Gallery from '../../../components/Gallery';
 import GalleryForItem from '../../../components/Gallery/GalleryForItem';
+import {addMountParent} from '../../../actions/mountActions';
 
 export const OnMeInfo = props => {
   const [scan, store, settings, currentCompany] = useSelector(
@@ -285,6 +286,7 @@ export const OnMeInfo = props => {
                                 ),
                               );
                               props.navigation.navigate('MountList');
+                              dispatch(addMountParent(scan.scanInfo._id));
                             }}
                           />
                         )}
