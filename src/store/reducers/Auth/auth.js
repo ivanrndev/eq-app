@@ -1,13 +1,12 @@
 import {
-  LOGIN_USER,
-  LOGUT,
-  LOGIN_USER_ERROR,
   CHANGE_STATUS_ERROR,
   CHANGE_STATUS_LOAD,
   GET_COMPANY_INFO,
   GET_COMPANY_INFO_ERROR,
+  LOGIN_USER,
+  LOGIN_USER_ERROR,
   LOGIN_WITH_GOOGLE_ACCOUNT,
-  LOGIN_WITH_GOOGLE_ACCOUNT_ERROR,
+  LOGUT,
 } from '../../../actions/actionsType.js';
 
 const initialState = {
@@ -57,11 +56,6 @@ const authReducer = (state = initialState, action) => {
         ...action.payload,
       };
     case LOGIN_WITH_GOOGLE_ACCOUNT:
-      return {
-        ...state,
-        ...action.payload,
-      };
-    case LOGIN_WITH_GOOGLE_ACCOUNT_ERROR:
       return {
         ...state,
         ...action.payload,

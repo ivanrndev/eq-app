@@ -438,3 +438,16 @@ export const handleNavigateToMySingleItem = (
   }
   dispatch(saveCurrentMyItem(id, code, navigation, page));
 };
+
+export const getMNotificationMessage = (type, user) => {
+  switch (type) {
+    case '0':
+      return T.t('transaction_add');
+    case '1':
+      return `${T.t('notification_give_text')} ${user}`;
+    case '3':
+      return `${user} ${T.t('notification_cancel_text')}`;
+    default:
+      return T.t('unknown_operation');
+  }
+};

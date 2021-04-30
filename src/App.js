@@ -2,7 +2,6 @@
 import React, {useEffect} from 'react';
 import {StatusBar} from 'react-native';
 import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
-
 // navigation and router
 import {NavigationContainer} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
@@ -67,7 +66,8 @@ import TransferSetQuantity from './screens/Transfers/TransferSetQty';
 import ChooseCommentPhotoMode from './components/Gallery/ChooseCommentPhotoMode';
 import ChooseItemPhotoMode from './components/Gallery/ChooseItemPhotoMode';
 import messaging from '@react-native-firebase/messaging';
-import {Alert} from 'react-native';
+import PushNotification from 'react-native-push-notification';
+import {getMNotificationMessage} from './utils/helpers';
 
 const theme = {
   ...DefaultTheme,
@@ -82,8 +82,19 @@ const theme = {
 const Drawer = createDrawerNavigator();
 
 const App = () => {
+  const getPushData = async message => {
+    if (message.data.type === '1') {
+      PushNotification.localNotification({
+        message: getMNotificationMessage(
+          message.data.type,
+          message.data.userName,
+        ),
+      });
+    }
+  };
   useEffect(() => {
-    requestUserPermission();
+    const unsubscribe = messaging().onMessage(getPushData);
+    return unsubscribe;
   }, []);
 
   const requestUserPermission = async () => {
@@ -91,29 +102,12 @@ const App = () => {
     const enabled =
       authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
       authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-
-    if (enabled) {
-      console.log('Authorization status:', authStatus);
-    }
-  };
-  const getFcmToken = async () => {
-    const fcmToken = await messaging().getToken();
-    if (fcmToken) {
-      console.log(fcmToken);
-      console.log('Your Firebase Token is:', fcmToken);
-    } else {
-      console.log('Failed', 'No token received');
-    }
   };
 
-  console.log('JJJ', getFcmToken());
   useEffect(() => {
     requestUserPermission();
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-    });
-    return unsubscribe;
   }, []);
+
   return (
     <StoreContext.Provider value={store}>
       <Provider store={store}>

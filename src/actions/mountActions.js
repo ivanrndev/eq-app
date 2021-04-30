@@ -11,7 +11,6 @@ import AsyncStorage from '@react-native-community/async-storage';
 import axios from '../utils/axios';
 import {API_URL} from '../constants/auth';
 import {getSearchItem, loader} from './actions';
-import {useEffect, useState} from 'react';
 
 export const addMountParent = parentId => dispatch => {
   dispatch({
@@ -48,12 +47,12 @@ export const mountItems = (parent, items, navigation, page) => dispatch => {
         parent,
       })
       .then(resp => {
-        console.log('ACTIONRTRETRET', resp);
         if (resp.status === 200) {
           dispatch(loader(false));
           dispatch({
             type: MOUNT_ITEMS,
           });
+          z;
         }
       })
       .then(() => {
