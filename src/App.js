@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StatusBar} from 'react-native';
 import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
 
@@ -66,6 +66,8 @@ import MountItemSetQty from './screens/Ident/MountList/MountItemSetQty';
 import TransferSetQuantity from './screens/Transfers/TransferSetQty';
 import ChooseCommentPhotoMode from './components/Gallery/ChooseCommentPhotoMode';
 import ChooseItemPhotoMode from './components/Gallery/ChooseItemPhotoMode';
+import messaging from '@react-native-firebase/messaging';
+import {Alert} from 'react-native';
 
 const theme = {
   ...DefaultTheme,
@@ -80,6 +82,38 @@ const theme = {
 const Drawer = createDrawerNavigator();
 
 const App = () => {
+  useEffect(() => {
+    requestUserPermission();
+  }, []);
+
+  const requestUserPermission = async () => {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      console.log('Authorization status:', authStatus);
+    }
+  };
+  const getFcmToken = async () => {
+    const fcmToken = await messaging().getToken();
+    if (fcmToken) {
+      console.log(fcmToken);
+      console.log('Your Firebase Token is:', fcmToken);
+    } else {
+      console.log('Failed', 'No token received');
+    }
+  };
+
+  console.log('JJJ', getFcmToken());
+  useEffect(() => {
+    requestUserPermission();
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
+    return unsubscribe;
+  }, []);
   return (
     <StoreContext.Provider value={store}>
       <Provider store={store}>

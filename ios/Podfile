@@ -6,6 +6,7 @@ target 'EqMan' do
   # Pods for EcMan
    config = use_native_modules!
     pod 'GoogleSignIn', '~> 5.0.2'
+    pod 'Firebase/Analytics'
     permissions_path = '../node_modules/react-native-permissions/ios'
     pod 'Permission-Camera', :path => "#{permissions_path}/Camera.podspec"
     pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
