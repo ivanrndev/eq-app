@@ -89,7 +89,6 @@ import {
   SEARCH_MY_COMPANY_ITEMS_ERROR,
   SET_GIVE_ITEM_QTY,
   SET_INVENTORY_ITEM_QTY,
-  START_PAGE,
   SUCCES_IN_SERVICES,
   SUCCES_WRITE_OFF,
   TRANSACTIONS_ERROR,
@@ -103,7 +102,6 @@ import {
   UPDATE_SCAN_GIVE_LIST,
   USER_CURRENT_ID,
 } from './actionsType';
-import {getFcmToken} from '../utils/pushNotifications';
 
 // Settings
 export const nfc = (
@@ -177,15 +175,6 @@ export const NFCforMounting = page => dispatch => {
   });
 };
 
-export const switchStartPage = (name, page) => dispatch => {
-  dispatch({
-    type: START_PAGE,
-    payload: {
-      [name]: page,
-    },
-  });
-};
-
 export const loader = status => dispatch => {
   dispatch({
     type: LOADER,
@@ -230,7 +219,6 @@ export const userPostFetch = ({email, password}) => dispatch => {
 
         dispatch(currentUser());
       }
-      getFcmToken();
     })
     .catch(e => {
       if (!e.response.data.success) {
@@ -288,7 +276,6 @@ export const authWithGoogleAccount = token => dispatch => {
         dispatch(helps(1));
         dispatch(currentUser());
         dispatch(loader(false));
-        getFcmToken();
       }
     })
     .catch(e => {

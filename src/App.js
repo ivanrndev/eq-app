@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StatusBar} from 'react-native';
 import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
 // navigation and router
@@ -67,7 +67,9 @@ import ChooseCommentPhotoMode from './components/Gallery/ChooseCommentPhotoMode'
 import ChooseItemPhotoMode from './components/Gallery/ChooseItemPhotoMode';
 import messaging from '@react-native-firebase/messaging';
 import PushNotification from 'react-native-push-notification';
+
 import {getMNotificationMessage} from './utils/helpers';
+import {setTokenToDataBase} from './utils/pushNotifications';
 
 const theme = {
   ...DefaultTheme,
@@ -82,30 +84,49 @@ const theme = {
 const Drawer = createDrawerNavigator();
 
 const App = () => {
-  const getPushData = async message => {
-    if (message.data.type === '1') {
-      PushNotification.localNotification({
-        message: getMNotificationMessage(
-          message.data.type,
-          message.data.userName,
-        ),
-      });
-    }
-  };
-  useEffect(() => {
-    const unsubscribe = messaging().onMessage(getPushData);
-    return unsubscribe;
-  }, []);
-
+  const [pushNotificationToken, setPushNotificationToken] = useState('');
   const requestUserPermission = async () => {
     const authStatus = await messaging().requestPermission();
     const enabled =
       authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
       authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+    if (enabled) {
+      console.log('Authorization status:', authStatus);
+    }
+  };
+
+  const getFcmToken = async () => {
+    const fcmToken = await messaging().getToken();
+    console.log('fcmToken', fcmToken);
+    if (fcmToken) {
+      setPushNotificationToken(fcmToken);
+    } else {
+      console.log('Failed', 'No token received');
+    }
+  };
+
+  const getPushData = async message => {
+    console.log('Message', message);
+    PushNotification.localNotification({
+      message: getMNotificationMessage(
+        message.data.type,
+        message.data.userName,
+      ),
+    });
   };
 
   useEffect(() => {
     requestUserPermission();
+    getFcmToken();
+  }, []);
+
+  useEffect(() => setTokenToDataBase(pushNotificationToken), [
+    pushNotificationToken,
+  ]);
+
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(getPushData);
+    return unsubscribe;
   }, []);
 
   return (
