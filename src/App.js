@@ -84,7 +84,7 @@ const Drawer = createDrawerNavigator();
 
 const App = () => {
   const [pushNotificationToken, setPushNotificationToken] = useState('');
-  const [userEmail, setUserEmail] = useState('');
+
   const requestUserPermission = async () => {
     const authStatus = await messaging().requestPermission();
     const enabled =
@@ -108,8 +108,9 @@ const App = () => {
     }
   };
   const getPushData = async message => {
-    await AsyncStorage.getItem('email').then(email => setUserEmail(email));
-    if (userEmail === message.data.userEmail) {
+    const email = await AsyncStorage.getItem('email');
+    //console.log('KKJ', message, 'EMAIL', email);
+    if (email === message.data.userEmail) {
       PushNotification.localNotification({
         message: message.notification.body,
       });
