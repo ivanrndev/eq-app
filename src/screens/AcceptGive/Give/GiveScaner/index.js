@@ -11,6 +11,7 @@ import {searchMyItem} from '../../../../actions/actions';
 const GiveScaner = props => {
   const [scaner, setScaner] = useState(false);
   const onMeList = useSelector(({onMe}) => onMe.myList);
+  const list = onMeList.filter(item => item.transfer === null);
   useFocusEffect(
     useCallback(() => {
       setScaner(true);
@@ -29,7 +30,7 @@ const GiveScaner = props => {
         switch={true}
         typeSwitchNFC={true}
         search={true}
-        list={onMeList}
+        list={list}
         listAction={searchMyItem}
         pageToChosenItem="GiveListCheck"
         isSearchForGiveItem={true}
