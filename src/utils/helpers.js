@@ -376,6 +376,20 @@ export const getInventoryMesageError = (error, id) => {
     return `${T.t('error_code_incorrect')} "${id}" ${T.t('error_was_added')}`;
   }
 };
+export const getGiveMessageError = error => {
+  if (error === 'IsBan') {
+    return `${T.t('item')}  ${T.t('error_write_off')}`;
+  }
+  if (error === 'InRepair') {
+    return `${T.t('item')}  ${T.t('error_services')}`;
+  }
+  if (error === 'NotFound') {
+    return `${T.t('error_code_incorrect')}  ${T.t('error_not_found')}`;
+  }
+  if (error === 'InTransfer') {
+    return `${T.t('during_transfer')}`;
+  }
+};
 
 export const ucFirst = str => {
   if (!str) {

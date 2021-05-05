@@ -67,9 +67,8 @@ import ChooseCommentPhotoMode from './components/Gallery/ChooseCommentPhotoMode'
 import ChooseItemPhotoMode from './components/Gallery/ChooseItemPhotoMode';
 import messaging from '@react-native-firebase/messaging';
 import PushNotification from 'react-native-push-notification';
-
-import {getMNotificationMessage} from './utils/helpers';
 import {setTokenToDataBase} from './utils/pushNotifications';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const theme = {
   ...DefaultTheme,
@@ -85,6 +84,7 @@ const Drawer = createDrawerNavigator();
 
 const App = () => {
   const [pushNotificationToken, setPushNotificationToken] = useState('');
+  const [userEmail, setUserEmail] = useState('');
   const requestUserPermission = async () => {
     const authStatus = await messaging().requestPermission();
     const enabled =
@@ -94,31 +94,27 @@ const App = () => {
       console.log('Authorization status:', authStatus);
     }
   };
+  useEffect(() => {
+    requestUserPermission();
+    getFcmToken();
+  }, []);
 
   const getFcmToken = async () => {
     const fcmToken = await messaging().getToken();
-    console.log('fcmToken', fcmToken);
     if (fcmToken) {
       setPushNotificationToken(fcmToken);
     } else {
       console.log('Failed', 'No token received');
     }
   };
-
   const getPushData = async message => {
-    console.log('Message', message);
-    PushNotification.localNotification({
-      message: getMNotificationMessage(
-        message.data.type,
-        message.data.userName,
-      ),
-    });
+    await AsyncStorage.getItem('email').then(email => setUserEmail(email));
+    if (userEmail === message.data.userEmail) {
+      PushNotification.localNotification({
+        message: message.notification.body,
+      });
+    }
   };
-
-  useEffect(() => {
-    requestUserPermission();
-    getFcmToken();
-  }, []);
 
   useEffect(() => setTokenToDataBase(pushNotificationToken), [
     pushNotificationToken,
