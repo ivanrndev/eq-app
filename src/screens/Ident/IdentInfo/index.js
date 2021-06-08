@@ -129,7 +129,7 @@ export const IdentInfo = props => {
     setIsGalleryOpen(false);
     setChosenPhoto(0);
   };
-  console.log('META', metaData);
+
   return (
     <>
       <Appbar
