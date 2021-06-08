@@ -10,6 +10,17 @@
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>NSAppTransportSecurity</key>
+    	<dict>
+    		<key>NSExceptionDomains</key>
+    		<dict>
+    			<key>localhost</key>
+    			<dict>
+    				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+    				<true/>
+    			</dict>
+    		</dict>
+    	</dict>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -37,7 +48,6 @@
 	<true/>
 	<key>NFCReaderUsageDescription</key>
 	<string>YOUR_PRIVACY_DESCRIPTION</string>
-
 	<key>NSCameraUsageDescription</key>
 	<string>Это приложение используется для сканирования штрих-кодов</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
@@ -84,6 +94,7 @@
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
+		<string>processing</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>

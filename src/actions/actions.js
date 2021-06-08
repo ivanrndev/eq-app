@@ -102,6 +102,7 @@ import {
   UPDATE_SCAN_GIVE_LIST,
   USER_CURRENT_ID,
 } from './actionsType';
+import {setTokenToDataBase} from '../utils/pushNotifications';
 
 // Settings
 export const nfc = (
@@ -216,8 +217,10 @@ export const userPostFetch = ({email, password}) => dispatch => {
         // first open help
         AsyncStorage.setItem('help', '1');
         dispatch(helps(1));
-
         dispatch(currentUser());
+        AsyncStorage.getItem('fcmToken').then(token =>
+          setTokenToDataBase(token),
+        );
       }
     })
     .catch(e => {
@@ -275,6 +278,9 @@ export const authWithGoogleAccount = token => dispatch => {
         AsyncStorage.setItem('help', '1');
         dispatch(helps(1));
         dispatch(currentUser());
+        AsyncStorage.getItem('fcmToken').then(token =>
+          setTokenToDataBase(token),
+        );
         dispatch(loader(false));
       }
     })

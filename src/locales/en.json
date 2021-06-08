@@ -269,5 +269,6 @@
     "delete_photo": "Delete photo",
     "error_responsible": "Not you responsible for this item",
     "notification_give_text": "You have new 'take' request from ",
-    "notification_cancel_text": "cancel request."
+    "notification_cancel_text": "cancel request.",
+    "responsible": "Responsible person"
 }

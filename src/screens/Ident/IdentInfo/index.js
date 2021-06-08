@@ -129,7 +129,7 @@ export const IdentInfo = props => {
     setIsGalleryOpen(false);
     setChosenPhoto(0);
   };
-
+  console.log('META', metaData);
   return (
     <>
       <Appbar
@@ -161,7 +161,6 @@ export const IdentInfo = props => {
                     }" ${T.t('error_not_found')}`}
                   </Text>
                 )}
-
                 {isNotFreePlan && (
                   <GalleryForItem
                     setChosenPhoto={setChosenPhoto}
@@ -178,7 +177,6 @@ export const IdentInfo = props => {
                 <Text style={styles.text}>
                   {T.t('detail_title')}: {nameOfProduct}
                 </Text>
-
                 {metaData.brand && (
                   <Text style={styles.text}>
                     {T.t('detail_brand')}: {metaData.brand}
@@ -218,13 +216,22 @@ export const IdentInfo = props => {
                     {store.scanInfo.person.lastName}
                   </Text>
                 )}
+                {metaData.object && (
+                  <Text style={styles.text}>
+                    {T.t('object')}: {metaData.object}
+                  </Text>
+                )}
+                {!!metaData.location && (
+                  <Text style={styles.text}>
+                    {T.t('location')}: {metaData.location}
+                  </Text>
+                )}
                 <ItemCardQuantityAndPrice
                   quantity={quantity}
                   price={price}
                   units={units}
                   styles={styles}
                 />
-
                 {!isEmpty(store.scanInfo.items) && (
                   <>
                     <Text style={styles.textTmc}>{T.t('om_this_setup')}</Text>

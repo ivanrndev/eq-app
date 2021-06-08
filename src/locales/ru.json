@@ -273,5 +273,7 @@
     "delete_photo": "Удалить  фотографию",
     "error_responsible": "За это тмц ответственный другой работник",
     "notification_give_text": "У вас новая заявка на получение от ",
-    "notification_cancel_text": "отменил заявку."
+    "notification_cancel_text": "отменил заявку.",
+    "responsible": "Oтветственный",
+
 }

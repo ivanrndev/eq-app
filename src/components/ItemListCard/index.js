@@ -5,7 +5,13 @@ import T from '../../i18n';
 import {getTotalLotPrice} from '../../utils/helpers';
 import {useQuantityUnitsAndCurrency} from '../../hooks/useQuantityUnitsAndCurrency';
 
-const ItemListCard = ({item, width, isPriceShown = true, children}) => {
+const ItemListCard = ({
+  item,
+  width,
+  isPriceShown = true,
+  isMarking = false,
+  children,
+}) => {
   const {currency} = useQuantityUnitsAndCurrency();
 
   return (
@@ -64,6 +70,13 @@ const ItemListCard = ({item, width, isPriceShown = true, children}) => {
           )}
         </>
       )}
+
+      {isMarking && item.person ? (
+        <Paragraph style={styles.paragraph}>
+          {T.t('responsible')}:
+          {` ${item.person.firstName}  ${item.person.lastName}`}
+        </Paragraph>
+      ) : null}
       {children}
     </Card.Content>
   );

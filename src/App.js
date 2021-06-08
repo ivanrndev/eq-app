@@ -1,16 +1,11 @@
 /* eslint-disable prettier/prettier */
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {StatusBar} from 'react-native';
 import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
 // navigation and router
 import {NavigationContainer} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {NativeRouter} from 'react-router-native';
-
-// store
-import {StoreContext} from 'redux-react-hook';
-import {Provider} from 'react-redux';
-import {store} from './store';
 
 // components
 import Main from './screens/Main';
@@ -65,10 +60,12 @@ import MountItemSetQty from './screens/Ident/MountList/MountItemSetQty';
 import TransferSetQuantity from './screens/Transfers/TransferSetQty';
 import ChooseCommentPhotoMode from './components/Gallery/ChooseCommentPhotoMode';
 import ChooseItemPhotoMode from './components/Gallery/ChooseItemPhotoMode';
+import AsyncStorage from '@react-native-community/async-storage';
 import messaging from '@react-native-firebase/messaging';
 import PushNotification from 'react-native-push-notification';
-import {setTokenToDataBase} from './utils/pushNotifications';
-import AsyncStorage from '@react-native-community/async-storage';
+import {StoreContext} from 'redux-react-hook';
+import {store} from './store';
+import {Provider} from 'react-redux';
 
 const theme = {
   ...DefaultTheme,
@@ -83,43 +80,31 @@ const theme = {
 const Drawer = createDrawerNavigator();
 
 const App = () => {
-  const [pushNotificationToken, setPushNotificationToken] = useState('');
-
   const requestUserPermission = async () => {
     const authStatus = await messaging().requestPermission();
     const enabled =
       authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
       authStatus === messaging.AuthorizationStatus.PROVISIONAL;
     if (enabled) {
-      console.log('Authorization status:', authStatus);
+      getFcmToken();
     }
   };
+
   useEffect(() => {
     requestUserPermission();
-    getFcmToken();
   }, []);
 
   const getFcmToken = async () => {
     const fcmToken = await messaging().getToken();
     if (fcmToken) {
-      setPushNotificationToken(fcmToken);
-    } else {
-      console.log('Failed', 'No token received');
+      AsyncStorage.setItem('fcmToken', fcmToken);
     }
   };
   const getPushData = async message => {
-    const email = await AsyncStorage.getItem('email');
-    //console.log('KKJ', message, 'EMAIL', email);
-    if (email === message.data.userEmail) {
-      PushNotification.localNotification({
-        message: message.notification.body,
-      });
-    }
+    PushNotification.localNotification({
+      message: message.notification.body,
+    });
   };
-
-  useEffect(() => setTokenToDataBase(pushNotificationToken), [
-    pushNotificationToken,
-  ]);
 
   useEffect(() => {
     const unsubscribe = messaging().onMessage(getPushData);

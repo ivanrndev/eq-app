@@ -1,16 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
-import {SafeAreaView, Dimensions, StyleSheet, View} from 'react-native';
+import {Dimensions, SafeAreaView, StyleSheet, View} from 'react-native';
 import Appbar from '../../components/Appbar';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {isEmpty} from 'lodash';
 import T from '../../i18n';
-import {Portal, ActivityIndicator} from 'react-native-paper';
+import {ActivityIndicator, Portal} from 'react-native-paper';
 import Button from '../../components/Buttons/Menu';
-import {copilot, walkthroughable, CopilotStep} from 'react-native-copilot';
-import {useDispatch} from 'react-redux';
-import {helps, nfc, changeIsMultiple} from '../../actions/actions.js';
+import {copilot, CopilotStep, walkthroughable} from 'react-native-copilot';
+import {changeIsMultiple, helps, nfc} from '../../actions/actions.js';
 import {menuSvg} from '../../utils/menuSvg.js';
 import withLayout from '../../hooks/withLayout';
 
@@ -41,7 +40,6 @@ const Main = props => {
       }
     });
   }, []);
-
   return (
     <>
       <View style={styles.background}>
