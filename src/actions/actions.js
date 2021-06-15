@@ -1260,7 +1260,8 @@ export const saveCurrenTransferId = (nav, id) => dispatch => {
 };
 
 // Accept actions
-export const getBidList = (nav, id, offset) => dispatch => {
+export const getBidList = (nav, id, offset, page = 'Accept') => dispatch => {
+  dispatch(loader(true));
   AsyncStorage.getItem('company').then(company => {
     return axios
       .get(`${API_URL}/company/${company}/user/${id}/transfers/receive`, {
@@ -1279,7 +1280,7 @@ export const getBidList = (nav, id, offset) => dispatch => {
               offSet: 6,
             },
           });
-          nav.navigate('Accept');
+          nav.navigate(page);
           dispatch(loader(false));
         }
       })
@@ -1295,7 +1296,48 @@ export const getBidList = (nav, id, offset) => dispatch => {
               offSet: 6,
             },
           });
-          nav.navigate('Accept');
+          nav.navigate(page);
+          dispatch(loader(false));
+        }
+      });
+  });
+};
+export const getBidListPush = (id, offset) => dispatch => {
+  dispatch(loader(true));
+  AsyncStorage.getItem('company').then(company => {
+    return axios
+      .get(`${API_URL}/company/${company}/user/${id}/transfers/receive`, {
+        params: {limit: 6, offset},
+      })
+      .then(resp => {
+        if (resp.status === 200) {
+          let data = resp.data.data ? resp.data.data : resp.data;
+          dispatch({
+            type: GET_BID_LIST,
+            payload: {
+              acceptList: data,
+              userAcceptId: id,
+              acceptError: false,
+              acceptloadMore: false,
+              offSet: 6,
+            },
+          });
+
+          dispatch(loader(false));
+        }
+      })
+      .catch(e => {
+        if (!e.response.data.success) {
+          let error = getProperError(e.response.data.message.name);
+          dispatch({
+            type: GET_BID_LIST_ERROR,
+            payload: {
+              acceptError: error,
+              userAcceptId: id,
+              acceptloadMore: false,
+              offSet: 6,
+            },
+          });
           dispatch(loader(false));
         }
       });
@@ -1335,6 +1377,18 @@ export const userAcceptBid = (nav, id) => dispatch => {
     nfc('AcceptList', 'AcceptList', false, 'AcceptScaner', 'startPageAccept'),
   );
   nav.navigate('AcceptList');
+};
+export const userAcceptBidPushNotification = id => dispatch => {
+  console.log('Action', id);
+  dispatch({
+    type: SAVE_USER_ACCEPT_BID,
+    payload: {
+      userAcceptBid: id,
+    },
+  });
+  dispatch(
+    nfc('AcceptList', 'AcceptList', false, 'AcceptScaner', 'startPageAccept'),
+  );
 };
 
 export const clearUserAcceptBid = () => dispatch => {

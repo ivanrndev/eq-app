@@ -63,9 +63,8 @@ import ChooseItemPhotoMode from './components/Gallery/ChooseItemPhotoMode';
 import AsyncStorage from '@react-native-community/async-storage';
 import messaging from '@react-native-firebase/messaging';
 import PushNotification from 'react-native-push-notification';
-import {StoreContext} from 'redux-react-hook';
-import {store} from './store';
-import {Provider} from 'react-redux';
+import {userAcceptBidPushNotification} from './actions/actions';
+import {useDispatch} from 'react-redux';
 
 const theme = {
   ...DefaultTheme,
@@ -80,6 +79,7 @@ const theme = {
 const Drawer = createDrawerNavigator();
 
 const App = () => {
+  const dispatch = useDispatch();
   const requestUserPermission = async () => {
     const authStatus = await messaging().requestPermission();
     const enabled =
@@ -112,105 +112,80 @@ const App = () => {
   }, []);
 
   return (
-    <StoreContext.Provider value={store}>
-      <Provider store={store}>
-        <NavigationContainer>
-          <NativeRouter>
-            <PaperProvider theme={theme}>
-              <StatusBar barStyle="light-content" />
-              <Drawer.Navigator
-                drawerContent={props => <CustomDrawer {...props} />}
-                initialRouteName="Auth">
-                <Drawer.Screen name="Auth" component={Auth} />
-                <Drawer.Screen name="Home" component={Main} />
-                <Drawer.Screen name="Ident" component={Ident} />
-                <Drawer.Screen name="IdentInfo" component={IdentInfo} />
-                <Drawer.Screen name="ServiceMenu" component={ServiceMenu} />
-                <Drawer.Screen name="BackScanner" component={BackScanner} />
-                <Drawer.Screen name="BackInfo" component={BackInfo} />
-                <Drawer.Screen name="BackFinish" component={BackFinish} />
-                <Drawer.Screen name="Service" component={Service} />
-                <Drawer.Screen name="ServiceInfo" component={ServiceInfo} />
-                <Drawer.Screen name="ServiceFinish" component={ServiceFinish} />
-                <Drawer.Screen name="WriteOff" component={WriteOff} />
-                <Drawer.Screen name="WriteOffInfo" component={WriteOffInfo} />
-                <Drawer.Screen
-                  name="WriteOffFinish"
-                  component={WriteOffFinish}
-                />
-                <Drawer.Screen name="Marking" component={Marking} />
-                <Drawer.Screen name="MarkingList" component={MarkingList} />
-                <Drawer.Screen name="MarkingScaner" component={MarkingScaner} />
-                <Drawer.Screen name="MarkingFinish" component={MarkingFinish} />
-                <Drawer.Screen name="OnMe" component={OnMe} />
-                <Drawer.Screen name="OnMeInfo" component={OnMeInfo} />
-                <Drawer.Screen name="Transactions" component={Transactions} />
-                <Drawer.Screen name="AcceptGive" component={AcceptGive} />
-                <Drawer.Screen name="GiveList" component={GiveList} />
-                <Drawer.Screen name="GiveScaner" component={GiveScaner} />
-                <Drawer.Screen name="GiveListCheck" component={GiveListCheck} />
-                <Drawer.Screen
-                  name="GiveSetQuantity"
-                  component={GiveSetQuantity}
-                />
-                <Drawer.Screen name="GiveFinish" component={GiveFinish} />
-                <Drawer.Screen name="Transfers" component={Transfers} />
-                <Drawer.Screen name="TransferInfo" component={TransferInfo} />
-                <Drawer.Screen name="Accept" component={Accept} />
-                <Drawer.Screen name="AcceptList" component={AcceptList} />
-                <Drawer.Screen name="AcceptScaner" component={AcceptScaner} />
-                <Drawer.Screen name="AcceptFinish" component={AcceptFinish} />
-                <Drawer.Screen name="Inventory" component={Inventory} />
-                <Drawer.Screen
-                  name="InventoryChooseMode"
-                  component={InventoryChooseMode}
-                />
-                <Drawer.Screen
-                  name="InventoryScaner"
-                  component={InventoryScaner}
-                />
-                <Drawer.Screen name="InventoryDone" component={InventoryDone} />
-                <Drawer.Screen
-                  name="SetInventoryQty"
-                  component={SetInventoryQty}
-                />
-                <Drawer.Screen name="CreateItem" component={CreateItem} />
-                <Drawer.Screen name="Comments" component={Comments} />
-                <Drawer.Screen name="Settings" component={Settings} />
-                <Drawer.Screen name="TransfersEdit" component={TransfersEdit} />
-                <Drawer.Screen
-                  name="TransferScaner"
-                  component={TransferScaner}
-                />
-                <Drawer.Screen
-                  name="TransferSetQty"
-                  component={TransferSetQuantity}
-                />
-                <Drawer.Screen name="NFC" component={NFC} />
-                <Drawer.Screen name="MountList" component={MountList} />
-                <Drawer.Screen
-                  name="MountItemQty"
-                  component={MountItemSetQty}
-                />
-                <Drawer.Screen name="Search" component={Search} />
-                <Drawer.Screen
-                  name="ChooseCommentPhotoMode"
-                  component={ChooseCommentPhotoMode}
-                />
-                <Drawer.Screen
-                  name="ChooseItemPhotoMode"
-                  component={ChooseItemPhotoMode}
-                />
-                <Drawer.Screen
-                  name="MountNoMarking"
-                  component={MountNoMarking}
-                />
-              </Drawer.Navigator>
-            </PaperProvider>
-          </NativeRouter>
-        </NavigationContainer>
-      </Provider>
-    </StoreContext.Provider>
+    <NavigationContainer>
+      <NativeRouter>
+        <PaperProvider theme={theme}>
+          <StatusBar barStyle="light-content" />
+          <Drawer.Navigator
+            drawerContent={props => <CustomDrawer {...props} />}
+            initialRouteName="Auth">
+            <Drawer.Screen name="Auth" component={Auth} />
+            <Drawer.Screen name="Home" component={Main} />
+            <Drawer.Screen name="Ident" component={Ident} />
+            <Drawer.Screen name="IdentInfo" component={IdentInfo} />
+            <Drawer.Screen name="ServiceMenu" component={ServiceMenu} />
+            <Drawer.Screen name="BackScanner" component={BackScanner} />
+            <Drawer.Screen name="BackInfo" component={BackInfo} />
+            <Drawer.Screen name="BackFinish" component={BackFinish} />
+            <Drawer.Screen name="Service" component={Service} />
+            <Drawer.Screen name="ServiceInfo" component={ServiceInfo} />
+            <Drawer.Screen name="ServiceFinish" component={ServiceFinish} />
+            <Drawer.Screen name="WriteOff" component={WriteOff} />
+            <Drawer.Screen name="WriteOffInfo" component={WriteOffInfo} />
+            <Drawer.Screen name="WriteOffFinish" component={WriteOffFinish} />
+            <Drawer.Screen name="Marking" component={Marking} />
+            <Drawer.Screen name="MarkingList" component={MarkingList} />
+            <Drawer.Screen name="MarkingScaner" component={MarkingScaner} />
+            <Drawer.Screen name="MarkingFinish" component={MarkingFinish} />
+            <Drawer.Screen name="OnMe" component={OnMe} />
+            <Drawer.Screen name="OnMeInfo" component={OnMeInfo} />
+            <Drawer.Screen name="Transactions" component={Transactions} />
+            <Drawer.Screen name="AcceptGive" component={AcceptGive} />
+            <Drawer.Screen name="GiveList" component={GiveList} />
+            <Drawer.Screen name="GiveScaner" component={GiveScaner} />
+            <Drawer.Screen name="GiveListCheck" component={GiveListCheck} />
+            <Drawer.Screen name="GiveSetQuantity" component={GiveSetQuantity} />
+            <Drawer.Screen name="GiveFinish" component={GiveFinish} />
+            <Drawer.Screen name="Transfers" component={Transfers} />
+            <Drawer.Screen name="TransferInfo" component={TransferInfo} />
+            <Drawer.Screen name="Accept" component={Accept} />
+            <Drawer.Screen name="AcceptList" component={AcceptList} />
+            <Drawer.Screen name="AcceptScaner" component={AcceptScaner} />
+            <Drawer.Screen name="AcceptFinish" component={AcceptFinish} />
+            <Drawer.Screen name="Inventory" component={Inventory} />
+            <Drawer.Screen
+              name="InventoryChooseMode"
+              component={InventoryChooseMode}
+            />
+            <Drawer.Screen name="InventoryScaner" component={InventoryScaner} />
+            <Drawer.Screen name="InventoryDone" component={InventoryDone} />
+            <Drawer.Screen name="SetInventoryQty" component={SetInventoryQty} />
+            <Drawer.Screen name="CreateItem" component={CreateItem} />
+            <Drawer.Screen name="Comments" component={Comments} />
+            <Drawer.Screen name="Settings" component={Settings} />
+            <Drawer.Screen name="TransfersEdit" component={TransfersEdit} />
+            <Drawer.Screen name="TransferScaner" component={TransferScaner} />
+            <Drawer.Screen
+              name="TransferSetQty"
+              component={TransferSetQuantity}
+            />
+            <Drawer.Screen name="NFC" component={NFC} />
+            <Drawer.Screen name="MountList" component={MountList} />
+            <Drawer.Screen name="MountItemQty" component={MountItemSetQty} />
+            <Drawer.Screen name="Search" component={Search} />
+            <Drawer.Screen
+              name="ChooseCommentPhotoMode"
+              component={ChooseCommentPhotoMode}
+            />
+            <Drawer.Screen
+              name="ChooseItemPhotoMode"
+              component={ChooseItemPhotoMode}
+            />
+            <Drawer.Screen name="MountNoMarking" component={MountNoMarking} />
+          </Drawer.Navigator>
+        </PaperProvider>
+      </NativeRouter>
+    </NavigationContainer>
   );
 };
 

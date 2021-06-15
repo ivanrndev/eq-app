@@ -9,16 +9,58 @@ import T from '../../i18n';
 import {ActivityIndicator, Portal} from 'react-native-paper';
 import Button from '../../components/Buttons/Menu';
 import {copilot, CopilotStep, walkthroughable} from 'react-native-copilot';
-import {changeIsMultiple, helps, nfc} from '../../actions/actions.js';
+import {
+  changeIsMultiple,
+  getBidList,
+  getBidListPush,
+  getBidListPushNotification,
+  getLocations,
+  helps,
+  nfc,
+  userAcceptBid,
+  userAcceptBidPushNotification,
+} from '../../actions/actions.js';
 import {menuSvg} from '../../utils/menuSvg.js';
 import withLayout from '../../hooks/withLayout';
+import messaging from '@react-native-firebase/messaging';
+import {useNavigation} from '@react-navigation/native';
 
 const Main = props => {
+  const navigation = useNavigation();
   const dispatch = useDispatch();
-  const store = useSelector(state => state.auth);
-  const settings = useSelector(state => state.settings);
+  const [store, settings, acceptList] = useSelector(
+    ({auth, settings, accept}) => [auth, settings, accept.acceptList],
+  );
+
   const [myRole, setMyRole] = useState();
   const CopilotText = walkthroughable(View);
+  useEffect(() => {
+    // Assume a message-notification contains a "type" property in the data payload of the screen to open
+
+    messaging().onNotificationOpenedApp(remoteMessage => {
+      console.log(
+        'Notification caused app to open from background state:',
+        remoteMessage,
+      );
+
+      if (remoteMessage.data.type == 1) {
+        dispatch(userAcceptBidPushNotification(remoteMessage.data.id));
+        navigation.navigate('AcceptList');
+      }
+    });
+
+    // Check whether an initial notification is available
+    messaging()
+      .getInitialNotification()
+      .then(remoteMessage => {
+        if (remoteMessage) {
+          if (remoteMessage.data.type == 1) {
+            dispatch(userAcceptBidPushNotification(remoteMessage.data.id));
+            navigation.navigate('AcceptList');
+          }
+        }
+      });
+  }, []);
 
   // check is logOut
   useEffect(() => {

@@ -34,10 +34,13 @@ import {
   changeLocationLoc,
   changeLocationMain,
   clearUserAcceptBid,
+  getBidList,
+  getBidListPush,
   loader,
   makeAccept,
 } from '../../../../actions/actions.js';
 import ItemListCard from '../../../../components/ItemListCard';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const AcceptList = () => {
   const navigation = useNavigation();
@@ -47,14 +50,21 @@ const AcceptList = () => {
     settings,
     scan,
   ]);
+  const [bidItems, setBidItems] = useState(
+    accept.acceptList.filter(item => item._id === accept.userAcceptBid),
+  );
 
-  let bidItems = accept.acceptList.filter(item => {
-    return item._id === accept.userAcceptBid;
-  });
+  useEffect(
+    () =>
+      setBidItems(
+        accept.acceptList.filter(item => item._id === accept.userAcceptBid),
+      ),
+    [accept.acceptList],
+  );
   const [error, setError] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [rejectIds, setRejectIds] = useState(
-    bidItems[0] && bidItems[0].items.map(item => item._id),
+    bidItems[0] ? bidItems[0].items.map(item => item._id) : [],
   );
 
   const objects = settings.locations ? settings.locations : [];
@@ -72,7 +82,13 @@ const AcceptList = () => {
   });
   const isItemSelected = id => acceptedIds.includes(id);
   const acceptItemsCount = accept.length > 0 ? `(${acceptedIds.length})` : '';
-
+  useEffect(
+    () =>
+      AsyncStorage.getItem('userId').then(id =>
+        dispatch(getBidListPush(id, 0)),
+      ),
+    [accept.userAcceptBid],
+  );
   useEffect(() => {
     if (!isEmpty(bidItems)) {
       const filteredBids = bidItems[0].items.filter(x => {
@@ -136,7 +152,7 @@ const AcceptList = () => {
     }
   };
   const handleSelecttAll = () => {
-    if (rejectIds.length === 0) {
+    if (rejectIds && rejectIds.length === 0) {
       setRejectIds(bidItems[0] && bidItems[0].items.map(item => item._id));
       setAcceptedIds([]);
     } else {
