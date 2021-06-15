@@ -370,6 +370,7 @@ export const currentScan = (
   page,
   saveItems = false,
   mount = false,
+  inventory = false,
 ) => dispatch => {
   if (mount) {
     dispatch({
@@ -382,7 +383,7 @@ export const currentScan = (
       type: SAVE_CURRENT_SCAN,
       payload: {currentScan: id, isNewScan: false},
     });
-    dispatch(scanInfo(id, nav, page, saveItems));
+    dispatch(scanInfo(id, nav, page, saveItems, false, inventory));
   }
 };
 
@@ -463,6 +464,7 @@ export const scanInfo = (
   page,
   saveItems,
   mount = false,
+  inventory = false,
 ) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
@@ -489,6 +491,9 @@ export const scanInfo = (
           } else {
             if (saveItems) {
               let checkErrors = actionCheckError(resp.data);
+              if (inventory) {
+                checkErrors = false;
+              }
               if (checkErrors) {
                 dispatch({
                   type: ERROR_CURRENT_SCAN_INFO,
@@ -1379,7 +1384,6 @@ export const userAcceptBid = (nav, id) => dispatch => {
   nav.navigate('AcceptList');
 };
 export const userAcceptBidPushNotification = id => dispatch => {
-  console.log('Action', id);
   dispatch({
     type: SAVE_USER_ACCEPT_BID,
     payload: {

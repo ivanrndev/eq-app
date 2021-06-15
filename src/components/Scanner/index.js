@@ -91,6 +91,8 @@ const Scanner = props => {
             props.nav,
             props.page,
             props.saveItems,
+            false,
+            settings.swithCamera === 'InventoryScaner',
           ),
         );
         // } else {

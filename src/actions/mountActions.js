@@ -39,7 +39,6 @@ export const deleteItemFromMountList = id => dispatch => {
 };
 
 export const mountItems = (parent, items, navigation, page) => dispatch => {
-  console.log('ACTION', parent, items);
   AsyncStorage.getItem('company').then(company => {
     return axios
       .put(`${API_URL}/company/${company}/item/mount`, {
