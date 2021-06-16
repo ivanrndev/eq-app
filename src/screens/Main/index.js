@@ -11,13 +11,8 @@ import Button from '../../components/Buttons/Menu';
 import {copilot, CopilotStep, walkthroughable} from 'react-native-copilot';
 import {
   changeIsMultiple,
-  getBidList,
-  getBidListPush,
-  getBidListPushNotification,
-  getLocations,
   helps,
   nfc,
-  userAcceptBid,
   userAcceptBidPushNotification,
 } from '../../actions/actions.js';
 import {menuSvg} from '../../utils/menuSvg.js';
@@ -38,11 +33,6 @@ const Main = props => {
     // Assume a message-notification contains a "type" property in the data payload of the screen to open
 
     messaging().onNotificationOpenedApp(remoteMessage => {
-      console.log(
-        'Notification caused app to open from background state:',
-        remoteMessage,
-      );
-
       if (remoteMessage.data.type == 1) {
         dispatch(userAcceptBidPushNotification(remoteMessage.data.id));
         navigation.navigate('AcceptList');
