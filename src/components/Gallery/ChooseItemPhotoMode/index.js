@@ -15,13 +15,17 @@ const ChooseItemPhotoMode = () => {
   const dispatch = useDispatch();
   const didMount = useRef(true);
   const [newPhoto, setNewPhoto] = useState([]);
-  const [itemInfo, currentParent, goBackPageGallery] = useSelector(({scan}) => [
-    scan.scanInfo,
-    scan.currentParent,
-    scan.goBackPageGallery,
-  ]);
+  const [itemInfo, currentParent, goBackPageGallery, onMeId] = useSelector(
+    ({scan, onMe}) => [
+      scan.scanInfo,
+      scan.currentParent,
+      scan.goBackPageGallery,
+      onMe.myCurrentId,
+    ],
+  );
 
   const id = itemInfo._id ?? currentParent;
+  const itemId = !!id ? id : onMeId;
   const itemPhotos = itemInfo.photos ?? [];
   const maxPhotoCount = 8;
   const maxAddPhotoCount = maxPhotoCount - itemPhotos.length;
@@ -42,7 +46,7 @@ const ChooseItemPhotoMode = () => {
       return;
     }
     if (!isEmpty(newPhoto)) {
-      dispatch(addItemsPhoto(id, photos, goBackPageGallery, navigation));
+      dispatch(addItemsPhoto(itemId, photos, goBackPageGallery, navigation));
     }
   }, [newPhoto]);
 
