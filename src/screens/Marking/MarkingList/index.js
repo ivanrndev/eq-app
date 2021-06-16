@@ -94,7 +94,7 @@ const MarkingList = props => {
                           ),
                         )
                       }>
-                      <ItemListCard item={item} isMarking={true} />
+                      <ItemListCard item={item} isResponsibleShown={true} />
                     </Card>
                   ))}
               </ScrollView>

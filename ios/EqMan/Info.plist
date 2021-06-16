@@ -37,7 +37,11 @@
 	<true/>
 	<key>NFCReaderUsageDescription</key>
 	<string>YOUR_PRIVACY_DESCRIPTION</string>
-	<key>NSAppTransportSecurity</key>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+    <array>
+        <string>org.reactjs.native.example.EqMan</string>
+    </array>
+ <key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSExceptionDomains</key>
 		<dict>

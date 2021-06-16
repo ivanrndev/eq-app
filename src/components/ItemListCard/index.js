@@ -9,11 +9,10 @@ const ItemListCard = ({
   item,
   width,
   isPriceShown = true,
-  isMarking = false,
+  isResponsibleShown = false,
   children,
 }) => {
   const {currency} = useQuantityUnitsAndCurrency();
-
   return (
     <Card.Content style={{width}}>
       {item.metadata.title ? (
@@ -71,7 +70,7 @@ const ItemListCard = ({
         </>
       )}
 
-      {isMarking && item.person ? (
+      {isResponsibleShown && item.person ? (
         <Paragraph style={styles.paragraph}>
           {T.t('responsible')}:
           {` ${item.person.firstName}  ${item.person.lastName}`}

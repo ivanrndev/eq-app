@@ -6,20 +6,46 @@ import T from '../../../../i18n';
 import Appbar from '../../../../components/Appbar';
 import Scanner from '../../../../components/Scanner';
 import {useSelector} from 'react-redux';
-import {searchMyItem} from '../../../../actions/actions';
+import {searchMyCompanyItems, searchMyItem} from '../../../../actions/actions';
 import {Portal, Snackbar} from 'react-native-paper';
 import {getGiveMessageError} from '../../../../utils/helpers';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const GiveScaner = props => {
-  const [onMeList, err] = useSelector(({onMe, scan}) => [
-    onMe.myList,
+  const [err, companyItemList] = useSelector(({onMe, scan, companyItems}) => [
     scan.scanInfoError,
+    companyItems.myCompanyList,
   ]);
   const [scaner, setScaner] = useState(false);
 
   const [isSnackBar, setIsSnackBar] = useState(false);
+  const [id, setId] = useState();
+  const [role, setRole] = useState();
   const [error, setError] = useState('');
-  const list = onMeList.filter(item => item.transfer === null);
+
+  const [list, setList] = useState([]);
+  AsyncStorage.getItem('userId').then(resp => setId(resp));
+  AsyncStorage.getItem('role').then(resp => setRole(resp));
+
+  useEffect(() => {
+    if (role === 'root' || role === 'admin') {
+      setList(
+        companyItemList.filter(
+          item => !item.is_bun && !item.repair && item.transfer === null,
+        ),
+      );
+    } else {
+      setList(
+        companyItemList.filter(item =>
+          item.person &&
+          (!item.is_bun && !item.repair && item.transfer === null)
+            ? item.person._id === id
+            : '',
+        ),
+      );
+    }
+  }, [companyItemList]);
+
   useFocusEffect(
     useCallback(() => {
       setScaner(true);
@@ -56,7 +82,7 @@ const GiveScaner = props => {
         typeSwitchNFC={true}
         search={true}
         list={list}
-        listAction={searchMyItem}
+        listAction={searchMyCompanyItems}
         pageToChosenItem="GiveListCheck"
         isSearchForGiveItem={true}
         giveSearch={true}

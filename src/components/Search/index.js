@@ -82,7 +82,10 @@ const Search = ({
             style={styles.card}
             onPress={() => handleCurrentScan(item)}
             key={item._id}>
-            <ItemListCard item={item} />
+            <ItemListCard
+              item={item}
+              isResponsibleShown={pageToChosenItem === 'GiveListCheck'}
+            />
           </Card>
         ))}
       </KeyboardAwareScrollView>
