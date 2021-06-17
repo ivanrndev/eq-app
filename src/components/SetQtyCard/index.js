@@ -6,12 +6,22 @@ import DarkButton from '../Buttons/DarkButton';
 import {Card, IconButton} from 'react-native-paper';
 import React from 'react';
 
-const SetQtyCard = ({item, handleChangeQty, deleteItem, setItemQty}) => {
+const SetQtyCard = ({
+  item,
+  handleChangeQty,
+  deleteItem,
+  setItemQty,
+  isResponsibleShown,
+}) => {
   const isQtyBtnShow = item =>
     item.batch && +item.batch.quantity !== 1 && !setItemQty(item._id);
+
   return (
     <Card style={styles.card} key={item._id}>
-      <ItemListCard item={item} isPriceShown={false}>
+      <ItemListCard
+        item={item}
+        isPriceShown={false}
+        isResponsibleShown={isResponsibleShown}>
         {setItemQty(item._id) && (
           <View style={styles.giveArea}>
             <Text style={styles.cardTitle}>

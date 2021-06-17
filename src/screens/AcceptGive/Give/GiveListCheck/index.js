@@ -153,6 +153,7 @@ const GiveListCheck = props => {
               deleteItem={deleteItem}
               handleChangeQty={handleChangeQty}
               setItemQty={setItemQty}
+              isResponsibleShown={true}
             />
           ))}
         </ScrollView>

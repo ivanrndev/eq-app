@@ -490,33 +490,44 @@ export const scanInfo = (
             }
           } else {
             if (saveItems) {
-              let checkErrors = actionCheckError(resp.data);
-              if (inventory) {
-                checkErrors = false;
-              }
-              if (checkErrors) {
-                dispatch({
-                  type: ERROR_CURRENT_SCAN_INFO,
-                  payload: {
-                    scanInfoError: checkErrors,
-                    selectGiveId: resp.data._id,
-                  },
+              AsyncStorage.getItem('userId').then(userId => {
+                AsyncStorage.getItem('role').then(userRole => {
+                  const isOwner =
+                    userRole !== 'root' &&
+                    userRole !== 'admin' &&
+                    userId !== resp.data.person._id;
+                  let checkErrors = actionCheckError(resp.data, isOwner);
+
+                  if (inventory) {
+                    checkErrors = false;
+                  }
+                  if (checkErrors) {
+                    dispatch({
+                      type: ERROR_CURRENT_SCAN_INFO,
+                      payload: {
+                        scanInfoError: checkErrors,
+                        selectGiveId: resp.data._id,
+                      },
+                    });
+                    dispatch(loader(false));
+                  } else {
+                    let role = resp.data.person
+                      ? resp.data.person.role
+                      : 'none';
+                    dispatch({
+                      type: SAVE_GIVE_ITEM_INFO_LIST,
+                      payload: {
+                        scanGiveList: resp.data,
+                        scanUserRole: role,
+                        selectGiveId: resp.data._id,
+                        scanInfoError: false,
+                        scanInfo: resp.data,
+                      },
+                    });
+                    dispatch(loader(false));
+                  }
                 });
-                dispatch(loader(false));
-              } else {
-                let role = resp.data.person ? resp.data.person.role : 'none';
-                dispatch({
-                  type: SAVE_GIVE_ITEM_INFO_LIST,
-                  payload: {
-                    scanGiveList: resp.data,
-                    scanUserRole: role,
-                    selectGiveId: resp.data._id,
-                    scanInfoError: false,
-                    scanInfo: resp.data,
-                  },
-                });
-                dispatch(loader(false));
-              }
+              });
             } else {
               dispatch({
                 type: SAVE_CURRENT_SCAN_INFO,

@@ -339,7 +339,7 @@ export const getProperErrorTransfer = (error, id, isGive = true) => {
   return errorMessage;
 };
 
-export const actionCheckError = item => {
+export const actionCheckError = (item, isOwner = false) => {
   if (item.is_ban) {
     return 'IsBan';
   }
@@ -348,6 +348,9 @@ export const actionCheckError = item => {
   }
   if (item.transfer) {
     return 'InTransfer';
+  }
+  if (isOwner) {
+    return 'Forbidden';
   }
 };
 export const getMountTransferError = item => {

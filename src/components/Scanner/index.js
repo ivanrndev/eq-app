@@ -25,6 +25,7 @@ import {isEmpty} from 'lodash';
 // redux and actions
 import {useDispatch, useSelector} from 'react-redux';
 import {currentScan, dialogInput, loader} from '../../actions/actions.js';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const Scanner = props => {
   const dispatch = useDispatch();
@@ -41,6 +42,11 @@ const Scanner = props => {
   const [isOpen, setIsOpen] = useState(false);
   const keyboardShowListener = useRef(null);
   const keyboardHideListener = useRef(null);
+  const [role, setRole] = useState('');
+
+  useEffect(() => {
+    AsyncStorage.getItem('role').then(resp => setRole(resp));
+  }, []);
 
   useEffect(() => {
     keyboardShowListener.current = Keyboard.addListener('keyboardDidShow', () =>
@@ -80,14 +86,13 @@ const Scanner = props => {
         // let finishFilterId = finishRegular.exec(e.data);
         // if (finishFilterId) {
         let finishFilterId = e.data;
-
+        console.log('SCANNER', role);
         dispatch(dialogInput(false));
         setIsSnackbar(false);
         dispatch(loader(true));
         dispatch(
           currentScan(
             finishFilterId,
-            // finishFilterId[0],
             props.nav,
             props.page,
             props.saveItems,
@@ -95,10 +100,6 @@ const Scanner = props => {
             settings.swithCamera === 'InventoryScaner',
           ),
         );
-        // } else {
-        //   setErrorText(T.t('wrong_format_info'));
-        //   setIsSnackbar(true);
-        // }
       }
     }
   };

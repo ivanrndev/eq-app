@@ -105,8 +105,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-  },
-  wrap: {
     marginBottom: 100,
   },
   search: {
