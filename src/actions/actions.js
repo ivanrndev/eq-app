@@ -406,6 +406,7 @@ export const getSearchItem = (
       .get(`${API_URL}/company/${company}/item/${id}/detailed`)
       .then(resp => {
         if (resp.status === 200) {
+          console.log('GET RESP', resp);
           let checkErrors = actionCheckError(resp.data);
           const isRepairItem =
             page === 'BackInfo' && checkErrors === 'InRepair';

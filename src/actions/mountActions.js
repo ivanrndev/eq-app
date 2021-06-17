@@ -46,12 +46,12 @@ export const mountItems = (parent, items, navigation, page) => dispatch => {
         parent,
       })
       .then(resp => {
+        console.log('RESP MOUNT', resp);
         if (resp.status === 200) {
           dispatch(loader(false));
           dispatch({
             type: MOUNT_ITEMS,
           });
-          z;
         }
       })
       .then(() => {
