@@ -9,23 +9,19 @@ import {useSelector} from 'react-redux';
 import {searchMyCompanyItems, searchMyItem} from '../../../../actions/actions';
 import {Portal, Snackbar} from 'react-native-paper';
 import {getGiveMessageError} from '../../../../utils/helpers';
-import AsyncStorage from '@react-native-community/async-storage';
+import {useUserData} from '../../../../hooks/useUserData';
 
 const GiveScaner = props => {
   const [err, companyItemList] = useSelector(({onMe, scan, companyItems}) => [
     scan.scanInfoError,
     companyItems.myCompanyList,
   ]);
+  const {role, userId} = useUserData();
   const [scaner, setScaner] = useState(false);
-
   const [isSnackBar, setIsSnackBar] = useState(false);
-  const [id, setId] = useState();
-  const [role, setRole] = useState();
   const [error, setError] = useState('');
 
   const [list, setList] = useState([]);
-  AsyncStorage.getItem('userId').then(resp => setId(resp));
-  AsyncStorage.getItem('role').then(resp => setRole(resp));
 
   useEffect(() => {
     if (role === 'root' || role === 'admin') {
@@ -39,7 +35,7 @@ const GiveScaner = props => {
         companyItemList.filter(item =>
           item.person &&
           (!item.is_bun && !item.repair && item.transfer === null)
-            ? item.person._id === id
+            ? item.person._id === userId
             : '',
         ),
       );

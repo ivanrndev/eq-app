@@ -55,7 +55,6 @@ const Scanner = props => {
       keyboardHideListener.current.remove();
     };
   });
-
   useEffect(() => {
     // let regular = /^[a-z]{1,2}[0-9]{4,5}$/g;
     // let filterId = regular.exec(customId);
@@ -67,7 +66,6 @@ const Scanner = props => {
   }, [customId]);
 
   const text = props.text ? T.t('input_detail_new') : T.t('input_detail');
-
   const onSuccess = e => {
     if (store.isNewScan) {
       let cyrillicRegular = /[а-яА-ЯЁё]/;
@@ -105,7 +103,17 @@ const Scanner = props => {
   const handelCurrentScan = () => {
     dispatch(dialogInput(false));
     dispatch(loader(true));
-    dispatch(currentScan(customId, props.nav, props.page, props.saveItems));
+    dispatch(
+      currentScan(
+        customId,
+        props.nav,
+        props.page,
+        props.saveItems,
+        false,
+        false,
+        settings.swithCamera === 'WriteOff',
+      ),
+    );
   };
 
   return (

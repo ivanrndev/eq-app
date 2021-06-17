@@ -103,6 +103,7 @@ import {
   USER_CURRENT_ID,
 } from './actionsType';
 import {setTokenToDataBase} from '../utils/pushNotifications';
+import T from '../i18n';
 
 // Settings
 export const nfc = (
@@ -371,6 +372,7 @@ export const currentScan = (
   saveItems = false,
   mount = false,
   inventory = false,
+  isWriteOff = false,
 ) => dispatch => {
   if (mount) {
     dispatch({
@@ -383,7 +385,7 @@ export const currentScan = (
       type: SAVE_CURRENT_SCAN,
       payload: {currentScan: id, isNewScan: false},
     });
-    dispatch(scanInfo(id, nav, page, saveItems, false, inventory));
+    dispatch(scanInfo(id, nav, page, saveItems, false, inventory, isWriteOff));
   }
 };
 
@@ -465,6 +467,7 @@ export const scanInfo = (
   saveItems,
   mount = false,
   inventory = false,
+  isWriteOff = false,
 ) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
@@ -488,6 +491,36 @@ export const scanInfo = (
               });
               dispatch(loader(false));
             }
+          }
+          if (isWriteOff) {
+            AsyncStorage.getItem('userId').then(userId => {
+              AsyncStorage.getItem('role').then(userRole => {
+                const isNotOwner =
+                  userRole !== 'root' &&
+                  userRole !== 'admin' &&
+                  userId !== resp.data.person._id;
+                if (isNotOwner) {
+                  dispatch({
+                    type: ERROR_CURRENT_SCAN_INFO,
+                    payload: {
+                      scanInfoError: 'Forbidden',
+                      selectGiveId: resp.data._id,
+                    },
+                  });
+                } else {
+                  dispatch({
+                    type: SAVE_CURRENT_SCAN_INFO,
+                    payload: {
+                      scanInfo: resp.data,
+                      scanInfoError: false,
+                      selectGiveId: resp.data._id,
+                      isInfoOpen: true,
+                    },
+                  });
+                  dispatch(loader(false));
+                }
+              });
+            });
           } else {
             if (saveItems) {
               AsyncStorage.getItem('userId').then(userId => {

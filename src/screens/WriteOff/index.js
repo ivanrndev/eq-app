@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
 import {StyleSheet, View, Dimensions, SafeAreaView} from 'react-native';
 import T from '../../i18n';
@@ -11,10 +11,22 @@ import {useUserData} from '../../hooks/useUserData';
 
 const WriteOff = props => {
   const [scaner, setScaner] = useState(false);
-
+  const [list, setList] = useState(false);
+  const {role, userId} = useUserData();
   const companyItemList = useSelector(
     ({companyItems}) => companyItems.myCompanyList,
   );
+  useEffect(() => {
+    if (role === 'root' || role === 'admin') {
+      setList(companyItemList);
+    } else {
+      setList(
+        companyItemList.filter(item =>
+          item.person ? item.person._id === userId : '',
+        ),
+      );
+    }
+  }, [companyItemList]);
   useFocusEffect(
     useCallback(() => {
       setScaner(true);
@@ -35,7 +47,7 @@ const WriteOff = props => {
         switch={true}
         typeSwitchNFC={true}
         search={true}
-        list={companyItemList}
+        list={list}
         listAction={searchMyCompanyItems}
         pageToChosenItem="WriteOffInfo"
       />
