@@ -31,7 +31,6 @@ import {
   fontSizer,
   handleNavigateToSingleItemPage,
 } from '../../../utils/helpers.js';
-import AsyncStorage from '@react-native-community/async-storage';
 import {
   addItemToMountList,
   deleteItemFromMountList,
@@ -39,6 +38,7 @@ import {
 } from '../../../actions/mountActions';
 import ItemListCard from '../../../components/ItemListCard';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {useUserData} from '../../../hooks/useUserData';
 
 export const MountList = props => {
   const dispatch = useDispatch();
@@ -60,12 +60,8 @@ export const MountList = props => {
   const [deleteId, setDeleteId] = useState(false);
   const editItems = store.scanInfo.items;
   const [isText, setIsText] = useState('');
+  const {userId} = useUserData();
 
-  const [userId, setUserId] = useState('');
-
-  useEffect(() => {
-    AsyncStorage.getItem('userId').then(id => setUserId(id));
-  }, []);
   const [searchList, setSearchList] = useState([]);
   const isAvailableToMount = item =>
     item._id !== store.currentParent &&
@@ -171,7 +167,6 @@ export const MountList = props => {
 
   const handleDeleteItemFromMountList = id =>
     dispatch(deleteItemFromMountList(id));
-
   const handleMount = () => {
     dispatch(loader(true));
     dispatch(

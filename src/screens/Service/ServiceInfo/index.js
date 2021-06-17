@@ -21,12 +21,13 @@ import {
   sendToServices,
 } from '../../../actions/actions.js';
 import {getProperErrorMessage, getStatus} from '../../../utils/helpers.js';
-import AsyncStorage from '@react-native-community/async-storage';
 import ItemSetQuantityArea from '../../../components/ItemSetQuantityArea';
 import TariffLimitModal from '../../../components/TariffLimitModal';
+import {useUserData} from '../../../hooks/useUserData';
 
 export const ServiceInfo = props => {
   const dispatch = useDispatch();
+  const {role} = useUserData();
   const [store, settings, show, limit, totalItemsCount] = useSelector(
     ({scan, settings, auth, companyItems}) => [
       scan,
@@ -43,7 +44,7 @@ export const ServiceInfo = props => {
   const error = getProperErrorMessage(store.scanInfoError, store.currentScan);
   const keyboardMarginTop = 50;
   const metaData = store.scanInfo.metadata;
-  const [role, setRole] = useState();
+
   const [reason, setReason] = useState('');
   const [stockroom, setStockroom] = useState('');
   const [quantityToService, setQuantityForService] = useState(
@@ -87,18 +88,6 @@ export const ServiceInfo = props => {
       setIsModalShown(true);
     }
   };
-
-  const getRole = async () => {
-    try {
-      const value = await AsyncStorage.getItem('role');
-      if (value !== null) {
-        setRole(value);
-      }
-    } catch (e) {
-      console.log('no role');
-    }
-  };
-  getRole();
 
   return (
     <>

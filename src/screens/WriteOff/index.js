@@ -7,9 +7,11 @@ import Appbar from '../../components/Appbar';
 import Scanner from '../../components/Scanner';
 import {searchMyCompanyItems} from '../../actions/actions';
 import {useSelector} from 'react-redux';
+import {useUserData} from '../../hooks/useUserData';
 
 const WriteOff = props => {
   const [scaner, setScaner] = useState(false);
+
   const companyItemList = useSelector(
     ({companyItems}) => companyItems.myCompanyList,
   );

@@ -7,7 +7,6 @@ import {
   View,
 } from 'react-native';
 import {Card, Paragraph, Title} from 'react-native-paper';
-import AsyncStorage from '@react-native-community/async-storage';
 import T from '../../i18n';
 // components
 import Appbar from '../../components/Appbar';
@@ -19,6 +18,7 @@ import {
   getUserList,
   saveCurrentUserInventory,
 } from '../../actions/actions.js';
+import {useUserData} from '../../hooks/useUserData';
 
 const Inventory = props => {
   const dispatch = useDispatch();
@@ -27,26 +27,23 @@ const Inventory = props => {
   let error = getProperErrorMessage(users.getUsetError);
   const [userLists, setUserLists] = useState(users.userList);
   const [showText, setShowText] = useState(true);
+  const {role, userId} = useUserData();
   useEffect(() => {
     dispatch(getUserList(props.nav, '', 'Inventory'));
     dispatch(clearInventory());
   }, []);
 
   useEffect(() => {
-    AsyncStorage.getItem('role').then(role => {
-      if (role === 'worker') {
-        AsyncStorage.getItem('userId').then(userId => {
-          let newList = users.userList.filter(item => {
-            return item._id === userId;
-          });
-          setShowText(false);
-          setUserLists(newList);
-        });
-      } else {
-        setUserLists(users.userList);
-        setShowText(true);
-      }
-    });
+    if (role === 'worker') {
+      let newList = users.userList.filter(item => {
+        return item._id === userId;
+      });
+      setShowText(false);
+      setUserLists(newList);
+    } else {
+      setUserLists(users.userList);
+      setShowText(true);
+    }
   }, [users.userList]);
 
   return (

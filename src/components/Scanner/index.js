@@ -1,22 +1,22 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
-  View,
-  StyleSheet,
   Dimensions,
-  KeyboardAvoidingView,
   Keyboard,
+  KeyboardAvoidingView,
+  StyleSheet,
+  View,
 } from 'react-native';
 import T from '../../i18n';
 import {RNCamera} from 'react-native-camera';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {
-  TextInput,
-  Portal,
-  Dialog,
-  Snackbar,
   ActivityIndicator,
+  Dialog,
+  Portal,
+  Snackbar,
+  TextInput,
 } from 'react-native-paper';
-import {minY, maxY, minX, maxX} from '../../utils/markerParams.js';
+import {maxX, maxY, minX, minY} from '../../utils/markerParams.js';
 import DarkButton from '../../components/Buttons/DarkButton/';
 import TransparentButton from '../../components/Buttons/TransparentButton';
 import {fontSizer} from '../../utils/helpers.js';
@@ -25,7 +25,6 @@ import {isEmpty} from 'lodash';
 // redux and actions
 import {useDispatch, useSelector} from 'react-redux';
 import {currentScan, dialogInput, loader} from '../../actions/actions.js';
-import AsyncStorage from '@react-native-community/async-storage';
 
 const Scanner = props => {
   const dispatch = useDispatch();
@@ -42,11 +41,6 @@ const Scanner = props => {
   const [isOpen, setIsOpen] = useState(false);
   const keyboardShowListener = useRef(null);
   const keyboardHideListener = useRef(null);
-  const [role, setRole] = useState('');
-
-  useEffect(() => {
-    AsyncStorage.getItem('role').then(resp => setRole(resp));
-  }, []);
 
   useEffect(() => {
     keyboardShowListener.current = Keyboard.addListener('keyboardDidShow', () =>
@@ -86,7 +80,7 @@ const Scanner = props => {
         // let finishFilterId = finishRegular.exec(e.data);
         // if (finishFilterId) {
         let finishFilterId = e.data;
-        console.log('SCANNER', role);
+
         dispatch(dialogInput(false));
         setIsSnackbar(false);
         dispatch(loader(true));

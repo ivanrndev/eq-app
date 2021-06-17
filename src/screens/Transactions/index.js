@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   StyleSheet,
   View,
@@ -15,7 +15,7 @@ import {
   Button,
 } from 'react-native-paper';
 import T from '../../i18n';
-import AsyncStorage from '@react-native-community/async-storage';
+
 // components
 import Appbar from '../../components/Appbar';
 import {getProperErrorMessage} from '../../utils/helpers.js';
@@ -24,25 +24,14 @@ import {getDescription} from '../../utils/helpers.js';
 import {useDispatch, useSelector} from 'react-redux';
 import {loadMoreTransactions, getTransactions} from '../../actions/actions.js';
 import {isEmpty} from 'lodash';
+import {useUserData} from '../../hooks/useUserData';
 
 const Transactions = props => {
-  const [role, setRole] = useState();
+  const {role} = useUserData();
   const transactions = useSelector(state => state.transactions);
   let error = getProperErrorMessage(transactions.transactionError);
   let showEmptyError = !transactions.transactionList.length;
   const dispatch = useDispatch();
-
-  const getRole = async () => {
-    try {
-      const value = await AsyncStorage.getItem('role');
-      if (value !== null) {
-        setRole(value);
-      }
-    } catch (e) {
-      console.log('no role');
-    }
-  };
-  getRole();
 
   const getMoreItems = () => {
     dispatch(loadMoreTransactions(true));

@@ -20,8 +20,8 @@ import {
   sendToWriteOff,
 } from '../../../actions/actions.js';
 import {getProperErrorMessage, getStatus} from '../../../utils/helpers.js';
-import AsyncStorage from '@react-native-community/async-storage';
 import ItemSetQuantityArea from '../../../components/ItemSetQuantityArea';
+import {useUserData} from '../../../hooks/useUserData';
 
 export const WriteOffInfo = props => {
   const dispatch = useDispatch();
@@ -33,7 +33,7 @@ export const WriteOffInfo = props => {
   const units = store.scanInfo.batch
     ? store.scanInfo.batch.units
     : T.t('piece');
-  const [role, setRole] = useState();
+  const {role} = useUserData();
   const [quantityToWireOff, setQuantityToWireOff] = useState(1);
   const isEnteredQuantityValid =
     quantityToWireOff <= quantity || quantityToWireOff <= 0;
@@ -58,18 +58,6 @@ export const WriteOffInfo = props => {
     props.navigation.navigate(settings.startPageWriteOff);
     dispatch(allowNewScan(true));
   };
-
-  const getRole = async () => {
-    try {
-      const value = await AsyncStorage.getItem('role');
-      if (value !== null) {
-        setRole(value);
-      }
-    } catch (e) {
-      console.log('no role');
-    }
-  };
-  getRole();
 
   return (
     <>

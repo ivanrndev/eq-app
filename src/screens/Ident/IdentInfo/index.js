@@ -17,13 +17,13 @@ import {
 } from '../../../actions/actions.js';
 import T from '../../../i18n';
 import {fontSizer, getStatus} from '../../../utils/helpers.js';
-import AsyncStorage from '@react-native-community/async-storage';
 import DarkButton from '../../../components/Buttons/DarkButton';
 import ItemCardQuantityAndPrice from '../../../components/ItemCardQuantityAndPrice';
 import {getComments} from '../../../actions/commentsAction';
 import GalleryForItem from '../../../components/Gallery/GalleryForItem';
 import Gallery from '../../../components/Gallery';
 import {addMountParent} from '../../../actions/mountActions';
+import {useUserData} from '../../../hooks/useUserData';
 
 export const IdentInfo = props => {
   const dispatch = useDispatch();
@@ -34,11 +34,10 @@ export const IdentInfo = props => {
   const width = Dimensions.get('window').width;
   const [isOpen, setIsOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(false);
-  const [role, setRole] = useState();
-  const [userId, setUserId] = useState();
+
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [chosenPhoto, setChosenPhoto] = useState(0);
-
+  const {role, userId} = useUserData();
   const itemPhotos = store.scanInfo.photos ?? [];
   let nameOfProduct = '';
   if (metaData) {
@@ -71,29 +70,6 @@ export const IdentInfo = props => {
     dispatch(loader(true));
     dispatch(getTransactions(itemId, props.navigation, 0));
   };
-  const getRole = async () => {
-    try {
-      const value = await AsyncStorage.getItem('role');
-      if (value !== null) {
-        setRole(value);
-      }
-    } catch (e) {
-      console.log('no role');
-    }
-  };
-  getRole();
-
-  const getUserId = async () => {
-    try {
-      const value = await AsyncStorage.getItem('userId');
-      if (value !== null) {
-        setUserId(value);
-      }
-    } catch (e) {
-      console.log('no role');
-    }
-  };
-  getUserId();
 
   const deleteItem = () => {
     setIsOpen(false);

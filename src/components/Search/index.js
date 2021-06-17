@@ -84,7 +84,10 @@ const Search = ({
             key={item._id}>
             <ItemListCard
               item={item}
-              isResponsibleShown={pageToChosenItem === 'GiveListCheck'}
+              isResponsibleShown={
+                pageToChosenItem === 'GiveListCheck' ||
+                pageToChosenItem === 'WriteOffInfo'
+              }
             />
           </Card>
         ))}

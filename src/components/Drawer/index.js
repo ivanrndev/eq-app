@@ -1,32 +1,24 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
-  View,
-  Text,
-  SafeAreaView,
-  StyleSheet,
   Dimensions,
   Linking,
+  SafeAreaView,
   Share,
+  StyleSheet,
+  Text,
+  View,
 } from 'react-native';
 import {Button} from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
 import {useDispatch} from 'react-redux';
-import {logOut, helps} from '../../actions/actions.js';
+import {helps, logOut} from '../../actions/actions.js';
 import T from '../../i18n';
+import {useUserData} from '../../hooks/useUserData';
 
 const CustomDrawer = props => {
   const dispatch = useDispatch();
-  const [role, setRole] = useState();
-  const [email, setEmail] = useState();
-  const [lastName, setLastName] = useState();
-  const [firstName, setFirstName] = useState();
 
-  AsyncStorage.getItem('role').then(myRole => setRole(myRole));
-  AsyncStorage.getItem('email').then(myEmail => setEmail(myEmail));
-  AsyncStorage.getItem('lastName').then(myLastName => setLastName(myLastName));
-  AsyncStorage.getItem('firstName').then(myFirstName =>
-    setFirstName(myFirstName),
-  );
+  const {role, email, lastName, firstName} = useUserData();
 
   const ifRole = !(role === 'user' || role === 'worker');
 

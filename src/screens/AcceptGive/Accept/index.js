@@ -15,7 +15,6 @@ import {
   ActivityIndicator,
 } from 'react-native-paper';
 import T from '../../../i18n';
-import AsyncStorage from '@react-native-community/async-storage';
 // components
 import Appbar from '../../../components/Appbar';
 import {
@@ -30,17 +29,16 @@ import {
   acceptloadMoreStatus,
   getLocations,
 } from '../../../actions/actions.js';
+import {useUserData} from '../../../hooks/useUserData';
 
 const Accept = props => {
   const dispatch = useDispatch();
   const accept = useSelector(state => state.accept);
   let error = getProperErrorMessage(accept.acceptError);
-
+  const {userId} = useUserData();
   const getMoreItems = () => {
-    AsyncStorage.getItem('userId').then(userId => {
-      dispatch(acceptloadMoreStatus(true));
-      dispatch(getBidList(props.navigation, userId, accept.offSet));
-    });
+    dispatch(acceptloadMoreStatus(true));
+    dispatch(getBidList(props.navigation, userId, accept.offSet));
   };
 
   let showEmptyError = !accept.acceptList.length;

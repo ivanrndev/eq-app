@@ -15,13 +15,13 @@ import {
   View,
 } from 'react-native';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import Carousel from 'react-native-snap-carousel';
 import T from '../../i18n';
 import {useDispatch, useSelector} from 'react-redux';
 import {deleteItemsPhoto} from '../../actions/addItemPhotoActions';
 import {useNavigation} from '@react-navigation/native';
-import AsyncStorage from '@react-native-community/async-storage';
+import {useUserData} from '../../hooks/useUserData';
 
 const {width} = Dimensions.get('window');
 const image = require('./../../assets/svg/empty.png');
@@ -47,17 +47,11 @@ const Gallery = ({
   const entries = photoList.map(photo => ({illustration: photo.url}));
   const carouselRef = useRef(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [role, setRole] = useState('');
-  const [userId, setUserId] = useState('');
+  const {role, userId} = useUserData();
   const isEditingPhotoAllowed =
     itemInfo.person &&
     (userId === itemInfo.person._id ||
       (role === 'root' || role === 'stockman' || role === 'admin'));
-
-  useEffect(() => {
-    AsyncStorage.getItem('role').then(resp => setRole(resp));
-    AsyncStorage.getItem('userId').then(id => setUserId(id));
-  }, []);
 
   const handleChose = (item, index) => {
     carouselRef.current.snapToItem(index, true, true);

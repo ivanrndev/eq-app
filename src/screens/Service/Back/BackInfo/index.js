@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Dimensions, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {ActivityIndicator, Portal, Title} from 'react-native-paper';
 import T from '../../../../i18n';
@@ -15,6 +15,7 @@ import {
 import {getProperErrorMessage, getStatus} from '../../../../utils/helpers.js';
 import AsyncStorage from '@react-native-community/async-storage';
 import {useQuantityUnitsAndCurrency} from '../../../../hooks/useQuantityUnitsAndCurrency';
+import {useUserData} from '../../../../hooks/useUserData';
 
 export const BackInfo = props => {
   const dispatch = useDispatch();
@@ -23,9 +24,8 @@ export const BackInfo = props => {
   const error = getProperErrorMessage(store.scanInfoError, store.currentScan);
   const show = store.isInfoOpen;
   const metaData = store.scanInfo.metadata;
-  const [role, setRole] = useState();
   const arrayIds = [store.scanInfo._id];
-
+  const {role} = useUserData();
   let nameOfProduct = '';
   if (metaData) {
     nameOfProduct = metaData.title
@@ -44,18 +44,6 @@ export const BackInfo = props => {
     props.navigation.navigate('ServiceMenu');
     dispatch(allowNewScan(true));
   };
-
-  const getRole = async () => {
-    try {
-      const value = await AsyncStorage.getItem('role');
-      if (value !== null) {
-        setRole(value);
-      }
-    } catch (e) {
-      console.log('no role');
-    }
-  };
-  getRole();
 
   return (
     <>

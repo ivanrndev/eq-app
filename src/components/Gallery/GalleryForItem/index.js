@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {isEmpty} from 'lodash';
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -15,6 +15,7 @@ import {useNavigation} from '@react-navigation/native';
 import T from '../../../i18n';
 import {setGoBackPageGallery} from '../../../actions/addItemPhotoActions';
 import AsyncStorage from '@react-native-community/async-storage';
+import {useUserData} from '../../../hooks/useUserData';
 
 const image = require('./../../../assets/svg/empty.png');
 
@@ -30,17 +31,11 @@ const GalleryForItem = ({
 
   const itemPhotos = itemInfo.photos ?? [];
   const bigPhoto = !isEmpty(itemPhotos) && itemPhotos[0];
-  const [role, setRole] = useState('');
-  const [userId, setUserId] = useState('');
+  const {role, userId} = useUserData();
   const isEditingPhotoAllowed =
     itemPhotos.length < 8 &&
     ((itemInfo.person && userId === itemInfo.person._id) ||
       (role === 'root' || role === 'stockman' || role === 'admin'));
-
-  useEffect(() => {
-    AsyncStorage.getItem('role').then(resp => setRole(resp));
-    AsyncStorage.getItem('userId').then(id => setUserId(id));
-  }, []);
 
   const smallPhotos = itemPhotos.length > 1 ? itemPhotos.slice(1) : [];
 

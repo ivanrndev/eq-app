@@ -1,24 +1,14 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Dimensions, StyleSheet, Text, View} from 'react-native';
 import {Card, Portal} from 'react-native-paper';
 import T from '../../i18n';
-import AsyncStorage from '@react-native-community/async-storage';
+
 import TransparentButton from '../Buttons/TransparentButton';
 import DarkButton from '../Buttons/DarkButton';
+import {useUserData} from '../../hooks/useUserData';
 
 export const TariffLimitModal = ({handleClose}) => {
-  const [role, setRole] = useState();
-  const [email, setEmail] = useState();
-  const [lastName, setLastName] = useState();
-  const [firstName, setFirstName] = useState();
-
-  AsyncStorage.getItem('role').then(myRole => setRole(myRole));
-  AsyncStorage.getItem('email').then(myEmail => setEmail(myEmail));
-  AsyncStorage.getItem('lastName').then(myLastName => setLastName(myLastName));
-  AsyncStorage.getItem('firstName').then(myFirstName =>
-    setFirstName(myFirstName),
-  );
-
+  const {role, email, firstName, lastName} = useUserData();
   const isAdminOrStockman = !(role === 'user' || role === 'worker');
 
   return (
