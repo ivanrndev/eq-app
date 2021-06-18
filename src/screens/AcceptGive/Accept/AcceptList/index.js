@@ -11,16 +11,12 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import {Picker} from '@react-native-community/picker';
 import {
   ActivityIndicator,
-  Button,
-  Dialog,
   IconButton,
   Paragraph,
   Portal,
   Snackbar,
-  Text,
 } from 'react-native-paper';
 // components
 import Appbar from '../../../../components/Appbar';
@@ -31,16 +27,14 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   allowNewScan,
   alreadyScannedBids,
-  changeLocationLoc,
-  changeLocationMain,
   clearUserAcceptBid,
-  getBidList,
   getBidListPush,
   loader,
   makeAccept,
 } from '../../../../actions/actions.js';
 import ItemListCard from '../../../../components/ItemListCard';
 import AsyncStorage from '@react-native-community/async-storage';
+import {SelectLocationModal} from '../../SelectLocationModal';
 
 const AcceptList = () => {
   const navigation = useNavigation();
@@ -67,19 +61,9 @@ const AcceptList = () => {
     bidItems[0] ? bidItems[0].items.map(item => item._id) : [],
   );
 
-  const objects = settings.locations ? settings.locations : [];
-
   const [acceptedIds, setAcceptedIds] = useState([]);
   let showEmptyError = !isEmpty(bidItems) ? !bidItems[0].items.length : false;
 
-  const selectedValue = settings.locationMain;
-  const selectedValueLoc = settings.locationLoc;
-
-  const currentLocation = objects.filter(x => {
-    if (x.title === selectedValue) {
-      return x;
-    }
-  });
   const isItemSelected = id => acceptedIds.includes(id);
   const acceptItemsCount = accept.length > 0 ? `(${acceptedIds.length})` : '';
   useEffect(
@@ -260,60 +244,7 @@ const AcceptList = () => {
           {error}
         </Snackbar>
       </View>
-      <Portal>
-        <Dialog visible={showModal} onDismiss={() => setShowModal(false)}>
-          {/* <Dialog.Title>{T.t('object')}</Dialog.Title> */}
-          <Dialog.Content>
-            <View style={styles.container}>
-              <Text style={styles.left}>{T.t('object')}:</Text>
-              <Picker
-                selectedValue={selectedValue}
-                style={styles.picker}
-                onValueChange={(itemValue, itemIndex) => {
-                  dispatch(changeLocationMain(itemValue));
-                }}>
-                <Picker.Item label={T.t('choise')} value="" />
-                {objects.map((item, index) => {
-                  return (
-                    <Picker.Item
-                      key={index}
-                      label={item.title}
-                      value={item.title}
-                    />
-                  );
-                })}
-              </Picker>
-              {!!selectedValue && (
-                <>
-                  <Text style={styles.leftTwo}>{T.t('location')}:</Text>
-                  <Picker
-                    selectedValue={selectedValueLoc}
-                    style={styles.pickerTwo}
-                    onValueChange={(itemValue, itemIndex) => {
-                      dispatch(changeLocationLoc(itemValue));
-                    }}>
-                    <Picker.Item label={T.t('choise')} value="" />
-                    {currentLocation
-                      ? currentLocation[0].locations.map((item, index) => {
-                          return (
-                            <Picker.Item
-                              key={index}
-                              label={item}
-                              value={item}
-                            />
-                          );
-                        })
-                      : null}
-                  </Picker>
-                </>
-              )}
-            </View>
-          </Dialog.Content>
-          <Dialog.Actions>
-            <Button onPress={() => setShowModal(false)}>Done</Button>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
+      <SelectLocationModal setShowModal={setShowModal} showModal={showModal} />
     </>
   );
 };
@@ -357,23 +288,10 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width / 1.1,
     backgroundColor: '#EDF6FF',
   },
-
   title: {
     fontSize: 14,
     paddingLeft: 15,
     textAlign: 'center',
-  },
-  left: {
-    fontSize: 14,
-    paddingLeft: 15,
-    textAlign: 'left',
-    marginBottom: -70,
-  },
-  leftTwo: {
-    fontSize: 14,
-    textAlign: 'left',
-    marginBottom: -95,
-    marginLeft: 20,
   },
   checkBox: {height: 20, marginRight: 3},
   buttons: {
@@ -398,18 +316,6 @@ const styles = StyleSheet.create({
     zIndex: 99,
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
-  },
-  picker: {
-    // marginTop: -45,
-  },
-  pickerTwo: {
-    marginTop: 50,
-    marginBottom: -40,
-  },
-  container: {
-    paddingTop: 25,
-    width: Dimensions.get('window').width / 1.4,
-    height: 'auto',
   },
 });
 
