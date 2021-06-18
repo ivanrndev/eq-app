@@ -66,6 +66,7 @@ const AcceptList = () => {
 
   const isItemSelected = id => acceptedIds.includes(id);
   const acceptItemsCount = accept.length > 0 ? `(${acceptedIds.length})` : '';
+
   useEffect(
     () =>
       AsyncStorage.getItem('userId').then(id =>

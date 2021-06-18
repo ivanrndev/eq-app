@@ -28,15 +28,21 @@ import {SelectLocationModal} from '../../SelectLocationModal';
 const GiveListCheck = props => {
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
-  const [scan, give, settings, limit, totalItemsCount] = useSelector(
-    ({scan, give, settings, auth, companyItems}) => [
-      scan,
-      give,
-      settings,
-      auth.currentCompany.plan && auth.currentCompany.plan.items,
-      companyItems.totalItemsCount,
-    ],
-  );
+  const [
+    scan,
+    give,
+    settings,
+    limit,
+    totalItemsCount,
+    operationsWithApprovement,
+  ] = useSelector(({scan, give, settings, auth, companyItems}) => [
+    scan,
+    give,
+    settings,
+    auth.currentCompany.plan && auth.currentCompany.plan.items,
+    companyItems.totalItemsCount,
+    auth.currentCompany.settings.operationsWithApprovement,
+  ]);
   const [error, setError] = useState('');
   const [isModalShown, setIsModalShown] = useState(false);
 
@@ -160,12 +166,14 @@ const GiveListCheck = props => {
           ))}
         </ScrollView>
         <View style={styles.buttons}>
-          <View style={styles.buttonObject}>
-            <DarkButton
-              text={T.t('select_location')}
-              onPress={() => setShowModal(!showModal)}
-            />
-          </View>
+          {!operationsWithApprovement && (
+            <View style={styles.buttonObject}>
+              <DarkButton
+                text={T.t('select_location')}
+                onPress={() => setShowModal(!showModal)}
+              />
+            </View>
+          )}
           <DarkButton text={T.t('add')} onPress={addMore} />
           {scan.scanGiveList.length > 0 && (
             <TransparentButton
