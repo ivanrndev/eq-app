@@ -39,9 +39,12 @@ const GiveFinish = props => {
   };
 
   const allErrors = useCallback(() => {
-    let errorsMessages = give.transferError.map(error => {
-      return getProperErrorTransfer(error.type, error.code);
-    });
+    let errorsMessages =
+      give && give.transferError
+        ? give.transferError.map(error => {
+            return getProperErrorTransfer(error.type, error.code);
+          })
+        : '';
     setErrors(errorsMessages);
   });
 

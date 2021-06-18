@@ -16,6 +16,7 @@ import TransparentButton from '../../../../components/Buttons/TransparentButton'
 import {useDispatch, useSelector} from 'react-redux';
 import {
   allowNewScan,
+  getLocations,
   getTotalCountMyCompanyItems,
   loader,
   makeTransfer,
@@ -35,6 +36,8 @@ const GiveListCheck = props => {
     limit,
     totalItemsCount,
     operationsWithApprovement,
+    locationMain,
+    locationLoc,
   ] = useSelector(({scan, give, settings, auth, companyItems}) => [
     scan,
     give,
@@ -42,9 +45,12 @@ const GiveListCheck = props => {
     auth.currentCompany.plan && auth.currentCompany.plan.items,
     companyItems.totalItemsCount,
     auth.currentCompany.settings.operationsWithApprovement,
+    settings.locationMain,
+    settings.locationLoc,
   ]);
   const [error, setError] = useState('');
   const [isModalShown, setIsModalShown] = useState(false);
+  const [locationObj, setLocationObj] = useState({object: '', location: ''});
 
   let showEmptyError = !scan.scanGiveList.length;
   const userCurrentId = give.userCurrentId;
@@ -64,10 +70,15 @@ const GiveListCheck = props => {
           id: item._id,
           quantity: item.batch ? item.batch.quantity : 1,
         }));
-
+  useEffect(() => !operationsWithApprovement && dispatch(getLocations()), []);
+  useEffect(
+    () =>
+      !operationsWithApprovement &&
+      setLocationObj({object: locationMain, location: locationLoc}),
+    [locationMain, locationLoc],
+  );
   useEffect(() => dispatch(getTotalCountMyCompanyItems()), [totalItemsCount]);
   const setItemQty = itemId => give.giveList.find(pc => pc.id === itemId);
-
   useEffect(() => {
     const correctItem = scan.scanGiveList.find(
       item => item._id === scan.selectGiveId,
@@ -134,6 +145,7 @@ const GiveListCheck = props => {
         props.navigation,
         [...list, ...give.giveList],
         userCurrentId,
+        locationObj,
       ),
     );
   };

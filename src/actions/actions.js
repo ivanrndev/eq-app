@@ -1168,29 +1168,21 @@ export const updateGiveList = list => dispatch => {
   });
 };
 
-export const makeTransfer = (nav, list, user) => dispatch => {
+export const makeTransfer = (nav, list, user, locationObj) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
       .post(`${API_URL}/transfer/`, {
         item_ids: list,
         recipient: user,
         company_id: company,
+        object: locationObj,
       })
       .then(resp => {
         if (resp.status === 200) {
-          let status = '';
-          if (resp.data.transfer) {
-            status =
-              resp.data.transfer === true
-                ? 'complete'
-                : resp.data.transfer.status;
-          } else {
-            status = 'error';
-          }
           dispatch({
             type: TRANSFER,
             payload: {
-              statusTransfer: status,
+              statusTransfer: 'complete',
               transferError: resp.data.errors,
             },
           });
