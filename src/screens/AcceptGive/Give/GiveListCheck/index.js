@@ -23,9 +23,11 @@ import {
 } from '../../../../actions/actions.js';
 import TariffLimitModal from '../../../../components/TariffLimitModal';
 import SetQtyCard from '../../../../components/SetQtyCard';
+import {SelectLocationModal} from '../../SelectLocationModal';
 
 const GiveListCheck = props => {
   const dispatch = useDispatch();
+  const [showModal, setShowModal] = useState(false);
   const [scan, give, settings, limit, totalItemsCount] = useSelector(
     ({scan, give, settings, auth, companyItems}) => [
       scan,
@@ -158,6 +160,12 @@ const GiveListCheck = props => {
           ))}
         </ScrollView>
         <View style={styles.buttons}>
+          <View style={styles.buttonObject}>
+            <DarkButton
+              text={T.t('select_location')}
+              onPress={() => setShowModal(!showModal)}
+            />
+          </View>
           <DarkButton text={T.t('add')} onPress={addMore} />
           {scan.scanGiveList.length > 0 && (
             <TransparentButton
@@ -183,6 +191,7 @@ const GiveListCheck = props => {
           {error}
         </Snackbar>
       </View>
+      <SelectLocationModal setShowModal={setShowModal} showModal={showModal} />
     </>
   );
 };
@@ -214,6 +223,10 @@ const styles = StyleSheet.create({
   },
   button: {
     flex: 1,
+  },
+  buttonObject: {
+    display: 'flex',
+    width: Dimensions.get('window').width / 1.1,
   },
 });
 
