@@ -21,6 +21,10 @@ export const SelectLocationModal = ({showModal, setShowModal}) => {
       return x;
     }
   });
+  const handleChangeLocation = itemValue => {
+    dispatch(changeLocationMain(itemValue));
+    dispatch(changeLocationLoc(''));
+  };
   return (
     <Portal>
       <Dialog visible={showModal} onDismiss={() => setShowModal(false)}>
@@ -30,9 +34,7 @@ export const SelectLocationModal = ({showModal, setShowModal}) => {
             <Picker
               selectedValue={selectedValue}
               style={styles.picker}
-              onValueChange={itemValue => {
-                dispatch(changeLocationMain(itemValue));
-              }}>
+              onValueChange={itemValue => handleChangeLocation(itemValue)}>
               <Picker.Item label={T.t('choise')} value="" />
               {objects.map((item, index) => {
                 return (
