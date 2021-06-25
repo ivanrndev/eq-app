@@ -25,7 +25,7 @@ const initialErrors = {
 };
 const units = [T.t('piece'), T.t('kg'), T.t('litre'), T.t('tons')];
 
-const CreateItemOld = () => {
+const CreateInventoryItem = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [visible, setVisible] = useState(false);
@@ -220,4 +220,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateItemOld;
+export default CreateInventoryItem;

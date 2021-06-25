@@ -276,5 +276,14 @@
     "notification_give_text": "У вас новая заявка на получение от ",
     "notification_cancel_text": "отменил заявку.",
     "responsible": "Oтветственный",
+    "base_item_info": "Базвая информация о ТМЦ",
+    "type_and_value": "Тип учета и стоимость",
+    "photos": "Фотографии",
+    "item_location": "Местоположение ТМЦ",
+    "additional_info": "Дополнительная информация",
+    "amount_of_instances": "Количество экземпляров ТМЦ",
+    "is_not_specified": "не указано",
+    "specify": "Указать"
+
 
 }

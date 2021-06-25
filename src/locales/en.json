@@ -92,7 +92,6 @@
     "inventori_error": "Inventory error",
     "inventori": "Inventory",
     "current_inventori_qty": "Current qty",
-    "create_item": "Create Item",
     "give": "Give out",
     "accept": "Accept",
     "finish_inventory": "Finish inventory",
@@ -272,5 +271,13 @@
     "error_responsible": "Not you responsible for this item",
     "notification_give_text": "You have new 'take' request from ",
     "notification_cancel_text": "cancel request.",
-    "responsible": "Responsible person"
+    "responsible": "Responsible person",
+    "base_item_info": "Base item information",
+    "type_and_value": "Type of accounting and value",
+    "photos": "Photos",
+    "item_location": "Item location",
+    "additional_info": "Additional item info",
+    "amount_of_instances": "Amount of item instances",
+    "is_not_specified": "is not specified",
+    "specify": "Specify"
 }

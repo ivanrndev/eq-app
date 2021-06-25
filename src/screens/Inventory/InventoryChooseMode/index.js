@@ -181,7 +181,7 @@ const InventoryChooseMode = () => {
           text={`${T.t('search')} ${T.t('qr_code')}`}
         />
         <TransparentButton
-          onPress={() => navigation.navigate('CreateItem')}
+          onPress={() => navigation.navigate('CreateInventoryItem')}
           text={`${T.t('create')} ${T.t('qr_code')}`}
         />
         <DarkButton

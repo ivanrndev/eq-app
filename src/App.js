@@ -65,6 +65,7 @@ import messaging from '@react-native-firebase/messaging';
 import PushNotification from 'react-native-push-notification';
 import {useDispatch} from 'react-redux';
 import CreateItem from './screens/Create';
+import CreateInventoryItem from './screens/Inventory/InventoryChooseMode/CreateInventoryItem';
 
 const theme = {
   ...DefaultTheme,
@@ -79,7 +80,6 @@ const theme = {
 const Drawer = createDrawerNavigator();
 
 const App = () => {
-  const dispatch = useDispatch();
   const requestUserPermission = async () => {
     const authStatus = await messaging().requestPermission();
     const enabled =
@@ -161,6 +161,10 @@ const App = () => {
             <Drawer.Screen name="InventoryScaner" component={InventoryScaner} />
             <Drawer.Screen name="InventoryDone" component={InventoryDone} />
             <Drawer.Screen name="SetInventoryQty" component={SetInventoryQty} />
+            <Drawer.Screen
+              name="CreateInventoryItem"
+              component={CreateInventoryItem}
+            />
             <Drawer.Screen name="Comments" component={Comments} />
             <Drawer.Screen name="Settings" component={Settings} />
             <Drawer.Screen name="TransfersEdit" component={TransfersEdit} />
