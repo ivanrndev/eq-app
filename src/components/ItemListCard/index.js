@@ -13,6 +13,7 @@ const ItemListCard = ({
   children,
 }) => {
   const {currency} = useQuantityUnitsAndCurrency();
+
   return (
     <Card.Content style={{width}}>
       {item.metadata.title ? (
@@ -69,7 +70,16 @@ const ItemListCard = ({
           )}
         </>
       )}
-
+      {item.metadata.object && (
+        <Paragraph style={styles.paragraph}>
+          {T.t('object')}: {item.metadata.object}
+        </Paragraph>
+      )}
+      {!!item.metadata.location && (
+        <Paragraph style={styles.paragraph}>
+          {T.t('location')}: {item.metadata.location}
+        </Paragraph>
+      )}
       {isResponsibleShown && item.person ? (
         <Paragraph style={styles.paragraph}>
           {T.t('responsible')}:
