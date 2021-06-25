@@ -195,6 +195,17 @@ const Main = props => {
               />
             </CopilotText>
           </CopilotStep>
+          <CopilotStep text={T.t('create_item_help')} order={8} name="Who_i">
+            <CopilotText>
+              <Button
+                nav={props.navigation}
+                text={T.t('create_item')}
+                getItemsOnMe={true}
+                loader={true}
+                svg={'create'}
+              />
+            </CopilotText>
+          </CopilotStep>
         </View>
       </View>
     </>

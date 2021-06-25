@@ -9,6 +9,7 @@ import Ident from '../assets/svg/ident.svg';
 import Left from '../assets/svg/left-arrow.svg';
 import Right from '../assets/svg/right-arrow.svg';
 import Close from '../assets/svg/cancel.svg';
+import Create from '../assets/svg/plus.svg';
 
 export const menuSvg = item => {
   switch (item) {
@@ -32,6 +33,8 @@ export const menuSvg = item => {
       return <Right width={20} height={20} />;
     case 'close':
       return <Close width={20} height={20} />;
+    case 'create':
+      return <Create width={20} height={20} />;
     default:
       return null;
   }

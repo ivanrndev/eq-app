@@ -187,6 +187,8 @@
     "service_help": "Send items to the service or making a return from the service.",
     "write_off_help": "Scan the QR code of items, if its further operation is impossible and it is subject to write-off.",
     "my_account": "Look at the items assigned to you.",
+    "create_item_help": "Create new item.",
+    "create_item": "Create item",
     "not_now": "Limit is exceeded. You can send a password reset request only once per minute",
     "not_found": "User not found",
     "sucess_reset_pass": "We have successfully sent a link to reset your password",
