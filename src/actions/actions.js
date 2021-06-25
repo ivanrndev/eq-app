@@ -366,7 +366,7 @@ export const statusLoad = status => dispatch => {
 // Scan and search actions
 
 export const currentScan = (
-  id,
+  code,
   nav,
   page,
   saveItems = false,
@@ -377,15 +377,17 @@ export const currentScan = (
   if (mount) {
     dispatch({
       type: MOUNT_SCAN,
-      payload: {mountScan: id},
+      payload: {mountScan: code},
     });
-    dispatch(scanInfo(id, nav, page, saveItems, true));
+    dispatch(scanInfo(code, nav, page, saveItems, true));
   } else {
     dispatch({
       type: SAVE_CURRENT_SCAN,
-      payload: {currentScan: id, isNewScan: false},
+      payload: {currentScan: code, isNewScan: false},
     });
-    dispatch(scanInfo(id, nav, page, saveItems, false, inventory, isWriteOff));
+    dispatch(
+      scanInfo(code, nav, page, saveItems, false, inventory, isWriteOff),
+    );
   }
 };
 
@@ -461,7 +463,7 @@ export const getSearchItem = (
 };
 
 export const scanInfo = (
-  id,
+  code,
   nav,
   page,
   saveItems,
@@ -471,7 +473,7 @@ export const scanInfo = (
 ) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
-      .get(`${API_URL}/company/${company}/item/${id}`)
+      .get(`${API_URL}/company/${company}/item/${code}`)
       .then(resp => {
         if (resp.status === 200) {
           if (mount) {
@@ -1733,6 +1735,7 @@ export const unMountItemFromParent = (
   code,
   nav,
   page,
+  itemId,
 ) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
@@ -1740,7 +1743,11 @@ export const unMountItemFromParent = (
       .then(resp => {
         if (resp.status === 200) {
           dispatch(loader(false));
-          dispatch(currentScan(code, nav, page, false));
+          if (code) {
+            dispatch(currentScan(code, nav, page, false));
+          } else {
+            dispatch(getSearchItem(itemId, nav, page));
+          }
         }
       })
       .catch(e => {

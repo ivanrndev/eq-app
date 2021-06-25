@@ -94,6 +94,7 @@ export const IdentInfo = props => {
         store.scanInfo.code,
         props.navigation,
         'IdentInfo',
+        store.scanInfo._id,
       ),
     );
   };

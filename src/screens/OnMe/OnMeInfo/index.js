@@ -89,6 +89,7 @@ export const OnMeInfo = props => {
         scan.scanInfo.code,
         scan.navigation,
         'OnMeInfo',
+        store.scanInfo._id,
       ),
     );
   };

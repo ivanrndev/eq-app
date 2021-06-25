@@ -6,5 +6,5 @@ export const setTokenToDataBase = token => {
     .patch(`${API_URL}/auth/ios/firebase`, {
       token,
     })
-    .catch(e => console.log('errr set token', e.response.data));
+    .catch(e => console.log('error set token', e.response.data));
 };
