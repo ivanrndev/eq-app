@@ -64,8 +64,9 @@ import AsyncStorage from '@react-native-community/async-storage';
 import messaging from '@react-native-firebase/messaging';
 import PushNotification from 'react-native-push-notification';
 import {useDispatch} from 'react-redux';
-import CreateItem from './screens/Create';
+import CreateItem from './screens/CreateItem';
 import CreateInventoryItem from './screens/Inventory/InventoryChooseMode/CreateInventoryItem';
+import BaseInfo from './screens/CreateItem/BaseInfo';
 
 const theme = {
   ...DefaultTheme,
@@ -140,6 +141,7 @@ const App = () => {
             <Drawer.Screen name="OnMe" component={OnMe} />
             <Drawer.Screen name="OnMeInfo" component={OnMeInfo} />
             <Drawer.Screen name="CreateItem" component={CreateItem} />
+            <Drawer.Screen name="CreateItemBaseInfo" component={BaseInfo} />
             <Drawer.Screen name="Transactions" component={Transactions} />
             <Drawer.Screen name="AcceptGive" component={AcceptGive} />
             <Drawer.Screen name="GiveList" component={GiveList} />

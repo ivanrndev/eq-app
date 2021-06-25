@@ -13,6 +13,7 @@ import inventoryReducer from './Inventory/inventory';
 import commentsReducer from './Comments/comments';
 import settingsReducer from './Settings/settings.js';
 import companyItemsReducer from './CompanyItems/companyItems';
+import createItemReducer from './CreateItem/createItem';
 
 export default combineReducers({
   auth: authReducer,
@@ -29,4 +30,5 @@ export default combineReducers({
   comments: commentsReducer,
   settings: settingsReducer,
   companyItems: companyItemsReducer,
+  createItem: createItemReducer,
 });

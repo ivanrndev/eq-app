@@ -11,6 +11,9 @@ import {TextInput} from 'react-native-paper';
 import T from '../../i18n';
 import Appbar from '../../components/Appbar';
 import DarkButton from '../../components/Buttons/DarkButton';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
+import {useSelector} from 'react-redux';
+import ItemListCard from '../../components/ItemListCard';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -18,6 +21,8 @@ const height = Dimensions.get('window').height;
 const CreateItem = () => {
   const navigation = useNavigation();
   const [instanceAmount, setInstanceAmount] = useState(1);
+  const baseInfo = useSelector(({createItem}) => createItem.baseInfo);
+  const baseInfoMetadata = {metadata: baseInfo};
   return (
     <>
       <Appbar
@@ -27,12 +32,26 @@ const CreateItem = () => {
         title={T.t('create_item')}
         pageToChosenItem="IdentInfo"
       />
-      <View style={styles.container}>
-        <TouchableOpacity style={styles.menuItem}>
-          <Text style={styles.itemText}>{T.t('base_item_info')}</Text>
+
+      <KeyboardAwareScrollView style={styles.container}>
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => navigation.navigate('CreateItemBaseInfo')}>
+          <Text style={styles.itemText}>
+            {T.t('base_item_info')}
+            <Text style={styles.required}> * </Text>
+          </Text>
+          {baseInfo && baseInfo.type ? (
+            <ItemListCard item={baseInfoMetadata} width="100%" />
+          ) : (
+            <Text> {T.t('is_not_specified')}</Text>
+          )}
         </TouchableOpacity>
         <TouchableOpacity style={styles.menuItem}>
-          <Text style={styles.itemText}>{T.t('type_and_value')}</Text>
+          <Text style={styles.itemText}>
+            {T.t('type_and_value')}
+            <Text style={styles.required}> * </Text>
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.menuItem}>
           <Text style={styles.itemText}>{T.t('photos')}</Text>
@@ -62,7 +81,7 @@ const CreateItem = () => {
             text={`${T.t('create')}`}
           />
         </View>
-      </View>
+      </KeyboardAwareScrollView>
     </>
   );
 };
@@ -70,13 +89,14 @@ const CreateItem = () => {
 const styles = StyleSheet.create({
   container: {
     marginTop: -10,
-    alignItems: 'center',
+
     backgroundColor: '#D3E3F2',
     height: height,
     width: width,
+    flex: 1,
   },
   menuItem: {
-    height: height / 11,
+    minHeight: height / 11,
     borderBottomWidth: 2,
     borderBottomColor: '#7A7A9D',
     alignItems: 'center',
@@ -105,6 +125,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     marginTop: 10,
     marginBottom: 10,
+  },
+  required: {
+    color: '#E40B67',
   },
 });
 
