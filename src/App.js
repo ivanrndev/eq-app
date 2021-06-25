@@ -55,7 +55,7 @@ import GiveSetQuantity from './screens/AcceptGive/Give/GiveListCheck/GiveSetQuan
 import Search from './components/Search';
 import InventoryChooseMode from './screens/Inventory/InventoryChooseMode';
 import SetInventoryQty from './screens/Inventory/SetInventoryQty';
-import CreateItem from './screens/Inventory/InventoryChooseMode/CreateItem';
+
 import MountItemSetQty from './screens/Ident/MountList/MountItemSetQty';
 import TransferSetQuantity from './screens/Transfers/TransferSetQty';
 import ChooseCommentPhotoMode from './components/Gallery/ChooseCommentPhotoMode';
@@ -63,8 +63,8 @@ import ChooseItemPhotoMode from './components/Gallery/ChooseItemPhotoMode';
 import AsyncStorage from '@react-native-community/async-storage';
 import messaging from '@react-native-firebase/messaging';
 import PushNotification from 'react-native-push-notification';
-import {userAcceptBidPushNotification} from './actions/actions';
 import {useDispatch} from 'react-redux';
+import CreateItem from './screens/Create';
 
 const theme = {
   ...DefaultTheme,
@@ -139,6 +139,7 @@ const App = () => {
             <Drawer.Screen name="MarkingFinish" component={MarkingFinish} />
             <Drawer.Screen name="OnMe" component={OnMe} />
             <Drawer.Screen name="OnMeInfo" component={OnMeInfo} />
+            <Drawer.Screen name="CreateItem" component={CreateItem} />
             <Drawer.Screen name="Transactions" component={Transactions} />
             <Drawer.Screen name="AcceptGive" component={AcceptGive} />
             <Drawer.Screen name="GiveList" component={GiveList} />
@@ -160,7 +161,6 @@ const App = () => {
             <Drawer.Screen name="InventoryScaner" component={InventoryScaner} />
             <Drawer.Screen name="InventoryDone" component={InventoryDone} />
             <Drawer.Screen name="SetInventoryQty" component={SetInventoryQty} />
-            <Drawer.Screen name="CreateItem" component={CreateItem} />
             <Drawer.Screen name="Comments" component={Comments} />
             <Drawer.Screen name="Settings" component={Settings} />
             <Drawer.Screen name="TransfersEdit" component={TransfersEdit} />

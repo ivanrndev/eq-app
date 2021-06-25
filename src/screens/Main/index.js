@@ -112,7 +112,17 @@ const Main = props => {
               />
             </CopilotText>
           </CopilotStep>
-          <CopilotStep text={T.t('mark_help')} order={2} name="Marking">
+          <CopilotStep text={T.t('create_item_help')} order={2} name="Who_i">
+            <CopilotText>
+              <Button
+                nav={props.navigation}
+                text={T.t('create_item')}
+                svg={'create'}
+                route={'CreateItem'}
+              />
+            </CopilotText>
+          </CopilotStep>
+          <CopilotStep text={T.t('mark_help')} order={3} name="Marking">
             <CopilotText>
               <Button
                 nav={props.navigation}
@@ -122,7 +132,7 @@ const Main = props => {
               />
             </CopilotText>
           </CopilotStep>
-          <CopilotStep text={T.t('invent_help')} order={3} name="Inventory">
+          <CopilotStep text={T.t('invent_help')} order={4} name="Inventory">
             <CopilotText>
               <Button
                 nav={props.navigation}
@@ -134,7 +144,7 @@ const Main = props => {
             </CopilotText>
           </CopilotStep>
 
-          <CopilotStep text={T.t('accept_help')} order={4} name="AcceptGive">
+          <CopilotStep text={T.t('accept_help')} order={5} name="AcceptGive">
             <CopilotText>
               <Button
                 nav={props.navigation}
@@ -147,7 +157,7 @@ const Main = props => {
 
           {myRole !== 'worker' && (
             <>
-              <CopilotStep text={T.t('service_help')} order={5} name="Service">
+              <CopilotStep text={T.t('service_help')} order={6} name="Service">
                 <CopilotText>
                   <Button
                     nav={props.navigation}
@@ -159,7 +169,7 @@ const Main = props => {
               </CopilotStep>
               <CopilotStep
                 text={T.t('write_off_help')}
-                order={6}
+                order={7}
                 name="writeOff">
                 <CopilotText>
                   <Button
@@ -184,7 +194,7 @@ const Main = props => {
             </>
           )}
 
-          <CopilotStep text={T.t('my_account')} order={7} name="Who_i">
+          <CopilotStep text={T.t('my_account')} order={8} name="Who_i">
             <CopilotText>
               <Button
                 nav={props.navigation}
@@ -192,17 +202,6 @@ const Main = props => {
                 getItemsOnMe={true}
                 loader={true}
                 svg={'my'}
-              />
-            </CopilotText>
-          </CopilotStep>
-          <CopilotStep text={T.t('create_item_help')} order={8} name="Who_i">
-            <CopilotText>
-              <Button
-                nav={props.navigation}
-                text={T.t('create_item')}
-                getItemsOnMe={true}
-                loader={true}
-                svg={'create'}
               />
             </CopilotText>
           </CopilotStep>
