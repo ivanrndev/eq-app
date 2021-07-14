@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Dimensions, FlatList, StyleSheet, Text, View} from 'react-native';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
 import T from '../../../../i18n';
 import {useNavigation} from '@react-navigation/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
@@ -10,6 +10,7 @@ import TransparentButton from '../../../../components/Buttons/TransparentButton'
 import {validateFloatNumbers} from '../../../../utils/validation';
 import {saveCreatedInventoryItem} from '../../../../actions/actions';
 import {useDispatch} from 'react-redux';
+import {height, units, width} from '../../../../constants/dimentionsAndUnits';
 
 const initialFormValues = {
   type: '',
@@ -23,7 +24,6 @@ const initialErrors = {
   type: '',
   quantity: '',
 };
-const units = [T.t('piece'), T.t('kg'), T.t('litre'), T.t('tons')];
 
 const CreateInventoryItem = () => {
   const navigation = useNavigation();
@@ -163,12 +163,12 @@ const CreateInventoryItem = () => {
 const styles = StyleSheet.create({
   body: {
     backgroundColor: '#D3E3F2',
-    height: Dimensions.get('window').height,
+    height: height,
     paddingBottom: 70,
   },
   card: {
     justifyContent: 'center',
-    width: Dimensions.get('window').width / 1.1,
+    width: width / 1.1,
     marginVertical: 15,
     alignSelf: 'center',
     paddingBottom: 30,
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
     marginTop: 20,
-    width: Dimensions.get('window').width / 1.3,
+    width: width / 1.3,
     backgroundColor: '#fff',
   },
   secondInput: {
@@ -187,13 +187,13 @@ const styles = StyleSheet.create({
   qtyInput: {
     alignSelf: 'center',
     justifyContent: 'center',
-    width: Dimensions.get('window').width / 2.2,
+    width: width / 2.2,
     backgroundColor: '#fff',
   },
   err: {
     height: 15,
     color: '#8c231f',
-    width: Dimensions.get('window').width / 1.3,
+    width: width / 1.3,
     alignSelf: 'center',
     marginTop: 5,
   },
@@ -203,11 +203,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     flexWrap: 'wrap',
-    width: Dimensions.get('window').width / 1.1,
+    width: width / 1.1,
     alignSelf: 'center',
   },
   qtyError: {
-    width: Dimensions.get('window').width / 1.3,
+    width: width / 1.3,
     color: '#8c231f',
     height: 15,
     marginTop: 5,

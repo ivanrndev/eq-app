@@ -279,5 +279,12 @@
     "additional_info": "Additional item info",
     "amount_of_instances": "Amount of item instances",
     "is_not_specified": "is not specified",
-    "specify": "Specify"
+    "specify": "Specify",
+    "single": "Single",
+    "example": "For example:",
+    "single_example": "Grinder, laptop,hardware",
+    "quantitative": "Quantitative",
+    "quantitative_example": "Consumables, detergent in liters, gloves in pieces",
+
+
 }

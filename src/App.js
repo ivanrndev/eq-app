@@ -67,6 +67,7 @@ import {useDispatch} from 'react-redux';
 import CreateItem from './screens/CreateItem';
 import CreateInventoryItem from './screens/Inventory/InventoryChooseMode/CreateInventoryItem';
 import BaseInfo from './screens/CreateItem/BaseInfo';
+import AccountingAndValue from './screens/CreateItem/AccountingAndValue';
 
 const theme = {
   ...DefaultTheme,
@@ -142,6 +143,10 @@ const App = () => {
             <Drawer.Screen name="OnMeInfo" component={OnMeInfo} />
             <Drawer.Screen name="CreateItem" component={CreateItem} />
             <Drawer.Screen name="CreateItemBaseInfo" component={BaseInfo} />
+            <Drawer.Screen
+              name="CreateItemQty"
+              component={AccountingAndValue}
+            />
             <Drawer.Screen name="Transactions" component={Transactions} />
             <Drawer.Screen name="AcceptGive" component={AcceptGive} />
             <Drawer.Screen name="GiveList" component={GiveList} />

@@ -283,7 +283,10 @@
     "additional_info": "Дополнительная информация",
     "amount_of_instances": "Количество экземпляров ТМЦ",
     "is_not_specified": "не указано",
-    "specify": "Указать"
-
-
+    "specify": "Указать",
+    "single": "Единичное",
+    "example": "Например:",
+    "single_example": "Болгарка, ноутбук, оборудование",
+    "quantitative": "Количественное",
+    "quantitative_example": "Расходники, моющее в литрах, перчатки в штуках"
 }

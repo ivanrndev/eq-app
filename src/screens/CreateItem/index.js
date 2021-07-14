@@ -1,11 +1,5 @@
 import React, {useState} from 'react';
-import {
-  Dimensions,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {TextInput} from 'react-native-paper';
 import T from '../../i18n';
@@ -14,9 +8,7 @@ import DarkButton from '../../components/Buttons/DarkButton';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 import {useSelector} from 'react-redux';
 import ItemListCard from '../../components/ItemListCard';
-
-const width = Dimensions.get('window').width;
-const height = Dimensions.get('window').height;
+import {height, width} from '../../constants/dimentionsAndUnits';
 
 const CreateItem = () => {
   const navigation = useNavigation();
@@ -33,7 +25,9 @@ const CreateItem = () => {
         pageToChosenItem="IdentInfo"
       />
 
-      <KeyboardAwareScrollView style={styles.container}>
+      <KeyboardAwareScrollView
+        style={styles.container}
+        contentContainerStyle={{alignItems: 'center'}}>
         <TouchableOpacity
           style={styles.menuItem}
           onPress={() => navigation.navigate('CreateItemBaseInfo')}>
@@ -47,7 +41,9 @@ const CreateItem = () => {
             <Text> {T.t('is_not_specified')}</Text>
           )}
         </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem}>
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => navigation.navigate('CreateItemQty')}>
           <Text style={styles.itemText}>
             {T.t('type_and_value')}
             <Text style={styles.required}> * </Text>
