@@ -13,7 +13,7 @@ const ItemListCard = ({
   children,
 }) => {
   const {currency} = useQuantityUnitsAndCurrency();
-  console.log('LLLLL', item, isResponsibleShown, item.person);
+
   return (
     <Card.Content style={{width}}>
       {item.metadata.title ? (

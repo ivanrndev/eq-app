@@ -39,7 +39,7 @@ const Search = ({
     dispatch(myloadMore(true));
     dispatch(listAction(query, 0, true));
   };
-  console.log('LIST', renderedList, list);
+
   const handleCurrentScan = item => {
     actionCheckError(item);
     dispatch(loader(true));
