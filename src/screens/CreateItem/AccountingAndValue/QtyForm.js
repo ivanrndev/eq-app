@@ -36,7 +36,7 @@ export const QtyForm = () => {
         ...formValues,
         pricePerLot: formValues.pricePerPiece * formValues.qty,
       }),
-    [formValues.pricePerLot],
+    [formValues.pricePerPiece],
   );
 
   const handleChoseMenu = item => {
