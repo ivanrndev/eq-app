@@ -13,7 +13,7 @@ const ItemListCard = ({
   children,
 }) => {
   const {currency} = useQuantityUnitsAndCurrency();
-
+  console.log('LLLLL', item, isResponsibleShown, item.person);
   return (
     <Card.Content style={{width}}>
       {item.metadata.title ? (
@@ -70,7 +70,7 @@ const ItemListCard = ({
           )}
         </>
       )}
-      {item.metadata.object && (
+      {!!item.metadata.object && (
         <Paragraph style={styles.paragraph}>
           {T.t('object')}: {item.metadata.object}
         </Paragraph>
