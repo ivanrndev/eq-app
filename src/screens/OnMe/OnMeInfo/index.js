@@ -29,16 +29,15 @@ import {getComments} from '../../../actions/commentsAction';
 import Gallery from '../../../components/Gallery';
 import GalleryForItem from '../../../components/Gallery/GalleryForItem';
 import {addMountParent} from '../../../actions/mountActions';
+import {useUserPlan} from '../../../hooks/useUserPlan';
 
 export const OnMeInfo = props => {
-  const [scan, store, settings, currentCompany] = useSelector(
-    ({scan, onMe, settings, auth}) => [
-      scan,
-      onMe,
-      settings,
-      auth.currentCompany,
-    ],
-  );
+  const {isNotFreePlan} = useUserPlan();
+  const [scan, store, settings] = useSelector(({scan, onMe, settings}) => [
+    scan,
+    onMe,
+    settings,
+  ]);
   const itemPhotos = scan.scanInfo.photos ?? [];
 
   const dispatch = useDispatch();
@@ -55,10 +54,7 @@ export const OnMeInfo = props => {
   const myList = store.myList.filter(item => {
     return item._id === store.myCurrentId;
   });
-  const plan =
-    currentCompany && currentCompany.plan ? currentCompany.plan.title : '';
-  const isNotFreePlan =
-    plan === 'optimal' || plan === 'optimal +' || plan === 'premium';
+
   const metaData = myList.length ? myList[0] : {};
   const info = metaData.metadata;
   const show = !isEmpty(metaData);

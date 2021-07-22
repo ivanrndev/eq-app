@@ -24,12 +24,12 @@ import GalleryForItem from '../../../components/Gallery/GalleryForItem';
 import Gallery from '../../../components/Gallery';
 import {addMountParent} from '../../../actions/mountActions';
 import {useUserData} from '../../../hooks/useUserData';
+import {useUserPlan} from '../../../hooks/useUserPlan';
 
 export const IdentInfo = props => {
+  const {isNotFreePlan} = useUserPlan();
   const dispatch = useDispatch();
-  const [settings, store, currentCompany] = useSelector(
-    ({settings, scan, auth}) => [settings, scan, auth.currentCompany],
-  );
+  const [settings, store] = useSelector(({settings, scan}) => [settings, scan]);
   const metaData = store.scanInfo.metadata;
   const width = Dimensions.get('window').width;
   const [isOpen, setIsOpen] = useState(false);
@@ -51,10 +51,6 @@ export const IdentInfo = props => {
     itemPhotos[0] ? itemPhotos[0].name : '',
   );
 
-  const plan =
-    currentCompany && currentCompany.plan ? currentCompany.plan.title : '';
-  const isNotFreePlan =
-    plan === 'optimal' || plan === 'optimal +' || plan === 'premium';
   let itemId = store.scanInfo._id;
   const quantity = store.scanInfo.batch ? store.scanInfo.batch.quantity : 1;
   const price = store.scanInfo.metadata && store.scanInfo.metadata.price;
