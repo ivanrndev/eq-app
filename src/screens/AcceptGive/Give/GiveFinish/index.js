@@ -22,7 +22,12 @@ import {
 
 const GiveFinish = props => {
   const dispatch = useDispatch();
-  const give = useSelector(state => state.give);
+  const [give, operationsWithApprovement] = useSelector(({give, auth}) => [
+    give,
+    auth.currentCompany.settings
+      ? auth.currentCompany.settings.operationsWithApprovement
+      : true,
+  ]);
   const [status, setStatus] = useState('');
   const [errors, setErrors] = useState('');
   const [titleStatus, setTitleStatus] = useState(false);
@@ -50,12 +55,12 @@ const GiveFinish = props => {
 
   useEffect(() => {
     allErrors();
-    if (give.statusTransfer === 'complete') {
+    if (!operationsWithApprovement) {
       setStatus(T.t('auto_accept_transfer'));
       setTitleStatus(true);
     } else {
       setTitleStatus(false);
-      setStatus(getProperTransferStatus(give.statusTransfer));
+      setStatus(getProperTransferStatus('true'));
     }
   }, [give.statusTransfer]);
 

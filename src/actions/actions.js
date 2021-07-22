@@ -1171,6 +1171,7 @@ export const updateGiveList = list => dispatch => {
 };
 
 export const makeTransfer = (nav, list, user, locationObj) => dispatch => {
+  console.log('TRANSFER List', list, user);
   AsyncStorage.getItem('company').then(company => {
     return axios
       .post(`${API_URL}/transfer/`, {
@@ -1180,6 +1181,7 @@ export const makeTransfer = (nav, list, user, locationObj) => dispatch => {
         object: locationObj,
       })
       .then(resp => {
+        console.log('TRANSFER ACTION', resp);
         if (resp.status === 200) {
           dispatch({
             type: TRANSFER,
@@ -1197,6 +1199,7 @@ export const makeTransfer = (nav, list, user, locationObj) => dispatch => {
         dispatch(clearGiveItemQty());
       })
       .catch(e => {
+        console.log('TRANSFER Error', e.response.data);
         if (!e.response.data) {
           let error = getProperError(e.response.data.errors.type);
           dispatch({

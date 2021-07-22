@@ -44,7 +44,9 @@ const GiveListCheck = props => {
     settings,
     auth.currentCompany.plan && auth.currentCompany.plan.items,
     companyItems.totalItemsCount,
-    auth.currentCompany.settings.operationsWithApprovement,
+    auth.currentCompany.settings
+      ? auth.currentCompany.settings.operationsWithApprovement
+      : true,
     settings.locationMain,
     settings.locationLoc,
   ]);
@@ -145,6 +147,7 @@ const GiveListCheck = props => {
         props.navigation,
         [...list, ...give.giveList],
         userCurrentId,
+
         locationObj,
       ),
     );
