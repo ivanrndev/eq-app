@@ -49,16 +49,24 @@ const CreateItem = () => {
             <Text style={styles.required}> * </Text>
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem}>
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => navigation.navigate('CreateItemsPhotos')}>
           <Text style={styles.itemText}>{T.t('photos')}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem}>
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => navigation.navigate('CreateItemLocation')}>
           <Text style={styles.itemText}>{T.t('item_location')}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem}>
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => navigation.navigate('CreateItemResponsible')}>
           <Text style={styles.itemText}>{T.t('responsible')}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem}>
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => navigation.navigate('CreateItemAdditionalInfo')}>
           <Text style={styles.itemText}>{T.t('additional_info')}</Text>
         </TouchableOpacity>
         <View style={styles.amount}>
@@ -85,7 +93,6 @@ const CreateItem = () => {
 const styles = StyleSheet.create({
   container: {
     marginTop: -10,
-
     backgroundColor: '#D3E3F2',
     height: height,
     width: width,

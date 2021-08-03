@@ -63,11 +63,15 @@ import ChooseItemPhotoMode from './components/Gallery/ChooseItemPhotoMode';
 import AsyncStorage from '@react-native-community/async-storage';
 import messaging from '@react-native-firebase/messaging';
 import PushNotification from 'react-native-push-notification';
-import {useDispatch} from 'react-redux';
+
 import CreateItem from './screens/CreateItem';
 import CreateInventoryItem from './screens/Inventory/InventoryChooseMode/CreateInventoryItem';
 import BaseInfo from './screens/CreateItem/BaseInfo';
 import AccountingAndValue from './screens/CreateItem/AccountingAndValue';
+import AddPhoto from './screens/CreateItem/AddPhoto';
+import ItemLocation from './screens/CreateItem/ItemLocation';
+import Responsible from './screens/CreateItem/Responsible';
+import AdditionalInfo from './screens/CreateItem/AdditionalInfo';
 
 const theme = {
   ...DefaultTheme,
@@ -146,6 +150,16 @@ const App = () => {
             <Drawer.Screen
               name="CreateItemQty"
               component={AccountingAndValue}
+            />
+            <Drawer.Screen name="CreateItemsPhotos" component={AddPhoto} />
+            <Drawer.Screen name="CreateItemLocation" component={ItemLocation} />
+            <Drawer.Screen
+              name="CreateItemResponsible"
+              component={Responsible}
+            />
+            <Drawer.Screen
+              name="CreateItemAdditionalInfo"
+              component={AdditionalInfo}
             />
             <Drawer.Screen name="Transactions" component={Transactions} />
             <Drawer.Screen name="AcceptGive" component={AcceptGive} />

@@ -8,6 +8,7 @@ import TransparentButton from '../../../components/Buttons/TransparentButton';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {saveBaseItemInfo} from '../../../actions/createItem';
+import {CreateItemContainer} from '../CreateItemContainer';
 
 const initialFormValues = {
   type: '',
@@ -47,13 +48,7 @@ const BaseInfo = () => {
     }
   };
   return (
-    <View style={styles.body}>
-      <Appbar
-        navigation={navigation}
-        arrow={true}
-        goTo={'CreateItem'}
-        title={T.t('create_item')}
-      />
+    <CreateItemContainer handleSave={handleCreate}>
       <KeyboardAwareScrollView style={styles.container}>
         <Card style={styles.card}>
           <TextInput
@@ -93,22 +88,13 @@ const BaseInfo = () => {
             mode="outlined"
             onChangeText={text => handleTextChange(text, 'serial')}
           />
-
-          <View style={styles.btns}>
-            <TransparentButton text={T.t('save')} onPress={handleCreate} />
-          </View>
         </Card>
       </KeyboardAwareScrollView>
-    </View>
+    </CreateItemContainer>
   );
 };
 
 const styles = StyleSheet.create({
-  body: {
-    backgroundColor: '#D3E3F2',
-    height: Dimensions.get('window').height,
-    paddingBottom: 70,
-  },
   card: {
     justifyContent: 'center',
     width: Dimensions.get('window').width / 1.1,
@@ -134,9 +120,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 5,
   },
-  btns: {
-    marginTop: 30,
-  },
+
   container: {
     flex: 1,
   },
