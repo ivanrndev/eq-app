@@ -192,7 +192,7 @@ const Auth = props => {
     }
   };
 
-  const dueDate = 'June 21, 2021';
+  const dueDate = 'July 24, 2021';
 
   return (
     <>
@@ -240,7 +240,7 @@ const Auth = props => {
               />
             </View>
           )}
-          {moment().format('LL') >= dueDate && <GoogleAuth />}
+          {/*      {moment().format('LL') >= dueDate && <GoogleAuth />}*/}
         </KeyboardAvoidingView>
         {moment().format('LL') >= dueDate && (
           <Text style={styles.textRegister}>

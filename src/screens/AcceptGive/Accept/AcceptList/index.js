@@ -39,11 +39,15 @@ import {SelectLocationModal} from '../../SelectLocationModal';
 const AcceptList = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const [accept, settings, scan] = useSelector(({accept, settings, scan}) => [
-    accept,
-    settings,
-    scan,
-  ]);
+  const [accept, settings, scan, selectedValue, selectedValueLoc] = useSelector(
+    ({accept, settings, scan}) => [
+      accept,
+      settings,
+      scan,
+      settings.locationMain,
+      settings.locationLoc,
+    ],
+  );
   const [bidItems, setBidItems] = useState(
     accept.acceptList.filter(item => item._id === accept.userAcceptBid),
   );

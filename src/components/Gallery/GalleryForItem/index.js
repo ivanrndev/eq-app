@@ -14,7 +14,6 @@ import {Divider, IconButton, Text} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import T from '../../../i18n';
 import {setGoBackPageGallery} from '../../../actions/addItemPhotoActions';
-import AsyncStorage from '@react-native-community/async-storage';
 import {useUserData} from '../../../hooks/useUserData';
 
 const image = require('./../../../assets/svg/empty.png');

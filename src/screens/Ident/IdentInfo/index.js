@@ -189,7 +189,7 @@ export const IdentInfo = props => {
                     {store.scanInfo.person.lastName}
                   </Text>
                 )}
-                {metaData.object && (
+                {!!metaData.object && (
                   <Text style={styles.text}>
                     {T.t('object')}: {metaData.object}
                   </Text>
