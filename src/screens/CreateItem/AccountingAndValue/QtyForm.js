@@ -6,6 +6,11 @@ import {height, units, width} from '../../../constants/dimentionsAndUnits';
 import DarkButton from '../../../components/Buttons/DarkButton';
 import {useNavigation} from '@react-navigation/native';
 import {validateFloatNumbers} from '../../../utils/validation';
+import {useDispatch} from 'react-redux';
+import {
+  saveAccountingAndValue,
+  saveBaseItemInfo,
+} from '../../../actions/createItem';
 
 const initialValues = {
   qty: 1,
@@ -15,6 +20,7 @@ const initialValues = {
 };
 export const QtyForm = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const [visible, setVisible] = useState(false);
   const [formValues, setFormValues] = useState(initialValues);
   const [error, setError] = useState('');
@@ -51,6 +57,19 @@ export const QtyForm = () => {
         ? setError(T.t('error_only_positive_numbers'))
         : setError('');
     }
+  };
+  const normalizedValues = {
+    batch: {
+      qty: formValues.qty,
+      units: formValues.units,
+    },
+    pricePerPiece: formValues.pricePerLot,
+    priceTotal: formValues.pricePerPiece,
+  };
+
+  const handleSave = () => {
+    dispatch(saveAccountingAndValue(normalizedValues));
+    navigation.navigate('CreateItem');
   };
 
   return (
@@ -95,10 +114,7 @@ export const QtyForm = () => {
         onChangeText={text => handleTextChange(text, 'pricePerLot')}
       />
 
-      <DarkButton
-        onPress={() => navigation.navigate('CreateItem')}
-        text={`${T.t('save')}`}
-      />
+      <DarkButton onPress={handleSave} text={`${T.t('save')}`} />
     </>
   );
 };

@@ -17,6 +17,17 @@ const AccountingAndValue = () => {
     e.preventDefault();
     setQtyMode(mode);
   };
+  const handleSave = {
+    let accObj;
+    if(qtyMode === 'qty') {
+    accObj = {batch: {
+      qty: '',
+          units: '',
+    },
+    pricePerPiece: '',
+        priceTotal: '',
+  } }
+  }
   return (
     <CreateItemContainer isBtnVisible={qtyMode !== 'qty'} handleSave={() => {}}>
       <>

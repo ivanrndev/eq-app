@@ -1,6 +1,7 @@
 import {
   SAVE_ACCOUNT_AND_VALUE,
   SAVE_ADDITIONAL_INFO,
+  SAVE_AMOUNT_OF_INSTANCES,
   SAVE_BASE_ITEM_INFO,
   SAVE_ITEM_LOCATIONS,
   SAVE_PHOTO,
@@ -44,7 +45,7 @@ export const saveAdditionalInfo = additionalInfo => dispatch =>
   });
 export const saveAmountOfInstances = amountOfInstances => dispatch =>
   dispatch({
-    type: SAVE_ADDITIONAL_INFO,
+    type: SAVE_AMOUNT_OF_INSTANCES,
     payload: {amountOfInstances},
   });
 export const createItem = item => dispatch => {};

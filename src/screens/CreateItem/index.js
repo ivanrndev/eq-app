@@ -13,7 +13,10 @@ import {height, width} from '../../constants/dimentionsAndUnits';
 const CreateItem = () => {
   const navigation = useNavigation();
   const [instanceAmount, setInstanceAmount] = useState(1);
-  const baseInfo = useSelector(({createItem}) => createItem.baseInfo);
+  const [baseInfo, accountType] = useSelector(({createItem}) => [
+    createItem.baseInfo,
+    createItem.accountType,
+  ]);
   const baseInfoMetadata = {metadata: baseInfo};
   return (
     <>
