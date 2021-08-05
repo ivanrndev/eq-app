@@ -1093,10 +1093,11 @@ export const getUserList = (nav, search = '', page = '') => dispatch => {
       })
       .then(resp => {
         if (resp.status === 200) {
+          console.log('RESPOSE NNN', resp);
           dispatch({
             type: GET_USERS,
             payload: {
-              userList: resp.data,
+              userList: resp.data.data,
               getUsetError: false,
             },
           });
