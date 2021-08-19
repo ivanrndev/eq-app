@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import {Dimensions, SafeAreaView, StyleSheet, View} from 'react-native';

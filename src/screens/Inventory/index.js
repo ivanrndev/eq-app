@@ -23,7 +23,7 @@ import {useUserData} from '../../hooks/useUserData';
 const Inventory = props => {
   const dispatch = useDispatch();
   const users = useSelector(state => state.give);
-  let showEmptyError = !users.userList.length;
+  let showEmptyError = /*!users.userList.length ?? */ false;
   let error = getProperErrorMessage(users.getUsetError);
   const [userLists, setUserLists] = useState(users.userList);
   const [showText, setShowText] = useState(true);
