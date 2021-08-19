@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {TextInput} from 'react-native-paper';
+import {Card, Paragraph, TextInput} from 'react-native-paper';
 import T from '../../i18n';
 import Appbar from '../../components/Appbar';
 import DarkButton from '../../components/Buttons/DarkButton';
@@ -13,9 +13,10 @@ import {height, width} from '../../constants/dimentionsAndUnits';
 const CreateItem = () => {
   const navigation = useNavigation();
   const [instanceAmount, setInstanceAmount] = useState(1);
-  const [baseInfo, accountType] = useSelector(({createItem}) => [
+  const [baseInfo, accountType, location] = useSelector(({createItem}) => [
     createItem.baseInfo,
     createItem.accountType,
+    createItem.location,
   ]);
   const baseInfoMetadata = {metadata: baseInfo};
   return (
@@ -61,6 +62,20 @@ const CreateItem = () => {
           style={styles.menuItem}
           onPress={() => navigation.navigate('CreateItemLocation')}>
           <Text style={styles.itemText}>{T.t('item_location')}</Text>
+          {location ? (
+            <View style={styles.itemContent}>
+              {location.location ? (
+                <Text style={styles.itemContentText}>
+                  {T.t('location')}: {location.location}
+                </Text>
+              ) : null}
+              {location.location ? (
+                <Text style={styles.itemContentText}>
+                  {T.t('object')}: {location.object}
+                </Text>
+              ) : null}
+            </View>
+          ) : null}
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.menuItem}
@@ -134,6 +149,15 @@ const styles = StyleSheet.create({
   },
   required: {
     color: '#E40B67',
+  },
+  itemContent: {
+    width: width / 1.2,
+    alignItems: 'flex-start',
+  },
+  itemContentText: {
+    fontSize: 12,
+    lineHeight: 15,
+    color: '#22215B',
   },
 });
 
