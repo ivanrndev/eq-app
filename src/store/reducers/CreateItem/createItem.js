@@ -42,7 +42,7 @@ const createItemReducer = (state = initialState, action) => {
     case SAVE_PHOTO:
       return {
         ...state,
-        ...action.payload,
+        photos: [...state.photos, ...action.payload.photos],
       };
     case SAVE_RESPONSIBLE:
       return {

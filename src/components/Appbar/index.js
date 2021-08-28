@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Appbar, IconButton, Portal, Snackbar} from 'react-native-paper';
 import {useDispatch} from 'react-redux';
-import {StyleSheet, View} from 'react-native';
+import {Image, ImageBackground, StyleSheet, View} from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import T from '../../i18n';
 
@@ -26,6 +26,7 @@ import Search from '../Search';
 import NFC from '../../screens/NFC';
 import {cleanMountItemsList} from '../../actions/mountActions';
 import {clearComments} from '../../actions/commentsAction';
+import {setGoBackPageGallery} from '../../actions/addItemPhotoActions';
 
 const AppbarCustom = props => {
   const dispatch = useDispatch();
@@ -116,6 +117,9 @@ const AppbarCustom = props => {
             }
             if (props.clearMountList) {
               dispatch(cleanMountItemsList());
+            }
+            if (props.createItem) {
+              dispatch(setGoBackPageGallery(''));
             }
           }}
         />

@@ -44,7 +44,9 @@ const Gallery = ({
   ]);
 
   const id = itemInfo._id ?? currentParent;
-  const entries = photoList.map(photo => ({illustration: photo.url}));
+  const entries = photoList.map(photo => ({
+    illustration: photo.url ?? photo.path,
+  }));
   const carouselRef = useRef(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const {role, userId} = useUserData();
@@ -144,7 +146,7 @@ const Gallery = ({
                         index === chosenPhoto && styles.smallChosen,
                       ]}
                       source={{
-                        uri: photo.url,
+                        uri: photo.url ?? photo.path,
                       }}
                     />
                   </ImageBackground>

@@ -9,24 +9,31 @@ import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {isEmpty} from 'lodash';
 import {addItemsPhoto} from '../../../actions/addItemPhotoActions';
+import {savePhotos} from '../../../actions/createItem';
 
 const ChooseItemPhotoMode = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const didMount = useRef(true);
   const [newPhoto, setNewPhoto] = useState([]);
-  const [itemInfo, currentParent, goBackPageGallery, onMeId] = useSelector(
-    ({scan, onMe}) => [
-      scan.scanInfo,
-      scan.currentParent,
-      scan.goBackPageGallery,
-      onMe.myCurrentId,
-    ],
-  );
-
+  const [
+    itemInfo,
+    currentParent,
+    goBackPageGallery,
+    onMeId,
+    createItemPhotos,
+  ] = useSelector(({scan, onMe, createItem}) => [
+    scan.scanInfo,
+    scan.currentParent,
+    scan.goBackPageGallery,
+    onMe.myCurrentId,
+    createItem.photos,
+  ]);
+  const initialPhoto =
+    goBackPageGallery === 'CreateItem' ? createItemPhotos : itemInfo.photos;
   const id = itemInfo._id ?? currentParent;
   const itemId = !!id ? id : onMeId;
-  const itemPhotos = itemInfo.photos ?? [];
+  const itemPhotos = initialPhoto ?? [];
   const maxPhotoCount = 8;
   const maxAddPhotoCount = maxPhotoCount - itemPhotos.length;
   let photos = new FormData();
@@ -46,7 +53,12 @@ const ChooseItemPhotoMode = () => {
       return;
     }
     if (!isEmpty(newPhoto)) {
-      dispatch(addItemsPhoto(itemId, photos, goBackPageGallery, navigation));
+      if (goBackPageGallery === 'CreateItem') {
+        dispatch(savePhotos(newPhoto));
+        navigation.navigate('CreateItemsPhotos');
+      } else {
+        dispatch(addItemsPhoto(itemId, photos, goBackPageGallery, navigation));
+      }
     }
   }, [newPhoto]);
 

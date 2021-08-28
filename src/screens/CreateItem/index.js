@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Image, StyleSheet, Text, View, FlatList} from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 import {Card, Paragraph, TextInput} from 'react-native-paper';
 import T from '../../i18n';
@@ -13,13 +14,30 @@ import {height, width} from '../../constants/dimentionsAndUnits';
 const CreateItem = () => {
   const navigation = useNavigation();
   const [instanceAmount, setInstanceAmount] = useState(1);
-  const [baseInfo, accountType, location] = useSelector(({createItem}) => [
-    createItem.baseInfo,
-    createItem.accountType,
-    createItem.location,
-  ]);
+  const [baseInfo, accountType, location, photos] = useSelector(
+    ({createItem}) => [
+      createItem.baseInfo,
+      createItem.accountType,
+      createItem.location,
+      createItem.photos,
+    ],
+  );
   const baseInfoMetadata = {metadata: baseInfo};
+  console.log('OOOO', photos);
 
+  const renderPhotoItem = ({item}) => {
+    console.log('{P{', item);
+    return (
+      <View style={styles.smallImgWrap}>
+        <Image
+          style={styles.smallImg}
+          source={{
+            uri: item.url ?? item.path,
+          }}
+        />
+      </View>
+    );
+  };
   return (
     <>
       <Appbar
@@ -28,6 +46,7 @@ const CreateItem = () => {
         goTo={'Home'}
         title={T.t('create_item')}
         pageToChosenItem="IdentInfo"
+        createItem={true}
       />
 
       <KeyboardAwareScrollView
@@ -85,6 +104,17 @@ const CreateItem = () => {
           style={styles.menuItem}
           onPress={() => navigation.navigate('CreateItemsPhotos')}>
           <Text style={styles.itemText}>{T.t('photos')}</Text>
+          {photos.length ? (
+            <View style={styles.itemContent}>
+              <FlatList
+                showsHorizontalScrollIndicator={false}
+                data={photos}
+                renderItem={renderPhotoItem}
+                keyExtractor={item => item.id}
+                horizontal={true}
+              />
+            </View>
+          ) : null}
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.menuItem}
@@ -185,6 +215,19 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 15,
     color: '#22215B',
+  },
+  smallImgWrap: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingVertical: 10,
+    flexWrap: 'wrap',
+  },
+  smallImg: {
+    borderWidth: 3,
+    height: 50,
+    width: 50,
+    marginRight: 5,
+    borderColor: 'transparent',
   },
 });
 

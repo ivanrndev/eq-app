@@ -26,9 +26,17 @@ const GalleryForItem = ({
 }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const itemInfo = useSelector(({scan}) => scan.scanInfo);
+  const [itemInfo, goBackPageGallery, createItemPhotos] = useSelector(
+    ({scan, createItem}) => [
+      scan.scanInfo,
+      scan.goBackPageGallery,
+      createItem.photos,
+    ],
+  );
+  const initialPhoto =
+    goBackPageGallery === 'CreateItem' ? createItemPhotos : itemInfo.photos;
+  const itemPhotos = initialPhoto ?? [];
 
-  const itemPhotos = itemInfo.photos ?? [];
   const bigPhoto = !isEmpty(itemPhotos) && itemPhotos[0];
   const {role, userId} = useUserData();
   const isEditingPhotoAllowed =
@@ -43,12 +51,23 @@ const GalleryForItem = ({
     setChosenPhoto(index);
     setPhotoDel(item.name);
   };
-
+  console.log('KLO', bigPhoto, smallPhotos);
   const handleAddPhoto = () => {
     navigation.navigate('ChooseItemPhotoMode');
     dispatch(setGoBackPageGallery(page));
   };
 
+  const renderItem = ({item, index}) => {
+    return (
+      <View>
+        <Image
+          source={{uri: item.path ?? item.url}}
+          containerStyle={styles.imageContainer}
+          style={styles.bigImg}
+        />
+      </View>
+    );
+  };
   return (
     <View style={styles.wrap}>
       {!isEmpty(itemPhotos) ? (
@@ -59,7 +78,7 @@ const GalleryForItem = ({
               <Image
                 style={styles.bigImg}
                 source={{
-                  uri: bigPhoto.url,
+                  uri: bigPhoto.path ?? bigPhoto.url,
                 }}
               />
             </TouchableWithoutFeedback>
@@ -74,7 +93,7 @@ const GalleryForItem = ({
                     <Image
                       style={styles.smallImg}
                       source={{
-                        uri: photo.url,
+                        uri: photo.url ?? photo.path,
                       }}
                     />
                   </ImageBackground>
