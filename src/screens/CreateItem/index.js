@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
-import {Image, StyleSheet, Text, View, FlatList} from 'react-native';
+import {FlatList, Image, StyleSheet, Text, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
-import {Card, Paragraph, TextInput} from 'react-native-paper';
+import {TextInput} from 'react-native-paper';
 import T from '../../i18n';
 import Appbar from '../../components/Appbar';
 import DarkButton from '../../components/Buttons/DarkButton';
@@ -14,19 +14,18 @@ import {height, width} from '../../constants/dimentionsAndUnits';
 const CreateItem = () => {
   const navigation = useNavigation();
   const [instanceAmount, setInstanceAmount] = useState(1);
-  const [baseInfo, accountType, location, photos] = useSelector(
+  const [baseInfo, accountType, location, photos, responsible] = useSelector(
     ({createItem}) => [
       createItem.baseInfo,
       createItem.accountType,
       createItem.location,
       createItem.photos,
+      createItem.responsible,
     ],
   );
   const baseInfoMetadata = {metadata: baseInfo};
-  console.log('OOOO', photos);
 
   const renderPhotoItem = ({item}) => {
-    console.log('{P{', item);
     return (
       <View style={styles.smallImgWrap}>
         <Image
@@ -139,6 +138,13 @@ const CreateItem = () => {
           style={styles.menuItem}
           onPress={() => navigation.navigate('CreateItemResponsible')}>
           <Text style={styles.itemText}>{T.t('responsible')}</Text>
+          {responsible.firstName ? (
+            <View style={styles.itemContent}>
+              <Text style={styles.itemContentText}>
+                {T.t('responsible')}: {responsible.firstName}
+              </Text>
+            </View>
+          ) : null}
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.menuItem}
@@ -208,6 +214,7 @@ const styles = StyleSheet.create({
     color: '#E40B67',
   },
   itemContent: {
+    marginTop: 5,
     width: width / 1.2,
     alignItems: 'flex-start',
   },

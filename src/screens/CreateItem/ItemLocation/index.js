@@ -101,6 +101,7 @@ const ItemLocation = () => {
   );
 };
 export default ItemLocation;
+
 const styles = StyleSheet.create({
   left: {
     fontSize: 14,

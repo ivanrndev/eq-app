@@ -1,10 +1,8 @@
 import React, {useState} from 'react';
 import T from '../../../i18n';
-import {Dimensions, StyleSheet, Text, View} from 'react-native';
-import Appbar from '../../../components/Appbar';
+import {Dimensions, StyleSheet, Text} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 import {Card, TextInput} from 'react-native-paper';
-import TransparentButton from '../../../components/Buttons/TransparentButton';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {saveBaseItemInfo} from '../../../actions/createItem';

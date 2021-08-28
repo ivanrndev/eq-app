@@ -289,5 +289,16 @@
     "single_example": "Болгарка, ноутбук, оборудование",
     "quantitative": "Количественное",
     "quantitative_example": "Расходники, моющее в литрах, перчатки в штуках",
-    "add_photo_to_new_item": "Добавить фото до ногого ТМЦ"
+    "add_photo_to_new_item": "Добавить фото до ногого ТМЦ",
+    "choose_user": "Выбрать пользователя",
+    "or_create_new_user": "или создать нового пользователя",
+    "administrator": "Администратор",
+    "stockman":"Кладовщик",
+    "employee": "Сотрудник",
+    "name": "Имя",
+    "email": "Email",
+    "role": "Роль",
+    "or": "ИЛИ",
+    "error_valid_email": "Email не корректный",
+    "error_user_not_exist": "Пользователь не найден"
 }

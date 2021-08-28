@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
-import {Text, StyleSheet} from 'react-native';
+import {StyleSheet, Text} from 'react-native';
 import GalleryForItem from '../../../components/Gallery/GalleryForItem';
 import {CreateItemContainer} from '../CreateItemContainer';
 import Gallery from '../../../components/Gallery';
 import {useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import T from '../../../i18n';
-import {height, width} from '../../../constants/dimentionsAndUnits';
+import {width} from '../../../constants/dimentionsAndUnits';
 
 const AddPhoto = () => {
   const navigation = useNavigation();

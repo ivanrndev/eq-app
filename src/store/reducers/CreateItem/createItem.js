@@ -22,7 +22,11 @@ const initialState = {
     location: '',
     object: '',
   },
-  responsible: '',
+  responsible: {
+    role: '',
+    firstName: '',
+    email: '',
+  },
   additionalInfo: [],
   amountOfInstances: '',
 };

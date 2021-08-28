@@ -285,6 +285,17 @@
     "single_example": "Grinder, laptop,hardware",
     "quantitative": "Quantitative",
     "quantitative_example": "Consumables, detergent in liters, gloves in pieces",
-    "add_photo_to_new_item": "Add photo to new Item"
+    "add_photo_to_new_item": "Add photo to new Item",
+    "choose_user": "Choose user",
+    "or_create_new_user": "Create new user",
+    "administrator": "Administrato",
+    "stockman":"Stockman",
+    "employee": "Employee",
+    "name": "Name",
+    "email": "Email",
+    "role": "Role",
+    "or": "OR",
+    "error_valid_email": "Email not valid",
+    "error_user_not_exist": "Such user don't exist"
 
 }
