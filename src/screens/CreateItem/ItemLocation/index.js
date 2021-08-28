@@ -1,28 +1,22 @@
 import React, {useEffect, useState} from 'react';
-import {Dimensions, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import {CreateItemContainer} from '../CreateItemContainer';
 import {useDispatch, useSelector} from 'react-redux';
 import SearchableDropdown from 'react-native-searchable-dropdown';
-import {
-  changeLocationLoc,
-  changeLocationMain,
-  getLocations,
-} from '../../../actions/actions';
+import {getLocations} from '../../../actions/actions';
 
 import T from '../../../i18n';
-import {Picker} from '@react-native-community/picker';
 import {width} from '../../../constants/dimentionsAndUnits';
 import {saveLocation} from '../../../actions/createItem';
+import {useNavigation} from '@react-navigation/native';
 
 const ItemLocation = () => {
   const dispatch = useDispatch();
-  const [objects, selectedValue, selectedValueLoc] = useSelector(
-    ({settings}) => [
-      settings.locations ? settings.locations : [],
-      settings.locationMain,
-      settings.locationLoc,
-    ],
-  );
+  const navigation = useNavigation();
+  const [objects, selectedValue] = useSelector(({settings}) => [
+    settings.locations ? settings.locations : [],
+    settings.locationMain,
+  ]);
 
   const [selectedLoc, setSelectedLoc] = useState('');
   const [selectedLocObj, setSelectedLocObj] = useState('');
@@ -31,11 +25,6 @@ const ItemLocation = () => {
 
   useEffect(() => dispatch(getLocations()), []);
 
-  const currentLocation = objects.filter(x => {
-    if (x.title === selectedValue) {
-      return x;
-    }
-  });
   const handleChangeLocation = itemValue => {
     dispatch(
       saveLocation({
@@ -43,8 +32,8 @@ const ItemLocation = () => {
         object: selectedObj.name ? selectedObj.name : selectedObj,
       }),
     );
+    navigation.navigate('CreateItem');
   };
-  console.log();
   const handleSelectObj = item => {
     setSelectedLoc(item);
     const selectedObj = objects.find(obj => obj._id === item.id);

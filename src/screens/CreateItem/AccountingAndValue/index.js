@@ -7,9 +7,12 @@ import {width} from '../../../constants/dimentionsAndUnits';
 import {Card, TextInput} from 'react-native-paper';
 import {QtyForm} from './QtyForm';
 import {CreateItemContainer} from '../CreateItemContainer';
+import {useDispatch} from 'react-redux';
+import {saveAccountingAndValue} from '../../../actions/createItem';
 
 const AccountingAndValue = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const [qtyMode, setQtyMode] = useState('qty');
   const [sngPrice, setSngPrice] = useState('');
 
@@ -17,9 +20,14 @@ const AccountingAndValue = () => {
     e.preventDefault();
     setQtyMode(mode);
   };
-
+  const handleSave = () => {
+    dispatch(saveAccountingAndValue({pricePerPiece: sngPrice}));
+    navigation.navigate('CreateItem');
+  };
   return (
-    <CreateItemContainer isBtnVisible={qtyMode !== 'qty'} handleSave={() => {}}>
+    <CreateItemContainer
+      isBtnVisible={qtyMode !== 'qty'}
+      handleSave={handleSave}>
       <>
         <View style={styles.modeWrap}>
           <TouchableOpacity

@@ -7,10 +7,7 @@ import DarkButton from '../../../components/Buttons/DarkButton';
 import {useNavigation} from '@react-navigation/native';
 import {validateFloatNumbers} from '../../../utils/validation';
 import {useDispatch} from 'react-redux';
-import {
-  saveAccountingAndValue,
-  saveBaseItemInfo,
-} from '../../../actions/createItem';
+import {saveAccountingAndValue} from '../../../actions/createItem';
 
 const initialValues = {
   qty: 1,
@@ -31,18 +28,24 @@ export const QtyForm = () => {
     () =>
       setFormValues({
         ...formValues,
-        pricePerPiece: formValues.pricePerLot / formValues.qty,
+        pricePerPiece:
+          formValues.qty > 0
+            ? +formValues.pricePerLot / +formValues.qty
+            : +formValues.pricePerPiece,
       }),
-    [formValues.pricePerLot],
+    [formValues.pricePerLot, formValues.qty],
   );
 
   useEffect(
     () =>
       setFormValues({
         ...formValues,
-        pricePerLot: formValues.pricePerPiece * formValues.qty,
+        pricePerLot:
+          formValues.qty > 0
+            ? +formValues.pricePerPiece * +formValues.qty
+            : +formValues.pricePerLot,
       }),
-    [formValues.pricePerPiece],
+    [formValues.pricePerPiece, formValues.qty],
   );
 
   const handleChoseMenu = item => {
@@ -64,7 +67,6 @@ export const QtyForm = () => {
       units: formValues.units,
     },
     pricePerPiece: formValues.pricePerLot,
-    priceTotal: formValues.pricePerPiece,
   };
 
   const handleSave = () => {

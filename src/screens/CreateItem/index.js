@@ -19,6 +19,7 @@ const CreateItem = () => {
     createItem.location,
   ]);
   const baseInfoMetadata = {metadata: baseInfo};
+
   return (
     <>
       <Appbar
@@ -52,6 +53,33 @@ const CreateItem = () => {
             {T.t('type_and_value')}
             <Text style={styles.required}> * </Text>
           </Text>
+          {accountType.pricePerPiece ? (
+            <View style={styles.itemContent}>
+              <Text style={styles.itemContentText}>
+                {T.t('detail_type')}:{' '}
+                {accountType.batch ? T.t('quantitative') : T.t('single')}
+              </Text>
+              {accountType.batch && (
+                <>
+                  <Text style={styles.itemContentText}>
+                    {T.t('detail_quantit')}: {accountType.batch.qty}{' '}
+                    {accountType.batch.units}
+                  </Text>
+                  <Text style={styles.itemContentText}>
+                    {T.t('detail_price_per_item')}: {accountType.pricePerPiece}
+                  </Text>
+                  <Text style={styles.itemContentText}>
+                    {T.t('detail_price_per_lot')}:{' '}
+                    {accountType.batch.qty * accountType.pricePerPiece}
+                  </Text>
+                </>
+              )}
+
+              <Text style={styles.itemContentText}>
+                {T.t('detail_price_per_item')}: {accountType.pricePerPiece}
+              </Text>
+            </View>
+          ) : null}
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.menuItem}
@@ -110,7 +138,6 @@ const CreateItem = () => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: -10,
     backgroundColor: '#D3E3F2',
     height: height,
     width: width,

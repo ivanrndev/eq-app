@@ -16,7 +16,6 @@ const initialState = {
       units: '',
     },
     pricePerPiece: '',
-    priceTotal: '',
   },
   photos: [],
   location: {
