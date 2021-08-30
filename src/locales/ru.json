@@ -300,5 +300,6 @@
     "role": "Роль",
     "or": "ИЛИ",
     "error_valid_email": "Email не корректный",
-    "error_user_not_exist": "Пользователь не найден"
+    "error_user_not_exist": "Пользователь не найден",
+    "value": "Значение"
 }

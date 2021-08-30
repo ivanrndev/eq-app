@@ -1,5 +1,12 @@
 import React, {useState} from 'react';
-import {FlatList, Image, StyleSheet, Text, View} from 'react-native';
+import {
+  Dimensions,
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 import {TextInput} from 'react-native-paper';
@@ -14,15 +21,21 @@ import {height, width} from '../../constants/dimentionsAndUnits';
 const CreateItem = () => {
   const navigation = useNavigation();
   const [instanceAmount, setInstanceAmount] = useState(1);
-  const [baseInfo, accountType, location, photos, responsible] = useSelector(
-    ({createItem}) => [
-      createItem.baseInfo,
-      createItem.accountType,
-      createItem.location,
-      createItem.photos,
-      createItem.responsible,
-    ],
-  );
+  const [
+    baseInfo,
+    accountType,
+    location,
+    photos,
+    responsible,
+    additionalInfo,
+  ] = useSelector(({createItem}) => [
+    createItem.baseInfo,
+    createItem.accountType,
+    createItem.location,
+    createItem.photos,
+    createItem.responsible,
+    createItem.additionalInfo,
+  ]);
   const baseInfoMetadata = {metadata: baseInfo};
 
   const renderPhotoItem = ({item}) => {
@@ -37,6 +50,13 @@ const CreateItem = () => {
       </View>
     );
   };
+  const renderAdditionalInfoItem = ({item}) => (
+    <View style={styles.valuesWrap}>
+      <Text style={styles.valueText}>{item.name}: </Text>
+      <Text style={styles.valueText}>{item.value}</Text>
+    </View>
+  );
+
   return (
     <>
       <Appbar
@@ -150,6 +170,15 @@ const CreateItem = () => {
           style={styles.menuItem}
           onPress={() => navigation.navigate('CreateItemAdditionalInfo')}>
           <Text style={styles.itemText}>{T.t('additional_info')}</Text>
+          {additionalInfo.length ? (
+            <View style={styles.itemContent}>
+              <FlatList
+                data={additionalInfo}
+                renderItem={renderAdditionalInfoItem}
+                keyExtractor={item => item.name}
+              />
+            </View>
+          ) : null}
         </TouchableOpacity>
         <View style={styles.amount}>
           <Text style={styles.itemText}>{T.t('amount_of_instances')}</Text>
@@ -235,6 +264,19 @@ const styles = StyleSheet.create({
     width: 50,
     marginRight: 5,
     borderColor: 'transparent',
+  },
+  valuesWrap: {
+    flexDirection: 'row',
+    marginTop: 20,
+  },
+  valueText: {
+    fontSize: 12,
+    lineHeight: 15,
+    color: '#22215B',
+    fontWeight: 'bold',
+    textAlign: 'left',
+    marginRight: 5,
+    maxWidth: Dimensions.get('window').width / 2.6,
   },
 });
 

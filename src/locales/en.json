@@ -296,6 +296,7 @@
     "role": "Role",
     "or": "OR",
     "error_valid_email": "Email not valid",
-    "error_user_not_exist": "Such user don't exist"
+    "error_user_not_exist": "Such user don't exist",
+    "value": "Value"
 
 }
