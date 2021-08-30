@@ -37,7 +37,7 @@ const CreateItem = () => {
     createItem.additionalInfo,
   ]);
   const baseInfoMetadata = {metadata: baseInfo};
-
+  console.log('KKK', responsible);
   const renderPhotoItem = ({item}) => {
     return (
       <View style={styles.smallImgWrap}>

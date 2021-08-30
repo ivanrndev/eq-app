@@ -72,7 +72,7 @@ const Responsible = () => {
   );
   const handleSave = () => {
     const data = !!responsibleUser
-      ? {firstName: responsibleUser.name}
+      ? {firstName: responsibleUser.name, id: responsibleUser.id}
       : formValues;
     if (
       !!responsibleUser ||
