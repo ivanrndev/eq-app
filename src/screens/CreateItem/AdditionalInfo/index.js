@@ -16,15 +16,15 @@ const AdditionalInfo = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [additionalInfo, setAdditionalInfo] = useState({
-    name: '',
+    label: '',
     value: '',
   });
   const [additionalInfoArr, setAdditionalInfoArr] = useState([]);
 
   const handleAddInfo = () => {
-    if (additionalInfo.name.length > 0 && additionalInfo.value.length > 0) {
+    if (additionalInfo.label.length > 0 && additionalInfo.value.length > 0) {
       setAdditionalInfoArr([...additionalInfoArr, additionalInfo]);
-      setAdditionalInfo({name: '', value: ''});
+      setAdditionalInfo({label: '', value: ''});
     }
   };
 
@@ -41,7 +41,7 @@ const AdditionalInfo = () => {
   const renderItem = ({item, index}) => (
     <View style={styles.row}>
       <View style={styles.valuesWrap}>
-        <Text style={styles.valueText}>{item.name}: </Text>
+        <Text style={styles.valueText}>{item.label}: </Text>
         <Text style={styles.valueText}>{item.value}</Text>
       </View>
       <IconButton
@@ -60,12 +60,12 @@ const AdditionalInfo = () => {
         <Card style={styles.card}>
           <View style={styles.row}>
             <TextInput
-              value={additionalInfo.name}
+              value={additionalInfo.label}
               style={styles.input}
               label={`${T.t('name')}`}
               mode="outlined"
               onChangeText={text =>
-                setAdditionalInfo({...additionalInfo, name: text})
+                setAdditionalInfo({...additionalInfo, label: text})
               }
             />
             <TextInput
@@ -84,7 +84,7 @@ const AdditionalInfo = () => {
               style={styles.btn}
               onPress={handleAddInfo}
               disabled={
-                additionalInfo.name.length === 0 ||
+                additionalInfo.label.length === 0 ||
                 additionalInfo.value.length === 0
               }
             />
@@ -93,7 +93,7 @@ const AdditionalInfo = () => {
             <FlatList
               data={additionalInfoArr}
               renderItem={renderItem}
-              keyExtractor={item => item.name}
+              keyExtractor={item => item.label}
               ItemSeparatorComponent={() => (
                 <View style={styles.itemSeparator} />
               )}

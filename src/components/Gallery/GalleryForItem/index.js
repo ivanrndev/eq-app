@@ -51,7 +51,7 @@ const GalleryForItem = ({
     setChosenPhoto(index);
     setPhotoDel(item.name);
   };
-  console.log('KLO', bigPhoto, smallPhotos);
+
   const handleAddPhoto = () => {
     navigation.navigate('ChooseItemPhotoMode');
     dispatch(setGoBackPageGallery(page));

@@ -14,11 +14,14 @@ import T from '../../i18n';
 import Appbar from '../../components/Appbar';
 import DarkButton from '../../components/Buttons/DarkButton';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import ItemListCard from '../../components/ItemListCard';
 import {height, width} from '../../constants/dimentionsAndUnits';
+import {createItem} from '../../actions/createItem';
+import {isEmpty} from 'lodash';
 
 const CreateItem = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const [instanceAmount, setInstanceAmount] = useState(1);
   const [
@@ -36,8 +39,48 @@ const CreateItem = () => {
     createItem.responsible,
     createItem.additionalInfo,
   ]);
+
+  const item = {
+    type: baseInfo.type,
+    ...(baseInfo.brand && {brand: baseInfo.brand}),
+    ...(baseInfo.model && {model: baseInfo.model}),
+    ...(baseInfo.serial && {serial: baseInfo.serial}),
+    ...(baseInfo.title && {title: baseInfo.title}),
+    ...(responsible.id && {person: responsible.id}),
+    ...(location.location && {...location}),
+    ...(accountType.batch &&
+      accountType.batch.quantity && {
+        batch: {
+          quantity: accountType.batch.quantity,
+          units: accountType.batch.units,
+        },
+      }),
+    customFields: additionalInfo,
+    price: accountType.pricePerPiece,
+    count: instanceAmount,
+  };
+  let itemPhotos = new FormData();
+  console.log('PPP', accountType);
+  if (!isEmpty(photos)) {
+    photos.forEach(file => {
+      itemPhotos.append('file', {
+        uri: `file:///${file.path}`,
+        type: file.mime,
+        name: file.filename ?? 'file.path',
+      });
+    });
+  }
+  console.log('POPOPOOP', item);
+  const createNewItem = () => {
+    if (baseInfo.type) {
+      dispatch(createItem(item, navigation, itemPhotos));
+    }
+  };
   const baseInfoMetadata = {metadata: baseInfo};
-  console.log('KKK', responsible);
+  const pricePerLot =
+    accountType.batch &&
+    +accountType.batch.quantity * +accountType.pricePerPiece;
+
   const renderPhotoItem = ({item}) => {
     return (
       <View style={styles.smallImgWrap}>
@@ -52,7 +95,7 @@ const CreateItem = () => {
   };
   const renderAdditionalInfoItem = ({item}) => (
     <View style={styles.valuesWrap}>
-      <Text style={styles.valueText}>{item.name}: </Text>
+      <Text style={styles.valueText}>{item.label}: </Text>
       <Text style={styles.valueText}>{item.value}</Text>
     </View>
   );
@@ -107,8 +150,7 @@ const CreateItem = () => {
                     {T.t('detail_price_per_item')}: {accountType.pricePerPiece}
                   </Text>
                   <Text style={styles.itemContentText}>
-                    {T.t('detail_price_per_lot')}:{' '}
-                    {accountType.batch.qty * accountType.pricePerPiece}
+                    {T.t('detail_price_per_lot')}: {pricePerLot}
                   </Text>
                 </>
               )}
@@ -192,8 +234,9 @@ const CreateItem = () => {
         </View>
         <View style={styles.btn}>
           <DarkButton
-            onPress={() => navigation.navigate('CreateItem')}
+            onPress={createNewItem}
             text={`${T.t('create')}`}
+            disabled={!baseInfo.type}
           />
         </View>
       </KeyboardAwareScrollView>

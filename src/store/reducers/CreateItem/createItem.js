@@ -1,7 +1,6 @@
 import {
   SAVE_ACCOUNT_AND_VALUE,
   SAVE_ADDITIONAL_INFO,
-  SAVE_AMOUNT_OF_INSTANCES,
   SAVE_BASE_ITEM_INFO,
   SAVE_ITEM_LOCATIONS,
   SAVE_PHOTO,
@@ -12,10 +11,10 @@ const initialState = {
   baseInfo: {type: '', title: '', brand: '', model: '', serial: ''},
   accountType: {
     batch: {
-      qty: '',
-      units: '',
+      quantity: 1,
+      units: 'PC',
     },
-    pricePerPiece: '',
+    pricePerPiece: '1',
   },
   photos: [],
   location: {
@@ -28,7 +27,7 @@ const initialState = {
     email: '',
   },
   additionalInfo: [],
-  amountOfInstances: '',
+  createItemError: '',
 };
 
 const createItemReducer = (state = initialState, action) => {
@@ -59,11 +58,6 @@ const createItemReducer = (state = initialState, action) => {
         ...action.payload,
       };
     case SAVE_ADDITIONAL_INFO:
-      return {
-        ...state,
-        ...action.payload,
-      };
-    case SAVE_AMOUNT_OF_INSTANCES:
       return {
         ...state,
         ...action.payload,

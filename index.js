@@ -11,13 +11,11 @@ import {StoreContext} from 'redux-react-hook';
 import {Provider} from 'react-redux';
 import {store} from './src/store/index';
 
-/*
 if (__DEV__) {
   XMLHttpRequest = global.originalXMLHttpRequest
     ? global.originalXMLHttpRequest
     : global.XMLHttpRequest;
 }
-*/
 
 const ReduxApp = () => (
   <StoreContext.Provider value={store}>

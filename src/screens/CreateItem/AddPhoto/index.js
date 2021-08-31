@@ -15,6 +15,7 @@ const AddPhoto = () => {
   const [photoDel, setPhotoDel] = useState('');
 
   const [photos] = useSelector(({createItem}) => [createItem.photos]);
+
   return (
     <>
       <CreateItemContainer handleSave={() => navigation.navigate('CreateItem')}>

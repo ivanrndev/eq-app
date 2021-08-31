@@ -1,12 +1,19 @@
 import {
+  CREATE_ITEM,
+  CREATE_ITEM_ERROR,
+  CREATE_USER_ITEM,
+  CREATE_USER_ITEM_ERROR,
   SAVE_ACCOUNT_AND_VALUE,
   SAVE_ADDITIONAL_INFO,
-  SAVE_AMOUNT_OF_INSTANCES,
   SAVE_BASE_ITEM_INFO,
   SAVE_ITEM_LOCATIONS,
   SAVE_PHOTO,
   SAVE_RESPONSIBLE,
 } from './actionsType';
+import AsyncStorage from '@react-native-community/async-storage';
+import axios from '../utils/axios';
+import {API_URL} from '../constants/auth';
+import {addItemsPhoto} from './addItemPhotoActions';
 
 export const saveBaseItemInfo = values => dispatch =>
   dispatch({
@@ -43,9 +50,61 @@ export const saveAdditionalInfo = additionalInfo => dispatch =>
     type: SAVE_ADDITIONAL_INFO,
     payload: {additionalInfo},
   });
-export const saveAmountOfInstances = amountOfInstances => dispatch =>
-  dispatch({
-    type: SAVE_AMOUNT_OF_INSTANCES,
-    payload: {amountOfInstances},
+export const createItemUser = body => dispatch => {
+  AsyncStorage.getItem('company').then(company => {
+    return axios
+      .post(`${API_URL}/company/${company}/user`, body)
+      .then(resp => {
+        if (resp.status === 200) {
+          console.log('user RESP', resp);
+          dispatch({
+            type: CREATE_USER_ITEM,
+          });
+        }
+      })
+
+      .catch(e => {
+        if (!e.response.data) {
+          console.log('CREATE I', e.message);
+          dispatch({
+            type: CREATE_USER_ITEM_ERROR,
+            payload: {
+              createItemError: e.message,
+            },
+          });
+        }
+      });
   });
-export const createItem = item => dispatch => {};
+};
+
+export const createItem = (data, navigation, photos, user) => dispatch => {
+  console.log('IIIII');
+  AsyncStorage.getItem('company').then(company => {
+    return axios
+      .post(`${API_URL}/company/${company}/item`, data)
+      .then(resp => {
+        if (resp.status === 200) {
+          console.log('ITEM RESP', resp);
+          dispatch({
+            type: CREATE_ITEM,
+          });
+          const id = resp.data[0]._id;
+          if (photos) {
+            dispatch(addItemsPhoto(id, photos, 'CreateItem', navigation));
+          }
+        }
+      })
+      .catch(e => {
+        if (!e.response.data) {
+          console.log('CREATE I', e.message);
+          dispatch({
+            type: CREATE_ITEM_ERROR,
+            payload: {
+              statusTransfer: 'error',
+              createItemError: e.message,
+            },
+          });
+        }
+      });
+  });
+};

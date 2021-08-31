@@ -14,7 +14,7 @@ const AccountingAndValue = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [qtyMode, setQtyMode] = useState('qty');
-  const [sngPrice, setSngPrice] = useState('');
+  const [sngPrice, setSngPrice] = useState(1);
 
   const handleMode = (e, mode) => {
     e.preventDefault();
@@ -24,6 +24,7 @@ const AccountingAndValue = () => {
     dispatch(saveAccountingAndValue({pricePerPiece: sngPrice}));
     navigation.navigate('CreateItem');
   };
+
   return (
     <CreateItemContainer
       isBtnVisible={qtyMode !== 'qty'}

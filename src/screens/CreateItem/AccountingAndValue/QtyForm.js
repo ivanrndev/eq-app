@@ -10,7 +10,7 @@ import {useDispatch} from 'react-redux';
 import {saveAccountingAndValue} from '../../../actions/createItem';
 
 const initialValues = {
-  qty: 1,
+  quantity: 1,
   units: T.t('piece'),
   pricePerPiece: 1,
   pricePerLot: 1,
@@ -29,11 +29,11 @@ export const QtyForm = () => {
       setFormValues({
         ...formValues,
         pricePerPiece:
-          formValues.qty > 0
-            ? +formValues.pricePerLot / +formValues.qty
-            : +formValues.pricePerPiece,
+          formValues.quantity > 0
+            ? formValues.pricePerLot / formValues.quantity
+            : formValues.pricePerPiece,
       }),
-    [formValues.pricePerLot, formValues.qty],
+    [formValues.pricePerLot, formValues.quantity],
   );
 
   useEffect(
@@ -41,11 +41,11 @@ export const QtyForm = () => {
       setFormValues({
         ...formValues,
         pricePerLot:
-          formValues.qty > 0
-            ? +formValues.pricePerPiece * +formValues.qty
-            : +formValues.pricePerLot,
+          formValues.quantity > 0
+            ? formValues.pricePerPiece * formValues.quantity
+            : formValues.pricePerLot,
       }),
-    [formValues.pricePerPiece, formValues.qty],
+    [formValues.pricePerPiece, formValues.quantity],
   );
 
   const handleChoseMenu = item => {
@@ -63,7 +63,7 @@ export const QtyForm = () => {
   };
   const normalizedValues = {
     batch: {
-      qty: formValues.qty,
+      quantity: formValues.quantity,
       units: formValues.units,
     },
     pricePerPiece: formValues.pricePerLot,
@@ -78,13 +78,13 @@ export const QtyForm = () => {
     <>
       <View style={styles.qty}>
         <TextInput
-          value={formValues.qty.toString()}
+          value={formValues.quantity.toString()}
           style={[styles.qtyInput]}
           label={T.t('detail_quantity')}
           keyboardType="numeric"
           mode="outlined"
           error={error.length > 0}
-          onChangeText={text => handleTextChange(text, 'qty')}
+          onChangeText={text => handleTextChange(text, 'quantity')}
         />
         <Menu
           visible={visible}
