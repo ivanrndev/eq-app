@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Dimensions,
   FlatList,
@@ -17,7 +17,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 import {useDispatch, useSelector} from 'react-redux';
 import ItemListCard from '../../components/ItemListCard';
 import {height, width} from '../../constants/dimentionsAndUnits';
-import {createItem} from '../../actions/createItem';
+import {createItem, createItemUser} from '../../actions/createItem';
 import {isEmpty} from 'lodash';
 
 const CreateItem = () => {
@@ -39,6 +39,16 @@ const CreateItem = () => {
     createItem.responsible,
     createItem.additionalInfo,
   ]);
+  /*  useEffect(() => {
+    dispatch(
+      createItemUser({
+        role: 'admin',
+        firstName: 'LALALA11',
+        email: 'lala11@gmail.com',
+      }),
+    );
+  }),
+    [];*/
 
   const item = {
     type: baseInfo.type,
@@ -59,8 +69,15 @@ const CreateItem = () => {
     price: accountType.pricePerPiece,
     count: instanceAmount,
   };
+  const user = responsible.firstName &&
+    responsible.email && {
+      role: responsible.role.item,
+      firstName: responsible.firstName,
+      email: responsible.email,
+    };
+
   let itemPhotos = new FormData();
-  console.log('PPP', accountType);
+  console.log('VALUES', item);
   if (!isEmpty(photos)) {
     photos.forEach(file => {
       itemPhotos.append('file', {
@@ -70,10 +87,10 @@ const CreateItem = () => {
       });
     });
   }
-  console.log('POPOPOOP', item);
+
   const createNewItem = () => {
     if (baseInfo.type) {
-      dispatch(createItem(item, navigation, itemPhotos));
+      dispatch(createItem(item, navigation, photos.length && itemPhotos));
     }
   };
   const baseInfoMetadata = {metadata: baseInfo};

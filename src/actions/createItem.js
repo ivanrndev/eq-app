@@ -39,12 +39,13 @@ export const saveLocation = location => dispatch =>
     payload: {location},
   });
 
-export const saveResponsible = responsible => dispatch =>
+export const saveResponsible = responsible => dispatch => {
+  console.log('ACTION', responsible);
   dispatch({
     type: SAVE_RESPONSIBLE,
     payload: {responsible},
   });
-
+};
 export const saveAdditionalInfo = additionalInfo => dispatch =>
   dispatch({
     type: SAVE_ADDITIONAL_INFO,
@@ -60,12 +61,11 @@ export const createItemUser = body => dispatch => {
           dispatch({
             type: CREATE_USER_ITEM,
           });
+          return resp.data._id;
         }
       })
-
       .catch(e => {
         if (!e.response.data) {
-          console.log('CREATE I', e.message);
           dispatch({
             type: CREATE_USER_ITEM_ERROR,
             payload: {

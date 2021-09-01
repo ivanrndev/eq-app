@@ -25,6 +25,7 @@ const initialState = {
     role: '',
     firstName: '',
     email: '',
+    id: '',
   },
   additionalInfo: [],
   createItemError: '',

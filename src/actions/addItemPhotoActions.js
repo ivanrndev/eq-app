@@ -18,7 +18,6 @@ export const addItemsPhoto = (id, photos, page, nav) => dispatch => {
       .patch(`${API_URL}/company/${company}/item/${id}/photos`, photos)
       .then(resp => {
         if (resp.status === 200) {
-          console.log('PHOTO succ', resp);
           dispatch({
             type: ADD_PHOTO_TO_ITEM,
           });
@@ -26,7 +25,6 @@ export const addItemsPhoto = (id, photos, page, nav) => dispatch => {
       })
       .then(() => dispatch(getSearchItem(id, nav, page)))
       .catch(e => {
-        console.log('PHOTO ERR', e.message);
         if (!e.response.data.success) {
           dispatch({
             type: ADD_PHOTO_TO_ITEM_ERROR,

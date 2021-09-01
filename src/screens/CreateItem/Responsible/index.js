@@ -35,16 +35,17 @@ const Responsible = () => {
     dispatch(getUserList(navigation, '', 'CreateItemResponsible'));
   }, []);
   useEffect(() => {
-    const selectedUser = users.find(
-      user => user.firstName === responsibleUser.name,
-    );
-    selectedUser
-      ? seteErrorSelectedUser('')
-      : seteErrorSelectedUser(T.t('error_user_not_exist'));
-  }, [responsibleUser]);
+    formValues.firstName &&
+      (setResponsibleUser({name: formValues.firstName}) &&
+        seteErrorSelectedUser(''));
+  }, [formValues.firstName]);
 
   const handleSelectTextChange = text => {
     setResponsibleUser({name: text});
+    const selectedUser = users.find(user => user.firstName === text);
+    selectedUser
+      ? seteErrorSelectedUser('')
+      : seteErrorSelectedUser(T.t('error_user_not_exist'));
   };
   const handleTextChange = (text, name) => {
     setFormValues({...formValues, [name]: text});
@@ -61,7 +62,7 @@ const Responsible = () => {
   };
   const handleSelectResp = item => {
     setResponsibleUser(item);
-    const selectedUser = users.find(obj => obj._id === item.id);
+    setFormValues(initialValues);
   };
   const handleChooseRole = item => {
     setFormValues({...formValues, role: item});
@@ -70,20 +71,33 @@ const Responsible = () => {
   const renderItem = item => (
     <Menu.Item onPress={() => handleChooseRole(item)} title={item.item} />
   );
+  const newUser =
+    !!formValues.firstName && !!formValues.email && errors.email.length === 0;
+  console.log(
+    'OOIIII',
+    !!formValues.firstName,
+    !!formValues.email,
+    errors.email.length === 0,
+    formValues,
+  );
   const handleSave = () => {
-    const data = !!responsibleUser
-      ? {firstName: responsibleUser.name, id: responsibleUser.id}
-      : formValues;
-    if (
-      !!responsibleUser ||
-      (formValues.firstName &&
-        formValues.email &&
-        !errors.firstName &&
-        !errors.email)
-    ) {
-      dispatch(saveResponsible(data));
-      navigation.navigate('CreateItem');
+    if (newUser) {
+      dispatch(saveResponsible(formValues));
+    } else {
+      const data = !!responsibleUser
+        ? {firstName: responsibleUser.name, id: responsibleUser.id}
+        : formValues;
+      if (
+        !!responsibleUser ||
+        (formValues.firstName &&
+          formValues.email &&
+          !errors.firstName &&
+          !errors.email)
+      ) {
+        dispatch(saveResponsible(data));
+      }
     }
+    navigation.navigate('CreateItem');
   };
   return (
     <CreateItemContainer handleSave={handleSave}>
@@ -122,7 +136,7 @@ const Responsible = () => {
         <Text style={styles.left}>{T.t('or_create_new_user')}:</Text>
         <View>
           <TextInput
-            value={formValues.type}
+            value={formValues.firstName}
             style={styles.input}
             label={`${T.t('name')}`}
             mode="outlined"
@@ -131,7 +145,7 @@ const Responsible = () => {
           />
           <Text style={styles.err}>{errors.firstName}</Text>
           <TextInput
-            value={formValues.title}
+            value={formValues.email}
             style={[styles.input, styles.secondInput]}
             label={T.t('email')}
             mode="outlined"
