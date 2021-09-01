@@ -51,18 +51,27 @@ export const saveAdditionalInfo = additionalInfo => dispatch =>
     type: SAVE_ADDITIONAL_INFO,
     payload: {additionalInfo},
   });
-export const createItemUser = body => dispatch => {
+
+export const createItemAndUser = (
+  body,
+  item,
+  navigation,
+  photos,
+) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
       .post(`${API_URL}/company/${company}/user`, body)
       .then(resp => {
         if (resp.status === 200) {
-          console.log('user RESP', resp);
           dispatch({
             type: CREATE_USER_ITEM,
           });
-          return resp.data._id;
+          return resp.data.user._id;
         }
+      })
+      .then(id => {
+        const data = {...item, person: id};
+        dispatch(createItem(data, navigation, photos));
       })
       .catch(e => {
         if (!e.response.data) {
@@ -77,14 +86,13 @@ export const createItemUser = body => dispatch => {
   });
 };
 
-export const createItem = (data, navigation, photos, user) => dispatch => {
-  console.log('IIIII');
+export const createItem = (data, navigation, photos) => dispatch => {
+  console.log('IIIII', data);
   AsyncStorage.getItem('company').then(company => {
     return axios
       .post(`${API_URL}/company/${company}/item`, data)
       .then(resp => {
         if (resp.status === 200) {
-          console.log('ITEM RESP', resp);
           dispatch({
             type: CREATE_ITEM,
           });
@@ -94,9 +102,9 @@ export const createItem = (data, navigation, photos, user) => dispatch => {
           }
         }
       })
+      .then()
       .catch(e => {
         if (!e.response.data) {
-          console.log('CREATE I', e.message);
           dispatch({
             type: CREATE_ITEM_ERROR,
             payload: {

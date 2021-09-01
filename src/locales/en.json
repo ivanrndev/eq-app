@@ -290,7 +290,7 @@
     "or_create_new_user": "Create new user",
     "administrator": "admin",
     "stockman":"stockman",
-    "employee": "employee",
+    "employee": "worker",
     "name": "Name",
     "email": "Email",
     "role": "Role",

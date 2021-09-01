@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   Dimensions,
   FlatList,
@@ -17,7 +17,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 import {useDispatch, useSelector} from 'react-redux';
 import ItemListCard from '../../components/ItemListCard';
 import {height, width} from '../../constants/dimentionsAndUnits';
-import {createItem, createItemUser} from '../../actions/createItem';
+import {createItem, createItemAndUser} from '../../actions/createItem';
 import {isEmpty} from 'lodash';
 
 const CreateItem = () => {
@@ -39,16 +39,6 @@ const CreateItem = () => {
     createItem.responsible,
     createItem.additionalInfo,
   ]);
-  /*  useEffect(() => {
-    dispatch(
-      createItemUser({
-        role: 'admin',
-        firstName: 'LALALA11',
-        email: 'lala11@gmail.com',
-      }),
-    );
-  }),
-    [];*/
 
   const item = {
     type: baseInfo.type,
@@ -57,7 +47,8 @@ const CreateItem = () => {
     ...(baseInfo.serial && {serial: baseInfo.serial}),
     ...(baseInfo.title && {title: baseInfo.title}),
     ...(responsible.id && {person: responsible.id}),
-    ...(location.location && {...location}),
+    ...(location.location.object && {location: location.location.object}),
+    ...(location.location.location && {object: location.location.location}),
     ...(accountType.batch &&
       accountType.batch.quantity && {
         batch: {
@@ -77,7 +68,6 @@ const CreateItem = () => {
     };
 
   let itemPhotos = new FormData();
-  console.log('VALUES', item);
   if (!isEmpty(photos)) {
     photos.forEach(file => {
       itemPhotos.append('file', {
@@ -90,7 +80,18 @@ const CreateItem = () => {
 
   const createNewItem = () => {
     if (baseInfo.type) {
-      dispatch(createItem(item, navigation, photos.length && itemPhotos));
+      if (user) {
+        dispatch(
+          createItemAndUser(
+            user,
+            item,
+            navigation,
+            photos.length && itemPhotos,
+          ),
+        );
+      } else {
+        dispatch(createItem(item, navigation, photos.length && itemPhotos));
+      }
     }
   };
   const baseInfoMetadata = {metadata: baseInfo};
