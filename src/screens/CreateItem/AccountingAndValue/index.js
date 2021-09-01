@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import T from '../../../i18n';
@@ -9,26 +9,54 @@ import {QtyForm} from './QtyForm';
 import {CreateItemContainer} from '../CreateItemContainer';
 import {useDispatch} from 'react-redux';
 import {saveAccountingAndValue} from '../../../actions/createItem';
+import {validateFloatNumbers} from '../../../utils/validation';
 
 const AccountingAndValue = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [qtyMode, setQtyMode] = useState('qty');
   const [sngPrice, setSngPrice] = useState(1);
+  const [sngErr, setSngErr] = useState('');
 
+  useEffect(() => {
+    qtyMode === 'qty' && setSngErr('');
+  }),
+    [qtyMode];
+
+  console.log(
+    'ppppp',
+    sngErr,
+    qtyMode === 'sng',
+    sngErr.length === 0,
+    sngPrice.length > 0,
+  );
   const handleMode = (e, mode) => {
     e.preventDefault();
     setQtyMode(mode);
   };
   const handleSave = () => {
-    dispatch(saveAccountingAndValue({pricePerPiece: sngPrice}));
-    navigation.navigate('CreateItem');
+    if (qtyMode === 'sng' && sngErr.length === 0 && sngPrice.length > 0) {
+      dispatch(saveAccountingAndValue({pricePerPiece: sngPrice}));
+      navigation.navigate('CreateItem');
+    }
+  };
+  const handleSngChange = text => {
+    setSngPrice(text);
+    if (text.length === 0) {
+      setSngErr(T.t('error_required'));
+    }
+    !validateFloatNumbers(text)
+      ? setSngErr(T.t('error_only_positive_numbers'))
+      : setSngErr('');
   };
 
   return (
     <CreateItemContainer
       isBtnVisible={qtyMode !== 'qty'}
-      handleSave={handleSave}>
+      handleSave={handleSave}
+      isSaveBtnEnabled={
+        qtyMode === 'sng' && sngErr.length === 0 && sngPrice.length > 0
+      }>
       <>
         <View style={styles.modeWrap}>
           <TouchableOpacity
@@ -88,8 +116,10 @@ const AccountingAndValue = () => {
                   label={T.t('detail_price_per_item')}
                   keyboardType="numeric"
                   mode="outlined"
-                  onChangeText={text => setSngPrice(text)}
+                  onChangeText={text => handleSngChange(text)}
+                  error={sngErr}
                 />
+                <Text style={styles.err}>{sngErr}</Text>
               </>
             )}
           </Card>
@@ -130,6 +160,13 @@ const styles = StyleSheet.create({
     marginTop: 20,
     width: width / 1.3,
     backgroundColor: '#fff',
+  },
+  err: {
+    width: width / 1.3,
+    color: '#8c231f',
+    height: 15,
+    marginTop: 5,
+    marginLeft: 10,
   },
 });
 

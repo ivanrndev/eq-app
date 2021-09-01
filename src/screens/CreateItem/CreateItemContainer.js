@@ -9,6 +9,7 @@ import DarkButton from '../../components/Buttons/DarkButton';
 export const CreateItemContainer = ({
   handleSave,
   isBtnVisible = true,
+  isSaveBtnEnabled = true,
   children,
 }) => {
   const navigation = useNavigation();
@@ -23,7 +24,11 @@ export const CreateItemContainer = ({
       {children}
       {isBtnVisible && (
         <View style={styles.btns}>
-          <DarkButton onPress={handleSave} text={`${T.t('save')}`} />
+          <DarkButton
+            onPress={handleSave}
+            text={`${T.t('save')}`}
+            disabled={!isSaveBtnEnabled}
+          />
         </View>
       )}
     </View>

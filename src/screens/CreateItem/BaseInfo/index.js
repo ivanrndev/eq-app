@@ -46,7 +46,9 @@ const BaseInfo = () => {
     }
   };
   return (
-    <CreateItemContainer handleSave={handleCreate}>
+    <CreateItemContainer
+      handleSave={handleCreate}
+      isSaveBtnEnabled={formValues.type.length > 0}>
       <KeyboardAwareScrollView style={styles.container}>
         <Card style={styles.card}>
           <TextInput
