@@ -15,7 +15,6 @@ import Appbar from '../../components/Appbar';
 import DarkButton from '../../components/Buttons/DarkButton';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 import {useDispatch, useSelector} from 'react-redux';
-import ItemListCard from '../../components/ItemListCard';
 import {height, width} from '../../constants/dimentionsAndUnits';
 import {createItem, createItemAndUser} from '../../actions/createItem';
 import {isEmpty} from 'lodash';
@@ -47,8 +46,8 @@ const CreateItem = () => {
     ...(baseInfo.serial && {serial: baseInfo.serial}),
     ...(baseInfo.title && {title: baseInfo.title}),
     ...(responsible.id && {person: responsible.id}),
-    ...(location.location.object && {location: location.location.object}),
-    ...(location.location.location && {object: location.location.location}),
+    ...(location.object && {location: location.object}),
+    ...(location.location && {object: location.location}),
     ...(accountType.batch &&
       accountType.batch.quantity && {
         batch: {
@@ -135,15 +134,42 @@ const CreateItem = () => {
         <TouchableOpacity
           style={styles.menuItem}
           onPress={() => navigation.navigate('CreateItemBaseInfo')}>
-          <Text style={styles.itemText}>
-            {T.t('base_item_info')}
-            <Text style={styles.required}> * </Text>
-          </Text>
-          {baseInfo && baseInfo.type ? (
-            <ItemListCard item={baseInfoMetadata} width="100%" />
-          ) : (
-            <Text> {T.t('is_not_specified')}</Text>
-          )}
+          <>
+            <Text style={styles.itemText}>
+              {T.t('base_item_info')}
+              <Text style={styles.required}> * </Text>
+            </Text>
+            {baseInfo && baseInfo.type ? (
+              <View style={styles.itemContent}>
+                <Text style={styles.itemContentText}>
+                  {T.t('detail_type')}: {baseInfo.type}
+                </Text>
+                {baseInfo.title ? (
+                  <Text style={styles.itemContentText}>
+                    {T.t('detail_title')}: {baseInfo.title}
+                  </Text>
+                ) : null}
+                {baseInfo.brand ? (
+                  <Text style={styles.itemContentText}>
+                    {T.t('detail_brand')}: {baseInfo.brand}
+                  </Text>
+                ) : null}
+                {baseInfo.model ? (
+                  <Text style={styles.itemContentText}>
+                    {T.t('detail_model')}: {baseInfo.model}
+                  </Text>
+                ) : null}
+
+                {baseInfo.serial ? (
+                  <Text style={styles.itemContentText}>
+                    {T.t('detail_serial')}: {baseInfo.serial}
+                  </Text>
+                ) : null}
+              </View>
+            ) : (
+              <Text> {T.t('is_not_specified')}</Text>
+            )}
+          </>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.menuItem}
@@ -201,14 +227,14 @@ const CreateItem = () => {
           <Text style={styles.itemText}>{T.t('item_location')}</Text>
           {location ? (
             <View style={styles.itemContent}>
-              {location.location ? (
+              {location.object ? (
                 <Text style={styles.itemContentText}>
-                  {T.t('location')}: {location.location}
+                  {T.t('object')}: {location.object}
                 </Text>
               ) : null}
               {location.location ? (
                 <Text style={styles.itemContentText}>
-                  {T.t('object')}: {location.object}
+                  {T.t('location')}: {location.location}
                 </Text>
               ) : null}
             </View>

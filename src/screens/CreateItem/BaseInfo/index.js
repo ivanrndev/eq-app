@@ -23,9 +23,9 @@ const BaseInfo = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const baseInfo = useSelector(({createItem}) => createItem.baseInfo);
-  const [formValues, setFormValues] = useState(baseInfo ?? initialFormValues);
+  const [formValues, setFormValues] = useState(baseInfo);
   const [errors, setErrors] = useState(initialErrors);
-
+  console.log('#$%', formValues, baseInfo, '3', formValues.type);
   const handleTextChange = (text, name) => {
     setFormValues({...formValues, [name]: text});
 
@@ -40,8 +40,7 @@ const BaseInfo = () => {
       ? setErrors({...errors, type: T.t('error_required')})
       : setErrors({...errors, type: ''});
     if (errors.type.length === 0) {
-      setFormValues(initialFormValues);
-      dispatch(saveBaseItemInfo(formValues));
+      dispatch(saveBaseItemInfo({...baseInfo, ...formValues}));
       navigation.navigate('CreateItem');
     }
   };
@@ -52,7 +51,7 @@ const BaseInfo = () => {
       <KeyboardAwareScrollView style={styles.container}>
         <Card style={styles.card}>
           <TextInput
-            value={formValues.type}
+            defaultValue={formValues.type}
             style={styles.input}
             label={`${T.t('detail_type')}*`}
             mode="outlined"
@@ -61,28 +60,28 @@ const BaseInfo = () => {
           />
           <Text style={styles.err}>{errors.type}</Text>
           <TextInput
-            value={formValues.title}
+            defaultValue={formValues.title}
             style={[styles.input, styles.secondInput]}
             label={T.t('detail_title')}
             mode="outlined"
             onChangeText={text => handleTextChange(text, 'title')}
           />
           <TextInput
-            value={formValues.brand}
+            defaultValue={formValues.brand}
             style={styles.input}
             label={T.t('detail_brand')}
             mode="outlined"
             onChangeText={text => handleTextChange(text, 'brand')}
           />
           <TextInput
-            value={formValues.model}
+            defaultValue={formValues.model}
             style={styles.input}
             label={T.t('detail_model')}
             mode="outlined"
             onChangeText={text => handleTextChange(text, 'model')}
           />
           <TextInput
-            value={formValues.serial}
+            defaultValue={formValues.serial}
             style={styles.input}
             label={T.t('detail_serial')}
             mode="outlined"

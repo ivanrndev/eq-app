@@ -29,11 +29,12 @@ const ItemLocation = () => {
     dispatch(
       saveLocation({
         location: selectedLoc.name ? selectedLoc.name : selectedLoc,
-        object: selectedObj.name ? selectedObj.name : selectedObj,
+        objects: selectedObj.name,
       }),
     );
     navigation.navigate('CreateItem');
   };
+
   const handleSelectObj = item => {
     setSelectedLoc(item);
     const selectedObj = objects.find(obj => obj._id === item.id);
@@ -68,7 +69,7 @@ const ItemLocation = () => {
             underlineColorAndroid: 'transparent',
             style: styles.textInput,
             value: selectedLoc.name,
-            onTextChange: text => setSelectedLoc(text),
+            onTextChange: text => setSelectedLoc({name: text}),
           }}
           listProps={{
             nestedScrollEnabled: true,
@@ -90,7 +91,8 @@ const ItemLocation = () => {
             underlineColorAndroid: 'transparent',
             style: styles.textInput,
             value: selectedObj.name,
-            onTextChange: text => setSelectedObj(text),
+            editable: !!selectedLoc.name,
+            onTextChange: text => setSelectedObj({name: text}),
           }}
           listProps={{
             nestedScrollEnabled: true,
