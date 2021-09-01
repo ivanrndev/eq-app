@@ -27,6 +27,7 @@ import NFC from '../../screens/NFC';
 import {cleanMountItemsList} from '../../actions/mountActions';
 import {clearComments} from '../../actions/commentsAction';
 import {setGoBackPageGallery} from '../../actions/addItemPhotoActions';
+import {cleanCreateItem} from '../../actions/createItem';
 
 const AppbarCustom = props => {
   const dispatch = useDispatch();
@@ -120,6 +121,7 @@ const AppbarCustom = props => {
             }
             if (props.createItem) {
               dispatch(setGoBackPageGallery(''));
+              dispatch(cleanCreateItem());
             }
           }}
         />

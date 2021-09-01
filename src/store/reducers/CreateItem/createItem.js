@@ -5,6 +5,7 @@ import {
   SAVE_ITEM_LOCATIONS,
   SAVE_PHOTO,
   SAVE_RESPONSIBLE,
+  CLEAN_CREATE_ITEM,
 } from '../../../actions/actionsType';
 
 const initialState = {
@@ -63,6 +64,12 @@ const createItemReducer = (state = initialState, action) => {
         ...state,
         ...action.payload,
       };
+    case CLEAN_CREATE_ITEM:
+      return {
+        ...state,
+        ...initialState,
+      };
+
     default:
       return state;
   }

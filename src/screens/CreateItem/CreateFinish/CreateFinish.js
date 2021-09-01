@@ -13,6 +13,7 @@ const CreateFinish = () => {
         arrow={true}
         goTo={'Home'}
         title={T.t('create_item')}
+        createItem={true}
       />
       <View style={styles.wrap}>
         <Text style={styles.titleLarge}>{T.t('created')}</Text>

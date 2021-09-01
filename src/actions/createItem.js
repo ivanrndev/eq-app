@@ -9,6 +9,7 @@ import {
   SAVE_ITEM_LOCATIONS,
   SAVE_PHOTO,
   SAVE_RESPONSIBLE,
+  CLEAN_CREATE_ITEM,
 } from './actionsType';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from '../utils/axios';
@@ -49,6 +50,10 @@ export const saveAdditionalInfo = additionalInfo => dispatch =>
   dispatch({
     type: SAVE_ADDITIONAL_INFO,
     payload: {additionalInfo},
+  });
+export const cleanCreateItem = () => dispatch =>
+  dispatch({
+    type: CLEAN_CREATE_ITEM,
   });
 
 export const createItemAndUser = (

@@ -40,7 +40,7 @@ const CreateItem = () => {
   ]);
 
   const item = {
-    type: baseInfo.type,
+    ...(baseInfo.type && {type: baseInfo.type}),
     ...(baseInfo.brand && {brand: baseInfo.brand}),
     ...(baseInfo.model && {model: baseInfo.model}),
     ...(baseInfo.serial && {serial: baseInfo.serial}),
