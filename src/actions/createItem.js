@@ -40,7 +40,6 @@ export const saveLocation = location => dispatch =>
   });
 
 export const saveResponsible = responsible => dispatch => {
-  console.log('ACTION', responsible);
   dispatch({
     type: SAVE_RESPONSIBLE,
     payload: {responsible},
@@ -87,7 +86,6 @@ export const createItemAndUser = (
 };
 
 export const createItem = (data, navigation, photos) => dispatch => {
-  console.log('IIIII', data);
   AsyncStorage.getItem('company').then(company => {
     return axios
       .post(`${API_URL}/company/${company}/item`, data)
@@ -98,11 +96,12 @@ export const createItem = (data, navigation, photos) => dispatch => {
           });
           const id = resp.data[0]._id;
           if (photos) {
-            dispatch(addItemsPhoto(id, photos, 'CreateItem', navigation));
+            dispatch(addItemsPhoto(id, photos, 'CreateFinish', navigation));
+          } else {
+            navigation.navigate('CreateFinish');
           }
         }
       })
-      .then()
       .catch(e => {
         if (!e.response.data) {
           dispatch({

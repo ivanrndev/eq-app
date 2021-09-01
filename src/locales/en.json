@@ -297,6 +297,7 @@
     "or": "OR",
     "error_valid_email": "Email not valid",
     "error_user_not_exist": "Such user don't exist",
-    "value": "Value"
+    "value": "Value",
+    "created": "Item has been successfully created"
 
 }

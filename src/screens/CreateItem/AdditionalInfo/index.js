@@ -1,16 +1,13 @@
-import React, {useEffect, useState} from 'react';
-import {Dimensions, StyleSheet, Text, View, FlatList} from 'react-native';
+import React, {useState} from 'react';
+import {Dimensions, FlatList, StyleSheet, Text, View} from 'react-native';
 import {CreateItemContainer} from '../CreateItemContainer';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
-import {Button, Card, IconButton, TextInput} from 'react-native-paper';
+import {Card, IconButton, TextInput} from 'react-native-paper';
 import {width} from '../../../constants/dimentionsAndUnits';
 import T from '../../../i18n';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
-import {
-  saveAdditionalInfo,
-  saveBaseItemInfo,
-} from '../../../actions/createItem';
+import {saveAdditionalInfo} from '../../../actions/createItem';
 
 const AdditionalInfo = () => {
   const navigation = useNavigation();
@@ -131,7 +128,6 @@ const styles = StyleSheet.create({
   },
   valueText: {
     color: '#22215B',
-    fontWeight: 'bold',
     textAlign: 'left',
     fontSize: 16,
     marginRight: 10,

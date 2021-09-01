@@ -93,7 +93,6 @@ const CreateItem = () => {
       }
     }
   };
-  const baseInfoMetadata = {metadata: baseInfo};
   const pricePerLot =
     accountType.batch &&
     +accountType.batch.quantity * +accountType.pricePerPiece;
@@ -187,7 +186,7 @@ const CreateItem = () => {
               {accountType.batch && (
                 <>
                   <Text style={styles.itemContentText}>
-                    {T.t('detail_quantit')}: {accountType.batch.qty}{' '}
+                    {T.t('detail_quantity')}: {accountType.batch.qty}{' '}
                     {accountType.batch.units}
                   </Text>
                   <Text style={styles.itemContentText}>

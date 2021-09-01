@@ -72,6 +72,7 @@ import AddPhoto from './screens/CreateItem/AddPhoto';
 import ItemLocation from './screens/CreateItem/ItemLocation';
 import Responsible from './screens/CreateItem/Responsible';
 import AdditionalInfo from './screens/CreateItem/AdditionalInfo';
+import CreateFinish from './screens/CreateItem/CreateFinish/CreateFinish';
 
 const theme = {
   ...DefaultTheme,
@@ -161,6 +162,7 @@ const App = () => {
               name="CreateItemAdditionalInfo"
               component={AdditionalInfo}
             />
+            <Drawer.Screen name="CreateFinish" component={CreateFinish} />
             <Drawer.Screen name="Transactions" component={Transactions} />
             <Drawer.Screen name="AcceptGive" component={AcceptGive} />
             <Drawer.Screen name="GiveList" component={GiveList} />

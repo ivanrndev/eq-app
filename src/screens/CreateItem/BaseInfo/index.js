@@ -25,7 +25,6 @@ const BaseInfo = () => {
   const baseInfo = useSelector(({createItem}) => createItem.baseInfo);
   const [formValues, setFormValues] = useState(baseInfo);
   const [errors, setErrors] = useState(initialErrors);
-  console.log('#$%', formValues, baseInfo, '3', formValues.type);
   const handleTextChange = (text, name) => {
     setFormValues({...formValues, [name]: text});
 
