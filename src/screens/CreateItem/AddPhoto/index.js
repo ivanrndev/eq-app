@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text} from 'react-native';
 import GalleryForItem from '../../../components/Gallery/GalleryForItem';
 import {CreateItemContainer} from '../CreateItemContainer';
@@ -15,7 +15,11 @@ const AddPhoto = () => {
   const [photoDel, setPhotoDel] = useState('');
 
   const [photos] = useSelector(({createItem}) => [createItem.photos]);
-
+  useEffect(() => {
+    if (photos.length === 0) {
+      setChosenPhoto(0);
+    }
+  }, [photos]);
   return (
     <>
       <CreateItemContainer handleSave={() => navigation.navigate('CreateItem')}>
