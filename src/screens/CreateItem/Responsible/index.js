@@ -52,8 +52,7 @@ const Responsible = () => {
   }, []);
   useEffect(() => {
     formValues.firstName &&
-      (setResponsibleUser({name: formValues.firstName}) &&
-        seteErrorSelectedUser(''));
+      (setResponsibleUser({name: ''}) && seteErrorSelectedUser(''));
   }, [formValues.firstName]);
 
   const handleSelectTextChange = text => {
