@@ -37,7 +37,6 @@ const BaseInfo = () => {
     }
   }, [baseInfo]);
 
-  console.log('kjkjh', baseInfo, formValues);
   const handleTextChange = (text, name) => {
     setFormValues({...formValues, [name]: text});
 

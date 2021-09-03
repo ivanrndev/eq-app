@@ -13,9 +13,9 @@ import {useNavigation} from '@react-navigation/native';
 const ItemLocation = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const [objects, selectedValue] = useSelector(({settings}) => [
+  const [objects, location] = useSelector(({settings, createItem}) => [
     settings.locations ? settings.locations : [],
-    settings.locationMain,
+    createItem.location,
   ]);
 
   const [selectedLoc, setSelectedLoc] = useState('');
@@ -24,7 +24,14 @@ const ItemLocation = () => {
   const [selectedObjObj, setSelectedObjObj] = useState([]);
 
   useEffect(() => dispatch(getLocations()), []);
-
+  useEffect(() => {
+    if (!location.location && !location.object) {
+      setSelectedLoc('');
+      setSelectedLoc('');
+      setSelectedObj('');
+      setSelectedObjObj('');
+    }
+  }, [location]);
   const handleChangeLocation = itemValue => {
     dispatch(
       saveLocation({
@@ -69,6 +76,7 @@ const ItemLocation = () => {
             underlineColorAndroid: 'transparent',
             style: styles.textInput,
             value: selectedLoc.name,
+            defaultValue: location.location,
             onTextChange: text => setSelectedLoc({name: text}),
           }}
           listProps={{
@@ -91,6 +99,7 @@ const ItemLocation = () => {
             underlineColorAndroid: 'transparent',
             style: styles.textInput,
             value: selectedObj.name,
+            defaultValue: location.object,
             editable: !!selectedLoc.name,
             onTextChange: text => setSelectedObj({name: text}),
           }}
