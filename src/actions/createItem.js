@@ -105,6 +105,7 @@ export const createItem = (data, navigation, photos) => dispatch => {
           } else {
             navigation.navigate('CreateFinish');
           }
+          dispatch(cleanCreateItem());
         }
       })
       .catch(e => {

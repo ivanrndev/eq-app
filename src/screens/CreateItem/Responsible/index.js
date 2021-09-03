@@ -116,7 +116,7 @@ const Responsible = () => {
           }))}
           resetValue={false}
           textInputProps={{
-            placeholder: 'Choose user',
+            placeholder: T.t('choose_user'),
             underlineColorAndroid: 'transparent',
             style: [
               styles.textInput,

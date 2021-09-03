@@ -66,7 +66,6 @@ const createItemReducer = (state = initialState, action) => {
       };
     case CLEAN_CREATE_ITEM:
       return {
-        ...state,
         ...initialState,
       };
 
