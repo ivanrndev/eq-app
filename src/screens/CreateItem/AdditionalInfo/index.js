@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Dimensions, FlatList, StyleSheet, Text, View} from 'react-native';
 import {CreateItemContainer} from '../CreateItemContainer';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
@@ -6,7 +6,7 @@ import {Card, IconButton, TextInput} from 'react-native-paper';
 import {width} from '../../../constants/dimentionsAndUnits';
 import T from '../../../i18n';
 import {useNavigation} from '@react-navigation/native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {saveAdditionalInfo} from '../../../actions/createItem';
 
 const AdditionalInfo = () => {
@@ -16,8 +16,20 @@ const AdditionalInfo = () => {
     label: '',
     value: '',
   });
-  const [additionalInfoArr, setAdditionalInfoArr] = useState([]);
+  const additionalInfoState = useSelector(
+    ({createItem}) => createItem.additionalInfo,
+  );
 
+  const [additionalInfoArr, setAdditionalInfoArr] = useState([]);
+  useEffect(() => {
+    if (additionalInfoState.length === 0) {
+      setAdditionalInfo({
+        label: '',
+        value: '',
+      });
+      setAdditionalInfoArr([]);
+    }
+  }, [additionalInfoState]);
   const handleAddInfo = () => {
     if (additionalInfo.label.length > 0 && additionalInfo.value.length > 0) {
       setAdditionalInfoArr([...additionalInfoArr, additionalInfo]);

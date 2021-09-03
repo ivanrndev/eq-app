@@ -24,13 +24,29 @@ const initialErrors = {
 const Responsible = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const users = useSelector(state => state.give.userList);
+  const [users, responsible] = useSelector(({give, createItem}) => [
+    give.userList,
+    createItem.responsible,
+  ]);
   const [responsibleUser, setResponsibleUser] = useState({name: ''});
   const [errorSelectedUser, seteErrorSelectedUser] = useState('');
   const [visible, setVisible] = useState(false);
   const [formValues, setFormValues] = useState(initialValues);
   const [errors, setError] = useState(initialErrors);
 
+  useEffect(() => {
+    if (
+      !responsible.firstName &&
+      !responsible.email &&
+      !responsible.id &&
+      !responsible.role
+    ) {
+      setFormValues(initialValues);
+      setResponsibleUser({name: ''});
+      seteErrorSelectedUser('');
+      setError(initialErrors);
+    }
+  }, [responsible]);
   useEffect(() => {
     dispatch(getUserList(navigation, '', 'CreateItemResponsible'));
   }, []);
@@ -73,13 +89,7 @@ const Responsible = () => {
   );
   const newUser =
     !!formValues.firstName && !!formValues.email && errors.email.length === 0;
-  console.log(
-    'OOIIII',
-    !!formValues.firstName,
-    !!formValues.email,
-    errors.email.length === 0,
-    formValues,
-  );
+
   const handleSave = () => {
     if (newUser) {
       dispatch(saveResponsible(formValues));
