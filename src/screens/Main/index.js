@@ -18,6 +18,7 @@ import {menuSvg} from '../../utils/menuSvg.js';
 import withLayout from '../../hooks/withLayout';
 import messaging from '@react-native-firebase/messaging';
 import {useNavigation} from '@react-navigation/native';
+import {useUserData} from '../../hooks/useUserData';
 
 const Main = props => {
   const navigation = useNavigation();
@@ -25,7 +26,8 @@ const Main = props => {
   const [store, settings, acceptList] = useSelector(
     ({auth, settings, accept}) => [auth, settings, accept.acceptList],
   );
-
+  const {role} = useUserData();
+  const canCreateItem = role !== 'worker';
   const [myRole, setMyRole] = useState();
   const CopilotText = walkthroughable(View);
   useEffect(() => {
@@ -111,16 +113,18 @@ const Main = props => {
               />
             </CopilotText>
           </CopilotStep>
-          <CopilotStep text={T.t('create_item_help')} order={2} name="Who_i">
-            <CopilotText>
-              <Button
-                nav={props.navigation}
-                text={T.t('create_item')}
-                svg={'create'}
-                route={'CreateItem'}
-              />
-            </CopilotText>
-          </CopilotStep>
+          {canCreateItem && (
+            <CopilotStep text={T.t('create_item_help')} order={2} name="Who_i">
+              <CopilotText>
+                <Button
+                  nav={props.navigation}
+                  text={T.t('create_item')}
+                  svg={'create'}
+                  route={'CreateItem'}
+                />
+              </CopilotText>
+            </CopilotStep>
+          )}
           <CopilotStep text={T.t('mark_help')} order={3} name="Marking">
             <CopilotText>
               <Button

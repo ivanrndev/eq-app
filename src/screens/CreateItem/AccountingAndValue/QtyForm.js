@@ -8,6 +8,7 @@ import {useNavigation} from '@react-navigation/native';
 import {validateFloatNumbers} from '../../../utils/validation';
 import {useDispatch, useSelector} from 'react-redux';
 import {saveAccountingAndValue} from '../../../actions/createItem';
+import Arrow from '../../../assets/svg/arrow-down.svg';
 
 const initialValues = {
   quantity: 1,
@@ -96,7 +97,12 @@ export const QtyForm = () => {
         <Menu
           visible={visible}
           anchor={
-            <Button onPress={() => setVisible(true)}>{formValues.units}</Button>
+            <Button onPress={() => setVisible(true)}>
+              {formValues.units}{' '}
+              <View style={styles.arrowWrap}>
+                <Arrow width={10} height={10} />
+              </View>
+            </Button>
           }>
           <FlatList
             data={units}
@@ -184,5 +190,8 @@ const styles = StyleSheet.create({
     color: '#8c231f',
     height: 15,
     marginTop: 5,
+  },
+  arrowWrap: {
+    marginBottom: -1,
   },
 });
