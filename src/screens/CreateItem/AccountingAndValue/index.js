@@ -7,7 +7,7 @@ import {width} from '../../../constants/dimentionsAndUnits';
 import {Card, TextInput} from 'react-native-paper';
 import {QtyForm} from './QtyForm';
 import {CreateItemContainer} from '../CreateItemContainer';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {saveAccountingAndValue} from '../../../actions/createItem';
 import {validateFloatNumbers} from '../../../utils/validation';
 
@@ -17,19 +17,16 @@ const AccountingAndValue = () => {
   const [qtyMode, setQtyMode] = useState('qty');
   const [sngPrice, setSngPrice] = useState(1);
   const [sngErr, setSngErr] = useState('');
-
+  const accountType = useSelector(({createItem}) => createItem.accountType);
   useEffect(() => {
     qtyMode === 'qty' && setSngErr('');
   }),
     [qtyMode];
-
-  console.log(
-    'ppppp',
-    sngErr,
-    qtyMode === 'sng',
-    sngErr.length === 0,
-    sngPrice.length > 0,
-  );
+  useEffect(() => {
+    if (+accountType.pricePerPiece === 1) {
+      setSngPrice(1);
+    }
+  }, [accountType]);
   const handleMode = (e, mode) => {
     e.preventDefault();
     setQtyMode(mode);
@@ -112,6 +109,7 @@ const AccountingAndValue = () => {
               <>
                 <TextInput
                   value={sngPrice.toString()}
+                  defaultValue={accountType.pricePerPiece}
                   style={styles.input}
                   label={T.t('detail_price_per_item')}
                   keyboardType="numeric"

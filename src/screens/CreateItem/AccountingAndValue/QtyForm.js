@@ -6,7 +6,7 @@ import {height, units, width} from '../../../constants/dimentionsAndUnits';
 import DarkButton from '../../../components/Buttons/DarkButton';
 import {useNavigation} from '@react-navigation/native';
 import {validateFloatNumbers} from '../../../utils/validation';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {saveAccountingAndValue} from '../../../actions/createItem';
 
 const initialValues = {
@@ -18,12 +18,18 @@ const initialValues = {
 export const QtyForm = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const accountType = useSelector(({createItem}) => createItem.accountType);
   const [visible, setVisible] = useState(false);
   const [formValues, setFormValues] = useState(initialValues);
   const [error, setError] = useState('');
   const renderItem = item => (
     <Menu.Item onPress={() => handleChoseMenu(item)} title={item.item} />
   );
+  useEffect(() => {
+    if (+accountType.batch.quantity === 1 && +accountType.pricePerPiece === 1) {
+      setFormValues(initialValues);
+    }
+  }, [accountType]);
   useEffect(
     () =>
       setFormValues({
@@ -79,6 +85,7 @@ export const QtyForm = () => {
       <View style={styles.qty}>
         <TextInput
           value={formValues.quantity.toString()}
+          defaultValue={accountType.batch.quantity}
           style={[styles.qtyInput]}
           label={T.t('detail_quantity')}
           keyboardType="numeric"
@@ -101,6 +108,7 @@ export const QtyForm = () => {
       </View>
       <TextInput
         value={formValues.pricePerPiece.toString()}
+        defaultValue={accountType.pricePerPiece}
         style={[styles.input, styles.secondInput]}
         label={T.t('detail_price_per_item')}
         keyboardType="numeric"
