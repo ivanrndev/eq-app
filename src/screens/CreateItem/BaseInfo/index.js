@@ -1,12 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import T from '../../../i18n';
-import {Dimensions, StyleSheet, Text} from 'react-native';
+import {Dimensions, StyleSheet, Text, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 import {Card, TextInput} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
-import {saveBaseItemInfo} from '../../../actions/createItem';
+import {
+  getBrands,
+  getTitle,
+  getTypes,
+  saveBaseItemInfo,
+} from '../../../actions/createItem';
 import {CreateItemContainer} from '../CreateItemContainer';
+import SearchableDropdown from 'react-native-searchable-dropdown';
 
 const initialFormValues = {
   type: '',
@@ -22,7 +28,25 @@ const initialErrors = {
 const BaseInfo = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const baseInfo = useSelector(({createItem}) => createItem.baseInfo);
+  const [baseInfo, types, brands, titles, models] = useSelector(
+    ({createItem}) => [
+      createItem.baseInfo,
+      createItem.accountType,
+      createItem.location,
+      createItem.photos,
+      createItem.responsible,
+      createItem.additionalInfo,
+      createItem.types,
+      createItem.brands,
+      createItem.titles,
+      createItem.models,
+    ],
+  );
+  /*  useEffect(() => {
+    dispatch(getTitle());
+    dispatch(getBrands());
+    dispatch(getTypes());
+  }, []);*/
   const [formValues, setFormValues] = useState(initialFormValues);
   const [errors, setErrors] = useState(initialErrors);
   useEffect(() => {

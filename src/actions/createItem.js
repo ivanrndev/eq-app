@@ -10,6 +10,14 @@ import {
   SAVE_PHOTO,
   SAVE_RESPONSIBLE,
   CLEAN_CREATE_ITEM,
+  GET_ITEM_BRAND,
+  GET_ITEM_BRAND_ERROR,
+  GET_ITEM_MODEL,
+  GET_ITEM_MODEL_ERROR,
+  GET_ITEM_TYPE,
+  GET_ITEM_TYPE_ERROR,
+  GET_ITEM_TITLE,
+  GET_ITEM_TITLE_ERROR,
 } from './actionsType';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from '../utils/axios';
@@ -55,6 +63,89 @@ export const cleanCreateItem = () => dispatch =>
   dispatch({
     type: CLEAN_CREATE_ITEM,
   });
+
+export const getBrands = () => dispatch => {
+  return axios
+    .get(`search/brands`, {params: {title: ''}})
+    .then(resp => {
+      if (resp.status === 200) {
+        dispatch({
+          type: GET_ITEM_BRAND,
+          payload: {
+            brands: resp.data,
+          },
+        });
+        console.log('Brand', resp);
+      }
+    })
+    .catch(e => {
+      dispatch({
+        type: GET_ITEM_BRAND_ERROR,
+      });
+      console.log('ERRR!', e.message);
+    });
+};
+export const getModels = () => dispatch => {
+  return axios
+    .get(`search/models`, {params: {title: '', brand: ''}})
+    .then(resp => {
+      if (resp.status === 200) {
+        dispatch({
+          type: GET_ITEM_MODEL,
+          payload: {
+            models: resp.data,
+          },
+        });
+        console.log('&^&^&76767676', resp);
+      }
+    })
+    .catch(e => {
+      dispatch({
+        type: GET_ITEM_MODEL_ERROR,
+      });
+    });
+};
+export const getTypes = () => dispatch => {
+  return axios
+    .get(`search/types`, {params: {title: ''}})
+    .then(resp => {
+      if (resp.status === 200) {
+        dispatch({
+          type: GET_ITEM_TYPE,
+          payload: {
+            types: resp.data,
+          },
+        });
+        console.log('TYpe', resp);
+      }
+    })
+    .catch(e => {
+      dispatch({
+        type: GET_ITEM_TYPE_ERROR,
+      });
+      console.log('ERRR!', e.message);
+    });
+};
+export const getTitle = () => dispatch => {
+  return axios
+    .get(`/search/items/title`, {params: {search: ''}})
+    .then(resp => {
+      if (resp.status === 200) {
+        dispatch({
+          type: GET_ITEM_TITLE,
+          payload: {
+            titles: resp.data,
+          },
+        });
+        console.log('TITLE', resp);
+      }
+    })
+    .catch(e => {
+      dispatch({
+        type: GET_ITEM_TITLE_ERROR,
+      });
+    });
+};
 
 export const createItemAndUser = (
   body,

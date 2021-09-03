@@ -6,6 +6,10 @@ import {
   SAVE_PHOTO,
   SAVE_RESPONSIBLE,
   CLEAN_CREATE_ITEM,
+  GET_ITEM_TYPE,
+  GET_ITEM_BRAND,
+  GET_ITEM_TITLE,
+  GET_ITEM_MODEL,
 } from '../../../actions/actionsType';
 
 const initialState = {
@@ -30,6 +34,10 @@ const initialState = {
   },
   additionalInfo: [],
   createItemError: '',
+  brands: [],
+  models: [],
+  titles: [],
+  types: [],
 };
 
 const createItemReducer = (state = initialState, action) => {
@@ -66,7 +74,28 @@ const createItemReducer = (state = initialState, action) => {
       };
     case CLEAN_CREATE_ITEM:
       return {
+        ...state,
         ...initialState,
+      };
+    case GET_ITEM_TYPE:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case GET_ITEM_BRAND:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case GET_ITEM_TITLE:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case GET_ITEM_MODEL:
+      return {
+        ...state,
+        ...action.payload,
       };
 
     default:
