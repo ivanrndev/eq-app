@@ -61,7 +61,7 @@ const BaseInfo = () => {
       dispatch(getModels(formValues.brand));
     }
   }, [formValues.brand]);
-  console.log('brands', brands, 'VAL', formValues, 'models', models);
+
   const handleTextChange = (text, name) => {
     setFormValues({...formValues, [name]: text});
 
