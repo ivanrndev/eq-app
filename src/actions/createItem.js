@@ -85,9 +85,9 @@ export const getBrands = () => dispatch => {
       console.log('ERRR!', e.message);
     });
 };
-export const getModels = () => dispatch => {
+export const getModels = brand => dispatch => {
   return axios
-    .get(`search/models`, {params: {title: '', brand: ''}})
+    .get(`search/models`, {params: {title: '', brand}})
     .then(resp => {
       if (resp.status === 200) {
         dispatch({

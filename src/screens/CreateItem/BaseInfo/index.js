@@ -1,18 +1,19 @@
 import React, {useEffect, useState} from 'react';
 import T from '../../../i18n';
-import {Dimensions, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, StyleSheet, Text, TextInput} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
-import {Card, TextInput} from 'react-native-paper';
+import {Card} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   getBrands,
+  getModels,
   getTitle,
   getTypes,
   saveBaseItemInfo,
 } from '../../../actions/createItem';
 import {CreateItemContainer} from '../CreateItemContainer';
-import SearchableDropdown from 'react-native-searchable-dropdown';
+import {AutocompleteDropdown} from 'react-native-autocomplete-dropdown';
 
 const initialFormValues = {
   type: '',
@@ -31,22 +32,17 @@ const BaseInfo = () => {
   const [baseInfo, types, brands, titles, models] = useSelector(
     ({createItem}) => [
       createItem.baseInfo,
-      createItem.accountType,
-      createItem.location,
-      createItem.photos,
-      createItem.responsible,
-      createItem.additionalInfo,
       createItem.types,
       createItem.brands,
       createItem.titles,
       createItem.models,
     ],
   );
-  /*  useEffect(() => {
+  useEffect(() => {
     dispatch(getTitle());
     dispatch(getBrands());
     dispatch(getTypes());
-  }, []);*/
+  }, []);
   const [formValues, setFormValues] = useState(initialFormValues);
   const [errors, setErrors] = useState(initialErrors);
   useEffect(() => {
@@ -60,7 +56,12 @@ const BaseInfo = () => {
       setFormValues(initialFormValues);
     }
   }, [baseInfo]);
-
+  useEffect(() => {
+    if (formValues.brand > 0) {
+      dispatch(getModels(formValues.brand));
+    }
+  }, [formValues.brand]);
+  console.log('brands', brands, 'VAL', formValues, 'models', models);
   const handleTextChange = (text, name) => {
     setFormValues({...formValues, [name]: text});
 
@@ -86,46 +87,112 @@ const BaseInfo = () => {
       isSaveBtnEnabled={formValues.type.length > 0}>
       <KeyboardAwareScrollView style={styles.container}>
         <Card style={styles.card}>
-          <TextInput
-            defaultValue={baseInfo.type}
-            value={formValues.type}
-            style={styles.input}
-            label={`${T.t('detail_type')}*`}
-            mode="outlined"
-            error={errors.type}
-            onChangeText={text => handleTextChange(text, 'type')}
+          <AutocompleteDropdown
+            clearOnFocus={false}
+            closeOnBlur={true}
+            closeOnSubmit={true}
+            onChangeText={text => handleTextChange(text ?? '', 'type')}
+            onSelectItem={text =>
+              handleTextChange(text ? text.title : '', 'type')
+            }
+            dataSet={() =>
+              types.map(type => ({id: type._id, title: type.title}))
+            }
+            textInputProps={{
+              placeholder: `${T.t('detail_type')}*`,
+              autoCorrect: false,
+              autoCapitalize: 'none',
+              style: styles.input,
+              placeholderTextColor: 'gray',
+              defaultValue: baseInfo.type,
+              value: formValues.type,
+            }}
+            rightButtonsContainerStyle={styles.inputBtn}
+            suggestionsListContainerStyle={styles.dropdown}
+            containerStyle={{marginBottom: -15}}
           />
           <Text style={styles.err}>{errors.type}</Text>
-          <TextInput
-            defaultValue={baseInfo.title}
-            value={formValues.title}
-            style={[styles.input, styles.secondInput]}
-            label={T.t('detail_title')}
-            mode="outlined"
-            onChangeText={text => handleTextChange(text, 'title')}
+          <AutocompleteDropdown
+            clearOnFocus={false}
+            closeOnBlur={true}
+            closeOnSubmit={true}
+            onChangeText={text => handleTextChange(text ?? '', 'title')}
+            onSelectItem={text =>
+              handleTextChange(text ? text.title : '', 'title')
+            }
+            dataSet={() =>
+              titles.map(type => ({id: type._id, title: type.title}))
+            }
+            textInputProps={{
+              placeholder: T.t('detail_title'),
+              autoCorrect: false,
+              autoCapitalize: 'none',
+              style: styles.input,
+              placeholderTextColor: 'gray',
+              defaultValue: baseInfo.title,
+              value: formValues.title,
+            }}
+            rightButtonsContainerStyle={styles.inputBtn}
+            suggestionsListContainerStyle={styles.dropdown}
           />
-          <TextInput
-            defaultValue={baseInfo.brand}
-            value={formValues.brand}
-            style={styles.input}
-            label={T.t('detail_brand')}
-            mode="outlined"
-            onChangeText={text => handleTextChange(text, 'brand')}
+          <AutocompleteDropdown
+            clearOnFocus={false}
+            closeOnBlur={true}
+            closeOnSubmit={true}
+            onChangeText={text => handleTextChange(text ?? '', 'brand')}
+            onSelectItem={text =>
+              handleTextChange(text ? text.title : '', 'brand')
+            }
+            dataSet={() =>
+              brands.map(type => ({id: type._id, title: type.title}))
+            }
+            textInputProps={{
+              placeholder: T.t('detail_brand'),
+              autoCorrect: false,
+              autoCapitalize: 'none',
+              style: styles.input,
+              placeholderTextColor: 'gray',
+              defaultValue: baseInfo.brand,
+              value: formValues.brand,
+            }}
+            rightButtonsContainerStyle={styles.inputBtn}
+            suggestionsListContainerStyle={styles.dropdown}
           />
-          <TextInput
-            defaultValue={baseInfo.model}
-            value={formValues.model}
-            style={styles.input}
-            label={T.t('detail_model')}
-            mode="outlined"
-            onChangeText={text => handleTextChange(text, 'model')}
+          <AutocompleteDropdown
+            clearOnFocus={false}
+            closeOnBlur={true}
+            closeOnSubmit={true}
+            onChangeText={text => handleTextChange(text ?? '', 'model')}
+            onSelectItem={text =>
+              handleTextChange(text ? text.title : '', 'model')
+            }
+            dataSet={() =>
+              models.map(item => ({
+                id: Math.floor(Math.random() * 1000),
+                title: item,
+              }))
+            }
+            textInputProps={{
+              placeholder: T.t('detail_model'),
+              autoCorrect: false,
+              autoCapitalize: 'none',
+              defaultValue: baseInfo.model,
+              value: formValues.model,
+              style: !!formValues.brand.length
+                ? styles.input
+                : {...styles.input, opacity: 0.4},
+              editable: formValues.brand.length > 0,
+              placeholderTextColor: 'gray',
+            }}
+            rightButtonsContainerStyle={styles.inputBtn}
+            suggestionsListContainerStyle={styles.dropdown}
           />
           <TextInput
             defaultValue={baseInfo.serial}
             value={formValues.serial}
             style={styles.input}
-            label={T.t('detail_serial')}
-            mode="outlined"
+            placeholder={T.t('detail_serial')}
+            placeholderTextColor="gray"
             onChangeText={text => handleTextChange(text, 'serial')}
           />
         </Card>
@@ -149,6 +216,12 @@ const styles = StyleSheet.create({
     marginTop: 20,
     width: Dimensions.get('window').width / 1.3,
     backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#929394',
+    height: 55,
+    zIndex: -1,
+    borderRadius: 5,
+    padding: 15,
   },
   secondInput: {
     marginTop: 0,
@@ -158,11 +231,27 @@ const styles = StyleSheet.create({
     color: '#8c231f',
     width: Dimensions.get('window').width / 1.3,
     alignSelf: 'center',
-    marginTop: 5,
+    marginTop: 20,
+    marginBottom: -15,
   },
 
   container: {
     flex: 1,
+  },
+  inputBtn: {
+    right: 10,
+    height: 55,
+    top: 20,
+    alignSelf: 'center',
+    backgroundColor: 'transparent',
+  },
+  dropdown: {
+    top: 0,
+    width: Dimensions.get('window').width / 1.3,
+    alignSelf: 'center',
+    backgroundColor: '#C5CDD5',
+    position: 'relative',
+    zIndex: 2,
   },
 });
 export default BaseInfo;
