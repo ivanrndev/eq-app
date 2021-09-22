@@ -62,7 +62,11 @@ const InventoryChooseMode = () => {
     if (scan.scanInfoError !== 'InRepair' && scan.scanInfoError !== 'IsBan') {
       setError(getInventoryMesageError(scan.scanInfoError, scan.currentScan));
     }
-
+    if (scan.scanInfoError === 'InRepair') {
+      setError(
+        `${T.t('item')}  "${scan.selectGiveId}" ${T.t('error_services')}`,
+      );
+    }
     let isDuplicate = isAlreadyScaned(scan.selectGiveId);
     if (isDuplicate) {
       setError(getInventoryMesageError('Duplicate', scan.currentScan));

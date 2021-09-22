@@ -374,6 +374,7 @@ export const currentScan = (
   inventory = false,
   isWriteOff = false,
 ) => dispatch => {
+  console.log('PPPPP', code);
   if (mount) {
     dispatch({
       type: MOUNT_SCAN,
@@ -510,11 +511,12 @@ export const scanInfo = (
                     },
                   });
                 } else {
+                  let checkErrors = actionCheckError(resp.data);
                   dispatch({
                     type: SAVE_CURRENT_SCAN_INFO,
                     payload: {
                       scanInfo: resp.data,
-                      scanInfoError: false,
+                      scanInfoError: checkErrors,
                       selectGiveId: resp.data._id,
                       isInfoOpen: true,
                     },
