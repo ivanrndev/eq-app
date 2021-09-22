@@ -81,6 +81,7 @@ const BaseInfo = () => {
       /*     setFormValues(initialFormValues);*/
     }
   };
+  console.log('PPPPPP@#', location);
   return (
     <CreateItemContainer
       handleSave={handleCreate}

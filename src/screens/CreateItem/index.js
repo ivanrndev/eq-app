@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   Dimensions,
   FlatList,
@@ -16,14 +16,7 @@ import DarkButton from '../../components/Buttons/DarkButton';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 import {useDispatch, useSelector} from 'react-redux';
 import {height, width} from '../../constants/dimentionsAndUnits';
-import {
-  createItem,
-  createItemAndUser,
-  getBrands,
-  getModels,
-  getTitle,
-  getTypes,
-} from '../../actions/createItem';
+import {createItem, createItemAndUser} from '../../actions/createItem';
 import {isEmpty} from 'lodash';
 
 const CreateItem = () => {
@@ -83,7 +76,7 @@ const CreateItem = () => {
       });
     });
   }
-
+  console.log('LOC OB', location);
   const createNewItem = () => {
     if (baseInfo.type) {
       if (user) {

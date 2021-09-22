@@ -1,14 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {Dimensions, StyleSheet, Text, View} from 'react-native';
 import {CreateItemContainer} from '../CreateItemContainer';
 import {useDispatch, useSelector} from 'react-redux';
-import SearchableDropdown from 'react-native-searchable-dropdown';
 import {getLocations} from '../../../actions/actions';
 
 import T from '../../../i18n';
 import {width} from '../../../constants/dimentionsAndUnits';
 import {saveLocation} from '../../../actions/createItem';
 import {useNavigation} from '@react-navigation/native';
+import {AutocompleteDropdown} from 'react-native-autocomplete-dropdown';
 
 const ItemLocation = () => {
   const dispatch = useDispatch();
@@ -25,6 +25,11 @@ const ItemLocation = () => {
 
   useEffect(() => dispatch(getLocations()), []);
   useEffect(() => {
+    if (selectedLoc && selectedLoc.name.length === 0) {
+      setSelectedObj('');
+    }
+  }, [selectedLoc.name]);
+  useEffect(() => {
     if (!location.location && !location.object) {
       setSelectedLoc('');
       setSelectedLoc('');
@@ -35,7 +40,7 @@ const ItemLocation = () => {
   const handleChangeLocation = itemValue => {
     dispatch(
       saveLocation({
-        location: selectedLoc.name ? selectedLoc.name : selectedLoc,
+        location: selectedLoc.name,
         objects: selectedObj.name,
       }),
     );
@@ -44,9 +49,12 @@ const ItemLocation = () => {
 
   const handleSelectObj = item => {
     setSelectedLoc(item);
-    const selectedObj = objects.find(obj => obj._id === item.id);
-    setSelectedLocObj(selectedObj);
-    !!selectedObj && setSelectedObjObj(selectedObj.locations);
+    if (!!item) {
+      const selectedObj =
+        objects.length > 0 ? objects.find(obj => obj._id === item.id) : [];
+      setSelectedLocObj(selectedObj);
+      !!selectedObj && setSelectedObjObj(selectedObj.locations);
+    }
   };
   const objectLoc = selectedObjObj.length
     ? selectedObjObj.map(item => ({
@@ -54,58 +62,67 @@ const ItemLocation = () => {
         id: Math.floor(Math.random() * 1000),
       }))
     : [];
-
+  console.log('IU33', objects);
   return (
     <CreateItemContainer handleSave={handleChangeLocation}>
       <View style={styles.inputWrap}>
         <Text style={styles.left}>{T.t('object')}:</Text>
-        <SearchableDropdown
-          onItemSelect={item => handleSelectObj(item)}
-          containerStyle={styles.inputContainer}
-          onRemoveItem={() => setSelectedLoc('')}
-          itemStyle={styles.item}
-          textInputStyle={styles.input}
-          itemsContainerStyle={styles.itemsContainer}
-          items={objects.map(item => ({
-            name: item.title,
-            id: item._id,
-          }))}
-          resetValue={false}
+        <AutocompleteDropdown
+          clearOnFocus={false}
+          closeOnBlur={true}
+          closeOnSubmit={true}
+          onChangeText={text => setSelectedLoc({name: text})}
+          onSelectItem={item => {
+            handleSelectObj(item);
+            setSelectedLoc({name: item ? item.title : ''});
+          }}
+          dataSet={() =>
+            objects.length
+              ? objects.map(item => ({
+                  title: item ? item.title : '',
+                  id: item ? item._id : '',
+                }))
+              : []
+          }
           textInputProps={{
             placeholder: 'Choose object',
-            underlineColorAndroid: 'transparent',
-            style: styles.textInput,
+            autoCorrect: false,
+            autoCapitalize: 'none',
+            style: styles.inputDropdown,
+            placeholderTextColor: 'gray',
             value: selectedLoc.name,
             defaultValue: location.location,
-            onTextChange: text => setSelectedLoc({name: text}),
           }}
-          listProps={{
-            nestedScrollEnabled: true,
-          }}
+          rightButtonsContainerStyle={styles.inputBtn}
+          suggestionsListContainerStyle={styles.dropdown}
         />
 
         <Text style={styles.left}>{T.t('location')}:</Text>
-        <SearchableDropdown
-          onItemSelect={item => setSelectedObj(item)}
-          containerStyle={styles.inputContainer2}
-          onRemoveItem={() => setSelectedLoc('')}
-          itemStyle={styles.item}
-          textInputStyle={styles.input}
-          itemsContainerStyle={styles.itemsContainer}
-          items={objectLoc}
-          resetValue={false}
+        <AutocompleteDropdown
+          clearOnFocus={false}
+          closeOnBlur={true}
+          closeOnSubmit={true}
+          onChangeText={text => setSelectedObj({name: text})}
+          onSelectItem={item => setSelectedObj({name: item ? item.title : ''})}
+          dataSet={() =>
+            objects.length
+              ? objectLoc.map(item => ({
+                  title: item ? item.name : '',
+                  id: item ? item._id : '',
+                }))
+              : []
+          }
           textInputProps={{
-            placeholder: 'Choose location',
-            underlineColorAndroid: 'transparent',
-            style: styles.textInput,
+            placeholder: 'Choose object',
+            autoCorrect: false,
+            autoCapitalize: 'none',
+            style: styles.inputDropdown,
+            placeholderTextColor: 'gray',
             value: selectedObj.name,
             defaultValue: location.object,
-            editable: !!selectedLoc.name,
-            onTextChange: text => setSelectedObj({name: text}),
           }}
-          listProps={{
-            nestedScrollEnabled: true,
-          }}
+          rightButtonsContainerStyle={styles.inputBtn}
+          suggestionsListContainerStyle={styles.dropdown}
         />
       </View>
     </CreateItemContainer>
@@ -121,50 +138,46 @@ const styles = StyleSheet.create({
     margin: 5,
     width: width / 1.1,
   },
-  leftTwo: {
-    fontSize: 14,
-    textAlign: 'left',
-    marginBottom: -95,
-    marginLeft: 20,
-  },
+
   inputWrap: {
     justifyContent: 'center',
     alignItems: 'center',
     width: width,
-    marginTop: 30,
-  },
-  inputContainer: {
-    width: width / 1.1,
-    height: 137,
-    marginTop: 0,
-  },
-  itemsContainer: {
-    maxHeight: 140,
-    position: 'relative',
-    zIndex: 1000,
-  },
-  inputContainer2: {
-    width: width / 1.1,
-    height: 162,
-    position: 'relative',
-    zIndex: -1,
-  },
-  input: {
-    width: width / 1.1,
-    height: 50,
-  },
-  item: {
-    padding: 5,
-    marginTop: 2,
-    backgroundColor: '#EDF6FF',
-    borderColor: '#bbb',
-    borderWidth: 1,
-    borderRadius: 5,
+    marginVertical: 30,
+    minHeight: 200,
   },
   textInput: {
     padding: 12,
     borderColor: '#22215B',
     borderWidth: 1,
     borderRadius: 5,
+  },
+  inputDropdown: {
+    alignSelf: 'center',
+    justifyContent: 'center',
+    marginTop: 10,
+    marginBottom: 20,
+    width: Dimensions.get('window').width / 1.1,
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#929394',
+    height: 55,
+    borderRadius: 5,
+    padding: 15,
+  },
+  inputBtn: {
+    right: 10,
+    height: 55,
+    top: 10,
+    alignSelf: 'center',
+    backgroundColor: 'transparent',
+  },
+  dropdown: {
+    top: 0,
+    width: Dimensions.get('window').width / 1.1,
+    alignSelf: 'center',
+    backgroundColor: '#C5CDD5',
+    position: 'relative',
+    zIndex: 2,
   },
 });
