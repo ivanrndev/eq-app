@@ -13,16 +13,16 @@ const ItemCardQuantityAndPrice = ({quantity, units, price, styles}) => {
         {T.t('detail_quantity')}: {quantity} {units}
       </Text>
 
-      {price && (
+      {price ? (
         <Text style={styles.text}>
           {T.t('detail_price_per_item')}: {price} {currency}
         </Text>
-      )}
-      {price && !!quantity && quantity !== 1 && (
+      ) : null}
+      {price && !!quantity && quantity !== 1 ? (
         <Text style={styles.text}>
           {T.t('detail_price_per_lot')}: {`${totalLotPrice} ${currency}`}
         </Text>
-      )}
+      ) : null}
     </>
   );
 };

@@ -134,14 +134,14 @@ export const IdentInfo = props => {
                     }" ${T.t('error_not_found')}`}
                   </Text>
                 )}
-                {isNotFreePlan && (
+                {isNotFreePlan ? (
                   <GalleryForItem
                     setChosenPhoto={setChosenPhoto}
                     setIsGalleryOpen={setIsGalleryOpen}
                     setPhotoDel={setPhotoDel}
                     page="IdentInfo"
                   />
-                )}
+                ) : null}
                 {store.scanInfo && (
                   <Text style={styles.text}>
                     {T.t('transfer_status')}: {getStatus(store.scanInfo, role)}
