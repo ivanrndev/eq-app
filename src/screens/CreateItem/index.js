@@ -76,7 +76,7 @@ const CreateItem = () => {
       });
     });
   }
-  console.log('LOC OB', location);
+
   const createNewItem = () => {
     if (baseInfo.type) {
       if (user) {

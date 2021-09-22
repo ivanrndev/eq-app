@@ -75,7 +75,6 @@ export const getBrands = () => dispatch => {
             brands: resp.data,
           },
         });
-        console.log('Brand', resp);
       }
     })
     .catch(e => {
@@ -96,7 +95,6 @@ export const getModels = brand => dispatch => {
             models: resp.data,
           },
         });
-        console.log('&^&^&76767676', resp);
       }
     })
     .catch(e => {
@@ -116,7 +114,6 @@ export const getTypes = () => dispatch => {
             types: resp.data,
           },
         });
-        console.log('TYpe', resp);
       }
     })
     .catch(e => {
@@ -137,7 +134,6 @@ export const getTitle = () => dispatch => {
             titles: resp.data,
           },
         });
-        console.log('TITLE', resp);
       }
     })
     .catch(e => {

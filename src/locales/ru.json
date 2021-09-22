@@ -292,12 +292,10 @@
     "add_photo_to_new_item": "Добавить фото к новому ТМЦ",
     "choose_user": "Выбрать пользователя",
     "or_create_new_user": "или создать нового пользователя",
-   /* "administrator": "Администратор",
+ "administrator": "Администратор",
     "stockman":"Кладовщик",
-    "employee": "Сотрудник",*/
-    "administrator": "admin",
-    "stockman":"stockman",
-    "employee": "worker",
+    "employee": "Сотрудник",
+
     "name": "Название",
     "email": "Email",
     "role": "Роль",

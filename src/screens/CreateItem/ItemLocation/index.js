@@ -62,7 +62,7 @@ const ItemLocation = () => {
         id: Math.floor(Math.random() * 1000),
       }))
     : [];
-  console.log('IU33', objects);
+
   return (
     <CreateItemContainer handleSave={handleChangeLocation}>
       <View style={styles.inputWrap}>
@@ -71,6 +71,7 @@ const ItemLocation = () => {
           clearOnFocus={false}
           closeOnBlur={true}
           closeOnSubmit={true}
+          showClear={false}
           onChangeText={text => setSelectedLoc({name: text})}
           onSelectItem={item => {
             handleSelectObj(item);
@@ -102,6 +103,7 @@ const ItemLocation = () => {
           clearOnFocus={false}
           closeOnBlur={true}
           closeOnSubmit={true}
+          showClear={false}
           onChangeText={text => setSelectedObj({name: text})}
           onSelectItem={item => setSelectedObj({name: item ? item.title : ''})}
           dataSet={() =>

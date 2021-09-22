@@ -38,13 +38,19 @@ const BaseInfo = () => {
       createItem.models,
     ],
   );
+
+  const [type, setType] = useState(baseInfo.type);
+  const [title, setTitle] = useState(baseInfo.title);
+  const [brand, setBrand] = useState(baseInfo.brand);
+  const [model, setModel] = useState(baseInfo.model);
+  const [serial, setSerial] = useState(baseInfo.serial);
+
+  const [errors, setErrors] = useState(initialErrors);
   useEffect(() => {
     dispatch(getTitle());
     dispatch(getBrands());
     dispatch(getTypes());
   }, []);
-  const [formValues, setFormValues] = useState(initialFormValues);
-  const [errors, setErrors] = useState(initialErrors);
   useEffect(() => {
     if (
       !baseInfo.type &&
@@ -53,49 +59,50 @@ const BaseInfo = () => {
       !baseInfo.serial &&
       !baseInfo.type
     ) {
-      setFormValues(initialFormValues);
+      setType('');
+      setTitle('');
+      setBrand('');
+      setModel('');
+      setSerial('');
     }
   }, [baseInfo]);
   useEffect(() => {
-    if (formValues.brand > 0) {
-      dispatch(getModels(formValues.brand));
+    if (brand > 0) {
+      dispatch(getModels(brand));
     }
-  }, [formValues.brand]);
+  }, [brand]);
 
-  const handleTextChange = (text, name) => {
-    setFormValues({...formValues, [name]: text});
-
-    if (name === 'type') {
-      text.length === 0
-        ? setErrors({...errors, type: T.t('error_required')})
-        : setErrors({...errors, type: ''});
-    }
+  const handleTypeField = text => {
+    setType(text);
+    text.length === 0
+      ? setErrors({...errors, type: T.t('error_required')})
+      : setErrors({...errors, type: ''});
   };
   const handleCreate = () => {
-    formValues.type.length === 0
+    type.length === 0
       ? setErrors({...errors, type: T.t('error_required')})
       : setErrors({...errors, type: ''});
     if (errors.type.length === 0) {
-      dispatch(saveBaseItemInfo({...baseInfo, ...formValues}));
+      dispatch(
+        saveBaseItemInfo({...baseInfo, type, title, model, brand, serial}),
+      );
       navigation.navigate('CreateItem');
-      /*     setFormValues(initialFormValues);*/
     }
   };
-  console.log('PPPPPP@#', location);
+
   return (
     <CreateItemContainer
       handleSave={handleCreate}
-      isSaveBtnEnabled={formValues.type.length > 0}>
+      isSaveBtnEnabled={type.length > 0}>
       <KeyboardAwareScrollView style={styles.container}>
         <Card style={styles.card}>
           <AutocompleteDropdown
             clearOnFocus={false}
             closeOnBlur={true}
             closeOnSubmit={true}
-            onChangeText={text => handleTextChange(text ?? '', 'type')}
-            onSelectItem={text =>
-              handleTextChange(text ? text.title : '', 'type')
-            }
+            showClear={false}
+            onChangeText={handleTypeField}
+            onSelectItem={text => handleTypeField(text ? text.title : '')}
             dataSet={() =>
               types.map(type => ({id: type._id, title: type.title}))
             }
@@ -106,7 +113,7 @@ const BaseInfo = () => {
               style: styles.input,
               placeholderTextColor: 'gray',
               defaultValue: baseInfo.type,
-              value: formValues.type,
+              value: type,
             }}
             rightButtonsContainerStyle={styles.inputBtn}
             suggestionsListContainerStyle={styles.dropdown}
@@ -117,10 +124,9 @@ const BaseInfo = () => {
             clearOnFocus={false}
             closeOnBlur={true}
             closeOnSubmit={true}
-            onChangeText={text => handleTextChange(text ?? '', 'title')}
-            onSelectItem={text =>
-              handleTextChange(text ? text.title : '', 'title')
-            }
+            showClear={false}
+            onChangeText={setTitle}
+            onSelectItem={text => setTitle(text ? text.title : '')}
             dataSet={() =>
               titles.map(type => ({id: type._id, title: type.title}))
             }
@@ -131,7 +137,7 @@ const BaseInfo = () => {
               style: styles.input,
               placeholderTextColor: 'gray',
               defaultValue: baseInfo.title,
-              value: formValues.title,
+              value: title,
             }}
             rightButtonsContainerStyle={styles.inputBtn}
             suggestionsListContainerStyle={styles.dropdown}
@@ -140,10 +146,9 @@ const BaseInfo = () => {
             clearOnFocus={false}
             closeOnBlur={true}
             closeOnSubmit={true}
-            onChangeText={text => handleTextChange(text ?? '', 'brand')}
-            onSelectItem={text =>
-              handleTextChange(text ? text.title : '', 'brand')
-            }
+            showClear={false}
+            onChangeText={setBrand}
+            onSelectItem={text => setBrand(text ? text.title : '')}
             dataSet={() =>
               brands.map(type => ({id: type._id, title: type.title}))
             }
@@ -154,7 +159,7 @@ const BaseInfo = () => {
               style: styles.input,
               placeholderTextColor: 'gray',
               defaultValue: baseInfo.brand,
-              value: formValues.brand,
+              value: brand,
             }}
             rightButtonsContainerStyle={styles.inputBtn}
             suggestionsListContainerStyle={styles.dropdown}
@@ -163,10 +168,9 @@ const BaseInfo = () => {
             clearOnFocus={false}
             closeOnBlur={true}
             closeOnSubmit={true}
-            onChangeText={text => handleTextChange(text ?? '', 'model')}
-            onSelectItem={text =>
-              handleTextChange(text ? text.title : '', 'model')
-            }
+            showClear={false}
+            onChangeText={setModel}
+            onSelectItem={text => setModel(text ? text.title : '')}
             dataSet={() =>
               models.map(item => ({
                 id: Math.floor(Math.random() * 1000),
@@ -178,11 +182,11 @@ const BaseInfo = () => {
               autoCorrect: false,
               autoCapitalize: 'none',
               defaultValue: baseInfo.model,
-              value: formValues.model,
-              style: !!formValues.brand.length
+              value: model,
+              style: !!brand.length
                 ? styles.input
                 : {...styles.input, opacity: 0.4},
-              editable: formValues.brand.length > 0,
+              editable: brand.length > 0,
               placeholderTextColor: 'gray',
             }}
             rightButtonsContainerStyle={styles.inputBtn}
@@ -190,11 +194,11 @@ const BaseInfo = () => {
           />
           <TextInput
             defaultValue={baseInfo.serial}
-            value={formValues.serial}
+            value={serial}
             style={styles.input}
             placeholder={T.t('detail_serial')}
             placeholderTextColor="gray"
-            onChangeText={text => handleTextChange(text, 'serial')}
+            onChangeText={setSerial}
           />
         </Card>
       </KeyboardAwareScrollView>

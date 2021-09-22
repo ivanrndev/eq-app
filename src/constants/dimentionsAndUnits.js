@@ -25,4 +25,4 @@ export const units = [
   'бухт',
   'пара',
 ];
-export const roles = [T.t('administrator'), T.t('stockman'), T.t('employee')];
+export const roles = ['admin', 'stockman', 'worker'];

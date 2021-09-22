@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, FlatList, StyleSheet, Text, View} from 'react-native';
 import {CreateItemContainer} from '../CreateItemContainer';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
@@ -11,6 +11,7 @@ import {Button, Menu, TextInput} from 'react-native-paper';
 import {validateEmail, validateFloatNumbers} from '../../../utils/validation';
 import Arrow from '../../../assets/svg/arrow-down.svg';
 import {saveResponsible} from '../../../actions/createItem';
+import {AutocompleteDropdown} from 'react-native-autocomplete-dropdown';
 
 const initialValues = {
   firstName: '',
@@ -28,7 +29,7 @@ const Responsible = () => {
     give.userList,
     createItem.responsible,
   ]);
-  const [responsibleUser, setResponsibleUser] = useState({name: ''});
+  const [responsibleUser, setResponsibleUser] = useState({title: ''});
   const [errorSelectedUser, seteErrorSelectedUser] = useState('');
   const [visible, setVisible] = useState(false);
   const [formValues, setFormValues] = useState(initialValues);
@@ -42,7 +43,7 @@ const Responsible = () => {
       !responsible.role
     ) {
       setFormValues(initialValues);
-      setResponsibleUser({name: ''});
+      setResponsibleUser({title: ''});
       seteErrorSelectedUser('');
       setError(initialErrors);
     }
@@ -52,11 +53,11 @@ const Responsible = () => {
   }, []);
   useEffect(() => {
     formValues.firstName &&
-      (setResponsibleUser({name: ''}) && seteErrorSelectedUser(''));
+      (setResponsibleUser({title: ''}) && seteErrorSelectedUser(''));
   }, [formValues.firstName]);
 
   const handleSelectTextChange = text => {
-    setResponsibleUser({name: text});
+    setResponsibleUser({title: text});
     const selectedUser = users.find(user => user.firstName === text);
     selectedUser
       ? seteErrorSelectedUser('')
@@ -84,7 +85,16 @@ const Responsible = () => {
     setVisible(false);
   };
   const renderItem = item => (
-    <Menu.Item onPress={() => handleChooseRole(item)} title={item.item} />
+    <Menu.Item
+      onPress={() => handleChooseRole(item)}
+      title={
+        item.item === 'admin'
+          ? T.t('administrator')
+          : item.item === 'stockman'
+          ? T.t('stockman')
+          : T.t('employee')
+      }
+    />
   );
   const newUser =
     !!formValues.firstName && !!formValues.email && errors.email.length === 0;
@@ -94,7 +104,7 @@ const Responsible = () => {
       dispatch(saveResponsible(formValues));
     } else {
       const data = !!responsibleUser
-        ? {firstName: responsibleUser.name, id: responsibleUser.id}
+        ? {firstName: responsibleUser.title ?? '', id: responsibleUser.id}
         : formValues;
       if (
         !!responsibleUser ||
@@ -108,37 +118,38 @@ const Responsible = () => {
     }
     navigation.navigate('CreateItem');
   };
+  const isSaveBtnEnabled =
+    newUser || !!users.find(user => user.firstName === responsibleUser.title);
+
   return (
-    <CreateItemContainer handleSave={handleSave}>
+    <CreateItemContainer
+      handleSave={handleSave}
+      isSaveBtnEnabled={isSaveBtnEnabled}>
       <View style={styles.inputWrap}>
         <Text style={styles.left}>{T.t('choose_user')}:</Text>
-        <SearchableDropdown
-          onItemSelect={item => handleSelectResp(item)}
-          containerStyle={styles.inputContainer}
-          onRemoveItem={() => setResponsibleUser('')}
-          itemStyle={styles.item}
-          textInputStyle={styles.input}
-          itemsContainerStyle={styles.itemsContainer}
-          items={users.map(item => ({
-            name: item.firstName,
-            id: item._id,
-          }))}
-          resetValue={false}
+        <AutocompleteDropdown
+          clearOnFocus={false}
+          closeOnBlur={true}
+          closeOnSubmit={true}
+          showClear={false}
+          onChangeText={text => handleSelectTextChange(text)}
+          onSelectItem={item => handleSelectResp(item)}
+          dataSet={() =>
+            users.map(item => ({
+              title: item.firstName,
+              id: item._id,
+            }))
+          }
           textInputProps={{
             placeholder: T.t('choose_user'),
-            underlineColorAndroid: 'transparent',
-            style: [
-              styles.textInput,
-              !!errorSelectedUser
-                ? {borderColor: '#8c231f'}
-                : {borderColor: '#22215B'},
-            ],
-            value: responsibleUser.name ?? '',
-            onTextChange: text => handleSelectTextChange(text),
+            autoCorrect: false,
+            autoCapitalize: 'none',
+            style: styles.inputDropdown,
+            placeholderTextColor: 'gray',
+            value: responsibleUser ? responsibleUser.title : '',
           }}
-          listProps={{
-            nestedScrollEnabled: true,
-          }}
+          rightButtonsContainerStyle={styles.inputBtn}
+          suggestionsListContainerStyle={styles.dropdown}
         />
         <Text style={styles.errFirst}>{errorSelectedUser}</Text>
         <Text style={styles.center}>{T.t('or')}</Text>
@@ -166,7 +177,11 @@ const Responsible = () => {
             style={styles.itemWrap}
             anchor={
               <Button onPress={() => setVisible(true)}>
-                {formValues.role.item}{' '}
+                {formValues.role.item === 'admin'
+                  ? T.t('administrator')
+                  : formValues.role.item === 'stockman'
+                  ? T.t('stockman')
+                  : T.t('employee')}{' '}
                 <View style={styles.arrowWrap}>
                   <Arrow width={15} height={15} />
                 </View>
@@ -259,5 +274,33 @@ const styles = StyleSheet.create({
     width: width / 1.1,
     textAlign: 'left',
     zIndex: -1,
+  },
+  inputDropdown: {
+    alignSelf: 'center',
+    justifyContent: 'center',
+    marginTop: 10,
+    marginBottom: 20,
+    width: Dimensions.get('window').width / 1.1,
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#929394',
+    height: 55,
+    borderRadius: 5,
+    padding: 15,
+  },
+  inputBtn: {
+    right: 10,
+    height: 55,
+    top: 10,
+    alignSelf: 'center',
+    backgroundColor: 'transparent',
+  },
+  dropdown: {
+    top: 0,
+    width: Dimensions.get('window').width / 1.1,
+    alignSelf: 'center',
+    backgroundColor: '#C5CDD5',
+    position: 'relative',
+    zIndex: 2,
   },
 });
