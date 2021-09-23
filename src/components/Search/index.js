@@ -86,7 +86,8 @@ const Search = ({
               item={item}
               isResponsibleShown={
                 pageToChosenItem === 'GiveListCheck' ||
-                pageToChosenItem === 'WriteOffInfo'
+                pageToChosenItem === 'WriteOffInfo' ||
+                pageToChosenItem === 'IdentInfo'
               }
             />
           </Card>

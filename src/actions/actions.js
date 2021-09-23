@@ -374,7 +374,6 @@ export const currentScan = (
   inventory = false,
   isWriteOff = false,
 ) => dispatch => {
-  console.log('PPPPP', code);
   if (mount) {
     dispatch({
       type: MOUNT_SCAN,

@@ -1,9 +1,12 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet} from 'react-native';
 import {Card, Paragraph, Title} from 'react-native-paper';
 import T from '../../i18n';
 import {getTotalLotPrice} from '../../utils/helpers';
 import {useQuantityUnitsAndCurrency} from '../../hooks/useQuantityUnitsAndCurrency';
+import {getUserList} from '../../actions/actions';
+import {useNavigation} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
 
 const ItemListCard = ({
   item,
@@ -13,6 +16,26 @@ const ItemListCard = ({
   children,
 }) => {
   const {currency} = useQuantityUnitsAndCurrency();
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const userList = useSelector(({give}) => give.userList);
+  const [userInfo, setUserInfo] = useState({});
+  useEffect(() => {
+    if (!!item.person && !item.person.firstName) {
+      dispatch(getUserList(navigation, ''));
+    }
+  }, []);
+  useEffect(
+    () => setUserInfo(userList.find(user => user._id === item.responsible)),
+    [userList],
+  );
+
+  const name =
+    item.person && !!item.person.firstName
+      ? ` ${item.person.firstName}  ${item.person.lastName ?? ''}`
+      : userInfo
+      ? ` ${userInfo.firstName}  ${userInfo.lastName ?? ''}`
+      : '';
 
   return (
     <Card.Content style={{width}}>
@@ -82,8 +105,7 @@ const ItemListCard = ({
       )}
       {isResponsibleShown && item.person ? (
         <Paragraph style={styles.paragraph}>
-          {T.t('responsible')}:
-          {` ${item.person.firstName}  ${item.person.lastName}`}
+          {T.t('responsible')}:{name}
         </Paragraph>
       ) : null}
       {children}

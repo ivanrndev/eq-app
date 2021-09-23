@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
 import {Dimensions, StyleSheet, View} from 'react-native';
 import T from '../../i18n';
@@ -6,11 +6,18 @@ import T from '../../i18n';
 import Appbar from '../../components/Appbar';
 import Scanner from '../../components/Scanner';
 import {useSelector} from 'react-redux';
-import {searchMyItem} from '../../actions/actions';
+import {searchMyCompanyItems, searchMyItem} from '../../actions/actions';
+import {useUserData} from '../../hooks/useUserData';
 
 const Ident = props => {
+  const [companyItemList] = useSelector(({companyItems}) => [
+    companyItems.myCompanyList,
+  ]);
+  const {role, userId} = useUserData();
+
   const [scaner, setScaner] = useState(false);
-  const onMeList = useSelector(({onMe}) => onMe.myList);
+  const [list, setList] = useState([]);
+
   useFocusEffect(
     useCallback(() => {
       setScaner(true);
@@ -18,6 +25,24 @@ const Ident = props => {
     }, []),
   );
 
+  useEffect(() => {
+    if (role === 'root' || role === 'admin') {
+      setList(
+        companyItemList.filter(
+          item => !item.is_bun && !item.repair && item.transfer === null,
+        ),
+      );
+    } else {
+      setList(
+        companyItemList.filter(item =>
+          item.person &&
+          (!item.is_bun && !item.repair && item.transfer === null)
+            ? item.person._id === userId
+            : '',
+        ),
+      );
+    }
+  }, [companyItemList]);
   return (
     <>
       <Appbar
@@ -29,8 +54,8 @@ const Ident = props => {
         switch={true}
         typeSwitchNFC={true}
         search={true}
-        list={onMeList}
-        listAction={searchMyItem}
+        list={list}
+        listAction={searchMyCompanyItems}
         pageToChosenItem="IdentInfo"
       />
 
