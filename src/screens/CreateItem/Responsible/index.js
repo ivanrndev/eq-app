@@ -1,14 +1,22 @@
 import React, {useEffect, useState} from 'react';
-import {Dimensions, FlatList, StyleSheet, Text, View} from 'react-native';
+import {
+  Dimensions,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Keyboard,
+} from 'react-native';
 import {CreateItemContainer} from '../CreateItemContainer';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import {getUserList} from '../../../actions/actions';
 import T from '../../../i18n';
-import SearchableDropdown from 'react-native-searchable-dropdown';
+
 import {roles, width} from '../../../constants/dimentionsAndUnits';
 import {Button, Menu, TextInput} from 'react-native-paper';
-import {validateEmail, validateFloatNumbers} from '../../../utils/validation';
+import {validateEmail} from '../../../utils/validation';
 import Arrow from '../../../assets/svg/arrow-down.svg';
 import {saveResponsible} from '../../../actions/createItem';
 import {AutocompleteDropdown} from 'react-native-autocomplete-dropdown';
@@ -125,7 +133,10 @@ const Responsible = () => {
     <CreateItemContainer
       handleSave={handleSave}
       isSaveBtnEnabled={isSaveBtnEnabled}>
-      <View style={styles.inputWrap}>
+      <ScrollView
+        style={styles.inputWrap}
+        contantContainerStyle={styles.contentStyle}
+        onPress={Keyboard.dismiss}>
         <Text style={styles.left}>{T.t('choose_user')}:</Text>
         <AutocompleteDropdown
           clearOnFocus={false}
@@ -154,7 +165,7 @@ const Responsible = () => {
         <Text style={styles.errFirst}>{errorSelectedUser}</Text>
         <Text style={styles.center}>{T.t('or')}</Text>
         <Text style={styles.left}>{T.t('or_create_new_user')}:</Text>
-        <View>
+        <View style={styles.createWrap}>
           <TextInput
             value={formValues.firstName}
             style={styles.input}
@@ -194,7 +205,7 @@ const Responsible = () => {
             />
           </Menu>
         </View>
-      </View>
+      </ScrollView>
     </CreateItemContainer>
   );
 };
@@ -217,11 +228,19 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   inputWrap: {
-    justifyContent: 'center',
-    alignItems: 'center',
     width: width,
     marginVertical: 30,
     position: 'relative',
+  },
+  contentStyle: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'red',
+  },
+  createWrap: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: width,
   },
   inputContainer: {
     width: width / 1.1,

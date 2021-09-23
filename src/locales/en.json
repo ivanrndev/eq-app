@@ -298,6 +298,7 @@
     "error_valid_email": "Email not valid",
     "error_user_not_exist": "Such user don't exist",
     "value": "Value",
-    "created": "Item has been successfully created"
-
+    "created": "Item has been successfully created",
+    "choose_object": "Choose object",
+    "choose_location": "Choose location"
 }

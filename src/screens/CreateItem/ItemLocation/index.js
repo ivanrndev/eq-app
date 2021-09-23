@@ -86,7 +86,7 @@ const ItemLocation = () => {
               : []
           }
           textInputProps={{
-            placeholder: 'Choose object',
+            placeholder: T.t('choose_object'),
             autoCorrect: false,
             autoCapitalize: 'none',
             style: styles.inputDropdown,
@@ -115,7 +115,7 @@ const ItemLocation = () => {
               : []
           }
           textInputProps={{
-            placeholder: 'Choose object',
+            placeholder: T.t('choose_location'),
             autoCorrect: false,
             autoCapitalize: 'none',
             style: styles.inputDropdown,

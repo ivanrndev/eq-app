@@ -291,6 +291,8 @@
     "quantitative_example": "Расходники, моющее в литрах, перчатки в штуках",
     "add_photo_to_new_item": "Добавить фото к новому ТМЦ",
     "choose_user": "Выбрать пользователя",
+    "choose_object": "Выбрать объект",
+    "choose_location": "Выбрать локацию",
     "or_create_new_user": "или создать нового пользователя",
  "administrator": "Администратор",
     "stockman":"Кладовщик",
