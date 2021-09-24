@@ -91,7 +91,6 @@ const ItemLocation = () => {
             autoCapitalize: 'none',
             style: styles.inputDropdown,
             placeholderTextColor: 'gray',
-            value: selectedLoc.name,
             defaultValue: location.location,
           }}
           rightButtonsContainerStyle={styles.inputBtn}
@@ -120,7 +119,6 @@ const ItemLocation = () => {
             autoCapitalize: 'none',
             style: styles.inputDropdown,
             placeholderTextColor: 'gray',
-            value: selectedObj.name,
             defaultValue: location.object,
           }}
           rightButtonsContainerStyle={styles.inputBtn}

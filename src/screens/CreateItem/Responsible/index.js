@@ -184,30 +184,31 @@ const Responsible = () => {
               onChangeText={text => handleTextChange(text, 'email')}
             />
             <Text style={styles.err}>{errors.email}</Text>
-            <Menu
-              visible={visible}
-              style={styles.itemWrap}
-              anchor={
-                <Button onPress={() => setVisible(true)}>
-                  {formValues.role.item === 'admin'
-                    ? T.t('administrator')
-                    : formValues.role.item === 'stockman'
-                    ? T.t('stockman')
-                    : T.t('employee')}{' '}
-                  <View style={styles.arrowWrap}>
-                    <Arrow width={15} height={15} />
-                  </View>
-                </Button>
-              }>
-              <FlatList
-                data={roles}
-                keyExtractor={item => item}
-                renderItem={renderItem}
-              />
-            </Menu>
           </View>
         </>
       </TouchableWithoutFeedback>
+      <View style={styles.itemWrap}>
+        <Menu
+          visible={visible}
+          anchor={
+            <Button onPress={() => setVisible(true)}>
+              {formValues.role.item === 'admin'
+                ? T.t('administrator')
+                : formValues.role.item === 'stockman'
+                ? T.t('stockman')
+                : T.t('employee')}{' '}
+              <View style={styles.arrowWrap}>
+                <Arrow width={15} height={15} />
+              </View>
+            </Button>
+          }>
+          <FlatList
+            data={roles}
+            keyExtractor={item => item}
+            renderItem={renderItem}
+          />
+        </Menu>
+      </View>
     </CreateItemContainer>
   );
 };
@@ -220,6 +221,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     margin: 5,
     width: width / 1.1,
+    alignSelf: 'center',
   },
   center: {
     fontSize: 16,
@@ -231,7 +233,7 @@ const styles = StyleSheet.create({
   },
   inputWrap: {
     width: width,
-    marginVertical: 30,
+    marginVertical: 5,
     position: 'relative',
   },
   contentStyle: {
@@ -240,19 +242,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'red',
   },
   createWrap: {
-    justifyContent: 'center',
     alignItems: 'center',
     width: width,
-  },
-  inputContainer: {
-    width: width / 1.1,
-    height: 137,
-    marginTop: 0,
-  },
-  itemsContainer: {
-    maxHeight: 140,
-    position: 'relative',
-    zIndex: 1000,
   },
   input: {
     width: width / 1.1,
@@ -277,7 +268,9 @@ const styles = StyleSheet.create({
 
   itemWrap: {
     width: width / 1.3,
-    marginTop: 30,
+    marginBottom: 30,
+    alignSelf: 'center',
+    marginTop: -10,
   },
   err: {
     height: 15,
@@ -301,7 +294,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
     marginTop: 10,
-    marginBottom: 20,
+    marginBottom: 5,
     width: Dimensions.get('window').width / 1.1,
     backgroundColor: '#fff',
     borderWidth: 1,
