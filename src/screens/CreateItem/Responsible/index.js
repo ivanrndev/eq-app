@@ -20,6 +20,7 @@ import {validateEmail} from '../../../utils/validation';
 import Arrow from '../../../assets/svg/arrow-down.svg';
 import {saveResponsible} from '../../../actions/createItem';
 import {AutocompleteDropdown} from 'react-native-autocomplete-dropdown';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 
 const initialValues = {
   firstName: '',
@@ -133,79 +134,80 @@ const Responsible = () => {
     <CreateItemContainer
       handleSave={handleSave}
       isSaveBtnEnabled={isSaveBtnEnabled}>
-      <ScrollView
+      <TouchableWithoutFeedback
         style={styles.inputWrap}
         contantContainerStyle={styles.contentStyle}
         onPress={Keyboard.dismiss}>
-        <Text style={styles.left}>{T.t('choose_user')}:</Text>
-        <AutocompleteDropdown
-          clearOnFocus={false}
-          closeOnBlur={true}
-          closeOnSubmit={true}
-          showClear={false}
-          onChangeText={text => handleSelectTextChange(text)}
-          onSelectItem={item => handleSelectResp(item)}
-          dataSet={() =>
-            users.map(item => ({
-              title: item.firstName,
-              id: item._id,
-            }))
-          }
-          textInputProps={{
-            placeholder: T.t('choose_user'),
-            autoCorrect: false,
-            autoCapitalize: 'none',
-            style: styles.inputDropdown,
-            placeholderTextColor: 'gray',
-            value: responsibleUser ? responsibleUser.title : '',
-          }}
-          rightButtonsContainerStyle={styles.inputBtn}
-          suggestionsListContainerStyle={styles.dropdown}
-        />
-        <Text style={styles.errFirst}>{errorSelectedUser}</Text>
-        <Text style={styles.center}>{T.t('or')}</Text>
-        <Text style={styles.left}>{T.t('or_create_new_user')}:</Text>
-        <View style={styles.createWrap}>
-          <TextInput
-            value={formValues.firstName}
-            style={styles.input}
-            label={`${T.t('name')}`}
-            mode="outlined"
-            error={errors.type}
-            onChangeText={text => handleTextChange(text, 'firstName')}
+        <>
+          <Text style={styles.left}>{T.t('choose_user')}:</Text>
+          <AutocompleteDropdown
+            clearOnFocus={false}
+            closeOnBlur={true}
+            closeOnSubmit={true}
+            showClear={false}
+            onChangeText={text => handleSelectTextChange(text)}
+            onSelectItem={item => handleSelectResp(item)}
+            dataSet={() =>
+              users.map(item => ({
+                title: item.firstName,
+                id: item._id,
+              }))
+            }
+            textInputProps={{
+              placeholder: T.t('choose_user'),
+              autoCorrect: false,
+              autoCapitalize: 'none',
+              style: styles.inputDropdown,
+              placeholderTextColor: 'gray',
+            }}
+            rightButtonsContainerStyle={styles.inputBtn}
+            suggestionsListContainerStyle={styles.dropdown}
           />
-          <Text style={styles.err}>{errors.firstName}</Text>
-          <TextInput
-            value={formValues.email}
-            style={[styles.input, styles.secondInput]}
-            label={T.t('email')}
-            mode="outlined"
-            onChangeText={text => handleTextChange(text, 'email')}
-          />
-          <Text style={styles.err}>{errors.email}</Text>
-          <Menu
-            visible={visible}
-            style={styles.itemWrap}
-            anchor={
-              <Button onPress={() => setVisible(true)}>
-                {formValues.role.item === 'admin'
-                  ? T.t('administrator')
-                  : formValues.role.item === 'stockman'
-                  ? T.t('stockman')
-                  : T.t('employee')}{' '}
-                <View style={styles.arrowWrap}>
-                  <Arrow width={15} height={15} />
-                </View>
-              </Button>
-            }>
-            <FlatList
-              data={roles}
-              keyExtractor={item => item}
-              renderItem={renderItem}
+          <Text style={styles.errFirst}>{errorSelectedUser}</Text>
+          <Text style={styles.center}>{T.t('or')}</Text>
+          <Text style={styles.left}>{T.t('or_create_new_user')}:</Text>
+          <View style={styles.createWrap}>
+            <TextInput
+              value={formValues.firstName}
+              style={styles.input}
+              label={`${T.t('name')}`}
+              mode="outlined"
+              error={errors.type}
+              onChangeText={text => handleTextChange(text, 'firstName')}
             />
-          </Menu>
-        </View>
-      </ScrollView>
+            <Text style={styles.err}>{errors.firstName}</Text>
+            <TextInput
+              value={formValues.email}
+              style={[styles.input, styles.secondInput]}
+              label={T.t('email')}
+              mode="outlined"
+              onChangeText={text => handleTextChange(text, 'email')}
+            />
+            <Text style={styles.err}>{errors.email}</Text>
+            <Menu
+              visible={visible}
+              style={styles.itemWrap}
+              anchor={
+                <Button onPress={() => setVisible(true)}>
+                  {formValues.role.item === 'admin'
+                    ? T.t('administrator')
+                    : formValues.role.item === 'stockman'
+                    ? T.t('stockman')
+                    : T.t('employee')}{' '}
+                  <View style={styles.arrowWrap}>
+                    <Arrow width={15} height={15} />
+                  </View>
+                </Button>
+              }>
+              <FlatList
+                data={roles}
+                keyExtractor={item => item}
+                renderItem={renderItem}
+              />
+            </Menu>
+          </View>
+        </>
+      </TouchableWithoutFeedback>
     </CreateItemContainer>
   );
 };
@@ -289,7 +291,8 @@ const styles = StyleSheet.create({
     marginTop: 5,
     fontSize: 10,
     position: 'absolute',
-    top: 70,
+    top: 95,
+    left: 20,
     width: width / 1.1,
     textAlign: 'left',
     zIndex: -1,
