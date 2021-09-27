@@ -66,7 +66,7 @@ const Responsible = () => {
   }, [formValues.firstName]);*/
 
   const handleSelectTextChange = text => {
-    setResponsibleUser(text);
+    setResponsibleUser({title: text});
     const selectedUser = users.find(user => user.firstName === text);
     selectedUser
       ? seteErrorSelectedUser('')
@@ -74,7 +74,7 @@ const Responsible = () => {
   };
   const handleTextChange = (text, name) => {
     setFormValues({...formValues, [name]: text});
-    setResponsibleUser('');
+    setResponsibleUser({title: ''});
     seteErrorSelectedUser('');
     if (name === 'firstName') {
       text.length <= 2
@@ -131,7 +131,7 @@ const Responsible = () => {
     navigation.navigate('CreateItem');
   };
   const isSaveBtnEnabled =
-    newUser || !!users.find(user => user.firstName === responsibleUser);
+    newUser || !!users.find(user => user.firstName === responsibleUser.title);
 
   return (
     <CreateItemContainer
@@ -148,8 +148,8 @@ const Responsible = () => {
             closeOnBlur={true}
             closeOnSubmit={true}
             showClear={false}
-            onChangeText={text => handleSelectTextChange(text)}
-            onSelectItem={item => handleSelectResp(item ? item.title : '')}
+            onChangeText={text => handleSelectTextChange({title: text})}
+            onSelectItem={item => handleSelectResp(item)}
             dataSet={() =>
               users.map(item => ({
                 title: item.firstName,
@@ -163,7 +163,7 @@ const Responsible = () => {
               style: styles.inputDropdown,
               placeholderTextColor: 'gray',
               defaultValue: responsible,
-              value: responsibleUser,
+              value: responsibleUser.title,
             }}
             rightButtonsContainerStyle={styles.inputBtn}
             suggestionsListContainerStyle={styles.dropdown}
@@ -282,6 +282,8 @@ const styles = StyleSheet.create({
     color: '#8c231f',
     marginTop: 5,
     fontSize: 10,
+    textAlign: 'left',
+    width: width / 1.1,
   },
   errFirst: {
     height: 15,
