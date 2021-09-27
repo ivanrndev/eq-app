@@ -64,9 +64,9 @@ export const cleanCreateItem = () => dispatch =>
     type: CLEAN_CREATE_ITEM,
   });
 
-export const getBrands = () => dispatch => {
+export const getBrands = (title = '') => dispatch => {
   return axios
-    .get(`search/brands`, {params: {title: ''}})
+    .get(`search/brands`, {params: {title}})
     .then(resp => {
       if (resp.status === 200) {
         dispatch({
@@ -84,9 +84,9 @@ export const getBrands = () => dispatch => {
       console.log('ERRR!', e.message);
     });
 };
-export const getModels = brand => dispatch => {
+export const getModels = (brand, title = '') => dispatch => {
   return axios
-    .get(`search/models`, {params: {title: '', brand}})
+    .get(`search/models`, {params: {title, brand}})
     .then(resp => {
       if (resp.status === 200) {
         dispatch({
@@ -103,9 +103,9 @@ export const getModels = brand => dispatch => {
       });
     });
 };
-export const getTypes = () => dispatch => {
+export const getTypes = (title = '') => dispatch => {
   return axios
-    .get(`search/types`, {params: {title: ''}})
+    .get(`search/types`, {params: {title}})
     .then(resp => {
       if (resp.status === 200) {
         dispatch({
@@ -123,9 +123,9 @@ export const getTypes = () => dispatch => {
       console.log('ERRR!', e.message);
     });
 };
-export const getTitle = () => dispatch => {
+export const getTitle = (title = '') => dispatch => {
   return axios
-    .get(`/search/items/title`, {params: {search: ''}})
+    .get(`/search/items/title`, {params: {search: title}})
     .then(resp => {
       if (resp.status === 200) {
         dispatch({

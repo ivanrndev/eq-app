@@ -42,10 +42,16 @@ const BaseInfo = () => {
 
   const [errors, setErrors] = useState('');
   useEffect(() => {
-    dispatch(getTitle());
-    dispatch(getBrands());
-    dispatch(getTypes());
-  }, []);
+    dispatch(getTypes(type));
+  }, [type]);
+  useEffect(() => {
+    dispatch(getTitle(title));
+  }, [title]);
+
+  useEffect(() => {
+    dispatch(getBrands(brand));
+  }, [brand]);
+
   useEffect(() => {
     if (
       !baseInfo.type &&
@@ -62,10 +68,10 @@ const BaseInfo = () => {
     }
   }, [baseInfo]);
   useEffect(() => {
-    if (brand > 0) {
-      dispatch(getModels(brand));
+    if (brand.length > 0) {
+      dispatch(getModels(brand, title));
     }
-  }, [brand]);
+  }, [brand, model]);
 
   const handleTypeField = text => {
     setType(text);
@@ -80,7 +86,7 @@ const BaseInfo = () => {
       navigation.navigate('CreateItem');
     }
   };
-  console.log('ERROR', errors);
+
   return (
     <CreateItemContainer
       handleSave={handleCreate}
