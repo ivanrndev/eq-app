@@ -1,5 +1,10 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {
+  Keyboard,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import T from '../../i18n';
 import Appbar from '../../components/Appbar';
 import {useNavigation} from '@react-navigation/native';
@@ -21,6 +26,7 @@ export const CreateItemContainer = ({
         goTo={'CreateItem'}
         title={T.t('create_item')}
       />
+
       {children}
       {isBtnVisible && (
         <View style={styles.btns}>

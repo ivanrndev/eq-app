@@ -60,13 +60,13 @@ const Responsible = () => {
   useEffect(() => {
     dispatch(getUserList(navigation, '', 'CreateItemResponsible'));
   }, []);
-  useEffect(() => {
+  /*  useEffect(() => {
     formValues.firstName &&
       (setResponsibleUser({title: ''}) && seteErrorSelectedUser(''));
-  }, [formValues.firstName]);
+  }, [formValues.firstName]);*/
 
   const handleSelectTextChange = text => {
-    setResponsibleUser({title: text});
+    setResponsibleUser(text);
     const selectedUser = users.find(user => user.firstName === text);
     selectedUser
       ? seteErrorSelectedUser('')
@@ -74,6 +74,8 @@ const Responsible = () => {
   };
   const handleTextChange = (text, name) => {
     setFormValues({...formValues, [name]: text});
+    setResponsibleUser('');
+    seteErrorSelectedUser('');
     if (name === 'firstName') {
       text.length <= 2
         ? setError({...errors, firstName: T.t('error_required')})
@@ -88,6 +90,7 @@ const Responsible = () => {
   const handleSelectResp = item => {
     setResponsibleUser(item);
     setFormValues(initialValues);
+    seteErrorSelectedUser('');
   };
   const handleChooseRole = item => {
     setFormValues({...formValues, role: item});
@@ -128,7 +131,7 @@ const Responsible = () => {
     navigation.navigate('CreateItem');
   };
   const isSaveBtnEnabled =
-    newUser || !!users.find(user => user.firstName === responsibleUser.title);
+    newUser || !!users.find(user => user.firstName === responsibleUser);
 
   return (
     <CreateItemContainer
@@ -146,7 +149,7 @@ const Responsible = () => {
             closeOnSubmit={true}
             showClear={false}
             onChangeText={text => handleSelectTextChange(text)}
-            onSelectItem={item => handleSelectResp(item)}
+            onSelectItem={item => handleSelectResp(item ? item.title : '')}
             dataSet={() =>
               users.map(item => ({
                 title: item.firstName,
@@ -159,6 +162,8 @@ const Responsible = () => {
               autoCapitalize: 'none',
               style: styles.inputDropdown,
               placeholderTextColor: 'gray',
+              defaultValue: responsible,
+              value: responsibleUser,
             }}
             rightButtonsContainerStyle={styles.inputBtn}
             suggestionsListContainerStyle={styles.dropdown}

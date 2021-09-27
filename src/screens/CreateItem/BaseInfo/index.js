@@ -5,7 +5,8 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 
 import {Card} from 'react-native-paper';
@@ -39,11 +40,12 @@ const BaseInfo = () => {
   const [brand, setBrand] = useState(baseInfo.brand);
   const [model, setModel] = useState(baseInfo.model);
   const [serial, setSerial] = useState(baseInfo.serial);
-
   const [errors, setErrors] = useState('');
+
   useEffect(() => {
     dispatch(getTypes(type));
   }, [type]);
+
   useEffect(() => {
     dispatch(getTitle(title));
   }, [title]);
@@ -91,107 +93,111 @@ const BaseInfo = () => {
     <CreateItemContainer
       handleSave={handleCreate}
       isSaveBtnEnabled={type.length > 0}>
-      <Card style={styles.card}>
-        <AutocompleteDropdown
-          clearOnFocus={false}
-          closeOnBlur={true}
-          closeOnSubmit={true}
-          showClear={false}
-          onChangeText={handleTypeField}
-          onSelectItem={text => handleTypeField(text ? text.title : '')}
-          dataSet={() => types.map(type => ({id: type._id, title: type.title}))}
-          textInputProps={{
-            placeholder: `${T.t('detail_type')}*`,
-            autoCorrect: false,
-            autoCapitalize: 'none',
-            style: errors.length > 0 ? styles.errorInput : styles.input,
-            placeholderTextColor: 'gray',
-            defaultValue: baseInfo.type,
-          }}
-          rightButtonsContainerStyle={styles.inputBtn}
-          suggestionsListContainerStyle={styles.dropdown}
-          containerStyle={{marginBottom: -15}}
-        />
-        <Text style={styles.err}>{errors}</Text>
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <Card style={styles.card}>
+          <AutocompleteDropdown
+            clearOnFocus={false}
+            closeOnBlur={true}
+            closeOnSubmit={true}
+            showClear={false}
+            onChangeText={handleTypeField}
+            onSelectItem={text => handleTypeField(text ? text.title : '')}
+            dataSet={() =>
+              types.map(type => ({id: type._id, title: type.title}))
+            }
+            textInputProps={{
+              placeholder: `${T.t('detail_type')}*`,
+              autoCorrect: false,
+              autoCapitalize: 'none',
+              style: errors.length > 0 ? styles.errorInput : styles.input,
+              placeholderTextColor: 'gray',
+              value: type,
+            }}
+            rightButtonsContainerStyle={styles.inputBtn}
+            suggestionsListContainerStyle={styles.dropdown}
+            containerStyle={{marginBottom: -15}}
+          />
+          <Text style={styles.err}>{errors}</Text>
 
-        <AutocompleteDropdown
-          clearOnFocus={false}
-          closeOnBlur={true}
-          closeOnSubmit={true}
-          showClear={false}
-          onChangeText={setTitle}
-          onSelectItem={text => setTitle(text ? text.title : '')}
-          dataSet={() =>
-            titles.map(type => ({id: type._id, title: type.title}))
-          }
-          textInputProps={{
-            placeholder: T.t('detail_title'),
-            autoCorrect: false,
-            autoCapitalize: 'none',
-            style: styles.input,
-            placeholderTextColor: 'gray',
-            defaultValue: baseInfo.title,
-          }}
-          rightButtonsContainerStyle={styles.inputBtn}
-          suggestionsListContainerStyle={styles.dropdown}
-        />
-        <AutocompleteDropdown
-          clearOnFocus={false}
-          closeOnBlur={true}
-          closeOnSubmit={true}
-          showClear={false}
-          onChangeText={setBrand}
-          onSelectItem={text => setBrand(text ? text.title : '')}
-          dataSet={() =>
-            brands.map(type => ({id: type._id, title: type.title}))
-          }
-          textInputProps={{
-            placeholder: T.t('detail_brand'),
-            autoCorrect: false,
-            autoCapitalize: 'none',
-            style: styles.input,
-            placeholderTextColor: 'gray',
-            defaultValue: baseInfo.brand,
-          }}
-          rightButtonsContainerStyle={styles.inputBtn}
-          suggestionsListContainerStyle={styles.dropdown}
-        />
-        <AutocompleteDropdown
-          clearOnFocus={false}
-          closeOnBlur={true}
-          closeOnSubmit={true}
-          showClear={false}
-          onChangeText={setModel}
-          onSelectItem={text => setModel(text ? text.title : '')}
-          dataSet={() =>
-            models.map(item => ({
-              id: Math.floor(Math.random() * 1000),
-              title: item,
-            }))
-          }
-          textInputProps={{
-            placeholder: T.t('detail_model'),
-            autoCorrect: false,
-            autoCapitalize: 'none',
-            defaultValue: baseInfo.model,
-            style: !!brand.length
-              ? styles.input
-              : {...styles.input, opacity: 0.4},
-            editable: brand.length > 0,
-            placeholderTextColor: 'gray',
-          }}
-          rightButtonsContainerStyle={styles.inputBtn}
-          suggestionsListContainerStyle={styles.dropdown}
-        />
-        <TextInput
-          defaultValue={baseInfo.serial}
-          value={serial}
-          style={styles.input}
-          placeholder={T.t('detail_serial')}
-          placeholderTextColor="gray"
-          onChangeText={setSerial}
-        />
-      </Card>
+          <AutocompleteDropdown
+            clearOnFocus={false}
+            closeOnBlur={true}
+            closeOnSubmit={true}
+            showClear={false}
+            onChangeText={setTitle}
+            onSelectItem={text => setTitle(text ? text.title : '')}
+            dataSet={() =>
+              titles.map(type => ({id: type._id, title: type.title}))
+            }
+            textInputProps={{
+              placeholder: T.t('detail_title'),
+              autoCorrect: false,
+              autoCapitalize: 'none',
+              style: styles.input,
+              placeholderTextColor: 'gray',
+              value: title,
+            }}
+            rightButtonsContainerStyle={styles.inputBtn}
+            suggestionsListContainerStyle={styles.dropdown}
+          />
+          <AutocompleteDropdown
+            clearOnFocus={false}
+            closeOnBlur={true}
+            closeOnSubmit={true}
+            showClear={false}
+            onChangeText={setBrand}
+            onSelectItem={text => setBrand(text ? text.title : '')}
+            dataSet={() =>
+              brands.map(type => ({id: type._id, title: type.title}))
+            }
+            textInputProps={{
+              placeholder: T.t('detail_brand'),
+              autoCorrect: false,
+              autoCapitalize: 'none',
+              style: styles.input,
+              placeholderTextColor: 'gray',
+              value: brand,
+            }}
+            rightButtonsContainerStyle={styles.inputBtn}
+            suggestionsListContainerStyle={styles.dropdown}
+          />
+          <AutocompleteDropdown
+            clearOnFocus={false}
+            closeOnBlur={true}
+            closeOnSubmit={true}
+            showClear={false}
+            onChangeText={setModel}
+            onSelectItem={text => setModel(text ? text.title : '')}
+            dataSet={() =>
+              models.map(item => ({
+                id: Math.floor(Math.random() * 1000),
+                title: item,
+              }))
+            }
+            textInputProps={{
+              placeholder: T.t('detail_model'),
+              autoCorrect: false,
+              autoCapitalize: 'none',
+              style: !!brand.length
+                ? styles.input
+                : {...styles.input, opacity: 0.4},
+              editable: brand.length > 0,
+              placeholderTextColor: 'gray',
+              value: model,
+            }}
+            rightButtonsContainerStyle={styles.inputBtn}
+            suggestionsListContainerStyle={styles.dropdown}
+          />
+          <TextInput
+            defaultValue={baseInfo.serial}
+            value={serial}
+            style={styles.input}
+            placeholder={T.t('detail_serial')}
+            placeholderTextColor="gray"
+            onChangeText={setSerial}
+          />
+        </Card>
+      </TouchableWithoutFeedback>
     </CreateItemContainer>
   );
 };

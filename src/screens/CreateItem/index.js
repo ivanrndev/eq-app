@@ -16,7 +16,11 @@ import DarkButton from '../../components/Buttons/DarkButton';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 import {useDispatch, useSelector} from 'react-redux';
 import {height, width} from '../../constants/dimentionsAndUnits';
-import {createItem, createItemAndUser} from '../../actions/createItem';
+import {
+  cleanCreateItem,
+  createItem,
+  createItemAndUser,
+} from '../../actions/createItem';
 import {isEmpty} from 'lodash';
 
 const CreateItem = () => {
@@ -90,6 +94,7 @@ const CreateItem = () => {
         );
       } else {
         dispatch(createItem(item, navigation, photos.length && itemPhotos));
+        dispatch(cleanCreateItem());
       }
     }
   };
