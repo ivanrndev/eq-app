@@ -191,7 +191,7 @@ const CreateItem = () => {
               {accountType.batch && (
                 <>
                   <Text style={styles.itemContentText}>
-                    {T.t('detail_quantity')}: {accountType.batch.qty}{' '}
+                    {T.t('detail_quantity')}: {accountType.batch.quantity}{' '}
                     {accountType.batch.units}
                   </Text>
                   <Text style={styles.itemContentText}>
@@ -202,10 +202,6 @@ const CreateItem = () => {
                   </Text>
                 </>
               )}
-
-              <Text style={styles.itemContentText}>
-                {T.t('detail_price_per_item')}: {accountType.pricePerPiece}
-              </Text>
             </View>
           ) : null}
         </TouchableOpacity>

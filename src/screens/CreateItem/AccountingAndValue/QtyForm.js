@@ -73,7 +73,7 @@ export const QtyForm = () => {
       quantity: formValues.quantity,
       units: formValues.units,
     },
-    pricePerPiece: formValues.pricePerLot,
+    pricePerPiece: formValues.pricePerPiece,
   };
 
   const handleSave = () => {
