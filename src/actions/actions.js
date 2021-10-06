@@ -473,9 +473,10 @@ export const scanInfo = (
 ) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
-      .get(`${API_URL}/company/${company}/item/${code}`)
+      .get(`${API_URL}/company/${company}/item/search`, {params: {code}})
       .then(resp => {
         if (resp.status === 200) {
+          console.log('RESP00000', resp);
           if (mount) {
             let checkErrors = actionCheckError(resp.data);
             if (checkErrors) {
