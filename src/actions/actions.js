@@ -719,12 +719,16 @@ export const putServicesError = error => dispatch => {
 };
 
 // WriteOff actions
-export const sendToWriteOff = (id, nav, quantity, object, location) => dispatch => {
+export const sendToWriteOff = (id, nav, quantity, objec, location) => dispatch => {
+  const object = {object: objec, location};
   const data = quantity
     ? {
         quantity,
         object,
+<<<<<<< Updated upstream
         location,
+=======
+>>>>>>> Stashed changes
       }
     : {};
   AsyncStorage.getItem('company').then(company => {

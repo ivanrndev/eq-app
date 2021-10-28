@@ -419,9 +419,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = EqMan/EqManDebug.entitlements;
+<<<<<<< Updated upstream
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
+=======
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 2;
+>>>>>>> Stashed changes
 				DEVELOPMENT_TEAM = 8G27Y4Z7P8;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = EqMan/Info.plist;
@@ -437,7 +443,11 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = EqMan;
+<<<<<<< Updated upstream
 				PROVISIONING_PROFILE_SPECIFIER = "EqMan develop";
+=======
+				PROVISIONING_PROFILE_SPECIFIER = "EqMan prodaction";
+>>>>>>> Stashed changes
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -453,7 +463,11 @@
 				CODE_SIGN_ENTITLEMENTS = EqMan/EqMan.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
+<<<<<<< Updated upstream
 				CURRENT_PROJECT_VERSION = 1;
+=======
+				CURRENT_PROJECT_VERSION = 2;
+>>>>>>> Stashed changes
 				DEVELOPMENT_TEAM = 8G27Y4Z7P8;
 				INFOPLIST_FILE = EqMan/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
