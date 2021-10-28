@@ -1,5 +1,5 @@
 // API URL PROD
-export const API_URL = 'https://admin.eqman.co/api/v1';
+export const API_URL = 'https://staging.eqman.co/api/v1';
 
 // API URL TEST
 //export const API_URL = 'http://104.131.15.180:4000/v1';

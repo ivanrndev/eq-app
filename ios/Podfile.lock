@@ -620,9 +620,9 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
-  DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
+  DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
   FBLazyVector: 49cbe4b43e445b06bf29199b6ad2057649e4c8f5
-  FBReactNativeSpec: cb08014dc77ba6d2b55333ff98ec743f31176487
+  FBReactNativeSpec: ae8cb6e1ef82ff34b7a83a3c795861b530ce33bc
   Firebase: c121feb35e4126c0b355e3313fa9b487d47319fd
   FirebaseAnalytics: cd3bd84d722a24a8923918af8af8e5236f615d77
   FirebaseCore: 907447d8917a4d3eb0cce2829c5a0ad21d90b432
@@ -630,7 +630,7 @@ SPEC CHECKSUMS:
   FirebaseInstallations: a58d4f72ec5861840b84df489f2668d970df558a
   FirebaseInstanceID: ad5135045a498d7775903efd39762d2cdfa1be27
   FirebaseMessaging: 163435fb6db065e3b6228f1e577b10ed2cc506d2
-  glog: 73c2498ac6884b13ede40eda8228cb1eee9d9d62
+  glog: 1f3da668190260b06b429bb211bfbee5cd790c28
   GoogleAppMeasurement: fd19169c3034975cb934e865e5667bfdce59df7f
   GoogleDataTransport: cd9db2180fcecd8da1b561aea31e3e56cf834aa7
   GoogleSignIn: 7137d297ddc022a7e0aa4619c86d72c909fa7213
@@ -688,4 +688,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: b7af9362c257c8c323e696e3b41e17d2afb9bf85
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.2

@@ -61,7 +61,7 @@ const CreateItem = () => {
       }),
     customFields: additionalInfo,
     price: accountType.pricePerPiece,
-    count: instanceAmount,
+    count: +instanceAmount,
   };
   const user = responsible.firstName &&
     responsible.email && {

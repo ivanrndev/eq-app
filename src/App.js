@@ -85,6 +85,9 @@ const theme = {
 };
 
 const Drawer = createDrawerNavigator();
+XMLHttpRequest = GLOBAL.originalXMLHttpRequest ?
+    GLOBAL.originalXMLHttpRequest :
+    GLOBAL.XMLHttpRequest;
 
 const App = () => {
   const requestUserPermission = async () => {
