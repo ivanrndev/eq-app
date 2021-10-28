@@ -19,6 +19,7 @@ import withLayout from '../../hooks/withLayout';
 import messaging from '@react-native-firebase/messaging';
 import {useNavigation} from '@react-navigation/native';
 import {useUserData} from '../../hooks/useUserData';
+import {getLocations} from "../../actions/actions";
 
 const Main = props => {
   const navigation = useNavigation();
@@ -73,6 +74,7 @@ const Main = props => {
       }
     });
   }, []);
+  useEffect(() => dispatch(getLocations()), []);
   return (
     <>
       <View style={styles.background}>
