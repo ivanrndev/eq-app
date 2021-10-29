@@ -725,10 +725,6 @@ export const sendToWriteOff = (id, nav, quantity, objec, location) => dispatch =
     ? {
         quantity,
         object,
-<<<<<<< Updated upstream
-        location,
-=======
->>>>>>> Stashed changes
       }
     : {};
   AsyncStorage.getItem('company').then(company => {
