@@ -136,42 +136,6 @@ export const WriteOffInfo = props => {
                   <Title style={styles.title}>
                     {T.t('title_ban_question')}?
                   </Title>
-                  <Menu
-                    visible={visibleObject}
-                    anchor={
-                      <Button onPress={handleOpenObject} >
-                        {formObjectValues ? (formObjectValues) : ('Выбор обьекта') }{' '}
-                        <View style={styles.arrowWrap}>
-                          <Arrow width={10} height={10} />
-                        </View>
-                      </Button>
-                    }>
-                    <View style={styles.list}>
-                    <FlatList
-                      data={settings.locations}
-                      keyExtractor={item => item._id}
-                      renderItem={renderItemObject}
-                    />
-                  </View>
-                  </Menu>
-                  {location.length > 0 ? (<Menu
-                    visible={visibleLocation}
-                    anchor={
-                      <Button onPress={() => setVisibleLocation(!visibleLocation)}>
-                        {formLocationValues ? (formLocationValues) : ('Выбор локации')}{' '}
-                        <View style={styles.arrowWrap}>
-                          <Arrow width={10} height={10} />
-                        </View>
-                      </Button>
-                    }>
-                    <View style={styles.list}>
-                      <FlatList
-                        data={location}
-                        keyExtractor={item => item}
-                        renderItem={renderItemLocations}
-                      />
-                    </View>
-                  </Menu>) : null}
                   {show && (
                     <View style={styles.info}>
                       {store.scanInfo && (
@@ -230,6 +194,42 @@ export const WriteOffInfo = props => {
                     setQuantity={setQuantityToWireOff}
                     mode="title_write_off_quantity"
                   />
+                  <Menu
+                    visible={visibleObject}
+                    anchor={
+                      <Button onPress={handleOpenObject} >
+                        {formObjectValues ? (formObjectValues) : ('Выбор обьекта') }{' '}
+                        <View style={styles.arrowWrap}>
+                          <Arrow width={10} height={10} />
+                        </View>
+                      </Button>
+                    }>
+                    <View style={styles.list}>
+                      <FlatList
+                        data={settings.locations}
+                        keyExtractor={item => item._id}
+                        renderItem={renderItemObject}
+                      />
+                    </View>
+                  </Menu>
+                  {location.length > 0 ? (<Menu
+                    visible={visibleLocation}
+                    anchor={
+                      <Button onPress={() => setVisibleLocation(!visibleLocation)}>
+                        {formLocationValues ? (formLocationValues) : ('Выбор локации')}{' '}
+                        <View style={styles.arrowWrap}>
+                          <Arrow width={10} height={10} />
+                        </View>
+                      </Button>
+                    }>
+                    <View style={styles.list}>
+                      <FlatList
+                        data={location}
+                        keyExtractor={item => item}
+                        renderItem={renderItemLocations}
+                      />
+                    </View>
+                  </Menu>) : null}
                 </View>
               )}
             </View>
@@ -266,7 +266,7 @@ const styles = StyleSheet.create({
     paddingTop: 30,
     alignItems: 'center',
     backgroundColor: '#D3E3F2',
-    // height: Dimensions.get('window').height,
+    height: Dimensions.get('window').height,
   },
   container: {
     display: 'flex',
