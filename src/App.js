@@ -72,7 +72,11 @@ import AddPhoto from './screens/CreateItem/AddPhoto';
 import ItemLocation from './screens/CreateItem/ItemLocation';
 import Responsible from './screens/CreateItem/Responsible';
 import AdditionalInfo from './screens/CreateItem/AdditionalInfo';
-import CreateFinish from './screens/CreateItem/CreateFinish/CreateFinish';
+import MoveStartPage from "./screens/AcceptGive/MoveToObject/MoveStartPage";
+import MoveScaner from "./screens/AcceptGive/MoveToObject/MoveScaner";
+import MoveLocation from "./screens/AcceptGive/MoveToObject/MoveLocation";
+import CreateFinish from "./screens/CreateItem/CreateFinish/CreateFinish";
+import MoveSuccess from "./screens/AcceptGive/MoveToObject/MoveSuccess/MoveSuccess";
 
 const theme = {
   ...DefaultTheme,
@@ -157,6 +161,7 @@ const App = () => {
             />
             <Drawer.Screen name="CreateItemsPhotos" component={AddPhoto} />
             <Drawer.Screen name="CreateItemLocation" component={ItemLocation} />
+            <Drawer.Screen name="CreateMoveLocation" component={MoveLocation} />
             <Drawer.Screen
               name="CreateItemResponsible"
               component={Responsible}
@@ -166,6 +171,7 @@ const App = () => {
               component={AdditionalInfo}
             />
             <Drawer.Screen name="CreateFinish" component={CreateFinish} />
+            <Drawer.Screen name="MoveSuccess" component={MoveSuccess} />
             <Drawer.Screen name="Transactions" component={Transactions} />
             <Drawer.Screen name="AcceptGive" component={AcceptGive} />
             <Drawer.Screen name="GiveList" component={GiveList} />
@@ -180,9 +186,14 @@ const App = () => {
             <Drawer.Screen name="AcceptScaner" component={AcceptScaner} />
             <Drawer.Screen name="AcceptFinish" component={AcceptFinish} />
             <Drawer.Screen name="Inventory" component={Inventory} />
+            <Drawer.Screen name="MoveScaner" component={MoveScaner} />
             <Drawer.Screen
               name="InventoryChooseMode"
               component={InventoryChooseMode}
+            />
+            <Drawer.Screen
+                name="MoveStartPage"
+                component={MoveStartPage}
             />
             <Drawer.Screen name="InventoryScaner" component={InventoryScaner} />
             <Drawer.Screen name="InventoryDone" component={InventoryDone} />

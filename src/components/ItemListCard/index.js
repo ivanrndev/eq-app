@@ -38,7 +38,7 @@ const ItemListCard = ({
       : '';
 
   return (
-    <Card.Content style={{width}}>
+    <Card.Content  icon={'delete'}  style={{width}}>
       {item.metadata.title ? (
         <Title style={styles.cardTitle}>
           {T.t('detail_title')}: {item.metadata.title}

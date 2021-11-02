@@ -1,5 +1,8 @@
 {
     "upload": "Upload",
+    "move_item": "Move item",
+    "choose_responsible": "Choose responsible",
+    "move_success": "Move item completed successfully",
     "identification": "Identification",
     "mark": "Marking",
     "units": "units",
@@ -79,6 +82,8 @@
     "error_service_quantity": "The specified value exceeds\navailable balance, operation cannot\nbe committed",
     "send": "Send",
     "menu": "Menu",
+    "move": "Move",
+    "move_to_object": "Move to object",
     "send_service_finish": "Item was sent to service",
     "back_service_btn": "Return",
     "service_back_done": "Item was returned from service",

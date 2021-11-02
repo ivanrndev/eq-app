@@ -8,6 +8,7 @@ import {
   LOGIN_WITH_GOOGLE_ACCOUNT,
   LOGUT,
 } from '../../../actions/actionsType.js';
+import {USER_ROLE} from "../../../actions/actionsType";
 
 const initialState = {
   currentUser: {},
@@ -16,14 +17,19 @@ const initialState = {
   isError: false,
   isLoad: false,
   isLogOut: false,
+  role: '',
 };
-
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOGIN_USER:
       return {
         ...state,
         ...action.payload,
+      };
+    case USER_ROLE:
+      return {
+        ...state,
+        role: action.role,
       };
     case GET_COMPANY_INFO:
       return {

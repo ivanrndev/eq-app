@@ -5,6 +5,7 @@ import {
   KeyboardAvoidingView,
   StyleSheet,
   View,
+  Text,
 } from 'react-native';
 import T from '../../i18n';
 import {RNCamera} from 'react-native-camera';
@@ -26,9 +27,13 @@ import {isEmpty} from 'lodash';
 import {useDispatch, useSelector} from 'react-redux';
 import {currentScan, dialogInput, loader} from '../../actions/actions.js';
 
+
 const Scanner = props => {
   const dispatch = useDispatch();
   const store = useSelector(state => state.scan);
+
+  const isMoveScaner = useSelector(({moveToObject})=> moveToObject.isMoveToObject);
+  const isRoleAllow = useSelector(({moveToObject})=> moveToObject.isAllowed)
   const settings = useSelector(state => state.settings);
   const width = Dimensions.get('window').width;
 
@@ -67,6 +72,7 @@ const Scanner = props => {
 
   const text = props.text ? T.t('input_detail_new') : T.t('input_detail');
   const onSuccess = e => {
+
     if (store.isNewScan) {
       let cyrillicRegular = /[а-яА-ЯЁё]/;
       let cyrillicFilterId = cyrillicRegular.exec(e.data);
@@ -90,6 +96,7 @@ const Scanner = props => {
             props.saveItems,
             false,
             settings.swithCamera === 'InventoryScaner',
+              isMoveScaner
           ),
         );
       }
@@ -195,6 +202,8 @@ const Scanner = props => {
                     text={T.t('flash')}
                     onPress={handleOnFlashMode}
                   />
+
+
                 </View>
               </View>
             </View>
@@ -203,11 +212,19 @@ const Scanner = props => {
         <View style={styles.min} />
         <View style={styles.max} />
       </View>
+      {!isRoleAllow ? <Text style={styles.noAccesStyle}>No access</Text> : null}
     </>
   );
 };
 
 const styles = StyleSheet.create({
+  noAccesStyle:{
+    color:'rgb(0, 0, 0)',
+    textAlign: 'center',
+    fontSize: 26,
+    marginTop: 530,
+    backgroundColor:'rgb(255, 255, 255)',
+  },
   input: {
     display: 'flex',
     alignSelf: 'center',

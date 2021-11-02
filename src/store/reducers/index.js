@@ -14,6 +14,7 @@ import commentsReducer from './Comments/comments';
 import settingsReducer from './Settings/settings.js';
 import companyItemsReducer from './CompanyItems/companyItems';
 import createItemReducer from './CreateItem/createItem';
+import moveToObjectReducer from "./MoveToObject/moveToObject";
 
 export default combineReducers({
   auth: authReducer,
@@ -31,4 +32,5 @@ export default combineReducers({
   settings: settingsReducer,
   companyItems: companyItemsReducer,
   createItem: createItemReducer,
+  moveToObject: moveToObjectReducer,
 });

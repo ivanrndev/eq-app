@@ -28,6 +28,7 @@ import {
 } from '../../../actions/actionsType.js';
 import T from '../../../i18n';
 import {getMountTransferError} from '../../../utils/helpers';
+import {CLEAN_MOVE_TO_OBJECT, CLEAN_SCAN} from "../../../actions/actionsType";
 
 const initialState = {
   currentScan: '',
@@ -80,6 +81,11 @@ const scanReducer = (state = initialState, action) => {
       return {
         ...state,
         ...action.payload,
+      };
+    case CLEAN_SCAN:
+      return {
+        ...state,
+        ...initialState,
       };
     case CLEAR_SCAN_GIVE_LIST:
       return {

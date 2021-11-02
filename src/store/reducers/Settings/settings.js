@@ -16,6 +16,7 @@ import {
   LOCATION_MAIN,
   LOCATTION_LOC,
 } from '../../../actions/actionsType.js';
+import MoveScaner from "../../../screens/AcceptGive/MoveToObject/MoveScaner";
 
 const initialState = {
   loader: false,
@@ -38,6 +39,8 @@ const initialState = {
   startPageInventory: 'InventoryScaner',
   startPageMarking: 'MarkingScaner',
   startPageGive: 'GiveScaner',
+  moveScanPage: 'MoveScaner',
+  moveSuccess: 'MoveSuccess',
   startPageAccept: 'AcceptScaner',
   startPageMountList: 'MountList',
   backPageMount: '',

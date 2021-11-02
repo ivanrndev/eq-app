@@ -16,7 +16,7 @@ import {
   CHANGE_STATUS_ERROR,
   CHANGE_STATUS_LOAD,
   CHANGE_STATUS_LOAD_MORE,
-  CHANGE_STATUS_MY_LOAD_MORE,
+  CHANGE_STATUS_MY_LOAD_MORE, CLEAN_SCAN,
   CLEAR_BID_LIST,
   CLEAR_GIVE_ITEM_QTY,
   CLEAR_INVENTORY,
@@ -88,7 +88,7 @@ import {
   SEARCH_MY_COMPANY_ITEMS,
   SEARCH_MY_COMPANY_ITEMS_ERROR,
   SET_GIVE_ITEM_QTY,
-  SET_INVENTORY_ITEM_QTY,
+  SET_INVENTORY_ITEM_QTY, SET_IS_MOVE_SCANER, SET_MOVE_SCANER, SET_SCANED_MOVE_ITEM,
   SUCCES_IN_SERVICES,
   SUCCES_WRITE_OFF,
   TRANSACTIONS_ERROR,
@@ -100,10 +100,11 @@ import {
   TRANSFERS_UPDATE,
   TRANSFERS_UPDATE_ERROR,
   UPDATE_SCAN_GIVE_LIST,
-  USER_CURRENT_ID,
+  USER_CURRENT_ID, USER_ROLE,
 } from './actionsType';
 import {setTokenToDataBase} from '../utils/pushNotifications';
 import T from '../i18n';
+import {setIsMoveScan, setIsRoleAllowThunk} from "./moveToObjectsActions";
 
 // Settings
 export const nfc = (
@@ -199,6 +200,14 @@ export const helps = status => dispatch => {
 };
 
 // Auth actions
+
+
+export const userRole = role => dispatch => {
+  dispatch({
+    type: USER_ROLE,
+    role,
+  });
+};
 export const userPostFetch = ({email, password}) => dispatch => {
   return axios
     .post(LOGIN_URL, {login: email, password})
@@ -363,7 +372,11 @@ export const statusLoad = status => dispatch => {
   });
 };
 
-// Scan and search actions
+export const cleanScan = () => dispatch => {
+  dispatch({
+    type: CLEAN_SCAN,
+  });
+};
 
 export const currentScan = (
   code,
@@ -373,6 +386,8 @@ export const currentScan = (
   mount = false,
   inventory = false,
   isWriteOff = false,
+  isMoveScaner = false,
+
 ) => dispatch => {
   if (mount) {
     dispatch({
@@ -386,7 +401,7 @@ export const currentScan = (
       payload: {currentScan: code, isNewScan: false},
     });
     dispatch(
-      scanInfo(code, nav, page, saveItems, false, inventory, isWriteOff),
+      scanInfo(code, nav, page, saveItems, false, inventory, isWriteOff, isMoveScaner),
     );
   }
 };
@@ -470,6 +485,7 @@ export const scanInfo = (
   mount = false,
   inventory = false,
   isWriteOff = false,
+  isMoveScaner = false,
 ) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
@@ -537,6 +553,10 @@ export const scanInfo = (
                   if (inventory) {
                     checkErrors = false;
                   }
+                  if (isMoveScaner) {
+                    checkErrors = false;
+                    dispatch(setIsMoveScan(false));
+                  }
                   if (checkErrors) {
                     dispatch({
                       type: ERROR_CURRENT_SCAN_INFO,
@@ -593,8 +613,8 @@ export const scanInfo = (
             },
           });
           dispatch(loader(false));
+          dispatch(setIsRoleAllowThunk());
           dispatch(dialogInput(false));
-          nav.navigate(page);
         } else {
           dispatch({
             type: ERROR_CURRENT_MOUNT_SCAN_INFO,
@@ -1141,6 +1161,11 @@ export const clearGiveItemQty = () => dispatch => {
   });
 };
 
+export const openScan = () => dispatch => {
+  dispatch({
+    type: CLEAR_GIVE_ITEM_QTY,
+  });
+};
 export const saveCurrentUser = (id, role, nav, startPage) => dispatch => {
   dispatch({
     type: USER_CURRENT_ID,

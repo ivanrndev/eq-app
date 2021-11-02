@@ -7,7 +7,7 @@ import {
   saveCurrentMyItem,
 } from '../actions/actions';
 
-export const getUserName = (user: any) => {
+export const getUserName = (user) => {
   let name = '';
 
   if (user.firstName) {

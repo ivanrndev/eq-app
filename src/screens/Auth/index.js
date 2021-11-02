@@ -40,6 +40,7 @@ import {
 } from 'react-native-paper';
 import GoogleAuth from './GoogleAuth';
 import moment from 'moment';
+import {userRole} from "../../actions/actions";
 
 // import { GoogleSignin, GoogleSigninButton, statusCodes } from 'react-native-google-signin';
 const Auth = props => {
@@ -125,6 +126,7 @@ const Auth = props => {
 
     // if auth -> home page + role = user
     AsyncStorage.getItem('role').then(role => {
+      dispatch(userRole(role));
       if (
         role === 'root' ||
         role === 'worker' ||
@@ -132,6 +134,7 @@ const Auth = props => {
         role === 'admin'
       ) {
         AsyncStorage.getItem('token').then(token => {
+          console.log(token);
           if (!isEmpty(token)) {
             props.navigation.navigate('Home');
             // dispatch(statusError(false));

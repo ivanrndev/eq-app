@@ -15,6 +15,10 @@ import {
   getBidList,
   getTransfers,
 } from '../../actions/actions.js';
+import {nfc} from "../../actions/actions";
+import MoveScaner from "./MoveToObject/MoveScaner";
+import MoveStartPage from "./MoveToObject/MoveStartPage";
+import {openMoveScan} from "../../actions/moveToObjectsActions";
 
 const AcceptGive = props => {
   const dispatch = useDispatch();
@@ -71,6 +75,7 @@ const AcceptGive = props => {
           <View style={styles.buttonBlock}>
             <DarkButton text={T.t('accept')} onPress={bidList} />
             <DarkButton text={T.t('give')} onPress={userList} />
+            <DarkButton text={T.t('move_item')} onPress={() => dispatch(openMoveScan(props.navigation, settings.moveScanPage))} />
           </View>
         </View>
         <View style={styles.BottomButton}>

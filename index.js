@@ -18,7 +18,9 @@ if (__DEV__) {
     : global.XMLHttpRequest;
 }
 */
-
+XMLHttpRequest = global.originalXMLHttpRequest
+    ? global.originalXMLHttpRequest
+    : global.XMLHttpRequest;
 const ReduxApp = () => (
   <StoreContext.Provider value={store}>
     <Provider store={store}>
