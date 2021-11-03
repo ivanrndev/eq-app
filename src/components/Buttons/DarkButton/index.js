@@ -50,8 +50,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 5,
     marginTop: 5,
+
   },
   textContainer: {
     display: 'flex',

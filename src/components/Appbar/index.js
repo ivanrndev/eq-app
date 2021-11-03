@@ -167,6 +167,7 @@ const AppbarCustom = props => {
           listAction={props.listAction}
           pageToChosenItem={props.pageToChosenItem}
           setIsSearchOpen={setIsSearchOpen}
+          isSearchForMoveItem={props.isSearchForMoveItem}
           isSearchForGiveItem={props.isSearchForGiveItem}
           onSelectAction={props.onSelectAction}
           editTransfer={props.editTransfer}

@@ -8,6 +8,8 @@ import Scanner from '../../../../components/Scanner';
 import {useDispatch, useSelector} from 'react-redux';
 import MoveStartPage from "../MoveStartPage";
 import {setIsMoveScan} from "../../../../actions/moveToObjectsActions";
+import {searchMyCompanyItems} from "../../../../actions/actions";
+import {useUserData} from "../../../../hooks/useUserData";
 
 const MoveScaner = props => {
   const [scaner, setScaner] = useState(false);
@@ -17,22 +19,39 @@ const MoveScaner = props => {
         inventory.currentInventoryUser,
       ],
   );
+  const {role, userId} = useUserData();
   const [list, setList] = useState([]);
   const dispatch = useDispatch();
   useEffect(() => {
       dispatch(setIsMoveScan(true));
   }, [])
-
-  useEffect(
-      () =>
+  // useEffect(
+  //     () =>
+  //         setList(
+  //             companyItemList.filter(item =>
+  //                 item.person ? item.person._id === currentInventoryUser : '',
+  //             ),
+  //         ),
+  //
+  //     [companyItemList],
+  // );
+  useEffect(() => {
+      if (role === 'root' || role === 'admin') {
+          setList(
+              companyItemList.filter(
+                  item => !item.is_bun && !item.repair && item.transfer === null,
+              ),
+          );
+      } else {
           setList(
               companyItemList.filter(item =>
-                  item.person ? item.person._id === currentInventoryUser : '',
+                  item.person &&
+                  (!item.is_bun && !item.repair && item.transfer === null)
+                      ? item.person._id === userId
+                      : '',
               ),
-          ),
-
-      [companyItemList],
-  );
+          );
+      }}, [companyItemList]);
   useFocusEffect(
       useCallback(() => {
         setScaner(true);
@@ -50,8 +69,11 @@ const MoveScaner = props => {
             arrow={true}
             search={true}
             list={list}
+            listAction={searchMyCompanyItems}
+            pageToChosenItem="MoveStartPage"
+            isSearchForMoveItem={true}
+            giveSearch={true}
             goTo={'AcceptGive'}
-            clearGiveList={true}
             title={T.t('move_to_object')}
             switch={true}
             typeSwitchNFC={true}

@@ -60,7 +60,7 @@ const MoveStartPage = (props) => {
               quantity: 1
             }
           ],
-          user: choosedUser,
+          user: choosedUser.id,
           object: {
             object: location.objects,
             location: location.location
@@ -73,7 +73,7 @@ const MoveStartPage = (props) => {
   const renderItem = ({item}) => (
       <Menu.Item
           onPress={() => {
-            dispatch(setChoosedUser(item._id)),
+            dispatch(setChoosedUser({id:item._id, firstName: item.firstName})),
                 setVisible(false)
           }}
           title={item.firstName}
@@ -102,7 +102,7 @@ const MoveStartPage = (props) => {
       scan.scanInfoError !== 'NotFound' &&
       Object.keys(scan.scanInfo).length > 0
     ) {
-      dispatch( setScanedMoveItem(scan.scanInfo));
+      dispatch( setScanedMoveItem(scan.scanInfo, scan.scanInfo._id));
       dispatch( cleanScan());
     }
   }, [scan.scanInfo]);
@@ -143,7 +143,7 @@ const MoveStartPage = (props) => {
                   onDismiss={() => setVisible(false)}
                   anchor={
                     <Button onPress={() => setVisible(true)}>
-                      {T.t('choose_responsible')}
+                      {choosedUser.firstName}
                       <View style={styles.arrowWrap}>
                         <Arrow width={15} height={15} />
                       </View>
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
   },
   itemWrap: {
     width: width / 1.3,
-    marginBottom: 30,
+    marginBottom: 10,
     alignSelf: 'center',
     marginTop: -10,
   },
@@ -212,33 +212,7 @@ const styles = StyleSheet.create({
   btns: {
     width: Dimensions.get('window').width / 1.1,
     alignSelf: 'center',
-    marginBottom: 25,
-  },
-  titleError: {
-    color: '#E40B67',
-    textAlign: 'center',
-    paddingTop: 15,
-    paddingBottom: 30,
-    paddingLeft: 20,
-    paddingRight: 20,
-  },
-  setQtyBtn: {
-    width: Dimensions.get('window').width / 2.2,
-    alignSelf: 'center',
-  },
-  editArea: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 10,
-  },
-  cardTitle: {
-    fontSize: 14,
-    textTransform: 'uppercase',
-    textAlign: 'center',
-    color: '#22215B',
-  },
-  edit: {
-    color: '#8c03fc',
+    marginBottom: 10,
   },
 });
 

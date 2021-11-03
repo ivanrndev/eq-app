@@ -104,7 +104,7 @@ import {
 } from './actionsType';
 import {setTokenToDataBase} from '../utils/pushNotifications';
 import T from '../i18n';
-import {setIsMoveScan, setIsRoleAllowThunk} from "./moveToObjectsActions";
+import {setIsMoveScan, setIsRoleAllowThunk, setScanedMoveItem} from "./moveToObjectsActions";
 
 // Settings
 export const nfc = (
@@ -418,6 +418,7 @@ export const getSearchItem = (
   nav,
   page,
   isSearchForGiveItem = false,
+  isSearchForMoveItem =false,
 ) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     dispatch(loader(true));
@@ -449,6 +450,8 @@ export const getSearchItem = (
                   scanInfoError: false,
                 },
               });
+            } if(isSearchForMoveItem) {
+              dispatch(setScanedMoveItem(resp.data, resp.data._id));
             } else {
               dispatch({
                 type: SAVE_CURRENT_SEARCH,

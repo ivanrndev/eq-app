@@ -21,7 +21,7 @@ const Search = ({
   setIsSearchOpen,
   isSearchForGiveItem,
   onSelectAction,
-  editTransfer,
+  editTransfer, isSearchForMoveItem,
 }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -49,6 +49,7 @@ const Search = ({
         navigation,
         pageToChosenItem,
         isSearchForGiveItem,
+          isSearchForMoveItem,
       ),
       !!onSelectAction && dispatch(onSelectAction(item)),
       editTransfer &&

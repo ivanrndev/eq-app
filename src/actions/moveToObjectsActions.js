@@ -13,8 +13,8 @@ import {API_URL} from "../constants/auth";
 export const setIsMoveScan = (boolean) => {
   return {type: SET_IS_MOVE_SCANER, boolean }
 };
-export const setScanedMoveItem = (item) => {
-  return {type: SET_SCANED_MOVE_ITEM, item }
+export const setScanedMoveItem = (item, itemId) => {
+  return {type: SET_SCANED_MOVE_ITEM, item, itemId }
 };
 export const openMoveScan = (nav, page)=> dispatch => {
   dispatch(loader(true));
@@ -47,10 +47,10 @@ export const deleteMoveItem = (id) => dispatch =>
         type: DELETE_MOVE_ITEM,
         id
     });
-export const setChoosedUser = (user) => dispatch =>
+export const setChoosedUser = payload => dispatch =>
     dispatch({
         type: CHOOSED_MOVE_USER,
-        user
+        payload
     });
 
 export const changeLocation = (data, companyId, navigation) => dispatch => {

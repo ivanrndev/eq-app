@@ -5,6 +5,7 @@ import {
   SET_IS_MOVE_SCANER,
   SET_SCANED_MOVE_ITEM
 } from "../../../actions/actionsType";
+import T from "../../../i18n";
 
 const initialState = {
   isMoveToObject: false,
@@ -15,7 +16,11 @@ const initialState = {
   errorMessage: "",
   isAllowed: true,
   scanedItem: [],
-  choosedUser: '',
+  scanedItemId: [],
+  choosedUser: {
+    id: null,
+    firstName: T.t('choose_responsible')
+  },
 
 };
 
@@ -29,7 +34,12 @@ const moveToObjectReducer = (state = initialState, action) => {
     case SET_SCANED_MOVE_ITEM:
       return {
         ...state,
-        scanedItem:    [...state.scanedItem, action.item],
+        scanedItem: !state.scanedItemId.find(item =>item === action.itemId)
+            ? [...state.scanedItem, action.item]
+              : [...state.scanedItem],
+        scanedItemId: !state.scanedItemId.find(item =>item === action.itemId)
+            ? [...state.scanedItemId, action.itemId]
+              : [...state.scanedItemId],
       };
     case SAVE_MOVE_LOCATIONS:
       return {
@@ -54,7 +64,7 @@ const moveToObjectReducer = (state = initialState, action) => {
     case CHOOSED_MOVE_USER:
       return {
         ...state,
-        choosedUser: action.user,
+        choosedUser: action.payload,
       };
     case DELETE_MOVE_ITEM:
       return {
