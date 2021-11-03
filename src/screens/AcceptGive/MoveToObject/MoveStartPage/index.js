@@ -4,6 +4,7 @@ import {
   ScrollView,
   StyleSheet,
   View,
+  Alert
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -16,23 +17,16 @@ import {
   getInventoryMesageError,
 } from '../../../../utils/helpers';
 import {
-  changeLocation,
+  changeLocation, changeLocationWithoutUser,
   deleteMoveItem,
   openMoveScan, setChoosedUser,
   setScanedMoveItem
 } from "../../../../actions/moveToObjectsActions";
-
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Arrow from "../../../../assets/svg/arrow-down.svg";
 import {width} from "../../../../constants/dimentionsAndUnits";
 import {cleanScan, getUserList} from "../../../../actions/actions";
 
-
-const initialValues = {
-  firstName: '',
-  email: '',
-  role: {item: T.t('employee')},
-};
 
 const MoveStartPage = (props) => {
 
@@ -42,7 +36,6 @@ const MoveStartPage = (props) => {
   const choosedUser = useSelector(({moveToObject}) => moveToObject.choosedUser);
   const role = useSelector(({auth}) => auth.role);
   const [visible, setVisible] = useState(false);
-  const [formValues, setFormValues] = useState(initialValues);
   const users = useSelector(({give}) => give.userList );
 
   const [settings, inventory, scan] = useSelector(
@@ -62,11 +55,25 @@ const MoveStartPage = (props) => {
           ],
           user: choosedUser.id,
           object: {
-            object: location.objects,
-            location: location.location
+            object: location.objects ? location.location : item.metadata.object,
+            location: location.location ? location.location : item.metadata.location
           }
         }
-        dispatch(changeLocation(locationObject, item.company._id, navigation));
+        const locationObjectWithoutUser = {
+          item_ids: [
+            {
+              id: item._id,
+              quantity: 1
+            }
+          ],
+          object: location.objects,
+          location: location.location
+        }
+        if(!choosedUser.id){
+          dispatch(changeLocationWithoutUser(locationObjectWithoutUser, item.company._id, navigation));
+        }else{
+          dispatch(changeLocation(locationObject, item.company._id, navigation));
+        }
       })
     }
   };
@@ -158,17 +165,17 @@ const MoveStartPage = (props) => {
             </View> : null
         }
         <DarkButton
-          onPress={() => dispatch(openMoveScan(props.navigation, settings.moveScanPage))}
-          text={T.t('add')}
-        />
-        <DarkButton
             onPress={() => navigation.navigate('CreateMoveLocation')}
             disabled={renderedList.length === 0}
             text={T.t('choose_object')}
         />
         <DarkButton
+          onPress={() => dispatch(openMoveScan(props.navigation, settings.moveScanPage))}
+          text={T.t('add')}
+        />
+        <DarkButton
             onPress={() => createNewLocation()}
-            disabled={!location.location}
+            disabled={!choosedUser.id && !location.location}
             text={T.t('move')}
         />
       </View>

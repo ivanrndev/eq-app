@@ -103,11 +103,11 @@ const ItemListCard = ({
           {T.t('location')}: {item.metadata.location}
         </Paragraph>
       )}
-      {isResponsibleShown && item.person ? (
-        <Paragraph style={styles.paragraph}>
-          {T.t('responsible')}:{name}
-        </Paragraph>
-      ) : null}
+      {!!item.person && (
+          <Paragraph style={styles.paragraph}>
+            {T.t('responsible')}: {item.person.firstName}
+          </Paragraph>
+      )}
       {children}
     </Card.Content>
   );

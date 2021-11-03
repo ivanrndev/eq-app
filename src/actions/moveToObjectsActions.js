@@ -53,6 +53,25 @@ export const setChoosedUser = payload => dispatch =>
         payload
     });
 
+export const changeLocationWithoutUser = (data, companyId, navigation) => dispatch => {
+    return axios
+        .put(`${API_URL}/company/${companyId}/item/locations/add`, data)
+        .then(resp => {
+            if (resp.status === 200) {
+                navigation.navigate('MoveSuccess');
+                dispatch(cleanMoveToObject());
+            }
+        })
+        .catch(e => {
+            if (e.message) {
+                dispatch({
+                    type: MOVE_TO_OBJECT_ERROR,
+                    message: e.message,
+                });
+            }
+        });
+};
+
 export const changeLocation = (data, companyId, navigation) => dispatch => {
     return axios
         .put(`${API_URL}/company/${companyId}/item/move`, data)
@@ -68,6 +87,7 @@ export const changeLocation = (data, companyId, navigation) => dispatch => {
                     type: MOVE_TO_OBJECT_ERROR,
                     message: e.message,
                 });
+                // navigation.navigate('MoveSuccess');
             }
         });
 };
