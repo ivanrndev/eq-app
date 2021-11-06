@@ -1,5 +1,6 @@
 {
     "upload": "Upload",
+    "clear": "Clear",
     "move_item": "Move item",
     "choose_responsible": "Choose responsible",
     "move_success": "Move item completed successfully",

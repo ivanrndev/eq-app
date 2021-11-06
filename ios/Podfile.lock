@@ -329,6 +329,8 @@ PODS:
     - React-Core
   - react-native-nfc-manager (2.3.1):
     - React
+  - react-native-pager-view (5.4.8):
+    - React-Core
   - react-native-safe-area-context (0.7.3):
     - React
   - React-perflogger (0.64.0)
@@ -465,6 +467,7 @@ DEPENDENCIES:
   - react-native-camera (from `../node_modules/react-native-camera`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-nfc-manager (from `../node_modules/react-native-nfc-manager`)
+  - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -556,6 +559,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/netinfo"
   react-native-nfc-manager:
     :path: "../node_modules/react-native-nfc-manager"
+  react-native-pager-view:
+    :path: "../node_modules/react-native-pager-view"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   React-perflogger:
@@ -654,6 +659,7 @@ SPEC CHECKSUMS:
   react-native-camera: a6055b8538d741b5ac221fa73c866c526010c8c9
   react-native-netinfo: 30fb89fa913c342be82a887b56e96be6d71201dd
   react-native-nfc-manager: c792b9d484af4a8a82f0ae9b4a0fdf14567510dc
+  react-native-pager-view: c44c385eb20f0733c53685456fb9eb8d8469a1bb
   react-native-safe-area-context: e200d4433aba6b7e60b52da5f37af11f7a0b0392
   React-perflogger: 9c547d8f06b9bf00cb447f2b75e8d7f19b7e02af
   React-RCTActionSheet: 3080b6e12e0e1a5b313c8c0050699b5c794a1b11

@@ -26,7 +26,6 @@ import Marking from './screens/Marking/';
 import MarkingList from './screens/Marking/MarkingList';
 import MarkingScaner from './screens/Marking/MarkingScaner';
 import MarkingFinish from './screens/Marking/MarkingFinish';
-import OnMe from './screens/OnMe/';
 import OnMeInfo from './screens/OnMe/OnMeInfo';
 import Transactions from './screens/Transactions';
 import AcceptGive from './screens/AcceptGive';
@@ -75,8 +74,10 @@ import AdditionalInfo from './screens/CreateItem/AdditionalInfo';
 import MoveStartPage from "./screens/AcceptGive/MoveToObject/MoveStartPage";
 import MoveScaner from "./screens/AcceptGive/MoveToObject/MoveScaner";
 import MoveLocation from "./screens/AcceptGive/MoveToObject/MoveLocation";
-import CreateFinish from "./screens/CreateItem/CreateFinish/CreateFinish";
 import MoveSuccess from "./screens/AcceptGive/MoveToObject/MoveSuccess/MoveSuccess";
+import CreateFinish from './screens/CreateItem/CreateFinish/CreateFinish';
+import {OnMeNavigation} from "./screens/OnMe/OnMeNavigation";
+import OnMe from "./screens/OnMe";
 
 const theme = {
   ...DefaultTheme,

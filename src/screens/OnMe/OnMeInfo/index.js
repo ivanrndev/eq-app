@@ -39,7 +39,7 @@ export const OnMeInfo = props => {
     settings,
   ]);
   const itemPhotos = scan.scanInfo.photos ?? [];
-
+  const renderedList = useSelector(({onMe}) => onMe.scanedItem);
   const dispatch = useDispatch();
   const [isDeleteItemModalOpen, setIsDeleteItemModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(false);
@@ -48,14 +48,14 @@ export const OnMeInfo = props => {
   const [photoDel, setPhotoDel] = useState(
     itemPhotos[0] ? itemPhotos[0].name : '',
   );
+
   useEffect(() => itemPhotos.length && setPhotoDel(itemPhotos[0].name), [
     itemPhotos,
   ]);
   const myList = store.myList.filter(item => {
     return item._id === store.myCurrentId;
   });
-
-  const metaData = myList.length ? myList[0] : {};
+  const metaData = myList.length ? myList[0] : renderedList[0];
   const info = metaData.metadata;
   const show = !isEmpty(metaData);
   let nameOfProduct = '';

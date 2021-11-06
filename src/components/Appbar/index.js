@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Appbar, IconButton, Portal, Snackbar} from 'react-native-paper';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {Image, ImageBackground, StyleSheet, View} from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import T from '../../i18n';
@@ -28,6 +28,11 @@ import {cleanMountItemsList} from '../../actions/mountActions';
 import {clearComments} from '../../actions/commentsAction';
 import {setGoBackPageGallery} from '../../actions/addItemPhotoActions';
 import {cleanCreateItem} from '../../actions/createItem';
+import OnMeSearch from "../../screens/OnMe/OnMeSearch";
+import OnMe from "../../screens/OnMe";
+import OnMeSearched from "../../screens/OnMe/OnMeSearched";
+import {setIsShowFilter} from "../../actions/actions";
+
 
 const AppbarCustom = props => {
   const dispatch = useDispatch();
@@ -35,7 +40,10 @@ const AppbarCustom = props => {
   const [isConnection, setIsConnection] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isNFCOpen, setIsNFCOpen] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
+  const isShowFilter = useSelector(({onMe})=>onMe.isShowFilter)
+    console.log(isShowFilter);
   NetInfo.fetch().then(state => {
     if (state.isConnected) {
       setIsConnection(false);
@@ -97,6 +105,7 @@ const AppbarCustom = props => {
             if (props.menu) {
               props.navigation.openDrawer();
             }
+
             if (props.isMutiple) {
               dispatch(changeIsMultiple(false));
             }
@@ -108,6 +117,9 @@ const AppbarCustom = props => {
             }
             if (props.search) {
               setIsSearchOpen(false);
+            }
+            if (props.filter) {
+                setIsFilterOpen(false);
             }
             if (props.switch) {
               setIsNFCOpen(false);
@@ -146,9 +158,25 @@ const AppbarCustom = props => {
             icon="magnify"
             size={35}
             color="#22215B"
-            onPress={() => setIsSearchOpen(true)}
+            onPress={() => {
+                setIsSearchOpen(true);
+                setIsFilterOpen(false);
+            }}
           />
         )}
+        {props.filter && (
+            <IconButton
+                icon={'filter'}
+                size={30}
+                color="#22215B"
+                onPress={() => {
+                    setIsFilterOpen(true);
+                    setIsSearchOpen(false);
+                    dispatch(setIsShowFilter(true));
+                    console.log('h')
+
+                }}
+            />)}
         {props.handleSelect && (
           <IconButton
             icon={
@@ -161,9 +189,11 @@ const AppbarCustom = props => {
           />
         )}
       </Appbar.Header>
+        {/*{(props.onMe && isSearchOpen) && (<OnMeSearched/>)}*/}
       {isSearchOpen && (
         <Search
           list={props.list}
+          filter={props.filter}
           listAction={props.listAction}
           pageToChosenItem={props.pageToChosenItem}
           setIsSearchOpen={setIsSearchOpen}
@@ -173,6 +203,7 @@ const AppbarCustom = props => {
           editTransfer={props.editTransfer}
         />
       )}
+      {isFilterOpen && (<OnMeSearch/>)}
       {isNFCOpen && <NFC />}
       <View style={styles.borderRadius} />
       <Portal>

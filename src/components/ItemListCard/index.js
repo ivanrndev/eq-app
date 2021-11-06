@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Image, View} from 'react-native';
 import {Card, Paragraph, Title} from 'react-native-paper';
 import T from '../../i18n';
 import {getTotalLotPrice} from '../../utils/helpers';
@@ -70,6 +70,11 @@ const ItemListCard = ({
           {T.t('detail_serial')}: {item.metadata.serial}
         </Paragraph>
       ) : null}
+      {item?.person?.firstName ? (
+        <Paragraph style={styles.paragraph}>
+          {T.t('responsible')}: {item.person.firstName}
+        </Paragraph>
+      ) : null}
       {item.batch && (
         <>
           <Paragraph style={styles.paragraph}>
@@ -108,6 +113,19 @@ const ItemListCard = ({
             {T.t('responsible')}: {item.person.firstName}
           </Paragraph>
       )}
+      {/*{item.photos.length > 0 && (*/}
+      {/*    <Paragraph style={styles.paragraph}>*/}
+      {/*      {T.t('photos')}:*/}
+      {/*      <View >*/}
+      {/*        <Image*/}
+      {/*            style={styles.tinyLogo}*/}
+      {/*            source={{*/}
+      {/*              uri: item.photos[0],*/}
+      {/*            }}*/}
+      {/*        />*/}
+      {/*      </View>*/}
+      {/*    </Paragraph>*/}
+      {/*)}*/}
       {children}
     </Card.Content>
   );
@@ -127,6 +145,11 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 15,
     color: '#22215B',
+  },
+  tinyLogo: {
+    width: 20,
+    height: 20,
+
   },
 });
 

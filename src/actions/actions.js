@@ -88,7 +88,7 @@ import {
   SEARCH_MY_COMPANY_ITEMS,
   SEARCH_MY_COMPANY_ITEMS_ERROR,
   SET_GIVE_ITEM_QTY,
-  SET_INVENTORY_ITEM_QTY, SET_IS_MOVE_SCANER, SET_MOVE_SCANER, SET_SCANED_MOVE_ITEM,
+  SET_INVENTORY_ITEM_QTY, SET_IS_MOVE_SCANER, SET_IS_SHOW_FILTER, SET_MOVE_SCANER, SET_SCANED_MOVE_ITEM,
   SUCCES_IN_SERVICES,
   SUCCES_WRITE_OFF,
   TRANSACTIONS_ERROR,
@@ -105,6 +105,7 @@ import {
 import {setTokenToDataBase} from '../utils/pushNotifications';
 import T from '../i18n';
 import {setIsMoveScan, setIsRoleAllowThunk, setScanedMoveItem} from "./moveToObjectsActions";
+import {setScanedOnMeItem} from "./onMeActions";
 
 // Settings
 export const nfc = (
@@ -419,6 +420,7 @@ export const getSearchItem = (
   page,
   isSearchForGiveItem = false,
   isSearchForMoveItem =false,
+  filter = false,
 ) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     dispatch(loader(true));
@@ -452,6 +454,9 @@ export const getSearchItem = (
               });
             } if(isSearchForMoveItem) {
               dispatch(setScanedMoveItem(resp.data, resp.data._id));
+            } if(filter) {
+              dispatch(setScanedOnMeItem(resp.data, resp.data._id));
+              dispatch(myloadMore(false));
             } else {
               dispatch({
                 type: SAVE_CURRENT_SEARCH,
@@ -891,7 +896,17 @@ export const searchItem = (status, query, offset, isNew) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
       .get(`${API_URL}/company/${company}/item/`, {
-        params: {marked: status, search: query, limit: 6, offset: offset},
+        params: {
+          marked: status,
+          search: query?.query,
+          responsible: query?.responsibleUser?.id,
+          object: query?.selectedLoc?.name,
+          location: query?.selectedObj?.name,
+          type: query?.type,
+          status: query?.status?.value,
+          limit: 6,
+          offset: offset
+        },
       })
       .then(resp => {
         if (resp.status === 200) {
@@ -939,6 +954,13 @@ export const loadMore = status => dispatch => {
 };
 
 // OnMe actions
+
+export const setIsShowFilter = boolean => dispatch => {
+  dispatch({
+    type: SET_IS_SHOW_FILTER,
+    boolean,
+  });
+};
 export const getItemsOnMe = nav => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
@@ -977,11 +999,11 @@ export const getItemsOnMe = nav => dispatch => {
   });
 };
 
-export const searchMyItem = (query, offset, isNew, limit) => dispatch => {
+export const searchMyItem = (query,person, offset, isNew, limit) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
       .get(`${API_URL}/company/${company}/item/me`, {
-        params: {search: query, offset, limit},
+        params: {search: query, person, offset, limit},
       })
       .then(resp => {
         if (resp.status === 200) {

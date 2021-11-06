@@ -25,16 +25,6 @@ const MoveScaner = props => {
   useEffect(() => {
       dispatch(setIsMoveScan(true));
   }, [])
-  // useEffect(
-  //     () =>
-  //         setList(
-  //             companyItemList.filter(item =>
-  //                 item.person ? item.person._id === currentInventoryUser : '',
-  //             ),
-  //         ),
-  //
-  //     [companyItemList],
-  // );
   useEffect(() => {
       if (role === 'root' || role === 'admin') {
           setList(

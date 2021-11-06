@@ -5,6 +5,7 @@ import {
   CHANGE_STATUS_MY_LOAD_MORE,
   MY_CURRENT_INFO_ID,
 } from '../../../actions/actionsType.js';
+import {SET_IS_SHOW_FILTER, SET_MY_CURRENT_INFO, SET_SCANED_MOVE_ITEM} from "../../../actions/actionsType";
 
 const initialState = {
   myList: [],
@@ -14,6 +15,9 @@ const initialState = {
   myCurrentId: '',
   myCurrentCode: '',
   isMyInfoOpen: false,
+  isShowFilter: false,
+  scanedItem: [],
+  scanedItemId: [],
 };
 
 const onMeReducer = (state = initialState, action) => {
@@ -40,10 +44,25 @@ const onMeReducer = (state = initialState, action) => {
         ...state,
         ...action.payload,
       };
+    case SET_MY_CURRENT_INFO:
+      return {
+        ...state,
+        scanedItem: !state.scanedItemId.find(item =>item === action.itemId)
+            ? [...state.scanedItem, action.item]
+            : [...state.scanedItem],
+        scanedItemId: !state.scanedItemId.find(item =>item === action.itemId)
+            ? [...state.scanedItemId, action.itemId]
+            : [...state.scanedItemId],
+      };
     case MY_CURRENT_INFO_ID:
       return {
         ...state,
         ...action.payload,
+      };
+    case SET_IS_SHOW_FILTER:
+      return {
+        ...state,
+        isShowFilter: action.boolean,
       };
     default:
       return state;

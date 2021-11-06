@@ -54,10 +54,10 @@ const MoveStartPage = (props) => {
             }
           ],
           user: choosedUser.id,
-          object: {
-            object: location.objects ? location.location : item.metadata.object,
-            location: location.location ? location.location : item.metadata.location
-          }
+          // object: {
+          //   object: location.objects ? location.location : item.metadata.object,
+          //   location: location.location ? location.location : item.metadata.location
+          // }
         }
         const locationObjectWithoutUser = {
           item_ids: [
@@ -69,10 +69,19 @@ const MoveStartPage = (props) => {
           object: location.objects,
           location: location.location
         }
+        // if(!location){
+        //   dispatch(changeLocation(locationObject, item.company._id, navigation));
+        // }else if (!choosedUser.id){
+        //   dispatch(changeLocationWithoutUser(locationObjectWithoutUser, item.company._id, navigation));
+        // }else{
+        //   dispatch(changeLocation(locationObject, item.company._id, navigation));
+        //   dispatch(changeLocationWithoutUser(locationObjectWithoutUser, item.company._id, navigation));
+        // }
         if(!choosedUser.id){
           dispatch(changeLocationWithoutUser(locationObjectWithoutUser, item.company._id, navigation));
         }else{
           dispatch(changeLocation(locationObject, item.company._id, navigation));
+          dispatch(changeLocationWithoutUser(locationObjectWithoutUser, item.company._id, navigation));
         }
       })
     }
@@ -115,7 +124,6 @@ const MoveStartPage = (props) => {
   }, [scan.scanInfo]);
   useEffect(()=>{dispatch(getUserList(navigation, '', 'MoveStartPage'))},[])
 
-
   return (
     <View style={styles.body}>
       <Appbar
@@ -150,7 +158,7 @@ const MoveStartPage = (props) => {
                   onDismiss={() => setVisible(false)}
                   anchor={
                     <Button onPress={() => setVisible(true)}>
-                      {choosedUser.firstName}
+                      {choosedUser.firstName ? choosedUser.firstName : T.t('choose_responsible')}
                       <View style={styles.arrowWrap}>
                         <Arrow width={15} height={15} />
                       </View>
@@ -175,7 +183,7 @@ const MoveStartPage = (props) => {
         />
         <DarkButton
             onPress={() => createNewLocation()}
-            disabled={!choosedUser.id && !location.location}
+            disabled={!choosedUser.id && !location.objects}
             text={T.t('move')}
         />
       </View>

@@ -46,11 +46,11 @@ const DarkButton = props => {
 
 const styles = StyleSheet.create({
   container: {
-    height: Dimensions.get('window').height / 14,
+    height: Dimensions.get('window').height / 13,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 2,
+    marginTop: 5,
 
   },
   textContainer: {

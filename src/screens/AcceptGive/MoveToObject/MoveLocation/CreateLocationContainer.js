@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   Keyboard,
   StyleSheet,
@@ -15,7 +15,7 @@ export const CreateLocationContainer = ({
   handleSave,
   isBtnVisible = true,
   isSaveBtnEnabled = true,
-  children,
+  children, setSelectedObj, setSelectedLoc,
 }) => {
   const navigation = useNavigation();
   return (
@@ -31,7 +31,11 @@ export const CreateLocationContainer = ({
       {isBtnVisible && (
         <View style={styles.btns}>
           <DarkButton
-            onPress={handleSave}
+            onPress={()=> {
+              handleSave();
+              setSelectedLoc('');
+              setSelectedObj('');
+            }}
             text={`${T.t('save')}`}
             disabled={!isSaveBtnEnabled}
           />

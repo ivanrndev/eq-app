@@ -77,7 +77,7 @@ export const changeLocation = (data, companyId, navigation) => dispatch => {
         .put(`${API_URL}/company/${companyId}/item/move`, data)
         .then(resp => {
             if (resp.status === 200) {
-                navigation.navigate('MoveSuccess');
+                // navigation.navigate('MoveSuccess');
                 dispatch(cleanMoveToObject());
             }
         })

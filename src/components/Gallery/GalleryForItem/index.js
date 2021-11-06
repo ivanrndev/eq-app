@@ -38,6 +38,7 @@ const GalleryForItem = ({
   const itemPhotos = initialPhoto ?? [];
 
   const bigPhoto = !isEmpty(itemPhotos) && itemPhotos[0];
+  console.log(itemInfo.photos)
   const {role, userId} = useUserData();
   const isEditingPhotoAllowed =
     itemPhotos.length < 8 &&

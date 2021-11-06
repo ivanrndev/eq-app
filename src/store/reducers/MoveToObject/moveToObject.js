@@ -5,12 +5,11 @@ import {
   SET_IS_MOVE_SCANER,
   SET_SCANED_MOVE_ITEM
 } from "../../../actions/actionsType";
-import T from "../../../i18n";
 
 const initialState = {
   isMoveToObject: false,
   location: {
-    object: '',
+    objects: '',
     location: '',
   },
   errorMessage: "",
@@ -19,7 +18,7 @@ const initialState = {
   scanedItemId: [],
   choosedUser: {
     id: null,
-    firstName: T.t('choose_responsible')
+    firstName: null
   },
 
 };
@@ -70,6 +69,7 @@ const moveToObjectReducer = (state = initialState, action) => {
       return {
         ...state,
         scanedItem: state.scanedItem.filter(item => item._id !== action.id),
+        scanedItemId: state.scanedItem.filter(item => item._id !== action.id),
       };
 
     default:

@@ -6,7 +6,7 @@ import T from '../../i18n';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 import {useNavigation} from '@react-navigation/native';
 import ItemListCard from '../ItemListCard';
-import {actionCheckError} from '../../utils/helpers';
+import {actionCheckError, handleNavigateToMySingleItem} from '../../utils/helpers';
 import {
   getSearchItem,
   loader,
@@ -22,6 +22,7 @@ const Search = ({
   isSearchForGiveItem,
   onSelectAction,
   editTransfer, isSearchForMoveItem,
+    filter
 }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -41,6 +42,7 @@ const Search = ({
   };
 
   const handleCurrentScan = item => {
+
     actionCheckError(item);
     dispatch(loader(true));
     dispatch(
@@ -50,6 +52,7 @@ const Search = ({
         pageToChosenItem,
         isSearchForGiveItem,
           isSearchForMoveItem,
+          filter,
       ),
       !!onSelectAction && dispatch(onSelectAction(item)),
       editTransfer &&
@@ -64,6 +67,7 @@ const Search = ({
     );
     setIsSearchOpen(false);
     setSearch('');
+
   };
 
   return (
@@ -81,7 +85,9 @@ const Search = ({
         {renderedList.map(item => (
           <Card
             style={styles.card}
-            onPress={() => handleCurrentScan(item)}
+            onPress={() => {
+              handleCurrentScan(item)
+            }}
             key={item._id}>
             <ItemListCard
               item={item}
