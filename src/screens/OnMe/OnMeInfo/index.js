@@ -55,7 +55,7 @@ export const OnMeInfo = props => {
   const myList = store.myList.filter(item => {
     return item._id === store.myCurrentId;
   });
-  const metaData = myList.length ? myList[0] : renderedList[0];
+  const metaData = myList?.length ? myList[0] : renderedList[0];
   const info = metaData?.metadata;
   const show = !isEmpty(metaData);
   let nameOfProduct = '';

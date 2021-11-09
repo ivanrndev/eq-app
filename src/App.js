@@ -78,6 +78,8 @@ import MoveSuccess from "./screens/AcceptGive/MoveToObject/MoveSuccess/MoveSucce
 import CreateFinish from './screens/CreateItem/CreateFinish/CreateFinish';
 import {OnMeNavigation} from "./screens/OnMe/OnMeNavigation";
 import OnMe from "./screens/OnMe";
+import OnMeSearch from "./screens/OnMe/OnMeSearch";
+import OnMeSearched from "./screens/OnMe/OnMeSearched";
 
 const theme = {
   ...DefaultTheme,
@@ -154,6 +156,7 @@ const App = () => {
             <Drawer.Screen name="MarkingFinish" component={MarkingFinish} />
             <Drawer.Screen name="OnMe" component={OnMe} />
             <Drawer.Screen name="OnMeInfo" component={OnMeInfo} />
+            <Drawer.Screen name="OnMeSearch" component={OnMeSearch} />
             <Drawer.Screen name="CreateItem" component={CreateItem} />
             <Drawer.Screen name="CreateItemBaseInfo" component={BaseInfo} />
             <Drawer.Screen

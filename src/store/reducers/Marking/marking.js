@@ -16,9 +16,9 @@ const initialState = {
   markingErrorDone: '',
   markingError: false,
   currentItemMark: '',
-  offSet: 0,
   loadMore: false,
   showButtonLoad: true,
+  totalItemsCount:0,
 };
 
 const markingReducer = (state = initialState, action) => {
@@ -38,7 +38,7 @@ const markingReducer = (state = initialState, action) => {
         ...state,
         ...action.payload,
         markingList: state.markingList.concat(action.payload.markingList),
-        offSet: state.offSet + action.payload.offSet,
+
       };
     case MARKING_ERROR:
       return {

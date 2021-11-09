@@ -905,7 +905,9 @@ export const searchItem = (status, query, offset, isNew) => dispatch => {
           type: query?.type,
           status: query?.status?.value,
           limit: 6,
-          offset: offset
+          offset: offset,
+          withPhoto: true
+
         },
       })
       .then(resp => {
@@ -964,8 +966,11 @@ export const setIsShowFilter = boolean => dispatch => {
 export const getItemsOnMe = nav => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
-      .get(`${API_URL}/company/${company}/item/me`, {
-        params: {limit: 6, offSet: 0},
+      .get(`${API_URL}/company/${company}/item`, {
+        params: {
+          limit: 10,
+          withPhoto: true
+        }
       })
       .then(resp => {
         if (resp.status === 200) {
@@ -973,9 +978,9 @@ export const getItemsOnMe = nav => dispatch => {
             type: GET_MY_ITEMS,
             payload: {
               myloadMore: false,
-              offSet: 6,
               myList: resp.data.data,
               myError: false,
+              totalItemsCount: resp.data.count,
             },
           });
           nav.navigate('OnMe');
@@ -999,11 +1004,16 @@ export const getItemsOnMe = nav => dispatch => {
   });
 };
 
-export const searchMyItem = (query,person, offset, isNew, limit) => dispatch => {
+export const searchMyItem = (query, offset, isNew, limit) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
-      .get(`${API_URL}/company/${company}/item/me`, {
-        params: {search: query, person, offset, limit},
+      .get(`${API_URL}/company/${company}/item`, {
+        params: {
+          limit: 10,
+          offset:offset,
+          withPhoto: true
+        }
+        // params: {search: query, person, offset, limit},
       })
       .then(resp => {
         if (resp.status === 200) {
@@ -1012,16 +1022,15 @@ export const searchMyItem = (query,person, offset, isNew, limit) => dispatch => 
             dispatch({
               type: GET_MY_ITEMS,
               payload: {
-                offSet: offset,
                 myloadMore: false,
                 myList: data,
+                totalItemsCount: resp.data.count,
               },
             });
           } else {
             dispatch({
               type: GET_MY_ITEMS_SEARCH,
               payload: {
-                offSet: 6,
                 myloadMore: false,
                 myList: data,
               },

@@ -9,6 +9,7 @@ import {
 import {useDispatch} from 'react-redux';
 import {loader, getItemsOnMe, getUserList} from '../../../actions/actions.js';
 import {menuSvg} from '../../../utils/menuSvg.js';
+import {searchMyItem} from "../../../actions/actions";
 
 const Button = props => {
   const dispatch = useDispatch();
@@ -18,6 +19,7 @@ const Button = props => {
     if (props.getItemsOnMe) {
       dispatch(getItemsOnMe(props.nav));
     }
+
     if (props.route) {
       props.nav.navigate(props.route);
     }

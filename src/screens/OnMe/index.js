@@ -26,8 +26,6 @@ const OnMe = props => {
         inventory.currentInventoryUser,
       ],
   );
-  let error = getProperErrorMessage(onMe.markingError);
-  let showEmptyError = !onMe.myList.length;
   const {role, userId} = useUserData();
 
   const getMoreItems = () => {
@@ -52,15 +50,6 @@ const OnMe = props => {
           ),
       );
     }}, [companyItemList]);
-  const handleItemPress = item => {
-    handleNavigateToMySingleItem(
-      item.code,
-      props.navigation,
-      item._id,
-      'OnMeInfo',
-      dispatch,
-    );
-  };
 
   const queryText = (query) => {
     setText(query)

@@ -15,7 +15,6 @@ import {
 } from 'react-native-paper';
 import T from '../../../i18n';
 // components
-import Appbar from '../../../components/Appbar';
 import {
   getProperErrorMessage,
   handleNavigateToMySingleItem,
@@ -25,6 +24,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {myloadMore, searchMyItem} from '../../../actions/actions.js';
 import ItemListCard from '../../../components/ItemListCard';
 import {getSearchItems, searchItems} from "../../../actions/actions";
+import Text from "react-native-paper/src/components/Typography/Text";
 
 const OnMeSearched = props => {
 
@@ -38,7 +38,7 @@ const OnMeSearched = props => {
 
   const getMoreItems = () => {
     dispatch(myloadMore(true));
-    dispatch(searchMyItem('', onMe.offSet, false, 6));
+    dispatch(searchMyItem('', offset));
   };
 
   const changeOffset = () => {
@@ -104,23 +104,26 @@ const OnMeSearched = props => {
                     </Button> :
                     <>{onMe.myList.length > 5 && (
                     <>
-                    {!onMe.myloadMore && (
-                      <Button
-                        style={styles.button}
-                        mode="Text"
-                        color="#22215B"
-                        onPress={getMoreItems}>
-                        {T.t('load_more')}
-                      </Button>
-                    )}
-                    {onMe.myloadMore && (
-                      <ActivityIndicator
-                        style={styles.load}
-                        size={'large'}
-                        animating={true}
-                        color={'#EDF6FF'}
-                      />
-                    )}
+                      {(!onMe.myloadMore && (onMe.myList.length < onMe.totalItemsCount)) &&(
+                        <Button
+                          style={{ paddingBottom: 10 }}
+                          mode="Text"
+                          color="#22215B"
+                          onPress={()=> {
+                            setOffset(offset+10)
+                            getMoreItems();
+                          }}>
+                          {T.t('load_more')}
+                        </Button>
+                      )}
+                      {onMe.myloadMore && (
+                        <ActivityIndicator
+                          style={styles.load}
+                          size={'large'}
+                          animating={true}
+                          color={'#EDF6FF'}
+                        />
+                      )}
                     </>
                     )}
                     </>
@@ -137,16 +140,12 @@ const OnMeSearched = props => {
 
 const styles = StyleSheet.create({
   body: {
-    position:'absolute',
-    zIndex:-10,
-    width: Dimensions.get('window').width,
-    marginTop: 100,
-    paddingTop: 25,
-    backgroundColor: '#D3E3F2',
     height: Dimensions.get('window').height,
+    backgroundColor: '#D3E3F2',
+
   },
   container: {
-    height: Dimensions.get('window').height / 1.4,
+    height: Dimensions.get('window').height / 1.2,
     alignItems: 'center',
   },
   search: {
@@ -158,17 +157,18 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   card: {
-    display: 'flex',
     justifyContent: 'center',
     width: Dimensions.get('window').width / 1.1,
-    marginBottom: 15,
+    borderBottomColor: 'gray',
+    borderBottomWidth: 0.5,
     backgroundColor: '#EDF6FF',
+    color: '#22215B',
   },
-  text: {
-    fontSize: 15,
-    textAlign: 'center',
-    paddingBottom: 20,
-    width: Dimensions.get('window').width / 1.2,
+  cards: {
+    marginTop: -10,
+    paddingTop: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

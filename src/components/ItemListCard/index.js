@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Image, View} from 'react-native';
+import {StyleSheet, Text, View, Image} from 'react-native';
 import {Card, Paragraph, Title} from 'react-native-paper';
 import T from '../../i18n';
 import {getTotalLotPrice} from '../../utils/helpers';
@@ -29,103 +29,131 @@ const ItemListCard = ({
     () => setUserInfo(userList.find(user => user._id === item.responsible)),
     [userList],
   );
-
-  const name =
-    item.person && !!item.person.firstName
-      ? ` ${item.person.firstName}  ${item.person.lastName ?? ''}`
-      : userInfo
-      ? ` ${userInfo.firstName}  ${userInfo.lastName ?? ''}`
-      : '';
-
   return (
     <Card.Content  icon={'delete'}  style={{width}}>
-      {item.metadata.title ? (
-        <Title style={styles.cardTitle}>
-          {T.t('detail_title')}: {item.metadata.title}
-        </Title>
-      ) : (
-        <Title style={styles.cardTitle}>
-          {T.t('detail_type')}: {item.metadata.type} {item.metadata.brand}
-          {T.t('detail_model')}: {item.metadata.model} {item.metadata.serial}
-        </Title>
-      )}
+      <View style={{flexDirection: 'row', paddingTop:10}}>
+        {item.photos.length > 0
+            ? <Image
+                style={styles.tinyLogo}
+                source={{
+                  uri: item.photos[0],
+                }}
+            />
+            : item.metadata.title && <Text style={styles.titleText}>{T.t('detail_title')}:</Text>}
+            <Text style={!item.photos.length > 0 ? styles.marginText : {marginLeft: 60}}>
+              {item.metadata.title}
+            </Text>
+          </View>
       {item.metadata.type && (
-        <Paragraph style={styles.paragraph}>
-          {T.t('detail_type')}: {item.metadata.type}
-          {item.code && '/ ' + item.code}
-        </Paragraph>
+          <View style={{flexDirection:'row'}}>
+            <Text style={styles.titleText}>
+              {T.t('detail_type')}:
+            </Text>
+            <Text style={styles.marginText}>
+              {item.metadata.type}{item.code && '/ ' + item.code}
+            </Text>
+          </View>
       )}
-      {item.metadata.brand ? (
-        <Paragraph style={styles.paragraph}>
-          {T.t('detail_brand')}: {item.metadata.brand}
-        </Paragraph>
-      ) : null}
-      {item.metadata.model ? (
-        <Paragraph style={styles.paragraph}>
-          {T.t('detail_model')}: {item.metadata.model}
-        </Paragraph>
-      ) : null}
-      {item.metadata.serial ? (
-        <Paragraph style={styles.paragraph}>
-          {T.t('detail_serial')}: {item.metadata.serial}
-        </Paragraph>
-      ) : null}
-      {item?.person?.firstName ? (
-        <Paragraph style={styles.paragraph}>
-          {T.t('responsible')}: {item.person.firstName}
-        </Paragraph>
-      ) : null}
+      {item.metadata.brand && (
+          <View style={{flexDirection:'row'}}>
+            <Text style={styles.titleText}>
+              {T.t('detail_brand')}:
+            </Text>
+            <Text style={styles.marginText}>
+              {item.metadata.brand}
+            </Text>
+          </View>
+      ) }
+
+      {item.metadata.model && (
+          <View style={{flexDirection:'row'}}>
+            <Text style={styles.titleText}>
+              {T.t('detail_model')}:
+            </Text>
+            <Text style={styles.marginText}>
+              {item.metadata.model}
+            </Text>
+          </View>
+      ) }
+
+      {item.metadata.serial && (
+          <View style={{flexDirection:'row'}}>
+            <Text style={styles.titleText}>
+              {T.t('detail_serial')}:
+            </Text>
+            <Text style={styles.marginText}>
+              {item.metadata.serial}
+            </Text >
+          </View>
+      ) }
+
       {item.batch && (
         <>
-          <Paragraph style={styles.paragraph}>
-            {T.t('detail_quantity')}: {item.batch.quantity} {item.batch.units}
-          </Paragraph>
+          <View style={{flexDirection:'row'}}>
+            <Text style={styles.titleText}>
+              {T.t('detail_quantity')}:
+            </Text>
+            <Text style={styles.marginText}>
+              {item.batch.quantity} {item.batch.units}
+            </Text>
+          </View>
           {isPriceShown && (
             <>
-              <Paragraph style={styles.paragraph}>
-                {T.t('detail_price_per_item')}: {item.metadata.price} {currency}
-              </Paragraph>
+              <View style={{flexDirection:'row'}}>
+                <Text style={styles.titleText}>
+                  {T.t('detail_price_per_item')}:
+                </Text>
+                <Text style={styles.marginText}>
+                  {item.metadata.price} {currency}
+                </Text>
+              </View>
               {+item.batch.quantity !== 1 && (
-                <Paragraph style={styles.paragraph}>
-                  {T.t('detail_price_per_lot')}:
-                  {` ${getTotalLotPrice(
-                    item.metadata.price,
-                    item.batch.quantity,
-                  )} ${currency}`}
-                </Paragraph>
+                  <View style={{flexDirection:'row'}}>
+                    <Text style={styles.titleText}>
+                      {T.t('detail_price_per_lot')}:
+                    </Text>
+                    <Text style={styles.marginText}>
+                      {` ${getTotalLotPrice(
+                              item.metadata.price,
+                              item.batch.quantity,
+                            )} ${currency}`}
+                    </Text>
+                  </View>
               )}
             </>
           )}
         </>
       )}
       {!!item.metadata.object && (
-        <Paragraph style={styles.paragraph}>
-          {T.t('object')}: {item.metadata.object}
-        </Paragraph>
+          <View style={{flexDirection:'row'}}>
+            <Text style={styles.titleText}>
+              {T.t('object')}:
+            </Text>
+            <Text style={styles.marginText}>
+              {item.metadata.object}
+            </Text>
+          </View>
       )}
       {!!item.metadata.location && (
-        <Paragraph style={styles.paragraph}>
-          {T.t('location')}: {item.metadata.location}
-        </Paragraph>
+          <View style={{flexDirection:'row'}}>
+            <Text style={styles.titleText}>
+              {T.t('location')}:
+            </Text>
+            <Text style={styles.marginText}>
+              {item.metadata.location}
+            </Text>
+          </View>
       )}
       {!!item.person && (
-          <Paragraph style={styles.paragraph}>
-            {T.t('responsible')}: {item.person.firstName}
-          </Paragraph>
+          <View style={{flexDirection:'row'}}>
+            <Text style={styles.titleText}>
+              {T.t('responsible')}:
+            </Text>
+            <Text style={styles.marginText}>
+              {item.person.firstName}
+            </Text>
+          </View>
       )}
-      {/*{item.photos.length > 0 && (*/}
-      {/*    <Paragraph style={styles.paragraph}>*/}
-      {/*      {T.t('photos')}:*/}
-      {/*      <View >*/}
-      {/*        <Image*/}
-      {/*            style={styles.tinyLogo}*/}
-      {/*            source={{*/}
-      {/*              uri: item.photos[0],*/}
-      {/*            }}*/}
-      {/*        />*/}
-      {/*      </View>*/}
-      {/*    </Paragraph>*/}
-      {/*)}*/}
       {children}
     </Card.Content>
   );
@@ -135,20 +163,15 @@ const styles = StyleSheet.create({
   load: {
     marginTop: 10,
   },
-  cardTitle: {
-    fontSize: 13,
-    textTransform: 'uppercase',
-    color: '#22215B',
-    marginRight: 25,
+  titleText:{
+    width:110
   },
-  paragraph: {
-    fontSize: 12,
-    lineHeight: 15,
-    color: '#22215B',
+  marginText:{
+    marginLeft:50,
   },
   tinyLogo: {
-    width: 20,
-    height: 20,
+    width: 100,
+    height: 100,
 
   },
 });

@@ -1,5 +1,9 @@
 {
     "upload": "Загрузить",
+    "no_allocated": "Не распределено",
+    "in_the_process_of_transmission": "В процессе передачи",
+    "worker": "Сотрудник",
+    "write_off": "Списано",
     "move_item": "Перемещение ТМЦ",
     "move_success": "Перемещение TMЦ выполнено успешно",
     "choose_responsible": "Выбор ответственного",

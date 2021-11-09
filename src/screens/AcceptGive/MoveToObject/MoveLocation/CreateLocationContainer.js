@@ -18,6 +18,10 @@ export const CreateLocationContainer = ({
   children, setSelectedObj, setSelectedLoc,
 }) => {
   const navigation = useNavigation();
+  useEffect(()=>{
+    setSelectedLoc('');
+    setSelectedObj('');
+    },[])
   return (
     <View style={styles.container}>
       <Appbar

@@ -1,141 +1,131 @@
 import React, {useEffect, useState} from 'react';
-import {Dimensions, StyleSheet, Text, View, TextInput, FlatList, LayoutAnimation} from 'react-native';
+import {Dimensions, StyleSheet, Text, View} from 'react-native';
+import {CreateLocationContainer} from "./CreateLocationContainer";
 import {useDispatch, useSelector} from 'react-redux';
 import {getLocations} from '../../../../actions/actions';
 
 import T from '../../../../i18n';
 import {width} from '../../../../constants/dimentionsAndUnits';
+import {saveLocation} from '../../../../actions/createItem';
 import {useNavigation} from '@react-navigation/native';
 import {AutocompleteDropdown} from 'react-native-autocomplete-dropdown';
-import {CreateLocationContainer} from "./CreateLocationContainer";
-import {saveMoveLocation, setChoosedUser} from "../../../../actions/moveToObjectsActions";
-import {Button, Menu} from "react-native-paper";
-import Arrow from "../../../../assets/svg/arrow-down.svg";
+import {saveMoveLocation} from "../../../../actions/moveToObjectsActions";
 
 const MoveLocation = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const [objects, location] = useSelector(({settings, moveToObject}) => [
+  const [objects, location] = useSelector(({settings, createItem}) => [
     settings.locations ? settings.locations : [],
-    moveToObject.location,
+    createItem.location,
   ]);
 
   const [selectedLoc, setSelectedLoc] = useState('');
+  const [selectedLocObj, setSelectedLocObj] = useState('');
   const [selectedObj, setSelectedObj] = useState('');
-  const [editMode, setEditMode] = useState(false);
-  const [editModeLocation, setEditModeLocation] = useState(false);
+  const [selectedObjObj, setSelectedObjObj] = useState([]);
 
+  useEffect(() => dispatch(getLocations()), []);
+  // useEffect(() => {
+  //   if (selectedLoc && selectedLoc.name.length === 0) {
+  //     setSelectedObj('');
+  //   }
+  // }, [selectedLoc.name]);
   useEffect(() => {
-    dispatch(getLocations());
-    return setSelectedObj('') && setSelectedLoc('');
-  }, []);
-  useEffect(() => {
-    if (!location) {
+    if (!location.location && !location.object) {
       setSelectedLoc('');
       setSelectedLoc('');
       setSelectedObj('');
+      setSelectedObjObj('');
     }
   }, [location]);
   const handleChangeLocation = itemValue => {
     dispatch(
         saveMoveLocation({
-          objects: selectedObj ,
-          location: selectedLoc ,
-        }),
+          objects: selectedObj.name,
+          location: selectedLoc.name,
+        })
     );
     navigation.navigate('MoveStartPage');
   };
 
-  const renderItem = ({item}) => {
 
-    return <>
-
-      {((item.title.indexOf(selectedObj) !== -1) && (item.title.indexOf(selectedObj) < 3)) &&
-      < Text
-          onPress={() => setSelectedObj(item.title)}
-          style={styles.dropdown}
-      >
-        {item.title}
-      </Text>
-      }
-    </>
-  };
-
-  const animateObject = (boolean) => {
-    // LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
-
-    setEditMode(boolean);
-  };
-  const animateLocation = () => {
-    // LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
-    setEditModeLocation(!editModeLocation);
-  };
-
-  const renderItemLocation = ({item}) => {
-
-    return <>
-      <View>
-        {
-          item.locations.length > 0 && item.locations.map((item) => {
-            return <Text
-                onPress={() => setSelectedLoc(item)}
-                style={styles.dropdown}>
-              {item}
-            </Text>
-          })
-        }
-      </View>
-    </>
-  };
-  useEffect(() =>{
-    if(!selectedObj){
-      animateObject(false);
+  const handleSelectObj = item => {
+    setSelectedLoc(item);
+    if (!!item) {
+      const selectedObj =
+          objects.length > 0 ? objects.find(obj => obj._id === item.id) : [];
+      setSelectedLocObj(selectedObj);
+      !!selectedObj && setSelectedObjObj(selectedObj.locations);
     }
-    if(selectedObj!==''){
-      animateObject(true);
-    }
-  } ,[selectedObj])
+  };
+  const objectLoc = selectedObjObj
+      ? selectedObjObj.map(item => ({
+        name: item,
+        id: Math.floor(Math.random() * 1000),
+      }))
+      : [];
 
   return (
       <CreateLocationContainer handleSave={handleChangeLocation} setSelectedObj={setSelectedObj} setSelectedLoc={setSelectedLoc}>
-        <View >
+        <View style={styles.inputWrap}>
           <Text style={styles.left}>{T.t('object')}:</Text>
-          <TextInput
-              style={styles.inputDropdown}
-              onChangeText={text => {
-                setSelectedObj(text)
+          <AutocompleteDropdown
+              clearOnFocus={false}
+              closeOnBlur={true}
+              closeOnSubmit={true}
+              showClear={false}
+              onChangeText={text => setSelectedObj({name: text})}
+              onSelectItem={item => {
+                handleSelectObj(item);
+                setSelectedObj({name: item ? item.title : ''});
               }}
-              value={selectedObj}
-              // onFocus={()=>animateObject(true)}
-              onBlur={()=>animateObject(false)}
-              placeholder={T.t('choose_object')}
+              dataSet={() =>
+                  objects.length
+                      ? objects.map(item => ({
+                        title: item ? item.title : '',
+                        id: item ? item._id : '',
+                      }))
+                      : []
+              }
+              textInputProps={{
+                placeholder: T.t('choose_object'),
+                autoCorrect: false,
+                autoCapitalize: 'none',
+                style: styles.inputDropdown,
+                placeholderTextColor: 'gray',
+                defaultValue: location.location,
+              }}
+              rightButtonsContainerStyle={styles.inputBtn}
+              suggestionsListContainerStyle={styles.dropdown}
+          />
 
-          />
-          {editMode &&
-          <FlatList
-              data={objects}
-              renderItem={renderItem}
-              keyExtractor={item => item.id}
-          />
-          }
           <Text style={styles.left}>{T.t('location')}:</Text>
-          <TextInput
-              style={styles.inputDropdown}
-              onChangeText={text => setSelectedLoc(text)}
-              value={selectedLoc}
-              onFocus={animateLocation}
-              onBlur={animateLocation}
-              placeholder={T.t('choose_object')}
-
+          <AutocompleteDropdown
+              clearOnFocus={false}
+              closeOnBlur={true}
+              closeOnSubmit={true}
+              showClear={false}
+              onChangeText={text => setSelectedLoc({name: text})}
+              onSelectItem={item => setSelectedLoc({name: item ? item.title : ''})}
+              dataSet={() =>
+                  objects.length
+                      ? objectLoc.map(item => ({
+                        title: item ? item.name : '',
+                        id: item ? item._id : '',
+                      }))
+                      : []
+              }
+              textInputProps={{
+                placeholder: T.t('choose_location'),
+                autoCorrect: false,
+                autoCapitalize: 'none',
+                style: styles.inputDropdown,
+                placeholderTextColor: 'gray',
+                defaultValue: location.object,
+              }}
+              rightButtonsContainerStyle={styles.inputBtn}
+              suggestionsListContainerStyle={styles.dropdown}
           />
-          {editModeLocation
-              ? <FlatList
-                  data={objects.filter(item => item.title === selectedObj )}
-                  renderItem={renderItemLocation}
-                  keyExtractor={item => item.id}
-              />
-              : null
-          }
         </View>
       </CreateLocationContainer>
   );
@@ -143,15 +133,6 @@ const MoveLocation = () => {
 export default MoveLocation;
 
 const styles = StyleSheet.create({
-  itemWrap: {
-    width: width / 1.3,
-    marginBottom: 10,
-    alignSelf: 'center',
-    marginTop: -10,
-  },
-  arrowWrap: {
-    marginBottom: -1.5,
-  },
   left: {
     fontSize: 14,
     fontWeight: 'bold',
@@ -195,13 +176,7 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     top: 0,
-    padding:15,
-    fontSize: 14,
-    borderWidth:1,
-    justifyContent:'center',
-    borderRadius:3,
-    borderColor: 'rgb(255, 255, 255)',
-    width: Dimensions.get('window').width / 1.12,
+    width: Dimensions.get('window').width / 1.1,
     alignSelf: 'center',
     backgroundColor: '#C5CDD5',
     position: 'relative',

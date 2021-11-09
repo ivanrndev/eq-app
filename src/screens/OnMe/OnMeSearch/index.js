@@ -26,10 +26,10 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import {myloadMore} from '../../../actions/actions.js';
 import ItemListCard from '../../../components/ItemListCard';
-import {searchItem, setIsShowFilter} from "../../../actions/actions";
+import {getUserList, searchItem, searchMyCompanyItems, setIsShowFilter} from "../../../actions/actions";
 import {getTypes} from "../../../actions/createItem";
 import {AutocompleteDropdown} from "react-native-autocomplete-dropdown";
-import {width} from "../../../constants/dimentionsAndUnits";
+import {height, width} from "../../../constants/dimentionsAndUnits";
 import {useNavigation} from "@react-navigation/native";
 
 const OnMeSearch = props => {
@@ -46,7 +46,13 @@ const OnMeSearch = props => {
         onMe.isShowFilter
     ],
   );
-
+  const [onMe, searchResult] = useSelector(
+      ({onMe}) => [onMe, onMe.searchResult],
+  );
+  useEffect(() => {
+    dispatch(getUserList(navigation, '', 'OnMeSearch'));
+  }, []);
+  const [errorSelectedUser, seteErrorSelectedUser] = useState('');
   const [isFilters, setIsFilters] = useState(false);
   const [endFilters, setEndFilters] = useState(false)
   const [query, setQuery] = useState('');
@@ -58,6 +64,8 @@ const OnMeSearch = props => {
   const [selectedLocObj, setSelectedLocObj] = useState('');
   const [selectedObj, setSelectedObj] = useState('');
   const [selectedObjObj, setSelectedObjObj] = useState([]);
+  const [errors, setErrors] = useState('');
+  const[offSet, setOffset] = useState(10);
 
   useEffect(() => {
     dispatch(getTypes(type));
@@ -83,7 +91,7 @@ const OnMeSearch = props => {
 
   const getMoreItems = () => {
     dispatch(myloadMore(true));
-    dispatch(searchItem(true, '', 6, true));
+    dispatch(searchItem(true, '', offSet, true));
   };
 
   const handleItemPress = item => {
@@ -108,14 +116,15 @@ const OnMeSearch = props => {
     }, 0, true));
     animate(false);
     responsibleUser && (responsibleUser.title && setIsFilters(true));
-
   }
+
   // const closeFilters = () => {
   //   getSearchItems();
   //   setIsFilters(false)
   // }
   const handleTypeField = text => {
     setType(text);
+    !text ? setErrors(T.t('error_required')) : setErrors('');
   };
 
   const handleStatus = item => {
@@ -142,54 +151,63 @@ const OnMeSearch = props => {
 
   const handleSelectTextChange = text => {
     setResponsibleUser({title: text});
+    const selectedUser = users.find(user => user.firstName === text);
+    selectedUser
+        ? seteErrorSelectedUser('')
+        : seteErrorSelectedUser(T.t('error_user_not_exist'));
   };
 
   const handleSelectResp = item => {
     setResponsibleUser(item);
   };
 
+
+
+  console.log(searchBar, isShowFilter)
   return (
-    <SafeAreaView style={{flex: 1}}>
 
-      <View style={styles.body}>
+    <View style={styles.body}>
+      <Appbar
+          navigation={props.navigation}
+          pageToChosenItem="OnMeInfo"
+          // listAction={searchMyCompanyItems}
+          arrow={true}
+          newScan={true}
+          goTo={'OnMe'}
+          title={T.t('who_i')}
+          search={true}
+          filter={true}
+          onMe={true}
+      />
+      <View >
           <>
-            {(!searchBar && isFilters) &&
-            <View style={{margin: 20, flexDirection: 'row'}}>
-              <TouchableOpacity style={{flexDirection: 'row', backgroundColor:'white', height:20, borderRadius:5}}>
-
-                <Text
-                    style={{fontSize:14, marginRight: 10}}
-                    onPress={()=> {
-                      animate(true);
-                      setIsFilters(false);
-                    }}
-                >
-
-                  {responsibleUser && responsibleUser.title}
-                </Text>
-                <Text
-                    style={{fontSize:14}}
-                    onPress={()=> {
-                      getSearchItems();
-                      clearInputs()
-                      setIsFilters(false);
-                    }}
-                >
-                  X
-                </Text>
-              </TouchableOpacity>
-            </View>
-            }
+            {/*{(!searchBar && isFilters) &&*/}
+            {/*<View style={{margin: 20, flexDirection: 'row'}}>*/}
+            {/*  <TouchableOpacity style={{flexDirection: 'row', backgroundColor:'white', height:20, borderRadius:5}}>*/}
+            {/*    <Text*/}
+            {/*        style={{fontSize:14, marginRight: 10}}*/}
+            {/*        onPress={()=> {*/}
+            {/*          animate(true);*/}
+            {/*          setIsFilters(false);*/}
+            {/*        }}*/}
+            {/*    >*/}
+            {/*      {responsibleUser && responsibleUser.title}*/}
+            {/*    </Text>*/}
+            {/*    <Text*/}
+            {/*        style={{fontSize:14}}*/}
+            {/*        onPress={()=> {*/}
+            {/*          getSearchItems();*/}
+            {/*          setIsFilters(false);*/}
+            {/*        }}*/}
+            {/*    >*/}
+            {/*      X*/}
+            {/*    </Text>*/}
+            {/*  </TouchableOpacity>*/}
+            {/*</View>*/}
+            {/*}*/}
               {(searchBar  || isShowFilter) && (
-
-              <View style={styles.searchBar}>
-                <ScrollView >
+              <View >
                 <View style={styles.inputWrap}>
-                  {/*<Searchbar*/}
-                  {/*  placeholder={T.t('search')}*/}
-                  {/*  onChangeText={text => itemSearch(text)}*/}
-                  {/*  value={query}*/}
-                  {/*  style={styles.search}/>*/}
                   <Text style={styles.left}>{T.t('responsible')}:</Text>
                   <AutocompleteDropdown
                     clearOnFocus={true}
@@ -270,11 +288,17 @@ const OnMeSearch = props => {
                       style: styles.inputDropdown,
                       placeholderTextColor: 'gray',
                       defaultValue: location.object,
-                      value: selectedObj?.name
+                      // value: selectedObj?.name
                     }}
                     rightButtonsContainerStyle={styles.inputBtn}
                     suggestionsListContainerStyle={styles.dropdown}
                   />
+
+
+
+
+
+
                   <Text style={styles.left}>{T.t('detail_type')}:</Text>
                   <AutocompleteDropdown
                     clearOnFocus={true}
@@ -293,7 +317,7 @@ const OnMeSearch = props => {
                       autoCapitalize: 'none',
                       style: styles.inputDropdown,
                       placeholderTextColor: 'gray',
-                      value: type,
+                      // value: type,
                     }}
                     rightButtonsContainerStyle={styles.inputBtn}
                     suggestionsListContainerStyle={styles.dropdown}
@@ -308,8 +332,11 @@ const OnMeSearch = props => {
                     onSelectItem={item => item && handleStatus(item)}
                     onClear={() => handleStatus(null)}
                     dataSet={[
-                      { value: 'ban', title: `${T.t('operation_ban')}` },
+                      { value: 'ban', title: `${T.t('write_off')}` },
                       { value: 'repair', title: `${T.t('error_services')}` },
+                      { value: 'worker', title: `${T.t('worker')}` },
+                      { value: 'transfer', title: `${T.t('in_the_process_of_transmission')}` },
+                      { value: 'default', title: `${T.t('no_allocated')}` }
                     ]}
                     textInputProps={{
                       placeholder: `${T.t('transfer_status')}*`,
@@ -317,7 +344,7 @@ const OnMeSearch = props => {
                       autoCapitalize: 'none',
                       style: styles.inputDropdown,
                       placeholderTextColor: 'gray',
-                      value: status?.title,
+                      // value: status?.title,
                     }}
                     rightButtonsContainerStyle={styles.inputBtn}
                     suggestionsListContainerStyle={styles.dropdown}
@@ -345,64 +372,121 @@ const OnMeSearch = props => {
                     </Button>
                   </View>
                 </View>
-                </ScrollView>
               </View>
             )}
           </>
 
+
+
+
+        {(!searchBar  && !isShowFilter) &&(
         <View style={styles.container}>
             <>
               <View style={styles.container}>
                 <ScrollView>
                   {marking.markingList.map(item => (
+
                     <Card
                       style={styles.card}
                       key={item._id}
                       onPress={() => handleItemPress(item)}>
+                      {item.length }
                       <ItemListCard item={item}/>
                     </Card>
                   ))}
                 </ScrollView>
                 {marking.markingList.length > 5 && (
                   <>
-                    {marking.markingList && (
-                      <Button
+                    {/*<Button*/}
+                    {/*    style={styles.button}*/}
+                    {/*    mode="Text"*/}
+                    {/*    color="#22215B"*/}
+                    {/*    onPress={()=> {*/}
+                    {/*      setOffset(offSet+10)*/}
+                    {/*      getMoreItems();*/}
+                    {/*    }}>*/}
+                    {/*  {T.t('load_more')}*/}
+                    {/*</Button>*/}
+
+                    {/*{(!onMe.myloadMore && (onMe.myList.length < onMe.totalItemsCount)) &&(*/}
+                    {/*    <Button*/}
+                    {/*        style={styles.button}*/}
+                    {/*        mode="Text"*/}
+                    {/*        color="#22215B"*/}
+                    {/*        onPress={()=> {*/}
+                    {/*          setOffset(offSet+10)*/}
+                    {/*          getMoreItems();*/}
+                    {/*        }}>*/}
+                    {/*      {T.t('load_more')}*/}
+                    {/*    </Button>*/}
+                    {/*)}*/}
+                    {/*{onMe.myloadMore && (*/}
+                    {/*    <ActivityIndicator*/}
+                    {/*        style={styles.load}*/}
+                    {/*        size={'large'}*/}
+                    {/*        animating={true}*/}
+                    {/*        color={'#EDF6FF'}*/}
+                    {/*    />*/}
+                    {/*)}*/}
+                    <Button
                         style={styles.button}
                         mode="Text"
                         color="#22215B"
-                        onPress={getMoreItems}>
-                        {T.t('load_more')}
-                      </Button>
-                    )}
-                    {!marking.markingList && (
-                      <ActivityIndicator
-                        style={styles.load}
-                        size={'large'}
-                        animating={true}
-                        color={'#EDF6FF'}
-                      />
-                    )}
+                        onPress={()=> {
+                          setOffset(offSet+10)
+                          getMoreItems();
+                        }}>
+                      {T.t('load_more')}
+                    </Button>
+                    {!onMe.myloadMore &&
+                        <Button
+                            style={styles.button}
+                            mode="Text"
+                            color="#22215B"
+                            onPress={()=> {
+                              setOffset(offSet+10)
+                              getMoreItems();
+                            }}>
+                          {T.t('load_more')}
+                        </Button>
+                    }
+                    {/*{!marking.markingList && (*/}
+                    {/*  <ActivityIndicator*/}
+                    {/*    style={styles.load}*/}
+                    {/*    size={'large'}*/}
+                    {/*    animating={true}*/}
+                    {/*    color={'#EDF6FF'}*/}
+                    {/*  />*/}
+                    {/*)}*/}
                   </>
                 )}
               </View>
             </>
         </View>
+        )}
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   body: {
-    flex: 1,
+
     marginTop: -10,
-    display: 'flex',
-    paddingTop: 25,
     backgroundColor: '#D3E3F2',
-    height: Dimensions.get('window').height,
+    flex: 1,
+    justifyContent: 'flex-start',
+    // height: height,
+    // width: width,
+    // flex: 1,
+    // marginTop: -10,
+    // display: 'flex',
+    // paddingTop: 25,
+    // backgroundColor: '#D3E3F2',
+    // height: Dimensions.get('window').height,
   },
   container: {
-    height: Dimensions.get('window').height / 1.4,
+    height: Dimensions.get('window').height / 1.1,
     alignItems: 'center',
   },
   search: {
@@ -451,6 +535,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   inputDropdown: {
+
     alignSelf: 'center',
     justifyContent: 'center',
     marginTop: 10,
@@ -479,11 +564,11 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
   searchBar: {
-  height: '90%',
-  zIndex: 3,
+  // height: '90%',
+  // zIndex: 3,
   backgroundColor: '#D3E3F2',
-  position: 'absolute',
-  top: 20,
+  // position: 'absolute',
+  // top: 20,
 }
 });
 

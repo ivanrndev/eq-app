@@ -69,14 +69,7 @@ const MoveStartPage = (props) => {
           object: location.objects,
           location: location.location
         }
-        // if(!location){
-        //   dispatch(changeLocation(locationObject, item.company._id, navigation));
-        // }else if (!choosedUser.id){
-        //   dispatch(changeLocationWithoutUser(locationObjectWithoutUser, item.company._id, navigation));
-        // }else{
-        //   dispatch(changeLocation(locationObject, item.company._id, navigation));
-        //   dispatch(changeLocationWithoutUser(locationObjectWithoutUser, item.company._id, navigation));
-        // }
+
         if(!choosedUser.id){
           dispatch(changeLocationWithoutUser(locationObjectWithoutUser, item.company._id, navigation));
         }else{
@@ -123,6 +116,7 @@ const MoveStartPage = (props) => {
     }
   }, [scan.scanInfo]);
   useEffect(()=>{dispatch(getUserList(navigation, '', 'MoveStartPage'))},[])
+
 
   return (
     <View style={styles.body}>

@@ -1,5 +1,10 @@
 {
     "upload": "Upload",
+
+    "worker": "Worker",
+    "no_allocated": "No allocated",
+    "in_the_process_of_transmission": "In the process of transmission",
+    "write_off": "Write off",
     "clear": "Clear",
     "move_item": "Move item",
     "choose_responsible": "Choose responsible",

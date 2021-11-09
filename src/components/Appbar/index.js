@@ -43,7 +43,7 @@ const AppbarCustom = props => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [search, setSearch] = useState('');
 
-  const searchCount = useSelector(({onMe})=>onMe.searchCount)
+  const isShowFilter = useSelector(({onMe})=>onMe.isShowFilter)
   NetInfo.fetch().then(state => {
     if (state.isConnected) {
       setIsConnection(false);
@@ -180,7 +180,7 @@ const AppbarCustom = props => {
           />
         )}
 
-        {props.search && (
+        {props.search && !isSearchOpen && (
           <IconButton
             icon="magnify"
             size={35}
@@ -200,8 +200,7 @@ const AppbarCustom = props => {
                     setIsFilterOpen(true);
                     setIsSearchOpen(false);
                     dispatch(setIsShowFilter(true));
-                    console.log('h')
-
+                    props.navigation.navigate('OnMeSearch');
                 }}
             />)}
         {props.handleSelect && (
@@ -279,8 +278,7 @@ const styles = StyleSheet.create({
   },
   search: {
     backgroundColor: '#EDF6FF',
-    width: Dimensions.get('window').width / 1.8,
-    // marginBottom: 20,
+    flex: 1
   },
 });
 
