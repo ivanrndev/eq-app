@@ -71,7 +71,7 @@ const ItemLocation = () => {
           clearOnFocus={false}
           closeOnBlur={true}
           closeOnSubmit={true}
-          showClear={false}
+          showClear={true}
           onChangeText={text => setSelectedLoc({name: text})}
           onSelectItem={item => {
             handleSelectObj(item);
@@ -91,7 +91,8 @@ const ItemLocation = () => {
             autoCapitalize: 'none',
             style: styles.inputDropdown,
             placeholderTextColor: 'gray',
-            defaultValue: location.location,
+            defaultValue: selectedLoc.name || '',
+            value: selectedLoc.name || '',
           }}
           rightButtonsContainerStyle={styles.inputBtn}
           suggestionsListContainerStyle={styles.dropdown}
@@ -102,7 +103,7 @@ const ItemLocation = () => {
           clearOnFocus={false}
           closeOnBlur={true}
           closeOnSubmit={true}
-          showClear={false}
+          showClear={true}
           onChangeText={text => setSelectedObj({name: text})}
           onSelectItem={item => setSelectedObj({name: item ? item.title : ''})}
           dataSet={() =>
@@ -119,7 +120,8 @@ const ItemLocation = () => {
             autoCapitalize: 'none',
             style: styles.inputDropdown,
             placeholderTextColor: 'gray',
-            defaultValue: location.object,
+            defaultValue: selectedObj.name || '',
+            value: selectedObj.name || '',
           }}
           rightButtonsContainerStyle={styles.inputBtn}
           suggestionsListContainerStyle={styles.dropdown}

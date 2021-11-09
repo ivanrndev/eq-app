@@ -24,12 +24,13 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import {myloadMore, searchMyItem} from '../../../actions/actions.js';
 import ItemListCard from '../../../components/ItemListCard';
+import {searchItems} from "../../../actions/actions";
 
 const OnMeSearched = props => {
 
   const dispatch = useDispatch();
-  const [onMe] = useSelector(
-      ({onMe}) => [onMe],
+  const [onMe, searchResult] = useSelector(
+      ({onMe}) => [onMe, onMe.searchResult],
   );
   let error = getProperErrorMessage(onMe.markingError);
   let showEmptyError = !onMe.myList.length;
@@ -37,6 +38,11 @@ const OnMeSearched = props => {
   const getMoreItems = () => {
     dispatch(myloadMore(true));
     dispatch(searchMyItem('', onMe.offSet, false, 6));
+  };
+
+  const getMoreSearchItems = () => {
+    dispatch(searchItems(props.queryText, 10, 10))
+    console.log('для функции загрузить еще')
   };
 
 
@@ -59,43 +65,59 @@ const OnMeSearched = props => {
               <>
                 <View style={styles.container}>
                   <ScrollView>
-                    {showEmptyError && (
+                    {searchResult?.length ? (<>{searchResult.map(item => (
+                      <Card
+                        style={styles.card}
+                        key={item._id}
+                        onPress={() => handleItemPress(item)}>
+                        <ItemListCard item={item}/>
+                      </Card>
+                    ))}</>) : (<>{showEmptyError && (
                       <Paragraph style={styles.text}>
                         {T.t('who_i_info')}
                       </Paragraph>
                     )}
-                    {!error
-                      ? onMe.myList.map(item => (
-                        <Card
-                          style={styles.card}
-                          key={item._id}
-                          onPress={() => handleItemPress(item)}>
-                          <ItemListCard item={item}/>
-                        </Card>
-                      ))
-                      : null}
+                      {!error && onMe.myList.map(item => (
+                          <Card
+                            style={styles.card}
+                            key={item._id}
+                            onPress={() => handleItemPress(item)}>
+                            <ItemListCard item={item}/>
+                          </Card>
+                        ))}
+                        </>)}
                   </ScrollView>
-                  {onMe.myList.length > 5 && (
+                  {searchResult?.length ?
+                    <Button
+                      style={styles.button}
+                      mode="Text"
+                      color="#22215B"
+                      onPress={getMoreSearchItems}>
+                      {T.t('load_more')}
+                    </Button> :
+                    <>{onMe.myList.length > 5 && (
                     <>
-                      {!onMe.myloadMore && (
-                        <Button
-                          style={styles.button}
-                          mode="Text"
-                          color="#22215B"
-                          onPress={getMoreItems}>
-                          {T.t('load_more')}
-                        </Button>
-                      )}
-                      {onMe.myloadMore && (
-                        <ActivityIndicator
-                          style={styles.load}
-                          size={'large'}
-                          animating={true}
-                          color={'#EDF6FF'}
-                        />
-                      )}
+                    {!onMe.myloadMore && (
+                      <Button
+                        style={styles.button}
+                        mode="Text"
+                        color="#22215B"
+                        onPress={getMoreItems}>
+                        {T.t('load_more')}
+                      </Button>
+                    )}
+                    {onMe.myloadMore && (
+                      <ActivityIndicator
+                        style={styles.load}
+                        size={'large'}
+                        animating={true}
+                        color={'#EDF6FF'}
+                      />
+                    )}
                     </>
-                  )}
+                    )}
+                    </>
+                  }
                 </View>
               </>
             )}

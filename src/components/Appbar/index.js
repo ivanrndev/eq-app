@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
-import {Appbar, IconButton, Portal, Snackbar} from 'react-native-paper';
+import React, {useEffect, useState} from 'react';
+import {Appbar, IconButton, Portal, Searchbar, Snackbar} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
-import {Image, ImageBackground, StyleSheet, View} from 'react-native';
+import {Image, ImageBackground, StyleSheet, View, TextInput, Dimensions} from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import T from '../../i18n';
 
@@ -31,7 +31,7 @@ import {cleanCreateItem} from '../../actions/createItem';
 import OnMeSearch from "../../screens/OnMe/OnMeSearch";
 import OnMe from "../../screens/OnMe";
 import OnMeSearched from "../../screens/OnMe/OnMeSearched";
-import {setIsShowFilter} from "../../actions/actions";
+import {cleanSearchResult, myloadMore, searchItems, setIsShowFilter} from "../../actions/actions";
 
 
 const AppbarCustom = props => {
@@ -41,9 +41,9 @@ const AppbarCustom = props => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isNFCOpen, setIsNFCOpen] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [search, setSearch] = useState('');
 
-  const isShowFilter = useSelector(({onMe})=>onMe.isShowFilter)
-    console.log(isShowFilter);
+  const searchCount = useSelector(({onMe})=>onMe.searchCount)
   NetInfo.fetch().then(state => {
     if (state.isConnected) {
       setIsConnection(false);
@@ -51,6 +51,29 @@ const AppbarCustom = props => {
       setIsConnection(true);
     }
   });
+
+  console.log('count', searchCount)
+
+    const itemSearch = query => {
+      setSearch(query.trim());
+      dispatch(myloadMore(true));
+      props.queryText(query);
+      if (search.length > 0) {
+        dispatch(searchItems(query, 0, 10));
+      }
+    };
+
+  const handleItemSearch = query => {
+    setSearch(query.trim());
+    // dispatch(myloadMore(true));
+    dispatch(props.listAction(query, 0, true));
+  };
+
+    useEffect(() => {
+      if (search.length === 0) {
+        setTimeout(() => dispatch(cleanSearchResult()),1000)
+      }
+    }, [search])
 
   return (
     <>
@@ -137,10 +160,16 @@ const AppbarCustom = props => {
             }
           }}
         />
-        <Appbar.Content
-          title={isNFCOpen ? 'NFC' : props.title}
-          titleStyle={styles.content}
-        />
+        { isSearchOpen && props.searchItem ? <Searchbar
+            placeholder={T.t('search')}
+            onChangeText={props.searchItem ? (val => itemSearch(val)) : (val => handleItemSearch(val))}
+            value={search}
+            style={styles.search}
+          />:
+          <Appbar.Content
+            title = {isNFCOpen ? 'NFC' : props.title}
+            titleStyle={styles.content}
+          />}
         {props.switch && (
           <IconButton
             icon={isNFCOpen ? 'camera' : 'cast'}
@@ -159,7 +188,7 @@ const AppbarCustom = props => {
             size={35}
             color="#22215B"
             onPress={() => {
-                setIsSearchOpen(true);
+                setIsSearchOpen(!isSearchOpen);
                 setIsFilterOpen(false);
             }}
           />
@@ -190,7 +219,7 @@ const AppbarCustom = props => {
         )}
       </Appbar.Header>
         {/*{(props.onMe && isSearchOpen) && (<OnMeSearched/>)}*/}
-      {isSearchOpen && (
+      {isSearchOpen && !props.searchItem && (
         <Search
           list={props.list}
           filter={props.filter}
@@ -249,6 +278,11 @@ const styles = StyleSheet.create({
   },
   selectBtn: {
     marginRight: 15,
+  },
+  search: {
+    backgroundColor: '#EDF6FF',
+    width: Dimensions.get('window').width / 1.8,
+    // marginBottom: 20,
   },
 });
 

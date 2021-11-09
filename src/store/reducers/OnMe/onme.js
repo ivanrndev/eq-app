@@ -5,7 +5,13 @@ import {
   CHANGE_STATUS_MY_LOAD_MORE,
   MY_CURRENT_INFO_ID,
 } from '../../../actions/actionsType.js';
-import {SET_IS_SHOW_FILTER, SET_MY_CURRENT_INFO, SET_SCANED_MOVE_ITEM} from "../../../actions/actionsType";
+import {
+  CLEAN_SEARCH_RESULT,
+  SEARCH_ITEMS,
+  SET_IS_SHOW_FILTER,
+  SET_MY_CURRENT_INFO,
+  SET_SCANED_MOVE_ITEM
+} from "../../../actions/actionsType";
 
 const initialState = {
   myList: [],
@@ -18,6 +24,8 @@ const initialState = {
   isShowFilter: false,
   scanedItem: [],
   scanedItemId: [],
+  searchResult: [],
+  searchCount: 0,
 };
 
 const onMeReducer = (state = initialState, action) => {
@@ -64,6 +72,17 @@ const onMeReducer = (state = initialState, action) => {
         ...state,
         isShowFilter: action.boolean,
       };
+    case SEARCH_ITEMS:
+      return {
+        ...state,
+        searchResult: state.myList.concat(action.payload.searchResult),
+      };
+    case CLEAN_SEARCH_RESULT:
+      return {
+        ...state,
+        searchResult: [],
+        myloadMore: false,
+      }
     default:
       return state;
   }

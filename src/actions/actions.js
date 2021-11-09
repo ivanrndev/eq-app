@@ -16,7 +16,7 @@ import {
   CHANGE_STATUS_ERROR,
   CHANGE_STATUS_LOAD,
   CHANGE_STATUS_LOAD_MORE,
-  CHANGE_STATUS_MY_LOAD_MORE, CLEAN_SCAN,
+  CHANGE_STATUS_MY_LOAD_MORE, CLEAN_CREATE_ITEM, CLEAN_SCAN, CLEAN_SEARCH_RESULT,
   CLEAR_BID_LIST,
   CLEAR_GIVE_ITEM_QTY,
   CLEAR_INVENTORY,
@@ -84,7 +84,7 @@ import {
   SAVE_GIVE_ITEM_INFO_LIST,
   SAVE_INVENTORY_CREATED_ITEM,
   SAVE_INVENTORY_SCANS,
-  SAVE_USER_ACCEPT_BID,
+  SAVE_USER_ACCEPT_BID, SEARCH_ITEMS, SEARCH_ITEMS_ERROR,
   SEARCH_MY_COMPANY_ITEMS,
   SEARCH_MY_COMPANY_ITEMS_ERROR,
   SET_GIVE_ITEM_QTY,
@@ -1872,6 +1872,44 @@ export const searchMyCompanyItems = (query, offset, limit) => dispatch => {
       });
   });
 };
+export const searchItems = (query, offset, limit) => dispatch => {
+  AsyncStorage.getItem('company').then(company => {
+    return axios
+      .get(`${API_URL}/company/${company}/item`, {
+        params: {search: query, offset, limit},
+      })
+      .then(resp => {
+        if (resp.status === 200) {
+          let data = resp.data.data ? resp.data.data : resp.data;
+          dispatch({
+            type: SEARCH_ITEMS,
+            payload: {
+              offSet: offset,
+              myloadMore: true,
+              searchResult: data,
+              searchCount: resp.data.count,
+            },
+          });
+        }
+      })
+      .catch(e => {
+        if (!e.response.data.success) {
+          let error = getProperError(e.response.data.message.name);
+          dispatch({
+            type: SEARCH_ITEMS_ERROR,
+            payload: {
+              myError: error,
+              myloadMore: false,
+            },
+          });
+        }
+      });
+  });
+};
+export const cleanSearchResult = () => dispatch =>
+  dispatch({
+    type: CLEAN_SEARCH_RESULT,
+  });
 export const getTotalCountMyCompanyItems = () => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
