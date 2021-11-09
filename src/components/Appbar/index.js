@@ -32,6 +32,7 @@ import OnMeSearch from "../../screens/OnMe/OnMeSearch";
 import OnMe from "../../screens/OnMe";
 import OnMeSearched from "../../screens/OnMe/OnMeSearched";
 import {cleanSearchResult, myloadMore, searchItems, setIsShowFilter} from "../../actions/actions";
+import {useDebouncedCallback} from "use-debounce";
 
 
 const AppbarCustom = props => {
@@ -52,14 +53,25 @@ const AppbarCustom = props => {
     }
   });
 
-    const itemSearch = query => {
-      setSearch(query.trim());
-      dispatch(myloadMore(true));
-      props.queryText(query);
-      if (search.length > 0) {
-        dispatch(searchItems(query, 0, 10));
-      }
-    };
+  const debouncedItemSearch = useDebouncedCallback(
+    // function
+    (query) => {
+      dispatch(searchItems(query, 0, 10));
+    },
+    // delay in ms
+    500
+  );
+
+
+  const itemSearch = query => {
+    setSearch(query.trim());
+    dispatch(myloadMore(true));
+
+    props.queryText(query);
+    if (query.length > 0) {
+      debouncedItemSearch(query);
+    }
+  };
 
   const handleItemSearch = query => {
     setSearch(query.trim());
@@ -67,11 +79,11 @@ const AppbarCustom = props => {
     dispatch(props.listAction(query, 0, true));
   };
 
-    useEffect(() => {
-      if (search.length === 0) {
-        setTimeout(() => dispatch(cleanSearchResult()),1000)
-      }
-    }, [search])
+  useEffect(() => {
+    if (search.length === 0) {
+      setTimeout(() => dispatch(cleanSearchResult()),1000)
+    }
+  }, [search])
 
   return (
     <>
