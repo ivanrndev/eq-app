@@ -1918,35 +1918,35 @@ export const searchItems = (query, offset, limit) => dispatch => {
 export const getSearchItems = (query, offset, limit) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
-      .get(`${API_URL}/company/${company}/item`, {
-        params: {search: query, offset, limit},
-      })
-      .then(resp => {
-        if (resp.status === 200) {
-          let data = resp.data.data ? resp.data.data : resp.data;
-          dispatch({
-            type: GET_SEARCH_ITEMS,
-            payload: {
-              offSet: offset,
-              myloadMore: true,
-              searchResult: data,
-              searchCount: resp.data.count,
-            },
-          });
-        }
-      })
-      .catch(e => {
-        if (!e.response.data.success) {
-          let error = getProperError(e.response.data.message.name);
-          dispatch({
-            type: SEARCH_ITEMS_ERROR,
-            payload: {
-              myError: error,
-              myloadMore: false,
-            },
-          });
-        }
-      });
+        .get(`${API_URL}/company/${company}/item`, {
+          params: {search: query, offset, limit},
+        })
+        .then(resp => {
+          if (resp.status === 200) {
+            let data = resp.data.data ? resp.data.data : resp.data;
+            dispatch({
+              type: GET_SEARCH_ITEMS,
+              payload: {
+                offSet: offset,
+                myloadMore: true,
+                searchResult: data,
+                searchCount: resp.data.count,
+              },
+            });
+          }
+        })
+        .catch(e => {
+          if (!e.response.data.success) {
+            let error = getProperError(e.response.data.message.name);
+            dispatch({
+              type: SEARCH_ITEMS_ERROR,
+              payload: {
+                myError: error,
+                myloadMore: false,
+              },
+            });
+          }
+        });
   });
 };
 export const cleanSearchResult = () => dispatch =>

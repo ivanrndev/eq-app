@@ -16,7 +16,6 @@ import {
 const initialState = {
   myList: [],
   myloadMore: false,
-  offSet: 0,
   myError: false,
   myCurrentId: '',
   myCurrentCode: '',
@@ -24,6 +23,7 @@ const initialState = {
   isShowFilter: false,
   scanedItem: [],
   scanedItemId: [],
+  totalItemsCount: 0,
   searchResult: [],
   searchCount: 0,
 };
@@ -45,7 +45,6 @@ const onMeReducer = (state = initialState, action) => {
         ...state,
         ...action.payload,
         myList: state.myList.concat(action.payload.myList),
-        offSet: state.offSet + action.payload.offSet,
       };
     case CHANGE_STATUS_MY_LOAD_MORE:
       return {
@@ -72,6 +71,8 @@ const onMeReducer = (state = initialState, action) => {
         ...state,
         isShowFilter: action.boolean,
       };
+
+
     case SEARCH_ITEMS:
       return {
         ...state,
@@ -89,6 +90,7 @@ const onMeReducer = (state = initialState, action) => {
         searchResult: [],
         myloadMore: false,
       }
+
     default:
       return state;
   }

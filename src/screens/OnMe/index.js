@@ -14,7 +14,7 @@ import {searchMyCompanyItems} from "../../actions/actions";
 import {useUserData} from "../../hooks/useUserData";
 
 const OnMe = props => {
-  const dispatch = useDispatch();
+
   const [list, setList] = useState([]);
   const [text, setText] = useState('');
   const [onMe] = useSelector(
@@ -27,12 +27,6 @@ const OnMe = props => {
       ],
   );
   const {role, userId} = useUserData();
-
-  const getMoreItems = () => {
-    dispatch(myloadMore(true));
-    dispatch(searchMyItem('', onMe.offSet, false, 6));
-  };
-
   useEffect(() => {
     if (role === 'root' || role === 'admin') {
       setList(

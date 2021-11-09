@@ -4,7 +4,7 @@ import {
   ScrollView,
   StyleSheet,
   View,
-  SafeAreaView
+  TouchableOpacity
 } from 'react-native';
 import {
   ActivityIndicator,
@@ -42,18 +42,17 @@ const OnMeSearched = props => {
   };
 
   const changeOffset = () => {
-    if (searchCount > offset) {
-      setOffset(offset + 10)
+    if (searchCount > offSet) {
+      setOffset(offSet + 10)
     } else {
       setOffset(searchCount)
     }
   }
 
   const getMoreSearchItems = () => {
-    dispatch(getSearchItems(props.queryText, offset, 10));
+    dispatch(getSearchItems(props.queryText, offSet, 10));
     changeOffset();
   };
-
   const handleItemPress = item => {
     handleNavigateToMySingleItem(
         item.code,
@@ -110,7 +109,7 @@ const OnMeSearched = props => {
                           mode="Text"
                           color="#22215B"
                           onPress={()=> {
-                            setOffset(offset+10)
+                            setOffset(offSet+10)
                             getMoreItems();
                           }}>
                           {T.t('load_more')}
@@ -170,6 +169,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+
 });
 
 export default OnMeSearched;

@@ -201,6 +201,9 @@ const AppbarCustom = props => {
                     setIsSearchOpen(false);
                     dispatch(setIsShowFilter(true));
                     props.navigation.navigate('OnMeSearch');
+
+
+
                 }}
             />)}
         {props.handleSelect && (
