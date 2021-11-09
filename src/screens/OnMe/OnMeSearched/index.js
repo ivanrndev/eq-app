@@ -42,15 +42,15 @@ const OnMeSearched = props => {
   };
 
   const changeOffset = () => {
-    if (searchCount > offSet) {
-      setOffset(offSet + 10)
+    if (searchCount > offset ) {
+      setOffset(offset + 10)
     } else {
       setOffset(searchCount)
     }
   }
 
   const getMoreSearchItems = () => {
-    dispatch(getSearchItems(props.queryText, offSet, 10));
+    dispatch(getSearchItems(props.queryText, offset, 10));
     changeOffset();
   };
   const handleItemPress = item => {
@@ -109,7 +109,7 @@ const OnMeSearched = props => {
                           mode="Text"
                           color="#22215B"
                           onPress={()=> {
-                            setOffset(offSet+10)
+                            setOffset(offset + 10)
                             getMoreItems();
                           }}>
                           {T.t('load_more')}
