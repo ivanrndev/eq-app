@@ -39,7 +39,7 @@ export const OnMeInfo = props => {
     settings,
   ]);
   const itemPhotos = scan.scanInfo.photos ?? [];
-  const renderedList = useSelector(({onMe}) => onMe.scanedItem);
+  const renderedList = useSelector(({onMe}) => onMe.searchResult);
   const dispatch = useDispatch();
   const [isDeleteItemModalOpen, setIsDeleteItemModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(false);
@@ -56,11 +56,11 @@ export const OnMeInfo = props => {
     return item._id === store.myCurrentId;
   });
   const metaData = myList.length ? myList[0] : renderedList[0];
-  const info = metaData.metadata;
+  const info = metaData?.metadata;
   const show = !isEmpty(metaData);
   let nameOfProduct = '';
-  const quantity = metaData.batch ? metaData.batch.quantity : 1;
-  const units = metaData.batch ? metaData.batch.units : T.t('piece');
+  const quantity = metaData?.batch ? metaData?.batch.quantity : 1;
+  const units = metaData?.batch ? metaData?.batch.units : T.t('piece');
   if (info) {
     nameOfProduct = info.title
       ? info.title

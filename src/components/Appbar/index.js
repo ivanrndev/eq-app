@@ -52,8 +52,6 @@ const AppbarCustom = props => {
     }
   });
 
-  console.log('count', searchCount)
-
     const itemSearch = query => {
       setSearch(query.trim());
       dispatch(myloadMore(true));

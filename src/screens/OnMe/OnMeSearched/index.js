@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Dimensions,
   ScrollView,
@@ -24,13 +24,14 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import {myloadMore, searchMyItem} from '../../../actions/actions.js';
 import ItemListCard from '../../../components/ItemListCard';
-import {searchItems} from "../../../actions/actions";
+import {getSearchItems, searchItems} from "../../../actions/actions";
 
 const OnMeSearched = props => {
 
+  const [offset, setOffset] = useState(10)
   const dispatch = useDispatch();
-  const [onMe, searchResult] = useSelector(
-      ({onMe}) => [onMe, onMe.searchResult],
+  const [onMe, searchResult, searchCount] = useSelector(
+      ({onMe}) => [onMe, onMe.searchResult, onMe.searchCount],
   );
   let error = getProperErrorMessage(onMe.markingError);
   let showEmptyError = !onMe.myList.length;
@@ -40,14 +41,20 @@ const OnMeSearched = props => {
     dispatch(searchMyItem('', onMe.offSet, false, 6));
   };
 
+  const changeOffset = () => {
+    if (searchCount > offset) {
+      setOffset(offset + 10)
+    } else {
+      setOffset(searchCount)
+    }
+  }
+
   const getMoreSearchItems = () => {
-    dispatch(searchItems(props.queryText, 10, 10))
-    console.log('для функции загрузить еще')
+    dispatch(getSearchItems(props.queryText, offset, 10));
+    changeOffset();
   };
 
-
   const handleItemPress = item => {
-
     handleNavigateToMySingleItem(
         item.code,
         props.navigation,

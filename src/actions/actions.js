@@ -41,7 +41,7 @@ import {
   GET_COUNT_MY_COMPANY_ITEMS_ERROR,
   GET_MY_ITEMS,
   GET_MY_ITEMS_ERROR,
-  GET_MY_ITEMS_SEARCH,
+  GET_MY_ITEMS_SEARCH, GET_SEARCH_ITEMS,
   GET_USERS,
   GET_USERS_ERROR,
   HELP,
@@ -1883,6 +1883,40 @@ export const searchItems = (query, offset, limit) => dispatch => {
           let data = resp.data.data ? resp.data.data : resp.data;
           dispatch({
             type: SEARCH_ITEMS,
+            payload: {
+              offSet: offset,
+              myloadMore: true,
+              searchResult: data,
+              searchCount: resp.data.count,
+            },
+          });
+        }
+      })
+      .catch(e => {
+        if (!e.response.data.success) {
+          let error = getProperError(e.response.data.message.name);
+          dispatch({
+            type: SEARCH_ITEMS_ERROR,
+            payload: {
+              myError: error,
+              myloadMore: false,
+            },
+          });
+        }
+      });
+  });
+};
+export const getSearchItems = (query, offset, limit) => dispatch => {
+  AsyncStorage.getItem('company').then(company => {
+    return axios
+      .get(`${API_URL}/company/${company}/item`, {
+        params: {search: query, offset, limit},
+      })
+      .then(resp => {
+        if (resp.status === 200) {
+          let data = resp.data.data ? resp.data.data : resp.data;
+          dispatch({
+            type: GET_SEARCH_ITEMS,
             payload: {
               offSet: offset,
               myloadMore: true,

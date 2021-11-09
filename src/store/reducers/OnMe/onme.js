@@ -6,7 +6,7 @@ import {
   MY_CURRENT_INFO_ID,
 } from '../../../actions/actionsType.js';
 import {
-  CLEAN_SEARCH_RESULT,
+  CLEAN_SEARCH_RESULT, GET_SEARCH_ITEMS,
   SEARCH_ITEMS,
   SET_IS_SHOW_FILTER,
   SET_MY_CURRENT_INFO,
@@ -75,7 +75,13 @@ const onMeReducer = (state = initialState, action) => {
     case SEARCH_ITEMS:
       return {
         ...state,
-        searchResult: state.myList.concat(action.payload.searchResult),
+        ...action.payload,
+      };
+    case GET_SEARCH_ITEMS:
+      return {
+        ...state,
+        ...action.payload,
+        searchResult: state.searchResult.concat(action.payload.searchResult),
       };
     case CLEAN_SEARCH_RESULT:
       return {
