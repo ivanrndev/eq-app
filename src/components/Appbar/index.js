@@ -197,9 +197,9 @@ const AppbarCustom = props => {
                 size={30}
                 color="#22215B"
                 onPress={() => {
-                    setIsFilterOpen(true);
-                    setIsSearchOpen(false);
-                    dispatch(setIsShowFilter(true));
+                    // setIsFilterOpen(true);
+                    // setIsSearchOpen(false);
+                    // dispatch(setIsShowFilter(true));
                     props.navigation.navigate('OnMeSearch');
 
 

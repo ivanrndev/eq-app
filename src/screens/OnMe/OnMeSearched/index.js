@@ -65,12 +65,11 @@ const OnMeSearched = props => {
 
   return (
       <>
-        <View style={styles.body}>
           <View style={styles.container}>
             {!error && (
               <>
                 <View style={styles.container}>
-                  <ScrollView>
+                  <ScrollView bounces={false} style={{ marginTop: 15, borderRadius: 15 }} showsVerticalScrollIndicator={false}>
                     {searchResult?.length ? (<>{searchResult.map(item => (
                       <Card
                         style={styles.card}
@@ -83,13 +82,14 @@ const OnMeSearched = props => {
                         {T.t('who_i_info')}
                       </Paragraph>
                     )}
-                      {!error && onMe.myList.map(item => (
-                          <Card
+                      {!error && onMe.myList.map((item, index, arr) => (
+                          <TouchableOpacity
                             style={styles.card}
                             key={item._id}
                             onPress={() => handleItemPress(item)}>
                             <ItemListCard item={item}/>
-                          </Card>
+                            <View style={{ height: 1, backgroundColor: '#D3E3F2', width: '90%', marginLeft: '5%', marginTop: 10}} />
+                          </TouchableOpacity>
                         ))}
                         </>)}
                   </ScrollView>
@@ -131,26 +131,23 @@ const OnMeSearched = props => {
               </>
             )}
             {error ? <Title style={styles.title}>{error}</Title> : null}
-          </View>
         </View>
       </>
   );
 };
 
 const styles = StyleSheet.create({
-  body: {
-    height: Dimensions.get('window').height,
-    backgroundColor: '#D3E3F2',
-
-  },
   container: {
-    height: Dimensions.get('window').height / 1.2,
-    alignItems: 'center',
+    flex: 1,
+    // height: Dimensions.get('window').height,
+    backgroundColor: '#D3E3F2',
+    alignItems: 'center'
+
   },
   search: {
     backgroundColor: '#EDF6FF',
     width: Dimensions.get('window').width / 1.1,
-    marginBottom: 20,
+    // marginBottom: 20,
   },
   load: {
     marginTop: 10,
@@ -158,8 +155,8 @@ const styles = StyleSheet.create({
   card: {
     justifyContent: 'center',
     width: Dimensions.get('window').width / 1.1,
-    borderBottomColor: 'gray',
-    borderBottomWidth: 0.5,
+    // borderBottomColor: 'gray',
+    // borderBottomWidth: 0.5,
     backgroundColor: '#EDF6FF',
     color: '#22215B',
   },
