@@ -65,7 +65,7 @@ const AppbarCustom = props => {
         ...filters,
         query
       }, 0, true));
-      dispatch(searchItems(query, 0, 10));
+      // dispatch(searchItems(query, 0, 10));
     },
     // delay in ms
     500
