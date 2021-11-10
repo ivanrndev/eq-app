@@ -31,7 +31,7 @@ import {cleanCreateItem} from '../../actions/createItem';
 import OnMeSearch from "../../screens/OnMe/OnMeSearch";
 import OnMe from "../../screens/OnMe";
 import OnMeSearched from "../../screens/OnMe/OnMeSearched";
-import {cleanSearchResult, myloadMore, searchItems, setIsShowFilter} from "../../actions/actions";
+import {cleanSearchResult, myloadMore, searchItem, searchItems, setIsShowFilter} from "../../actions/actions";
 import {useDebouncedCallback} from "use-debounce";
 
 
@@ -43,6 +43,8 @@ const AppbarCustom = props => {
   const [isNFCOpen, setIsNFCOpen] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [search, setSearch] = useState('');
+
+  const filters = useSelector(state => state.filterReducer);
 
   const isShowFilter = useSelector(({onMe})=>onMe.isShowFilter)
   NetInfo.fetch().then(state => {
@@ -59,6 +61,10 @@ const AppbarCustom = props => {
       dispatch(myloadMore(true));
 
       props.queryText(query);
+      dispatch(searchItem(true, {
+        ...filters,
+        query
+      }, 0, true));
       dispatch(searchItems(query, 0, 10));
     },
     // delay in ms
