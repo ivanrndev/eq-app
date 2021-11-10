@@ -899,7 +899,6 @@ export const searchItem = (status, query, offset, isNew) => dispatch => {
     return axios
       .get(`${API_URL}/company/${company}/item/`, {
         params: {
-          marked: status,
           search: query?.query,
           responsible: query?.responsibleUser?.id,
           object: query?.selectedLoc?.name,
