@@ -82,7 +82,7 @@ const onMeReducer = (state = initialState, action) => {
       return {
         ...state,
         ...action.payload,
-        searchResult: state.searchResult.concat(action.payload.searchResult),
+        searchResult: action.payload.searchResult,
       };
     case CLEAN_SEARCH_RESULT:
       return {

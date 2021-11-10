@@ -25,6 +25,7 @@ import {myloadMore, searchMyItem} from '../../../actions/actions.js';
 import ItemListCard from '../../../components/ItemListCard';
 import {getSearchItems, searchItems} from "../../../actions/actions";
 import Text from "react-native-paper/src/components/Typography/Text";
+import {useDebouncedCallback} from "use-debounce";
 
 const OnMeSearched = props => {
 
@@ -34,7 +35,9 @@ const OnMeSearched = props => {
       ({onMe}) => [onMe, onMe.searchResult, onMe.searchCount],
   );
   let error = getProperErrorMessage(onMe.markingError);
-  let showEmptyError = !onMe.myList.length;
+  let showEmptyError = !onMe.myList?.length;
+
+  console.log('ddd', onMe);
 
   const getMoreItems = () => {
     dispatch(myloadMore(true));
@@ -62,6 +65,7 @@ const OnMeSearched = props => {
         dispatch,
     );
   };
+  const debouncedItemSearch = useDebouncedCallback(getMoreSearchItems, 500);
 
   return (
       <>
@@ -70,19 +74,20 @@ const OnMeSearched = props => {
               <>
                 <View style={styles.container}>
                   <ScrollView bounces={false} style={{ marginTop: 15, borderRadius: 15 }} showsVerticalScrollIndicator={false}>
-                    {searchResult?.length ? (<>{searchResult.map(item => (
-                      <Card
+                    {searchResult?.length || props.queryText ? (<>{searchResult.map(item => (
+                      <TouchableOpacity
                         style={styles.card}
                         key={item._id}
                         onPress={() => handleItemPress(item)}>
                         <ItemListCard item={item}/>
-                      </Card>
+                        <View style={{ height: 1, backgroundColor: '#D3E3F2', width: '90%', marginLeft: '5%', marginTop: 10}} />
+                      </TouchableOpacity>
                     ))}</>) : (<>{showEmptyError && (
                       <Paragraph style={styles.text}>
                         {T.t('who_i_info')}
                       </Paragraph>
                     )}
-                      {!error && onMe.myList.map((item, index, arr) => (
+                      {!error && !props.queryText && onMe.myList.map((item, index, arr) => (
                           <TouchableOpacity
                             style={styles.card}
                             key={item._id}
@@ -93,39 +98,42 @@ const OnMeSearched = props => {
                         ))}
                         </>)}
                   </ScrollView>
-                  {searchResult?.length ?
-                    <Button
+                  {searchResult?.length
+                    ? (<Button
                       style={styles.button}
                       mode="Text"
                       color="#22215B"
-                      onPress={getMoreSearchItems}>
+                      onPress={debouncedItemSearch}>
                       {T.t('load_more')}
-                    </Button> :
-                    <>{onMe.myList.length > 5 && (
-                    <>
-                      {(!onMe.myloadMore && (onMe.myList.length < onMe.totalItemsCount)) &&(
-                        <Button
-                          style={{ paddingBottom: 10 }}
-                          mode="Text"
-                          color="#22215B"
-                          onPress={()=> {
-                            setOffset(offset + 10)
-                            getMoreItems();
-                          }}>
-                          {T.t('load_more')}
-                        </Button>
-                      )}
-                      {onMe.myloadMore && (
-                        <ActivityIndicator
-                          style={styles.load}
-                          size={'large'}
-                          animating={true}
-                          color={'#EDF6FF'}
-                        />
-                      )}
-                    </>
-                    )}
-                    </>
+                    </Button>)
+                    : <>
+                        {
+                          onMe.myList?.length > 5 && (
+                            <>
+                              {(!onMe.myloadMore && (onMe.myList?.length < onMe.totalItemsCount)) &&(
+                                <Button
+                                  style={{ paddingBottom: 10 }}
+                                  mode="Text"
+                                  color="#22215B"
+                                  onPress={()=> {
+                                    setOffset(offset + 10)
+                                    getMoreItems();
+                                  }}>
+                                  {T.t('load_more')}
+                                </Button>
+                              )}
+                              {onMe.myloadMore && (
+                                <ActivityIndicator
+                                  style={styles.load}
+                                  size={'large'}
+                                  animating={true}
+                                  color={'#EDF6FF'}
+                                />
+                              )}
+                            </>
+                          )
+                        }
+                      </>
                   }
                 </View>
               </>

@@ -56,6 +56,9 @@ const AppbarCustom = props => {
   const debouncedItemSearch = useDebouncedCallback(
     // function
     (query) => {
+      dispatch(myloadMore(true));
+
+      props.queryText(query);
       dispatch(searchItems(query, 0, 10));
     },
     // delay in ms
@@ -65,9 +68,7 @@ const AppbarCustom = props => {
 
   const itemSearch = query => {
     setSearch(query.trim());
-    dispatch(myloadMore(true));
 
-    props.queryText(query);
     if (query.length > 0) {
       debouncedItemSearch(query);
     }
