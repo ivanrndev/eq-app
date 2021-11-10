@@ -114,14 +114,9 @@ const OnMeSearch = props => {
       type,
       status
     }, 0, true));
-    animate(false);
-    responsibleUser && (responsibleUser.title && setIsFilters(true));
+    // animate(false);
+    // responsibleUser && (responsibleUser.title && setIsFilters(true));
   }
-
-  // const closeFilters = () => {
-  //   getSearchItems();
-  //   setIsFilters(false)
-  // }
   const handleTypeField = text => {
     setType(text);
     !text ? setErrors(T.t('error_required')) : setErrors('');
@@ -170,41 +165,14 @@ const OnMeSearch = props => {
       <Appbar
           navigation={props.navigation}
           pageToChosenItem="OnMeInfo"
-          // listAction={searchMyCompanyItems}
           arrow={true}
           newScan={true}
           goTo={'OnMe'}
           title={T.t('who_i')}
-          search={true}
-          filter={true}
           onMe={true}
       />
       <View >
           <>
-            {/*{(!searchBar && isFilters) &&*/}
-            {/*<View style={{margin: 20, flexDirection: 'row'}}>*/}
-            {/*  <TouchableOpacity style={{flexDirection: 'row', backgroundColor:'white', height:20, borderRadius:5}}>*/}
-            {/*    <Text*/}
-            {/*        style={{fontSize:14, marginRight: 10}}*/}
-            {/*        onPress={()=> {*/}
-            {/*          animate(true);*/}
-            {/*          setIsFilters(false);*/}
-            {/*        }}*/}
-            {/*    >*/}
-            {/*      {responsibleUser && responsibleUser.title}*/}
-            {/*    </Text>*/}
-            {/*    <Text*/}
-            {/*        style={{fontSize:14}}*/}
-            {/*        onPress={()=> {*/}
-            {/*          getSearchItems();*/}
-            {/*          setIsFilters(false);*/}
-            {/*        }}*/}
-            {/*    >*/}
-            {/*      X*/}
-            {/*    </Text>*/}
-            {/*  </TouchableOpacity>*/}
-            {/*</View>*/}
-            {/*}*/}
               {(searchBar  || isShowFilter) && (
               <View >
                 <View style={styles.inputWrap}>
@@ -293,12 +261,6 @@ const OnMeSearch = props => {
                     rightButtonsContainerStyle={styles.inputBtn}
                     suggestionsListContainerStyle={styles.dropdown}
                   />
-
-
-
-
-
-
                   <Text style={styles.left}>{T.t('detail_type')}:</Text>
                   <AutocompleteDropdown
                     clearOnFocus={true}
@@ -344,7 +306,6 @@ const OnMeSearch = props => {
                       autoCapitalize: 'none',
                       style: styles.inputDropdown,
                       placeholderTextColor: 'gray',
-                      // value: status?.title,
                     }}
                     rightButtonsContainerStyle={styles.inputBtn}
                     suggestionsListContainerStyle={styles.dropdown}
@@ -365,8 +326,6 @@ const OnMeSearch = props => {
                         color="#22215B"
                         onPress={()=> {
                           getSearchItems();
-                          // setIsFilters(true);
-                          dispatch(setIsShowFilter(false));
                         }}>
                       {T.t('search')}
                     </Button>
@@ -375,95 +334,6 @@ const OnMeSearch = props => {
               </View>
             )}
           </>
-
-
-
-
-        {(!searchBar  && !isShowFilter) &&(
-        <View style={styles.container}>
-            <>
-              <View style={styles.container}>
-                <ScrollView>
-                  {marking.markingList.map(item => (
-
-                    <Card
-                      style={styles.card}
-                      key={item._id}
-                      onPress={() => handleItemPress(item)}>
-                      {item.length }
-                      <ItemListCard item={item}/>
-                    </Card>
-                  ))}
-                </ScrollView>
-                {marking.markingList.length > 5 && (
-                  <>
-                    {/*<Button*/}
-                    {/*    style={styles.button}*/}
-                    {/*    mode="Text"*/}
-                    {/*    color="#22215B"*/}
-                    {/*    onPress={()=> {*/}
-                    {/*      setOffset(offSet+10)*/}
-                    {/*      getMoreItems();*/}
-                    {/*    }}>*/}
-                    {/*  {T.t('load_more')}*/}
-                    {/*</Button>*/}
-
-                    {/*{(!onMe.myloadMore && (onMe.myList.length < onMe.totalItemsCount)) &&(*/}
-                    {/*    <Button*/}
-                    {/*        style={styles.button}*/}
-                    {/*        mode="Text"*/}
-                    {/*        color="#22215B"*/}
-                    {/*        onPress={()=> {*/}
-                    {/*          setOffset(offSet+10)*/}
-                    {/*          getMoreItems();*/}
-                    {/*        }}>*/}
-                    {/*      {T.t('load_more')}*/}
-                    {/*    </Button>*/}
-                    {/*)}*/}
-                    {/*{onMe.myloadMore && (*/}
-                    {/*    <ActivityIndicator*/}
-                    {/*        style={styles.load}*/}
-                    {/*        size={'large'}*/}
-                    {/*        animating={true}*/}
-                    {/*        color={'#EDF6FF'}*/}
-                    {/*    />*/}
-                    {/*)}*/}
-                    <Button
-                        style={styles.button}
-                        mode="Text"
-                        color="#22215B"
-                        onPress={()=> {
-                          setOffset(offSet+10)
-                          getMoreItems();
-                        }}>
-                      {T.t('load_more')}
-                    </Button>
-                    {!onMe.myloadMore &&
-                        <Button
-                            style={styles.button}
-                            mode="Text"
-                            color="#22215B"
-                            onPress={()=> {
-                              setOffset(offSet+10)
-                              getMoreItems();
-                            }}>
-                          {T.t('load_more')}
-                        </Button>
-                    }
-                    {/*{!marking.markingList && (*/}
-                    {/*  <ActivityIndicator*/}
-                    {/*    style={styles.load}*/}
-                    {/*    size={'large'}*/}
-                    {/*    animating={true}*/}
-                    {/*    color={'#EDF6FF'}*/}
-                    {/*  />*/}
-                    {/*)}*/}
-                  </>
-                )}
-              </View>
-            </>
-        </View>
-        )}
       </View>
     </View>
   );
