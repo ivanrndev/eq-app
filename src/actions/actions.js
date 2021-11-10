@@ -86,7 +86,7 @@ import {
   SAVE_INVENTORY_SCANS,
   SAVE_USER_ACCEPT_BID, SEARCH_ITEMS, SEARCH_ITEMS_ERROR,
   SEARCH_MY_COMPANY_ITEMS,
-  SEARCH_MY_COMPANY_ITEMS_ERROR,
+  SEARCH_MY_COMPANY_ITEMS_ERROR, SET_FILTERS,
   SET_GIVE_ITEM_QTY,
   SET_INVENTORY_ITEM_QTY, SET_IS_MOVE_SCANER, SET_IS_SHOW_FILTER, SET_MOVE_SCANER, SET_SCANED_MOVE_ITEM,
   SUCCES_IN_SERVICES,
@@ -893,6 +893,8 @@ export const clearMarking = () => dispatch => {
 
 // Search Action
 export const searchItem = (status, query, offset, isNew) => dispatch => {
+  console.log('123123', query)
+
   AsyncStorage.getItem('company').then(company => {
     return axios
       .get(`${API_URL}/company/${company}/item/`, {
@@ -911,6 +913,10 @@ export const searchItem = (status, query, offset, isNew) => dispatch => {
         },
       })
       .then(resp => {
+        dispatch({
+          type: SET_FILTERS,
+          payload: query,
+        })
         if (resp.status === 200) {
           if (isNew) {
             dispatch({

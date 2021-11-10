@@ -15,8 +15,10 @@ import settingsReducer from './Settings/settings.js';
 import companyItemsReducer from './CompanyItems/companyItems';
 import createItemReducer from './CreateItem/createItem';
 import moveToObjectReducer from "./MoveToObject/moveToObject";
+import filterReducer from "./Filters";
 
 export default combineReducers({
+  filterReducer: filterReducer,
   auth: authReducer,
   scan: scanReducer,
   services: servicesReducer,

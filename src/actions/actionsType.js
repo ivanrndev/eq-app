@@ -199,3 +199,6 @@ export const SEARCH_ITEMS_ERROR = 'SEARCH_ITEMS_ERROR';
 export const CLEAN_SEARCH_RESULT = 'CLEAN_SEARCH_RESULT';
 export const GET_SEARCH_ITEMS = 'GET_SEARCH_ITEMS';
 
+//filters
+export const SET_FILTERS = 'SET_FILTERS';
+

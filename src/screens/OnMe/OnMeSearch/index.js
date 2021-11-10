@@ -78,32 +78,8 @@ const OnMeSearch = props => {
     setResponsibleUser("");
     setSelectedLoc("");
     setSelectedObj("");
-
+    getSearchItems();
   }
-  const animate = (boolean) => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
-    setSearchBar(boolean);
-  };
-
-  const itemSearch = text => {
-    setQuery(text);
-  };
-
-  const getMoreItems = () => {
-    dispatch(myloadMore(true));
-    dispatch(searchItem(true, '', offSet, true));
-  };
-
-  const handleItemPress = item => {
-
-    handleNavigateToMySingleItem(
-      item.code,
-      navigation,
-      item._id,
-      'OnMeInfo',
-      dispatch,
-    );
-  };
 
   const getSearchItems = () => {
     dispatch(searchItem(true, {
@@ -114,8 +90,7 @@ const OnMeSearch = props => {
       type,
       status
     }, 0, true));
-    // animate(false);
-    // responsibleUser && (responsibleUser.title && setIsFilters(true));
+    props.navigation.goBack()
   }
   const handleTypeField = text => {
     setType(text);
