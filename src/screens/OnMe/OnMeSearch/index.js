@@ -127,9 +127,9 @@ const OnMeSearch = props => {
   const handleSelectTextChange = text => {
     setResponsibleUser({title: text});
     const selectedUser = users.find(user => user.firstName === text);
-    selectedUser
-        ? seteErrorSelectedUser('')
-        : seteErrorSelectedUser(T.t('error_user_not_exist'));
+    // selectedUser
+    //     ? seteErrorSelectedUser('')
+    //     : seteErrorSelectedUser(T.t('error_user_not_exist'));
   };
 
   const handleSelectResp = item => {
@@ -144,7 +144,7 @@ const OnMeSearch = props => {
           pageToChosenItem="OnMeInfo"
           arrow={true}
           newScan={true}
-          goTo={'OnMe'}
+          goTo={'back'}
           title={T.t('who_i')}
           onMe={true}
           cb={() => {
@@ -154,6 +154,7 @@ const OnMeSearch = props => {
             setResponsibleUser(storeResponsibleUser);
             setSelectedLoc(storeSelectedLoc);
             setSelectedObj(storeSelectedObj);
+            console.log('here123123')
           }}
       />
       <View >

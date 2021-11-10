@@ -99,10 +99,12 @@ const AppbarCustom = props => {
               dispatch(clearUserList());
             }
             if (props.goTo === 'back') {
+
                 if(props.cb) props.cb();
               props.navigation.goBack();
             } else {
-              props.navigation.navigate(props.goTo);
+
+                props.navigation.navigate(props.goTo);
             }
             if (props.newScan) {
               dispatch(allowNewScan(true));
