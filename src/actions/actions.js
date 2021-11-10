@@ -918,25 +918,15 @@ export const searchItem = (status, query, offset, isNew) => dispatch => {
           payload: query,
         })
         if (resp.status === 200) {
-          if (isNew) {
-            dispatch({
-              type: MARKING,
-              payload: {
-                offSet: 6,
-                loadMore: false,
-                markingList: resp.data.data,
-              },
-            });
-          } else {
-            dispatch({
-              type: MARKING_SEARCH,
-              payload: {
-                offSet: 6,
-                loadMore: false,
-                markingList: resp.data.data,
-              },
-            });
-          }
+          dispatch({
+            type: GET_MY_ITEMS,
+            payload: {
+              myloadMore: false,
+              myList: resp.data.data,
+              myError: false,
+              totalItemsCount: resp.data.count,
+            },
+          });
         }
       })
       .catch(e => {
