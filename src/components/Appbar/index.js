@@ -68,10 +68,7 @@ const AppbarCustom = props => {
 
   const itemSearch = query => {
     setSearch(query.trim());
-
-    if (query.length > 0) {
-      debouncedItemSearch(query);
-    }
+    debouncedItemSearch(query);
   };
 
   const handleItemSearch = query => {
