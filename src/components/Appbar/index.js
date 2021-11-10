@@ -99,6 +99,7 @@ const AppbarCustom = props => {
               dispatch(clearUserList());
             }
             if (props.goTo === 'back') {
+                if(props.cb) props.cb();
               props.navigation.goBack();
             } else {
               props.navigation.navigate(props.goTo);

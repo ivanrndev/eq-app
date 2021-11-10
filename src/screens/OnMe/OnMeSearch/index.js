@@ -14,7 +14,6 @@ import {
   ActivityIndicator,
   Button,
   Card,
-  Searchbar,
 } from 'react-native-paper';
 import T from '../../../i18n';
 // components
@@ -49,20 +48,29 @@ const OnMeSearch = props => {
   useEffect(() => {
     dispatch(getUserList(navigation, '', 'OnMeSearch'));
   }, []);
-  const [errorSelectedUser, seteErrorSelectedUser] = useState('');
-  const [isFilters, setIsFilters] = useState(false);
-  const [endFilters, setEndFilters] = useState(false)
-  const [query, setQuery] = useState('');
-  const [searchBar, setSearchBar] = useState(true);
-  const [type, setType] = useState(types);
-  const [status, setStatus] = useState('');
-  const [responsibleUser, setResponsibleUser] = useState({title: ''});
-  const [selectedLoc, setSelectedLoc] = useState('');
+  const {
+    storeQuery,
+    storeResponsibleUser,
+    storeSelectedLoc,
+    storeSelectedObj,
+    storeType,
+    storeStatus,
+  } = useSelector(state => ({
+    storeQuery: state.filterReducer.query,
+    storeResponsibleUser: state.filterReducer.responsibleUser,
+    storeSelectedLoc: state.filterReducer.selectedLoc,
+    storeSelectedObj: state.filterReducer.selectedObj,
+    storeType: state.filterReducer.type,
+    storeStatus: state.filterReducer.status,
+  }))
+  const [query, setQuery] = useState(storeQuery);
+  const [type, setType] = useState(storeType);
+  const [status, setStatus] = useState(storeStatus);
+  const [responsibleUser, setResponsibleUser] = useState(storeResponsibleUser);
+  const [selectedLoc, setSelectedLoc] = useState(storeSelectedLoc);
   const [selectedLocObj, setSelectedLocObj] = useState('');
-  const [selectedObj, setSelectedObj] = useState('');
+  const [selectedObj, setSelectedObj] = useState(storeSelectedObj);
   const [selectedObjObj, setSelectedObjObj] = useState([]);
-  const [errors, setErrors] = useState('');
-  const[offSet, setOffset] = useState(10);
 
   useEffect(() => {
     dispatch(getTypes(type));
@@ -128,9 +136,6 @@ const OnMeSearch = props => {
     setResponsibleUser(item);
   };
 
-
-
-  console.log(searchBar, isShowFilter)
   return (
 
     <View style={styles.body}>
@@ -142,10 +147,17 @@ const OnMeSearch = props => {
           goTo={'OnMe'}
           title={T.t('who_i')}
           onMe={true}
+          cb={() => {
+            setQuery(storeQuery);
+            setStatus(storeStatus);
+            setType(storeType);
+            setResponsibleUser(storeResponsibleUser);
+            setSelectedLoc(storeSelectedLoc);
+            setSelectedObj(storeSelectedObj);
+          }}
       />
       <View >
           <>
-              {(searchBar  || isShowFilter) && (
               <View >
                 <View style={styles.inputWrap}>
                   <Text style={styles.left}>{T.t('responsible')}:</Text>
@@ -304,7 +316,6 @@ const OnMeSearch = props => {
                   </View>
                 </View>
               </View>
-            )}
           </>
       </View>
     </View>
@@ -405,13 +416,6 @@ const styles = StyleSheet.create({
     position: 'relative',
     zIndex: 2,
   },
-  searchBar: {
-  // height: '90%',
-  // zIndex: 3,
-  backgroundColor: '#D3E3F2',
-  // position: 'absolute',
-  // top: 20,
-}
 });
 
 export default OnMeSearch;

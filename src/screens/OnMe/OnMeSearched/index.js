@@ -37,8 +37,6 @@ const OnMeSearched = props => {
   let error = getProperErrorMessage(onMe.markingError);
   let showEmptyError = !onMe.myList?.length;
 
-  console.log('ddd', onMe);
-
   const getMoreItems = () => {
     dispatch(myloadMore(true));
     dispatch(searchMyItem('', offset));

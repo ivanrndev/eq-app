@@ -8,6 +8,7 @@ const initialState = {
     selectedObj: '',
     type: '',
     status: '',
+    query: ''
 };
 
 const filterReducer = (state = initialState, action) => {
