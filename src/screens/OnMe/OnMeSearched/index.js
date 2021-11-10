@@ -31,8 +31,8 @@ const OnMeSearched = props => {
 
   const [offset, setOffset] = useState(10)
   const dispatch = useDispatch();
-  const [onMe, searchResult, searchCount] = useSelector(
-      ({onMe}) => [onMe, onMe.searchResult, onMe.searchCount],
+  const [onMe, myList, searchCount] = useSelector(
+      ({onMe}) => [onMe, onMe.myList, onMe.searchCount],
   );
   let error = getProperErrorMessage(onMe.markingError);
   let showEmptyError = !onMe.myList?.length;
@@ -74,7 +74,7 @@ const OnMeSearched = props => {
               <>
                 <View style={styles.container}>
                   <ScrollView bounces={false} style={{ marginTop: 15, borderRadius: 15 }} showsVerticalScrollIndicator={false}>
-                    {searchResult?.length || props.queryText ? (<>{searchResult.map(item => (
+                    {myList?.length || props.queryText ? (<>{myList.map(item => (
                       <TouchableOpacity
                         style={styles.card}
                         key={item._id}
@@ -99,7 +99,7 @@ const OnMeSearched = props => {
                         </>)}
                   </ScrollView>
                   {props.queryText.length
-                    ? searchResult?.length && searchResult?.length > 4
+                    ? myList?.length && myList?.length > 4
                       ? (<Button
                         style={styles.button}
                         mode="Text"

@@ -46,9 +46,6 @@ const OnMeSearch = props => {
         onMe.isShowFilter
     ],
   );
-  const [onMe, searchResult] = useSelector(
-      ({onMe}) => [onMe, onMe.searchResult],
-  );
   useEffect(() => {
     dispatch(getUserList(navigation, '', 'OnMeSearch'));
   }, []);
