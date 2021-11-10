@@ -12,11 +12,23 @@ import {myloadMore, searchMyItem} from '../../actions/actions.js';
 import OnMeSearched from "./OnMeSearched";
 import {searchMyCompanyItems} from "../../actions/actions";
 import {useUserData} from "../../hooks/useUserData";
+import {SET_FILTERS, SET_QUERY} from "../../actions/actionsType";
 
 const OnMe = props => {
 
+  const dispatch = useDispatch();
+
   const [list, setList] = useState([]);
-  const [text, setText] = useState('');
+
+  const { query: text } = useSelector((state) => state.filterReducer)
+
+  const setQueryText = query => {
+    dispatch({
+      type: SET_QUERY,
+      payload: query,
+    })
+  }
+
   const [onMe] = useSelector(
     ({onMe}) => [onMe],
   );
@@ -46,7 +58,7 @@ const OnMe = props => {
     }}, [companyItemList]);
 
   const queryText = (query) => {
-    setText(query)
+    setQueryText(query)
   };
 
   return (

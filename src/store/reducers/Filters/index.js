@@ -1,5 +1,6 @@
 import {
-    SET_FILTERS
+    SET_FILTERS,
+    SET_QUERY
 } from '../../../actions/actionsType';
 
 const initialState = {
@@ -18,6 +19,12 @@ const filterReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ...action.payload,
+            };
+        case SET_QUERY:
+            console.log('action.payload', action.payload)
+            return {
+                ...state,
+                query: action.payload,
             };
         default:
             return state;

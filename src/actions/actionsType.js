@@ -201,4 +201,5 @@ export const GET_SEARCH_ITEMS = 'GET_SEARCH_ITEMS';
 
 //filters
 export const SET_FILTERS = 'SET_FILTERS';
+export const SET_QUERY = 'SET_QUERY';
 

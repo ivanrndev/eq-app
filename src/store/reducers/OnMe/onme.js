@@ -78,6 +78,7 @@ const onMeReducer = (state = initialState, action) => {
         ...state,
         ...action.payload,
         myList: action.payload.searchResult,
+        myloadMore: false,
       };
     case GET_SEARCH_ITEMS:
       return {
