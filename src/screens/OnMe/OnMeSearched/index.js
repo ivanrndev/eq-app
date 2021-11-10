@@ -98,14 +98,16 @@ const OnMeSearched = props => {
                         ))}
                         </>)}
                   </ScrollView>
-                  {searchResult?.length
-                    ? (<Button
-                      style={styles.button}
-                      mode="Text"
-                      color="#22215B"
-                      onPress={debouncedItemSearch}>
-                      {T.t('load_more')}
-                    </Button>)
+                  {props.queryText.length
+                    ? searchResult?.length && searchResult?.length > 4
+                      ? (<Button
+                        style={styles.button}
+                        mode="Text"
+                        color="#22215B"
+                        onPress={debouncedItemSearch}>
+                        {T.t('load_more')}
+                      </Button>)
+                      : null
                     : <>
                         {
                           onMe.myList?.length > 5 && (
