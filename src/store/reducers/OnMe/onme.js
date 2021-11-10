@@ -77,17 +77,17 @@ const onMeReducer = (state = initialState, action) => {
       return {
         ...state,
         ...action.payload,
+        myList: action.payload.searchResult,
       };
     case GET_SEARCH_ITEMS:
       return {
         ...state,
         ...action.payload,
-        searchResult: state.searchResult.concat(action.payload.searchResult),
+        myList: state.myList.concat(action.payload.myList),
       };
     case CLEAN_SEARCH_RESULT:
       return {
         ...state,
-        searchResult: [],
         myloadMore: false,
       }
 

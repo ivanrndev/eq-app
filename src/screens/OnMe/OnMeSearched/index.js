@@ -74,29 +74,26 @@ const OnMeSearched = props => {
               <>
                 <View style={styles.container}>
                   <ScrollView bounces={false} style={{ marginTop: 15, borderRadius: 15 }} showsVerticalScrollIndicator={false}>
-                    {myList?.length || props.queryText ? (<>{myList.map(item => (
-                      <TouchableOpacity
-                        style={styles.card}
-                        key={item._id}
-                        onPress={() => handleItemPress(item)}>
-                        <ItemListCard item={item}/>
-                        <View style={{ height: 1, backgroundColor: '#D3E3F2', width: '90%', marginLeft: '5%', marginTop: 10}} />
-                      </TouchableOpacity>
-                    ))}</>) : (<>{showEmptyError && (
-                      <Paragraph style={styles.text}>
-                        {T.t('who_i_info')}
-                      </Paragraph>
+                    {!!myList?.length && (
+                      <>
+                        {
+                          showEmptyError && (
+                            <Paragraph style={styles.text}>
+                              {T.t('who_i_info')}
+                            </Paragraph>
+                          )}
+                          {!error && myList.map((item, index, arr) => (
+                              <TouchableOpacity
+                                style={styles.card}
+                                key={item._id}
+                                onPress={() => handleItemPress(item)}>
+                                <ItemListCard item={item}/>
+                                <View style={{ height: 1, backgroundColor: '#D3E3F2', width: '90%', marginLeft: '5%', marginTop: 10}} />
+                              </TouchableOpacity>
+                            ))}
+
+                        </>
                     )}
-                      {!error && !props.queryText && onMe.myList.map((item, index, arr) => (
-                          <TouchableOpacity
-                            style={styles.card}
-                            key={item._id}
-                            onPress={() => handleItemPress(item)}>
-                            <ItemListCard item={item}/>
-                            <View style={{ height: 1, backgroundColor: '#D3E3F2', width: '90%', marginLeft: '5%', marginTop: 10}} />
-                          </TouchableOpacity>
-                        ))}
-                        </>)}
                   </ScrollView>
                   {props.queryText.length
                     ? myList?.length && myList?.length > 4
