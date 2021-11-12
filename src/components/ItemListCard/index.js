@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View, Image, Dimensions} from 'react-native';
-import {Card, Paragraph, Title} from 'react-native-paper';
+import {Card} from 'react-native-paper';
 import T from '../../i18n';
 import {getTotalLotPrice} from '../../utils/helpers';
 import {useQuantityUnitsAndCurrency} from '../../hooks/useQuantityUnitsAndCurrency';

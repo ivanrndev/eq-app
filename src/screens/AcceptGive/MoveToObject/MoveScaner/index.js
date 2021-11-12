@@ -50,7 +50,6 @@ const MoveScaner = props => {
         };
       }, []),
   );
-    console.log(companyItemList)
   return (
       <>
         <Appbar

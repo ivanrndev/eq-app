@@ -6,7 +6,6 @@ import {getLocations} from '../../../../actions/actions';
 
 import T from '../../../../i18n';
 import {width} from '../../../../constants/dimentionsAndUnits';
-import {saveLocation} from '../../../../actions/createItem';
 import {useNavigation} from '@react-navigation/native';
 import {AutocompleteDropdown} from 'react-native-autocomplete-dropdown';
 import {saveMoveLocation} from "../../../../actions/moveToObjectsActions";
@@ -25,11 +24,6 @@ const MoveLocation = () => {
   const [selectedObjObj, setSelectedObjObj] = useState([]);
 
   useEffect(() => dispatch(getLocations()), []);
-  // useEffect(() => {
-  //   if (selectedLoc && selectedLoc.name.length === 0) {
-  //     setSelectedObj('');
-  //   }
-  // }, [selectedLoc.name]);
   useEffect(() => {
     if (!location.location && !location.object) {
       setSelectedLoc('');

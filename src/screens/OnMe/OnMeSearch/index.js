@@ -12,17 +12,12 @@ import T from '../../../i18n';
 // components
 import Appbar from '../../../components/Appbar';
 
-import {
-  handleNavigateToMySingleItem,
-} from '../../../utils/helpers.js';
 // redux and actions
 import {useDispatch, useSelector} from 'react-redux';
-import {myloadMore} from '../../../actions/actions.js';
-import ItemListCard from '../../../components/ItemListCard';
-import {getUserList, searchItem, searchMyCompanyItems, setIsShowFilter} from "../../../actions/actions";
+import {getUserList, searchItem} from "../../../actions/actions";
 import {getTypes} from "../../../actions/createItem";
 import {AutocompleteDropdown} from "react-native-autocomplete-dropdown";
-import {height, width} from "../../../constants/dimentionsAndUnits";
+import {width} from "../../../constants/dimentionsAndUnits";
 import {useNavigation} from "@react-navigation/native";
 import {SET_FILTERS} from "../../../actions/actionsType";
 

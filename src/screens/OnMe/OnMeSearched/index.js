@@ -10,7 +10,6 @@ import {
 import {
   ActivityIndicator,
   Button,
-  Card,
   Paragraph,
   Title,
 } from 'react-native-paper';
@@ -24,7 +23,7 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import {myloadMore, searchMyItem} from '../../../actions/actions.js';
 import ItemListCard from '../../../components/ItemListCard';
-import {getSearchItems, searchItem, searchItems} from "../../../actions/actions";
+import {getSearchItems, searchItem} from "../../../actions/actions";
 import Text from "react-native-paper/src/components/Typography/Text";
 import {useDebouncedCallback} from "use-debounce";
 import {SET_FILTERS} from "../../../actions/actionsType";
@@ -252,7 +251,6 @@ const OnMeSearched = props => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // height: Dimensions.get('window').height,
     backgroundColor: '#D3E3F2',
     alignItems: 'center'
 
@@ -260,7 +258,6 @@ const styles = StyleSheet.create({
   search: {
     backgroundColor: '#EDF6FF',
     width: Dimensions.get('window').width / 1.1,
-    // marginBottom: 20,
   },
   load: {
     marginTop: 10,
@@ -268,8 +265,6 @@ const styles = StyleSheet.create({
   card: {
     justifyContent: 'center',
     width: Dimensions.get('window').width / 1.1,
-    // borderBottomColor: 'gray',
-    // borderBottomWidth: 0.5,
     backgroundColor: '#EDF6FF',
     color: '#22215B',
   },

@@ -4,7 +4,6 @@ import {
   ScrollView,
   StyleSheet,
   View,
-  Alert
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -54,10 +53,6 @@ const MoveStartPage = (props) => {
             }
           ],
           user: choosedUser.id,
-          // object: {
-          //   object: location.objects ? location.location : item.metadata.object,
-          //   location: location.location ? location.location : item.metadata.location
-          // }
         }
         const locationObjectWithoutUser = {
           item_ids: [
