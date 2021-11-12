@@ -50,7 +50,7 @@ const MoveScaner = props => {
         };
       }, []),
   );
-
+    console.log(companyItemList)
   return (
       <>
         <Appbar
@@ -58,7 +58,7 @@ const MoveScaner = props => {
             newScan={true}
             arrow={true}
             search={true}
-            list={list}
+            list={companyItemList}
             listAction={searchMyCompanyItems}
             pageToChosenItem="MoveStartPage"
             isSearchForMoveItem={true}

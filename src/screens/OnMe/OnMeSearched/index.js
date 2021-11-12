@@ -167,7 +167,7 @@ const OnMeSearched = props => {
               <>
                 <View style={styles.container}>
                   <FlatList
-                      numColumns={3}
+                      numColumns={2}
                       data={shownFilters}
                       renderItem={renderItem}
                       keyExtractor={item => item}

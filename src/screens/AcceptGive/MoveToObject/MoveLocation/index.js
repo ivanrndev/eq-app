@@ -71,7 +71,7 @@ const MoveLocation = () => {
           <Text style={styles.left}>{T.t('object')}:</Text>
           <AutocompleteDropdown
               clearOnFocus={false}
-              closeOnBlur={true}
+              closeOnBlur={false}
               closeOnSubmit={true}
               showClear={false}
               onChangeText={text => setSelectedObj({name: text})}
@@ -102,7 +102,7 @@ const MoveLocation = () => {
           <Text style={styles.left}>{T.t('location')}:</Text>
           <AutocompleteDropdown
               clearOnFocus={false}
-              closeOnBlur={true}
+              closeOnBlur={false}
               closeOnSubmit={true}
               showClear={false}
               onChangeText={text => setSelectedLoc({name: text})}

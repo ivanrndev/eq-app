@@ -1,19 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {
   Dimensions,
-  ScrollView,
   StyleSheet,
   View,
   Text,
-  TouchableOpacity,
-  LayoutAnimation,
-  SafeAreaView,
-  FlatList, Image
 } from 'react-native';
 import {
-  ActivityIndicator,
   Button,
-  Card,
 } from 'react-native-paper';
 import T from '../../../i18n';
 // components
@@ -76,6 +69,8 @@ const OnMeSearch = props => {
   const [selectedLocObj, setSelectedLocObj] = useState('');
   const [selectedObj, setSelectedObj] = useState(storeSelectedObj);
   const [selectedObjObj, setSelectedObjObj] = useState([]);
+  const [keyboardStatus, setKeyboardStatus] = useState(false);
+  const [searchStatus, setSearchStatus] = useState(false);
 
   useEffect(() => {
     dispatch(getTypes(type));
@@ -156,7 +151,7 @@ const OnMeSearch = props => {
 
   return (
 
-    <View  style={styles.body}>
+      <View style={[styles.body,{paddingBottom: keyboardStatus || searchStatus ? 977 : 0} ]}>
       <Appbar
           navigation={props.navigation}
           pageToChosenItem="OnMeInfo"
@@ -258,17 +253,20 @@ const OnMeSearch = props => {
                       style: styles.inputDropdown,
                       placeholderTextColor: 'gray',
                       defaultValue: location.object,
-                      // value: selectedObj?.name
+                      value: selectedObj?.name
                     }}
                     rightButtonsContainerStyle={styles.inputBtn}
                     suggestionsListContainerStyle={styles.dropdown}
                   />
                   <Text style={styles.left}>{T.t('detail_type')}:</Text>
                   <AutocompleteDropdown
+                    onOpenSuggestionsList={(res) => setSearchStatus(res)}
                     clearOnFocus={true}
                     closeOnBlur={false}
                     closeOnSubmit={true}
                     showClear={true}
+                    onFocus={() => {setKeyboardStatus(!keyboardStatus)}}
+                    onBlur={() => {setKeyboardStatus(!keyboardStatus)}}
                     onChangeText={handleTypeField}
                     onSelectItem={text => text && handleTypeField(text ? text.title : '')}
                     onClear={() => handleTypeField(null)}
@@ -281,17 +279,21 @@ const OnMeSearch = props => {
                       autoCapitalize: 'none',
                       style: styles.inputDropdown,
                       placeholderTextColor: 'gray',
-                      // value: type,
+                      defaultValue: type && type,
+                      value: type && type,
                     }}
                     rightButtonsContainerStyle={styles.inputBtn}
                     suggestionsListContainerStyle={styles.dropdown}
                   />
                   <Text style={styles.left}>{T.t('transfer_status')}:</Text>
                   <AutocompleteDropdown
+                    onOpenSuggestionsList={(res) => setSearchStatus(res)}
                     clearOnFocus={true}
                     closeOnBlur={false}
                     closeOnSubmit={true}
                     showClear={true}
+                    onFocus={() => {setKeyboardStatus(!keyboardStatus)}}
+                    onBlur={() => {setKeyboardStatus(!keyboardStatus)}}
                     onChangeText={handleStatus}
 
                     onSelectItem={item => item && handleStatus(item)}
@@ -309,11 +311,13 @@ const OnMeSearch = props => {
                       autoCapitalize: 'none',
                       style: styles.inputDropdown,
                       placeholderTextColor: 'gray',
+                      defaultValue: status?.title,
+                      value: status?.title
                     }}
                     rightButtonsContainerStyle={styles.inputBtn}
                     suggestionsListContainerStyle={styles.dropdown}
                   />
-                  <View style={{flexDirection:'row'}}>
+                  <View style={{flexDirection:'row', paddingVertical: 10}}>
                     <Button
                         style={styles.button}
                         mode="Text"

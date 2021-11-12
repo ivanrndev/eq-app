@@ -1846,11 +1846,15 @@ export const mountItemFromParent = (
 };
 
 //company
+
+
+
 export const searchMyCompanyItems = (query, offset, limit) => dispatch => {
+  
   AsyncStorage.getItem('company').then(company => {
     return axios
       .get(`${API_URL}/company/${company}/item`, {
-        params: {search: query, offset, limit},
+        params: {search: query, offset, limit, withPhoto: true},
       })
       .then(resp => {
         if (resp.status === 200) {
@@ -1880,6 +1884,7 @@ export const searchMyCompanyItems = (query, offset, limit) => dispatch => {
   });
 };
 export const searchItems = (query, offset, limit) => dispatch => {
+
   AsyncStorage.getItem('company').then(company => {
     return axios
       .get(`${API_URL}/company/${company}/item`, {

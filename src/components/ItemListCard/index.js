@@ -35,8 +35,10 @@ const ItemListCard = ({
         {item.photos.length > 0
             ? <Image
                 style={styles.tinyLogo}
+                defaultSource={require('../../assets/svg/empty.png')}
+
                 source={{
-                  uri: item.photos[0],
+                  uri: item.photos[0].url ? item.photos[0].url : item.photos[0],
                 }}
             />
             : item.metadata.title && <Text style={styles.titleText}>{T.t('detail_title')}:</Text>}
@@ -168,7 +170,7 @@ const styles = StyleSheet.create({
   },
   marginText:{
     marginLeft:45,
-    maxWidth: Dimensions.get('window').width/2.2,
+    maxWidth: Dimensions.get('window').width/2.5,
   },
   tinyLogo: {
     width: 100,
