@@ -18,6 +18,7 @@ import {
 import T from '../../../i18n';
 // components
 import Appbar from '../../../components/Appbar';
+
 import {
   handleNavigateToMySingleItem,
 } from '../../../utils/helpers.js';
@@ -30,9 +31,11 @@ import {getTypes} from "../../../actions/createItem";
 import {AutocompleteDropdown} from "react-native-autocomplete-dropdown";
 import {height, width} from "../../../constants/dimentionsAndUnits";
 import {useNavigation} from "@react-navigation/native";
+import {SET_FILTERS} from "../../../actions/actionsType";
 
 const OnMeSearch = props => {
   const dispatch = useDispatch();
+
   const navigation = useNavigation();
   const [marking, users, objects, types, responsible, location, isShowFilter] = useSelector(
     ({marking, give, settings, createItem, onMe}) => [
@@ -45,6 +48,7 @@ const OnMeSearch = props => {
         onMe.isShowFilter
     ],
   );
+
   useEffect(() => {
     dispatch(getUserList(navigation, '', 'OnMeSearch'));
   }, []);
@@ -63,6 +67,7 @@ const OnMeSearch = props => {
     storeType: state.filterReducer.type,
     storeStatus: state.filterReducer.status,
   }))
+  const [errors, setErrors] = useState(storeQuery);
   const [query, setQuery] = useState(storeQuery);
   const [type, setType] = useState(storeType);
   const [status, setStatus] = useState(storeStatus);
@@ -79,14 +84,27 @@ const OnMeSearch = props => {
   const clearInputs =() => {
     setQuery("");
     setStatus("");
-    setType(types);
+    setType("");
     setResponsibleUser("");
     setSelectedLoc("");
     setSelectedObj("");
-    getSearchItems();
+    dispatch({
+      type: SET_FILTERS,
+      payload: {
+        responsibleUser: {title: ''},
+        selectedLoc: '',
+        selectedObj: '',
+        type: '',
+        status: '',
+        query: ''
+      },
+    })
+    props.navigation.goBack()
+    // getSearchItems();
   }
 
   const getSearchItems = () => {
+
     dispatch(searchItem(true, {
       query,
       responsibleUser,
@@ -138,7 +156,7 @@ const OnMeSearch = props => {
 
   return (
 
-    <View style={styles.body}>
+    <View  style={styles.body}>
       <Appbar
           navigation={props.navigation}
           pageToChosenItem="OnMeInfo"
@@ -154,25 +172,24 @@ const OnMeSearch = props => {
             setResponsibleUser(storeResponsibleUser);
             setSelectedLoc(storeSelectedLoc);
             setSelectedObj(storeSelectedObj);
-            console.log('here123123')
           }}
       />
-      <View >
           <>
-              <View >
+              <View>
                 <View style={styles.inputWrap}>
                   <Text style={styles.left}>{T.t('responsible')}:</Text>
                   <AutocompleteDropdown
                     clearOnFocus={true}
-                    closeOnBlur={true}
+                    closeOnBlur={false}
                     closeOnSubmit={true}
                     showClear={true}
-                    onChangeText={text => handleSelectTextChange({title: text})}
+                    onChangeText={text => handleSelectTextChange(text)}
                     onSelectItem={item => item && handleSelectResp(item)}
                     onClear={() => handleSelectResp(null)}
+                    onOpenSuggestionsList={(_) => console.log({_})}
                     dataSet={() =>
                       users.map(item => ({
-                        title: item.firstName,
+                        title:  item.lastName ? `${item.firstName} ${item.lastName}` : item.firstName,
                         id: item._id,
                       }))
                     }
@@ -191,7 +208,7 @@ const OnMeSearch = props => {
                   <Text style={styles.left}>{T.t('object')}:</Text>
                   <AutocompleteDropdown
                     clearOnFocus={true}
-                    closeOnBlur={true}
+                    closeOnBlur={false}
                     closeOnSubmit={true}
                     showClear={true}
                     onChangeText={text => setSelectedLoc({name: text})}
@@ -220,7 +237,7 @@ const OnMeSearch = props => {
                   <Text style={styles.left}>{T.t('location')}:</Text>
                   <AutocompleteDropdown
                     clearOnFocus={true}
-                    closeOnBlur={true}
+                    closeOnBlur={false}
                     closeOnSubmit={true}
                     showClear={true}
                     onChangeText={text => setSelectedObj({name: text})}
@@ -249,7 +266,7 @@ const OnMeSearch = props => {
                   <Text style={styles.left}>{T.t('detail_type')}:</Text>
                   <AutocompleteDropdown
                     clearOnFocus={true}
-                    closeOnBlur={true}
+                    closeOnBlur={false}
                     closeOnSubmit={true}
                     showClear={true}
                     onChangeText={handleTypeField}
@@ -272,10 +289,11 @@ const OnMeSearch = props => {
                   <Text style={styles.left}>{T.t('transfer_status')}:</Text>
                   <AutocompleteDropdown
                     clearOnFocus={true}
-                    closeOnBlur={true}
+                    closeOnBlur={false}
                     closeOnSubmit={true}
                     showClear={true}
                     onChangeText={handleStatus}
+
                     onSelectItem={item => item && handleStatus(item)}
                     onClear={() => handleStatus(null)}
                     dataSet={[
@@ -318,26 +336,17 @@ const OnMeSearch = props => {
                 </View>
               </View>
           </>
-      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   body: {
-
     marginTop: -10,
     backgroundColor: '#D3E3F2',
     flex: 1,
     justifyContent: 'flex-start',
-    // height: height,
-    // width: width,
-    // flex: 1,
-    // marginTop: -10,
-    // display: 'flex',
-    // paddingTop: 25,
-    // backgroundColor: '#D3E3F2',
-    // height: Dimensions.get('window').height,
+
   },
   container: {
     height: Dimensions.get('window').height / 1.1,

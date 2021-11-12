@@ -893,8 +893,6 @@ export const clearMarking = () => dispatch => {
 
 // Search Action
 export const searchItem = (status, query, offset, isNew) => dispatch => {
-  console.log('123123', query)
-
   AsyncStorage.getItem('company').then(company => {
     return axios
       .get(`${API_URL}/company/${company}/item/`, {
@@ -905,7 +903,7 @@ export const searchItem = (status, query, offset, isNew) => dispatch => {
           location: query?.selectedObj?.name,
           type: query?.type,
           status: query?.status?.value,
-          limit: 6,
+          limit: 10,
           offset: offset,
           withPhoto: true
 
@@ -1004,11 +1002,16 @@ export const searchMyItem = (query, offset, isNew, limit) => dispatch => {
     return axios
       .get(`${API_URL}/company/${company}/item`, {
         params: {
-          limit: 10,
-          offset:offset,
+          search: query?.query,
+          responsible: query?.responsibleUser?.id,
+          object: query?.selectedLoc?.name,
+          location: query?.selectedObj?.name,
+          type: query?.type,
+          status: query?.status?.value,
+          limit: limit,
+          offset: offset,
           withPhoto: true
-        }
-        // params: {search: query, person, offset, limit},
+        },
       })
       .then(resp => {
         if (resp.status === 200) {
@@ -1914,7 +1917,17 @@ export const getSearchItems = (query, offset, limit) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
         .get(`${API_URL}/company/${company}/item`, {
-          params: {search: query, offset, limit},
+          params: {
+           search: query?.query,
+           responsible: query?.responsibleUser?.id,
+           object: query?.selectedLoc?.name,
+           location: query?.selectedObj?.name,
+           type: query?.type,
+           status: query?.status?.value,
+           limit: limit,
+           offset: offset,
+           withPhoto: true
+       },
         })
         .then(resp => {
           if (resp.status === 200) {
@@ -1924,7 +1937,7 @@ export const getSearchItems = (query, offset, limit) => dispatch => {
               payload: {
                 offSet: offset,
                 myloadMore: true,
-                searchResult: data,
+                myList: data,
                 searchCount: resp.data.count,
               },
             });

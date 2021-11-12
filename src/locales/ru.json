@@ -1,5 +1,6 @@
 {
     "upload": "Загрузить",
+    "your_list_empty": "Список пустой",
     "no_allocated": "Не распределено",
     "in_the_process_of_transmission": "В процессе передачи",
     "worker": "Сотрудник",
@@ -166,7 +167,7 @@
     "status_application_rejected": "Заявка удалена",
     "status_transfer_failed": "Не удалось",
     "error_write_off": "уже была списано с производства ранее.",
-    "error_services": "находится в сервисе.",
+    "error_services": "В сервисе",
     "error_code_incorrect": "Введенный идентификатор",
     "error_not_found": "не найден в базе.",
     "error_was_added": "уже был добавлен в инвентаризационную ведомость",

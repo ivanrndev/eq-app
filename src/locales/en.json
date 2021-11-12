@@ -1,6 +1,6 @@
 {
     "upload": "Upload",
-
+    "your_list_empty": "Your list empty",
     "worker": "Worker",
     "no_allocated": "No allocated",
     "in_the_process_of_transmission": "In the process of transmission",
@@ -166,7 +166,7 @@
     "status_application_rejected": "Application deleted",
     "status_transfer_failed": "Failed",
     "error_write_off": "has already been write-off",
-    "error_services": "is in service.",
+    "error_services": "In service",
     "error_code_incorrect": "The entered identifier",
     "error_not_found": "was not found in the database.",
     "error_was_added": "has already been added to inventory",

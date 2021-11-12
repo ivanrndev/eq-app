@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, View, Image} from 'react-native';
+import {StyleSheet, Text, View, Image, Dimensions} from 'react-native';
 import {Card, Paragraph, Title} from 'react-native-paper';
 import T from '../../i18n';
 import {getTotalLotPrice} from '../../utils/helpers';
@@ -45,7 +45,7 @@ const ItemListCard = ({
             </Text>
           </View>
       {item.metadata.type && (
-          <View style={{flexDirection:'row'}}>
+          <View style={{flexDirection:'row'}} >
             <Text style={styles.titleText}>
               {T.t('detail_type')}:
             </Text>
@@ -150,7 +150,7 @@ const ItemListCard = ({
               {T.t('responsible')}:
             </Text>
             <Text style={styles.marginText}>
-              {item.person.firstName}
+              { item.person.lastName ? `${item.person.firstName} ${item.person.lastName}` : item.person.firstName}
             </Text>
           </View>
       )}
@@ -167,7 +167,8 @@ const styles = StyleSheet.create({
     width:110
   },
   marginText:{
-    marginLeft:50,
+    marginLeft:45,
+    maxWidth: Dimensions.get('window').width/2.2,
   },
   tinyLogo: {
     width: 100,
