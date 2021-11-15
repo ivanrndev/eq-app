@@ -69,6 +69,7 @@ const GalleryForItem = ({
       </View>
     );
   };
+  console.log(bigPhoto)
   return (
     <View style={styles.wrap}>
       {!isEmpty(itemPhotos) ? (

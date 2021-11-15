@@ -7,12 +7,14 @@ import {useQuantityUnitsAndCurrency} from '../../hooks/useQuantityUnitsAndCurren
 import {getUserList} from '../../actions/actions';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
+import {deleteMoveItem} from "../../actions/moveToObjectsActions";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 const ItemListCard = ({
   item,
   width,
   isPriceShown = true,
-  isResponsibleShown = false,
+  isResponsibleShown = false,isBacket = false,
   children,
 }) => {
   const {currency} = useQuantityUnitsAndCurrency();
@@ -31,9 +33,11 @@ const ItemListCard = ({
   );
   return (
     <Card.Content  icon={'delete'}  style={{width}}>
-      <View style={{flexDirection: 'row', paddingTop:10}}>
-        {item.photos.length > 0
-            ? <Image
+      <View style={{flexDirection:'row'}}>
+        <View style={{flexDirection:'column'}}>
+          <View style={{flexDirection: 'row', paddingTop:10}}>
+            {item.photos.length > 0
+                ? <Image
                 style={styles.tinyLogo}
                 defaultSource={require('../../assets/svg/empty.png')}
 
@@ -155,8 +159,15 @@ const ItemListCard = ({
               { item.person.lastName ? `${item.person.firstName} ${item.person.lastName}` : item.person.firstName}
             </Text>
           </View>
-      )}
-      {children}
+          )}
+            {children}
+          </View>
+        {isBacket &&
+        <View style={styles.iconWrap}>
+          <Icon onPress={() => dispatch(deleteMoveItem(item._id))} name="trash" size={30} color="rgb(0, 0, 0)"/>
+        </View>
+        }
+      </View>
     </Card.Content>
   );
 };
@@ -170,13 +181,21 @@ const styles = StyleSheet.create({
   },
   marginText:{
     marginLeft:45,
-    maxWidth: Dimensions.get('window').width/2.5,
+    width: Dimensions.get('window').width/2.6,
+    maxWidth: Dimensions.get('window').width/2.6,
   },
   tinyLogo: {
     width: 100,
     height: 100,
 
   },
+  iconWrap:{
+    alignSelf:'center',
+    justifyContent:'center',
+    margin:10,
+
+  },
+
 });
 
 export default ItemListCard;

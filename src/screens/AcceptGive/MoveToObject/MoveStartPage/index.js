@@ -4,6 +4,8 @@ import {
   ScrollView,
   StyleSheet,
   View,
+  TextInput,
+  TouchableOpacity
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -35,6 +37,7 @@ const MoveStartPage = (props) => {
   const choosedUser = useSelector(({moveToObject}) => moveToObject.choosedUser);
   const role = useSelector(({auth}) => auth.role);
   const [visible, setVisible] = useState(false);
+  const [number, setNumber] = useState(1);
   const users = useSelector(({give}) => give.userList );
 
   const [settings, inventory, scan] = useSelector(
@@ -49,7 +52,7 @@ const MoveStartPage = (props) => {
           item_ids: [
             {
               id: item._id,
-              quantity: 1
+              quantity: number
             }
           ],
           user: choosedUser.id,
@@ -58,7 +61,7 @@ const MoveStartPage = (props) => {
           item_ids: [
             {
               id: item._id,
-              quantity: 1
+              quantity: number
             }
           ],
           object: location.objects,
@@ -73,6 +76,7 @@ const MoveStartPage = (props) => {
         }
       })
     }
+    setNumber(1);
   };
   const renderItem = ({item}) => (
       <Menu.Item
@@ -126,17 +130,20 @@ const MoveStartPage = (props) => {
         title={T.t('move_to_object')}
         isSearchForGiveItem={false}
       />
-      <ScrollView contentContainerStyle={styles.cards}>
+      <View style={{
+        flex: 1,
+        alignItems: 'center'
+      }}>
+      <ScrollView style={{ marginTop: 15, borderRadius: 15 }}>
         {renderedList.length > 0 &&
           renderedList.map(item => (
-              <View style={{flexDirection: 'row'}} >
-                <Card  style={styles.card} key={item._id}>
-                  <ItemListCard item={item} isPriceShown={false} />
-                </Card>
-                <Icon onPress = {()=> dispatch(deleteMoveItem(item._id))} name="trash" size={30} color="rgb(0, 0, 0)" style={styles.iconStyle}/>
-              </View>
+              <TouchableOpacity  style={styles.card} key={item._id}>
+                <ItemListCard item={item} isPriceShown={false} isBacket={true}/>
+                <View style={{ height: 1, backgroundColor: '#D3E3F2', width: '90%', marginLeft: '5%', marginTop: 10}} />
+              </TouchableOpacity>
           ))}
       </ScrollView>
+      </View>
       <View style={styles.btns}>
         { role === 'root' ||
         role === 'stockman' ||
@@ -162,14 +169,25 @@ const MoveStartPage = (props) => {
             </View> : null
         }
         <DarkButton
-            onPress={() => navigation.navigate('CreateMoveLocation')}
-            disabled={renderedList.length === 0}
-            text={T.t('choose_object')}
+          onPress={() => navigation.navigate('CreateMoveLocation')}
+          disabled={renderedList.length === 0}
+          text={T.t('choose_object')}
         />
-        <DarkButton
-          onPress={() => dispatch(openMoveScan(props.navigation, settings.moveScanPage))}
-          text={T.t('add')}
-        />
+        {renderedList[0]?.batch?.quantity > 1 ?
+          <View style={styles.buttonsContainer}>
+            <TextInput
+              style={styles.inputsStyle}
+              placeholder={T.t('set_quantity')}
+              onChangeText={(num => setNumber(num))}
+            />
+            <DarkButton
+              onPress={() => dispatch(openMoveScan(props.navigation, settings.moveScanPage))}
+              text={T.t('add')}
+            />
+          </View> : <DarkButton
+            onPress={() => dispatch(openMoveScan(props.navigation, settings.moveScanPage))}
+            text={T.t('add')}
+          />}
         <DarkButton
             onPress={() => createNewLocation()}
             disabled={!choosedUser.id && !location.objects}
@@ -185,38 +203,48 @@ const styles = StyleSheet.create({
     backgroundColor: '#D3E3F2',
     height: Dimensions.get('window').height,
   },
+  buttonsContainer: {
+    width: Dimensions.get('window').width / 2.02,
+    flexDirection: 'row'
+  },
+  inputsStyle: {
+    width: Dimensions.get('window').width / 2.5,
+    marginTop: 5,
+    marginRight: 5,
+    borderWidth: 1,
+    borderRadius: 10,
+    height: Dimensions.get('window').height / 13,
+    paddingHorizontal: 10,
+  },
   itemWrap: {
     width: width / 1.3,
     marginBottom: 10,
     alignSelf: 'center',
     marginTop: -10,
   },
-  iconStyle:{
-    alignSelf:'center',
-    margin:10,
-  },
+
   cards: {
     marginTop: -10,
+
     paddingTop: 25,
     alignItems: 'center',
     justifyContent: 'center',
+
   },
   arrowWrap: {
     marginBottom: -1.5,
   },
   card: {
     justifyContent: 'center',
-    width: Dimensions.get('window').width / 1.2,
-    marginBottom: 15,
+    width: Dimensions.get('window').width / 1.1,
+    borderRadius: 15,
     backgroundColor: '#EDF6FF',
     color: '#22215B',
-    borderRadius: 10,
-    paddingBottom: 10,
   },
   btns: {
     width: Dimensions.get('window').width / 1.1,
     alignSelf: 'center',
-    marginBottom: 10,
+    marginTop:10,
   },
 });
 

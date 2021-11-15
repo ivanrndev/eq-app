@@ -623,6 +623,7 @@ export const scanInfo = (
           dispatch(loader(false));
           dispatch(setIsRoleAllowThunk());
           dispatch(dialogInput(false));
+          nav.navigate(page);
         } else {
           dispatch({
             type: ERROR_CURRENT_MOUNT_SCAN_INFO,
@@ -1850,7 +1851,7 @@ export const mountItemFromParent = (
 
 
 export const searchMyCompanyItems = (query, offset, limit) => dispatch => {
-  
+
   AsyncStorage.getItem('company').then(company => {
     return axios
       .get(`${API_URL}/company/${company}/item`, {

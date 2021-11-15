@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {Dimensions, StyleSheet, View} from 'react-native';
+import {Dimensions, StyleSheet, View, TouchableOpacity} from 'react-native';
 import {Card, Paragraph, Searchbar} from 'react-native-paper';
 import T from '../../i18n';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
@@ -78,36 +78,37 @@ const Search = ({
         value={search}
         style={styles.search}
       />
-      <KeyboardAwareScrollView style={styles.container}>
+      <View style={styles.container}>
+      <KeyboardAwareScrollView style={{borderRadius:15}}>
         {showEmptyError && (
-          <Paragraph style={styles.text}>{T.t('error_not_found')}</Paragraph>
+            <Paragraph style={styles.text}>{T.t('error_not_found')}</Paragraph>
         )}
         {renderedList.map(item => (
-          <Card
-            style={styles.card}
-            onPress={() => {
-              handleCurrentScan(item)
-            }}
-            key={item._id}>
-            <ItemListCard
-              item={item}
-              isResponsibleShown={
-                pageToChosenItem === 'GiveListCheck' ||
-                pageToChosenItem === 'WriteOffInfo' ||
-                pageToChosenItem === 'IdentInfo'
-              }
-            />
-          </Card>
+            <TouchableOpacity
+                style={styles.card}
+                onPress={() => {
+                  handleCurrentScan(item)
+                }}
+                key={item._id}>
+              <ItemListCard
+                  item={item}
+                  isResponsibleShown={
+                    pageToChosenItem === 'GiveListCheck' ||
+                    pageToChosenItem === 'WriteOffInfo' ||
+                    pageToChosenItem === 'IdentInfo'
+                  }
+              />
+              <View style={{ height: 1, backgroundColor: '#D3E3F2', width: '90%', marginLeft: '5%', marginTop: 10}} />
+            </TouchableOpacity>
         ))}
       </KeyboardAwareScrollView>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   body: {
-    zIndex: 1,
-    display: 'flex',
     paddingTop: 30,
     paddingBottom: 30,
     alignItems: 'center',
@@ -123,12 +124,12 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width / 1.1,
     marginBottom: 20,
   },
+
   card: {
-    display: 'flex',
     justifyContent: 'center',
     width: Dimensions.get('window').width / 1.1,
-    marginBottom: 15,
     backgroundColor: '#EDF6FF',
+    color: '#22215B',
   },
   text: {
     fontSize: 15,

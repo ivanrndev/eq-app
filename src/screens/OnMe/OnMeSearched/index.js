@@ -268,12 +268,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#EDF6FF',
     color: '#22215B',
   },
-  cards: {
-    marginTop: -10,
-    paddingTop: 25,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  // cards: {
+  //   marginTop: -10,
+  //   paddingTop: 25,
+  //   alignItems: 'center',
+  //   justifyContent: 'center',
+  // },
 
 });
 
