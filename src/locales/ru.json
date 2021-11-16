@@ -308,7 +308,7 @@
  "administrator": "Администратор",
     "stockman":"Кладовщик",
     "employee": "Сотрудник",
-
+    "cancel": "Отменить",
     "name": "Название",
     "email": "Email",
     "role": "Роль",

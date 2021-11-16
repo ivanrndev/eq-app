@@ -181,8 +181,8 @@ const styles = StyleSheet.create({
   },
   marginText:{
     marginLeft:45,
-    width: Dimensions.get('window').width/2.6,
-    maxWidth: Dimensions.get('window').width/2.6,
+    width: Dimensions.get('window').width/2.9,
+    maxWidth: Dimensions.get('window').width/2.9,
   },
   tinyLogo: {
     width: 100,

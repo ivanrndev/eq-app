@@ -80,6 +80,7 @@ import {OnMeNavigation} from "./screens/OnMe/OnMeNavigation";
 import OnMe from "./screens/OnMe";
 import OnMeSearch from "./screens/OnMe/OnMeSearch";
 import OnMeSearched from "./screens/OnMe/OnMeSearched";
+import {ItemDetail} from "./components/ItemDetail";
 
 const theme = {
   ...DefaultTheme,
@@ -227,6 +228,7 @@ const App = () => {
               component={ChooseItemPhotoMode}
             />
             <Drawer.Screen name="MountNoMarking" component={MountNoMarking} />
+            <Drawer.Screen name="ItemDetail" component={ItemDetail} />
           </Drawer.Navigator>
         </PaperProvider>
       </NativeRouter>

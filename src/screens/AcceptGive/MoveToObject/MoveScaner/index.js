@@ -13,12 +13,12 @@ import {useUserData} from "../../../../hooks/useUserData";
 
 const MoveScaner = props => {
   const [scaner, setScaner] = useState(false);
-  const [companyItemList, currentInventoryUser] = useSelector(
-      ({companyItems, inventory}) => [
-        companyItems.myCompanyList,
-        inventory.currentInventoryUser,
+  const [companyItemList, isAdd] = useSelector(
+      ({companyItems, moveToObject}) => [
+        companyItems.myCompanyList, moveToObject.isAdd,
       ],
   );
+
   const {role, userId} = useUserData();
   const [list, setList] = useState([]);
   const dispatch = useDispatch();
@@ -62,7 +62,8 @@ const MoveScaner = props => {
             pageToChosenItem="MoveStartPage"
             isSearchForMoveItem={true}
             giveSearch={true}
-            goTo={'AcceptGive'}
+
+            goTo={!isAdd ? 'AcceptGive' : 'MoveStartPage'}
             title={T.t('move_to_object')}
             switch={true}
             typeSwitchNFC={true}

@@ -311,5 +311,6 @@
     "value": "Value",
     "created": "Item has been successfully created",
     "choose_object": "Choose object",
-    "choose_location": "Choose location"
+    "choose_location": "Choose location",
+    "cancel": "Cancel"
 }

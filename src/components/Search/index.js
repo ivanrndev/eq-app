@@ -42,7 +42,6 @@ const Search = ({
   };
 
   const handleCurrentScan = item => {
-
     actionCheckError(item);
     dispatch(loader(true));
     dispatch(

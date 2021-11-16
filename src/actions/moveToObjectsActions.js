@@ -1,8 +1,9 @@
 import {
+    CHANGE_QUANTITY,
     CHOOSED_MOVE_USER,
     CLEAN_MOVE_TO_OBJECT, DELETE_MOVE_ITEM, IS_ROLE_ALLOW,
     MOVE_TO_OBJECT_ERROR,
-    SAVE_MOVE_LOCATIONS,
+    SAVE_MOVE_LOCATIONS, SET_IS_ADD_MOVE,
     SET_IS_MOVE_SCANER,
     SET_SCANED_MOVE_ITEM
 } from "./actionsType";
@@ -14,12 +15,17 @@ export const setIsMoveScan = (boolean) => {
   return {type: SET_IS_MOVE_SCANER, boolean }
 };
 export const setScanedMoveItem = (item, itemId) => {
-  return {type: SET_SCANED_MOVE_ITEM, item, itemId }
+  return {type: SET_SCANED_MOVE_ITEM, item, itemId}
 };
+
 export const openMoveScan = (nav, page)=> dispatch => {
   dispatch(loader(true));
+
   nav.navigate(page);
   dispatch(loader(false));
+};
+export const setIsAddMove = (boolean) => {
+    return {type: SET_IS_ADD_MOVE, boolean }
 };
 export const saveMoveLocation = location => dispatch => {
     dispatch({
@@ -77,7 +83,7 @@ export const changeLocation = (data, companyId, navigation) => dispatch => {
         .put(`${API_URL}/company/${companyId}/item/move`, data)
         .then(resp => {
             if (resp.status === 200) {
-                // navigation.navigate('MoveSuccess');
+                navigation.navigate('MoveSuccess');
                 dispatch(cleanMoveToObject());
             }
         })
@@ -87,7 +93,14 @@ export const changeLocation = (data, companyId, navigation) => dispatch => {
                     type: MOVE_TO_OBJECT_ERROR,
                     message: e.message,
                 });
-                // navigation.navigate('MoveSuccess');
+                navigation.navigate('MoveSuccess');
             }
         });
 };
+
+export const changeQuantity = (payload) => {
+  return {
+    type: CHANGE_QUANTITY,
+    payload,
+  };
+}
