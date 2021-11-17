@@ -252,7 +252,7 @@ const AppbarCustom = props => {
         />
       )}
       {isFilterOpen && (<OnMeSearch/>)}
-      {isNFCOpen && <NFC />}
+      {isNFCOpen && <NFC move={props.move ? props.move : false}/>}
       <View style={styles.borderRadius} />
       <Portal>
         <Snackbar

@@ -153,34 +153,34 @@ const MoveStartPage = (props) => {
         flex: 1,
         alignItems: 'center'
       }}>
-      <ScrollView    style={{ marginTop: 15, borderRadius: 15 }}>
-        {renderedList.length > 0 &&
-          renderedList.map(item => {
-            const tmcFilter = userQuantity?.filter(cart => cart.id === item._id)[0];
-            return (
-              <TouchableOpacity  style={styles.card} key={item._id}>
-                <ItemListCard item={item} isPriceShown={false} isBacket={true}/>
-                <View style={{ height: 1, backgroundColor: '#D3E3F2', width: '90%', marginLeft: '5%', marginTop: 10}} />
-                {item?.batch?.quantity > 1 ?
-                  <View style={styles.buttonsContainer}>
-                    <Text style={{marginHorizontal: 15, marginTop: 5}}>
-                      Выдать
-                    </Text>
-                    <Button onPress={() => handleCurrentQuantity(item)}
-                            style={{
-                              backgroundColor: tmcFilter?.quantity ? '#EDF6FF' : '#22215B',
-                              marginLeft: tmcFilter?.quantity ? 50 : 90,
-                              width: tmcFilter?.quantity ? 160 : 110,
-                              borderRadius: 10}}>
-                      {tmcFilter?.quantity ? (<Text style={{fontSize: 12, color: '#22215B'}}>{tmcFilter?.quantity} изменить</Text>) :
-                          <Text style={{color: '#f3f3f5'}}>
-                            Задать
-                          </Text>}
-                    </Button>
-                  </View> : null}
-              </TouchableOpacity>
-          )})}
-      </ScrollView>
+        <ScrollView    style={{ marginTop: 15, borderRadius: 15 }}>
+          {renderedList.length > 0 &&
+            renderedList.map(item => {
+              const tmcFilter = userQuantity?.filter(cart => cart.id === item._id)[0];
+              return (
+                <TouchableOpacity  style={styles.card} key={item._id}>
+                  <ItemListCard item={item} isPriceShown={false} isBacket={true}/>
+                  <View style={{ height: 1, backgroundColor: '#D3E3F2', width: '90%', marginLeft: '5%', marginTop: 10}} />
+                  {item?.batch?.quantity > 1 ?
+                    <View style={styles.buttonsContainer}>
+                      <Text style={{marginHorizontal: 15, marginTop: 5}}>
+                        Выдать
+                      </Text>
+                      <Button onPress={() => handleCurrentQuantity(item)}
+                              style={{
+                                backgroundColor: tmcFilter?.quantity ? '#EDF6FF' : '#22215B',
+                                marginLeft: tmcFilter?.quantity ? 50 : 90,
+                                width: tmcFilter?.quantity ? 160 : 110,
+                                borderRadius: 10}}>
+                        {tmcFilter?.quantity ? (<Text style={{fontSize: 12, color: '#22215B'}}>{tmcFilter?.quantity} изменить</Text>) :
+                            <Text style={{color: '#f3f3f5'}}>
+                              Задать
+                            </Text>}
+                      </Button>
+                    </View> : null}
+                </TouchableOpacity>
+            )})}
+        </ScrollView>
       </View>
       <View style={styles.btns}>
         { role === 'root' ||

@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
-import {Dimensions, SafeAreaView, StyleSheet, View} from 'react-native';
+import {Dimensions, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import T from '../../../i18n';
 // components
 import Appbar from '../../../components/Appbar';
@@ -40,30 +40,35 @@ const InventoryScaner = props => {
 
   return (
     <>
-      <Appbar
-        navigation={props.navigation}
-        newScan={true}
-        arrow={true}
-        search={true}
-        list={list}
-        listAction={searchMyCompanyItems}
-        goTo={'Inventory'}
-        clearGiveList={true}
-        title={T.t('inventori')}
-        switch={true}
-        typeSwitchNFC={true}
-        pageToChosenItem="InventoryChooseMode"
-      />
-      <SafeAreaView />
-      <View style={styles.body}>
-        {scaner && (
-          <Scanner
-            nav={props.navigation}
-            page={'InventoryChooseMode'}
-            saveItems={true}
+        <View style={{backgroundColor: 'rgb(0,0,0)', flex:1}}>
+          <Appbar
+            navigation={props.navigation}
+            newScan={true}
+            arrow={true}
+            search={true}
+            list={list}
+            listAction={searchMyCompanyItems}
+            goTo={'Inventory'}
+            clearGiveList={true}
+            title={T.t('inventori')}
+            switch={true}
+            typeSwitchNFC={true}
+            pageToChosenItem="InventoryChooseMode"
           />
-        )}
-      </View>
+          <SafeAreaView />
+          <View>
+              <Text style={styles.textStyle}>{T.t('title_scan')}</Text>
+          </View>
+          <View style={styles.body}>
+            {scaner && (
+              <Scanner
+                nav={props.navigation}
+                page={'InventoryChooseMode'}
+                saveItems={true}
+              />
+            )}
+          </View>
+        </View>
     </>
   );
 };
@@ -72,6 +77,12 @@ const styles = StyleSheet.create({
   title: {
     color: '#fff',
   },
+    textStyle:{
+        color:'rgb(255,255,255)',
+        fontSize: 30,
+        position:'absolute',
+        left:Dimensions.get('window').width / 5,
+    },
   input: {
     marginBottom: 10,
     marginTop: 10,

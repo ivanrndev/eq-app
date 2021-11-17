@@ -29,6 +29,7 @@ import {currentScan, dialogInput, loader} from '../../actions/actions.js';
 
 
 const Scanner = props => {
+  console.log(props)
   const dispatch = useDispatch();
   const store = useSelector(state => state.scan);
 
@@ -72,7 +73,7 @@ const Scanner = props => {
 
   const text = props.text ? T.t('input_detail_new') : T.t('input_detail');
   const onSuccess = e => {
-
+    console.log(e);
     if (store.isNewScan) {
       let cyrillicRegular = /[а-яА-ЯЁё]/;
       let cyrillicFilterId = cyrillicRegular.exec(e.data);

@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
-import {Dimensions, SafeAreaView, StyleSheet, View} from 'react-native';
+import {Dimensions, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import T from '../../i18n';
 // components
 import Appbar from '../../components/Appbar';
@@ -22,29 +22,34 @@ const Service = props => {
 
   return (
     <>
-      <Appbar
-        navigation={props.navigation}
-        arrow={true}
-        newScan={true}
-        goTo={'ServiceMenu'}
-        title={T.t('send_service')}
-        switch={true}
-        typeSwitchNFC={true}
-        search={true}
-        list={companyItemList}
-        listAction={searchMyCompanyItems}
-        pageToChosenItem="ServiceInfo"
-      />
-      <SafeAreaView />
-      <View style={styles.body}>
-        {scaner && (
-          <Scanner
-            nav={props.navigation}
-            page={'ServiceInfo'}
-            saveItems={false}
+        <View style={{backgroundColor: 'rgb(0,0,0)', flex:1}}>
+          <Appbar
+            navigation={props.navigation}
+            arrow={true}
+            newScan={true}
+            goTo={'ServiceMenu'}
+            title={T.t('send_service')}
+            switch={true}
+            typeSwitchNFC={true}
+            search={true}
+            list={companyItemList}
+            listAction={searchMyCompanyItems}
+            pageToChosenItem="ServiceInfo"
           />
-        )}
-      </View>
+          <SafeAreaView />
+          <View>
+              <Text style={styles.textStyle}>{T.t('title_scan')}</Text>
+          </View>
+          <View style={styles.body}>
+            {scaner && (
+              <Scanner
+                nav={props.navigation}
+                page={'ServiceInfo'}
+                saveItems={false}
+              />
+            )}
+          </View>
+    </View>
     </>
   );
 };
@@ -69,6 +74,13 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   snackbar: {},
+
+    textStyle:{
+        color:'rgb(255,255,255)',
+        fontSize: 30,
+        position:'absolute',
+        left:Dimensions.get('window').width / 5,
+    },
 });
 
 export default Service;

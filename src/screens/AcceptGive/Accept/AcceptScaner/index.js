@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
-import {StyleSheet, View, Dimensions, SafeAreaView} from 'react-native';
+import {StyleSheet, View, Dimensions, SafeAreaView, Text} from 'react-native';
 import T from '../../../../i18n';
 // components
 import Appbar from '../../../../components/Appbar';
@@ -17,25 +17,30 @@ const AcceptScaner = props => {
 
   return (
     <>
-      <Appbar
-        navigation={props.navigation}
-        newScan={true}
-        arrow={true}
-        goTo={'AcceptList'}
-        title={T.t('title_scan')}
-        switch={true}
-        typeSwitchNFC={true}
-      />
-      <SafeAreaView />
-      <View style={styles.body}>
-        {scaner && (
-          <Scanner
-            nav={props.navigation}
-            page={'AcceptList'}
-            saveItems={false}
+        <View style={{backgroundColor: 'rgb(0,0,0)', flex:1}}>
+          <Appbar
+            navigation={props.navigation}
+            newScan={true}
+            arrow={true}
+            goTo={'AcceptList'}
+            title={T.t('title_scan')}
+            switch={true}
+            typeSwitchNFC={true}
           />
-        )}
-      </View>
+          <SafeAreaView />
+          <View>
+              <Text style={styles.textStyle}>{T.t('title_scan')}</Text>
+          </View>
+          <View style={styles.body}>
+            {scaner && (
+              <Scanner
+                nav={props.navigation}
+                page={'AcceptList'}
+                saveItems={false}
+              />
+            )}
+          </View>
+        </View>
     </>
   );
 };
@@ -60,6 +65,12 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   snackbar: {},
+    textStyle:{
+        color:'rgb(255,255,255)',
+        fontSize: 30,
+        position:'absolute',
+        left:Dimensions.get('window').width / 5,
+    },
 });
 
 export default AcceptScaner;

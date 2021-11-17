@@ -1,6 +1,6 @@
 import React, {useState, useCallback} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
-import {StyleSheet, View, Dimensions, SafeAreaView} from 'react-native';
+import {StyleSheet, View, Dimensions, SafeAreaView, Text} from 'react-native';
 import T from '../../../i18n';
 // components
 import Appbar from '../../../components/Appbar';
@@ -17,24 +17,29 @@ const MarkingScaner = props => {
 
   return (
     <>
-      <Appbar
-        navigation={props.navigation}
-        arrow={true}
-        newScan={true}
-        goTo={'MarkingList'}
-        title={T.t('title_scan')}
-        switch={true}
-        typeSwitchNFC={true}
-      />
-      <SafeAreaView />
-      <View style={styles.body}>
-        {scaner && (
-          <Scanner
-            nav={props.navigation}
-            page={'MarkingFinish'}
-            text={T.t('title_input_detail_new')}
-          />
-        )}
+      <View style={{backgroundColor: 'rgb(0,0,0)', flex:1}}>
+        <Appbar
+          navigation={props.navigation}
+          arrow={true}
+          newScan={true}
+          goTo={'MarkingList'}
+          title={T.t('title_scan')}
+          switch={true}
+          typeSwitchNFC={true}
+        />
+        <SafeAreaView />
+        <View>
+          <Text style={styles.textStyle}>{T.t('title_scan')}</Text>
+        </View>
+        <View style={styles.body}>
+          {scaner && (
+            <Scanner
+              nav={props.navigation}
+              page={'MarkingFinish'}
+              text={T.t('title_input_detail_new')}
+            />
+          )}
+        </View>
       </View>
     </>
   );
@@ -66,6 +71,12 @@ const styles = StyleSheet.create({
     color: '#fff',
     textAlign: 'right',
     width: Dimensions.get('window').width / 1.3,
+  },
+  textStyle:{
+    color:'rgb(255,255,255)',
+    fontSize: 30,
+    position:'absolute',
+    left:Dimensions.get('window').width / 5,
   },
 });
 

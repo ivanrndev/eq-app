@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
-import {StyleSheet, View, Dimensions, SafeAreaView} from 'react-native';
+import {StyleSheet, View, Dimensions, SafeAreaView, Text} from 'react-native';
 import T from '../../i18n';
 // components
 import Appbar from '../../components/Appbar';
@@ -38,28 +38,33 @@ const WriteOff = props => {
 
   return (
     <>
-      <Appbar
-        navigation={props.navigation}
-        newScan={true}
-        arrow={true}
-        goTo={'Home'}
-        title={T.t('title_scan')}
-        switch={true}
-        typeSwitchNFC={true}
-        search={true}
-        list={list}
-        listAction={searchMyCompanyItems}
-        pageToChosenItem="WriteOffInfo"
-      />
-      <SafeAreaView />
-      <View style={styles.body}>
-        {scaner && (
-          <Scanner
-            nav={props.navigation}
-            page={'WriteOffInfo'}
-            saveItems={false}
-          />
-        )}
+      <View style={{backgroundColor: 'rgb(0,0,0)', flex:1}}>
+        <Appbar
+          navigation={props.navigation}
+          newScan={true}
+          arrow={true}
+          goTo={'Home'}
+          title={T.t('title_scan')}
+          switch={true}
+          typeSwitchNFC={true}
+          search={true}
+          list={list}
+          listAction={searchMyCompanyItems}
+          pageToChosenItem="WriteOffInfo"
+        />
+        <SafeAreaView />
+        <View>
+          <Text style={styles.textStyle}>{T.t('title_scan')}</Text>
+        </View>
+        <View style={styles.body}>
+          {scaner && (
+            <Scanner
+              nav={props.navigation}
+              page={'WriteOffInfo'}
+              saveItems={false}
+            />
+          )}
+        </View>
       </View>
     </>
   );
@@ -84,7 +89,12 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 30,
   },
-  snackbar: {},
+  textStyle:{
+    color:'rgb(255,255,255)',
+    fontSize: 30,
+    position:'absolute',
+    left:Dimensions.get('window').width / 5,
+  },
 });
 
 export default WriteOff;

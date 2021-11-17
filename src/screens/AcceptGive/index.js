@@ -78,6 +78,7 @@ const AcceptGive = props => {
             <DarkButton text={T.t('move_item')} onPress={() => {
               dispatch(openMoveScan(props.navigation, settings.moveScanPage));
               dispatch(setIsAddMove(false));
+
             }} />
           </View>
         </View>
