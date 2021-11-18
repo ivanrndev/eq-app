@@ -1,22 +1,35 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
-import {Dimensions, Linking, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {AppState, Dimensions, Linking, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import T from '../../../../i18n';
 // components
 import Appbar from '../../../../components/Appbar';
 import Scanner from '../../../../components/Scanner';
-import {useSelector} from 'react-redux';
-import {searchMyCompanyItems, searchMyItem} from '../../../../actions/actions';
+import {useDispatch, useSelector} from 'react-redux';
+import {searchMyCompanyItems, searchMyItem, setIsAvailableCameraState} from '../../../../actions/actions';
 import {Portal, Snackbar} from 'react-native-paper';
 import {getGiveMessageError} from '../../../../utils/helpers';
 import {useUserData} from '../../../../hooks/useUserData';
 import TransparentButton from "../../../../components/Buttons/TransparentButton";
+import {PERMISSIONS, request} from "react-native-permissions";
 
 const GiveScaner = props => {
   const [err, companyItemList] = useSelector(({onMe, scan, companyItems}) => [
     scan.scanInfoError,
     companyItems.myCompanyList,
   ]);
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const listener = AppState.addEventListener('change', (status) => {
+      if (Platform.OS === 'ios' && status === 'active') {
+        request(PERMISSIONS.IOS.CAMERA)
+            .then((result) => result === "granted" && dispatch(setIsAvailableCameraState(true)))
+            .catch((error) => console.log(error))
+      }
+    });
+    // return listener.remove;
+  }, []);
   const {role, userId} = useUserData();
   const [scaner, setScaner] = useState(false);
   const [isSnackBar, setIsSnackBar] = useState(false);

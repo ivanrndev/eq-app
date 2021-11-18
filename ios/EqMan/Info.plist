@@ -6,8 +6,6 @@
 	<array>
 		<string>org.reactjs.native.example.EqMan</string>
 	</array>
-	<key>NSCameraUsageDescription</key>
-    <string>YOUR TEXT</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>

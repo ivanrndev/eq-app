@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
-import {Dimensions, Linking, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {AppState, Dimensions, Linking, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import T from '../../../../i18n';
 // components
 import Appbar from '../../../../components/Appbar';
@@ -8,9 +8,10 @@ import Scanner from '../../../../components/Scanner';
 import {useDispatch, useSelector} from 'react-redux';
 import MoveStartPage from "../MoveStartPage";
 import {setIsMoveScan} from "../../../../actions/moveToObjectsActions";
-import {searchMyCompanyItems} from "../../../../actions/actions";
+import {searchMyCompanyItems, setIsAvailableCameraState} from "../../../../actions/actions";
 import {useUserData} from "../../../../hooks/useUserData";
 import TransparentButton from "../../../../components/Buttons/TransparentButton";
+import {PERMISSIONS, request} from "react-native-permissions";
 
 const MoveScaner = props => {
   const [scaner, setScaner] = useState(false);
@@ -51,6 +52,16 @@ const MoveScaner = props => {
         };
       }, []),
   );
+  useEffect(() => {
+      const listener = AppState.addEventListener('change', (status) => {
+          if (Platform.OS === 'ios' && status === 'active') {
+              request(PERMISSIONS.IOS.CAMERA)
+                  .then((result) => result === "granted" && dispatch(setIsAvailableCameraState(true)))
+                  .catch((error) => console.log(error))
+          }
+      });
+      // return listener.remove;
+  }, []);
   const  isAvailableCamera = useSelector(({auth}) => auth.isAvailableCamera);
 
   return (

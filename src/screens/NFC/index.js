@@ -53,7 +53,12 @@ const NFC = () => {
           : NfcManager.transceive;
 
       resp = await cmd([0x3a, 4, 4]);
-      resp = await cmd([0x3a, 5, 8]);
+      let payloadLength = parseInt(resp.toString().split(",")[1]);
+      let payloadPages = Math.ceil(payloadLength / 4);
+      let startPage = 5;
+      let endPage = startPage + payloadPages - 1;
+      resp = await cmd([0x3A, startPage, endPage]);
+      console.log({resp});
       bytes = resp.toString().split(',');
 
       function removeElement(arrayName, arrayElement) {
@@ -67,31 +72,22 @@ const NFC = () => {
 
       let text = '';
       const number = bytes.length <= 13 ? 5 : 10;
-
+      console.log(bytes);
       for (let i = 0; i < bytes.length; i++) {
-        if (i < number) {
-          continue;
-        }
-        if (parseInt(bytes[i]) === 254) {
-          break;
-        }
+
+        // if (i < number) {
+        //   continue;
+        // }
+        // if (parseInt(bytes[i]) === 254) {
+        //   break;
+        // }
+        console.log(String.fromCharCode(parseInt(bytes[i])));
         text = text + String.fromCharCode(parseInt(bytes[i]));
       }
 
       let checkFormat = /^[a-zA-Z0-9]+$/;
 
       let codeFormat = checkFormat.exec(text);
-
-
-
-
-
-
-
-
-
-
-
 
 
       if (codeFormat) {

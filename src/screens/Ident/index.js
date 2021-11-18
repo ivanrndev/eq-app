@@ -1,23 +1,34 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
-import {Dimensions, StyleSheet, View, Text, Button, Linking} from 'react-native';
+import {Dimensions, StyleSheet, View, Text, Button, Linking, AppState} from 'react-native';
 import T from '../../i18n';
+
 // components
 import Appbar from '../../components/Appbar';
 import Scanner from '../../components/Scanner';
-import {useSelector} from 'react-redux';
-import {searchMyCompanyItems, searchMyItem} from '../../actions/actions';
+import {useDispatch, useSelector} from 'react-redux';
+import {searchMyCompanyItems, searchMyItem, setIsAvailableCameraState} from '../../actions/actions';
 import {useUserData} from '../../hooks/useUserData';
 import TransparentButton from "../../components/Buttons/TransparentButton";
+import {check, PERMISSIONS, request, RESULTS} from "react-native-permissions";
 
 const Ident = props => {
   const [companyItemList, isAvailableCamera] = useSelector(({companyItems, auth}) => [
     companyItems.myCompanyList,
     auth.isAvailableCamera
   ]);
-
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const listener = AppState.addEventListener('change', (status) => {
+      if (Platform.OS === 'ios' && status === 'active') {
+        request(PERMISSIONS.IOS.CAMERA)
+            .then((result) => result === "granted" && dispatch(setIsAvailableCameraState(true)))
+            .catch((error) => console.log(error))
+      }
+    });
+    // return listener.remove;
+  }, []);
   const {role, userId} = useUserData();
-
   const [scaner, setScaner] = useState(false);
   const [list, setList] = useState([]);
 

@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, {useEffect, useState} from 'react';
-import {StatusBar} from 'react-native';
+import {StatusBar, AppState} from 'react-native';
 import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
 // navigation and router
 import {NavigationContainer} from '@react-navigation/native';
@@ -81,7 +81,7 @@ import OnMe from "./screens/OnMe";
 import OnMeSearch from "./screens/OnMe/OnMeSearch";
 import OnMeSearched from "./screens/OnMe/OnMeSearched";
 import {ItemDetail} from "./components/ItemDetail";
-import {check, PERMISSIONS, RESULTS} from "react-native-permissions";
+import {check, PERMISSIONS, RESULTS, request} from "react-native-permissions";
 import {useDispatch} from "react-redux";
 import {setIsAvailableCameraState} from "./actions/actions";
 
@@ -129,6 +129,7 @@ const App = () => {
     });
   };
 
+
   useEffect(() => {
     const unsubscribe = messaging().onMessage(getPushData);
     checkCameraPermission();
@@ -140,19 +141,19 @@ const App = () => {
         .then((result) => {
           switch (result) {
             case RESULTS.UNAVAILABLE:
-              setIsAvailableCamera(false);
+              dispatch(setIsAvailableCameraState(false));
               break;
             case RESULTS.DENIED:
-              setIsAvailableCamera(false);
+              dispatch(setIsAvailableCameraState(false));
               break;
             case RESULTS.LIMITED:
-              setIsAvailableCamera(false);
+              dispatch(setIsAvailableCameraState(false));
               break;
             case RESULTS.GRANTED:
-              setIsAvailableCamera(true);
+              dispatch(setIsAvailableCameraState(true));
               break;
             case RESULTS.BLOCKED:
-              setIsAvailableCamera(false);
+              dispatch(setIsAvailableCameraState(false));;
               break;
           }
         })
@@ -161,7 +162,7 @@ const App = () => {
         });
   }
 
-  dispatch(setIsAvailableCameraState(isAvailableCamera));
+
   return (
     <NavigationContainer>
       <NativeRouter>

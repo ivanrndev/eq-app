@@ -17,7 +17,7 @@ const initialState = {
   isError: false,
   isLoad: false,
   isLogOut: false,
-  isAvailableCamera: true,
+  isAvailableCamera: false,
   role: '',
 };
 const authReducer = (state = initialState, action) => {

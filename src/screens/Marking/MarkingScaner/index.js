@@ -1,15 +1,28 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
-import {StyleSheet, View, Dimensions, SafeAreaView, Text, Linking} from 'react-native';
+import {StyleSheet, View, Dimensions, SafeAreaView, Text, Linking, AppState} from 'react-native';
 import T from '../../../i18n';
 // components
 import Appbar from '../../../components/Appbar';
 import Scanner from '../../../components/Scanner';
 import TransparentButton from "../../../components/Buttons/TransparentButton";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {PERMISSIONS, request} from "react-native-permissions";
+import {setIsAvailableCameraState} from "../../../actions/actions";
 
 const MarkingScaner = props => {
   const [scaner, setScaner] = useState(false);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const listener = AppState.addEventListener('change', (status) => {
+      if (Platform.OS === 'ios' && status === 'active') {
+        request(PERMISSIONS.IOS.CAMERA)
+            .then((result) => result === "granted" && dispatch(setIsAvailableCameraState(true)))
+            .catch((error) => console.log(error))
+      }
+    });
+    // return listener.remove;
+  }, []);
   useFocusEffect(
     useCallback(() => {
       setScaner(true);
