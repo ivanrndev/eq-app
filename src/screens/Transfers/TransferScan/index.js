@@ -1,17 +1,18 @@
 import React, {useCallback, useState} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
-import {Dimensions, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, Linking, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import T from '../../../i18n';
 // components
 import Appbar from '../../../components/Appbar';
 import Scanner from '../../../components/Scanner';
 import {useSelector} from 'react-redux';
 import {searchMyItem} from '../../../actions/actions';
+import TransparentButton from "../../../components/Buttons/TransparentButton";
 
 const TransferScaner = props => {
   const [scaner, setScaner] = useState(false);
   const [onMeList] = useSelector(({onMe, transfers}) => [onMe.myList]);
-
+  const  isAvailableCamera = useSelector(({auth}) => auth.isAvailableCamera);
   const searchList = onMeList.filter(item => item.transfer === null);
 
   useFocusEffect(
@@ -44,6 +45,17 @@ const TransferScaner = props => {
         <View>
           <Text style={styles.textStyle}>{T.t('title_scan')}</Text>
         </View>
+        {!isAvailableCamera &&
+        <View style={{ flex:1, justifyContent: 'center'}}>
+          <Text style={{textAlign: 'center', marginHorizontal:30, color:'rgb(255,255,255)'}}>{T.t('message_for_camera_permission')}</Text>
+          <View style={{width: Dimensions.get('window').height / 5,alignSelf:'center'}}>
+            <TransparentButton
+                text={T.t('open_settings')}
+                onPress={Linking.openSettings}
+            />
+          </View>
+        </View>
+        }
         <View style={styles.body}>
           {scaner && (
             <Scanner

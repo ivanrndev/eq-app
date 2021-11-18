@@ -71,7 +71,6 @@ const ItemLocation = () => {
           clearOnFocus={false}
           closeOnBlur={true}
           closeOnSubmit={true}
-          showClear={true}
           onChangeText={text => setSelectedLoc({name: text})}
           onSelectItem={item => {
             handleSelectObj(item);
@@ -103,7 +102,6 @@ const ItemLocation = () => {
           clearOnFocus={false}
           closeOnBlur={true}
           closeOnSubmit={true}
-          showClear={true}
           onChangeText={text => setSelectedObj({name: text})}
           onSelectItem={item => setSelectedObj({name: item ? item.title : ''})}
           dataSet={() =>

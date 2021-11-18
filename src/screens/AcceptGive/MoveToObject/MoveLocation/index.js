@@ -87,7 +87,9 @@ const MoveLocation = () => {
                 autoCapitalize: 'none',
                 style: styles.inputDropdown,
                 placeholderTextColor: 'gray',
-                defaultValue: location.location,
+                defaultValue: selectedObj.name || '',
+                value: selectedObj.name || '',
+
               }}
               rightButtonsContainerStyle={styles.inputBtn}
               suggestionsListContainerStyle={styles.dropdown}
@@ -115,7 +117,8 @@ const MoveLocation = () => {
                 autoCapitalize: 'none',
                 style: styles.inputDropdown,
                 placeholderTextColor: 'gray',
-                defaultValue: location.object,
+                defaultValue: selectedLoc.name || '',
+                value: selectedLoc.name || '',
               }}
               rightButtonsContainerStyle={styles.inputBtn}
               suggestionsListContainerStyle={styles.dropdown}

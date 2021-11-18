@@ -1,10 +1,12 @@
 import React, {useState, useCallback} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
-import {StyleSheet, View, Dimensions, SafeAreaView, Text} from 'react-native';
+import {StyleSheet, View, Dimensions, SafeAreaView, Text, Linking} from 'react-native';
 import T from '../../../i18n';
 // components
 import Appbar from '../../../components/Appbar';
 import Scanner from '../../../components/Scanner';
+import TransparentButton from "../../../components/Buttons/TransparentButton";
+import {useSelector} from "react-redux";
 
 const MarkingScaner = props => {
   const [scaner, setScaner] = useState(false);
@@ -14,6 +16,7 @@ const MarkingScaner = props => {
       return () => setScaner(false);
     }, []),
   );
+  const  isAvailableCamera = useSelector(({auth}) => auth.isAvailableCamera);
 
   return (
     <>
@@ -31,6 +34,17 @@ const MarkingScaner = props => {
         <View>
           <Text style={styles.textStyle}>{T.t('title_scan')}</Text>
         </View>
+        {!isAvailableCamera &&
+        <View style={{ flex:1, justifyContent: 'center'}}>
+          <Text style={{textAlign: 'center', marginHorizontal:30, color:'rgb(255,255,255)'}}>{T.t('message_for_camera_permission')}</Text>
+          <View style={{width: Dimensions.get('window').height / 5,alignSelf:'center'}}>
+            <TransparentButton
+                text={T.t('open_settings')}
+                onPress={Linking.openSettings}
+            />
+          </View>
+        </View>
+        }
         <View style={styles.body}>
           {scaner && (
             <Scanner

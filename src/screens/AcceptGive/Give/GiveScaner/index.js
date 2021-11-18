@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
-import {Dimensions, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, Linking, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import T from '../../../../i18n';
 // components
 import Appbar from '../../../../components/Appbar';
@@ -10,6 +10,7 @@ import {searchMyCompanyItems, searchMyItem} from '../../../../actions/actions';
 import {Portal, Snackbar} from 'react-native-paper';
 import {getGiveMessageError} from '../../../../utils/helpers';
 import {useUserData} from '../../../../hooks/useUserData';
+import TransparentButton from "../../../../components/Buttons/TransparentButton";
 
 const GiveScaner = props => {
   const [err, companyItemList] = useSelector(({onMe, scan, companyItems}) => [
@@ -48,7 +49,7 @@ const GiveScaner = props => {
       return () => setScaner(false);
     }, []),
   );
-
+  const  isAvailableCamera = useSelector(({auth}) => auth.isAvailableCamera);
   useEffect(() => {
     setError(getGiveMessageError(err));
     if (err.length > 0) {
@@ -88,6 +89,17 @@ const GiveScaner = props => {
         <View>
           <Text style={styles.textStyle}>{T.t('title_scan')}</Text>
         </View>
+        {!isAvailableCamera &&
+        <View style={{ flex:1, justifyContent: 'center'}}>
+          <Text style={{textAlign: 'center', marginHorizontal:30, color:'rgb(255,255,255)'}}>{T.t('message_for_camera_permission')}</Text>
+          <View style={{width: Dimensions.get('window').height / 5,alignSelf:'center'}}>
+            <TransparentButton
+                text={T.t('open_settings')}
+                onPress={Linking.openSettings}
+            />
+          </View>
+        </View>
+        }
         <View style={styles.body}>
           {scaner && (
             <Scanner
