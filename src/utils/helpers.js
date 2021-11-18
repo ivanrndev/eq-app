@@ -25,6 +25,7 @@ export const getUserName = (user) => {
   return name;
 };
 export const getDescription = (tx, role, id, parent) => {
+
   switch (+tx.type) {
     case 0:
       return T.t('transaction_add');
@@ -33,11 +34,11 @@ export const getDescription = (tx, role, id, parent) => {
     case 2:
       if (tx.data.sender.role === role) {
         return `${tx.data.sender.firstName} ${T.t('transaction_gave')} ${
-          tx.item.code
+            T.t('item')
         } ${T.t('transaction_gave_to')} ${tx.data.recipient.firstName}`;
       } else {
         return `${tx.data.recipient.firstName} ${T.t('transaction_accepted')} ${
-          tx.item.code
+            T.t('item') 
         } ${T.t('transaction_from')} ${tx.data.sender.firstName}`;
       }
     case 3:
@@ -97,7 +98,8 @@ export const getDescription = (tx, role, id, parent) => {
       }
     case 15:
       return `
-          ${T.t('operation_location_from')} ${
+          ${T.t('operation_location_from')} 
+          ${
         tx.data.from && tx.data.from.object
           ? `с ${tx.data.from.object || ''}`
           : ''
@@ -107,7 +109,7 @@ export const getDescription = (tx, role, id, parent) => {
           : ''
       }
           ${T.t('operation_location_to')} ${
-        tx.data.to && tx.data.to.location ? tx.data.to.object : ''
+          tx.data?.to?.object || tx.data?.to?.location || 'Москва Сити'
       } ${tx.data.to && tx.data.to.location ? `(${tx.data.to.location})` : ''}
         `;
     default:

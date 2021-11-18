@@ -67,10 +67,21 @@ const MoveStartPage = (props) => {
             }
           ],
           user: choosedUser.id,
+
           object: {
             object: location.objects,
             location: location.location
           }
+        }
+        const changeUserObject = {
+          item_ids: [
+            {
+              id: item.id,
+              quantity: item.quantity ? item.quantity : 1
+            }
+          ],
+          user: choosedUser.id,
+
         }
         const locationObjectWithoutUser = {
           item_ids: [
@@ -86,7 +97,7 @@ const MoveStartPage = (props) => {
         if(!choosedUser.id){
           dispatch(changeLocationWithoutUser(locationObjectWithoutUser, item.companyId, navigation));
         }else{
-          dispatch(changeLocation(locationObject, item.companyId, navigation));
+          dispatch(changeLocation(location.objects ? locationObject : changeUserObject, item.companyId, navigation));
           // dispatch(changeLocationWithoutUser(locationObjectWithoutUser, item.companyId, navigation));
         }
       })
@@ -126,8 +137,8 @@ const MoveStartPage = (props) => {
       Object.keys(scan.scanInfo).length > 0
     ) {
       dispatch( setScanedMoveItem(scan.scanInfo, scan.scanInfo._id));
-      dispatch(changeQuantity({id: scan.scanInfo._id, companyId: scan.scanInfo.company._id}))
-      dispatch( cleanScan());
+      dispatch(changeQuantity({id: scan.scanInfo._id, companyId: scan.scanInfo.company._id}));
+      // dispatch( cleanScan());
     }
   }, [scan.scanInfo]);
   useEffect(()=>{dispatch(getUserList(navigation, '', 'MoveStartPage'))},[])

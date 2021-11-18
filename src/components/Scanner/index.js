@@ -74,7 +74,7 @@ const Scanner = props => {
 
   const text = props.text ? T.t('input_detail_new') : T.t('input_detail');
   const onSuccess = e => {
-    console.log(e);
+
     if (store.isNewScan) {
       let cyrillicRegular = /[а-яА-ЯЁё]/;
       let cyrillicFilterId = cyrillicRegular.exec(e.data);
@@ -205,7 +205,6 @@ const Scanner = props => {
                     onPress={handleOnFlashMode}
                   />
 
-
                 </View>
               </View>
             </View>
@@ -214,7 +213,7 @@ const Scanner = props => {
         <View style={styles.min} />
         <View style={styles.max} />
       </View>
-      {!isRoleAllow ? <Text style={styles.noAccesStyle}>No access</Text> : null}
+      {/*{!isRoleAllow ? <Text style={styles.noAccesStyle}>No access</Text> : null}*/}
     </>
   );
 };

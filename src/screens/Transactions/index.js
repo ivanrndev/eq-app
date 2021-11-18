@@ -25,6 +25,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import {loadMoreTransactions, getTransactions} from '../../actions/actions.js';
 import {isEmpty} from 'lodash';
 import {useUserData} from '../../hooks/useUserData';
+import {saveCurrenTransferId} from "../../actions/actions";
+import {getProperTransferStatus} from "../../utils/helpers";
 
 const Transactions = props => {
   const {role} = useUserData();
@@ -67,35 +69,48 @@ const Transactions = props => {
                 )}
                 {!error &&
                   transactions.transactionList.map((item, index) => (
+
                     <Card style={styles.card} key={index} onPress={() => {}}>
                       <Card.Content>
-                        <Paragraph style={styles.paragraph}>
-                          {T.t('detail_code')}: {item.item.code}
-                        </Paragraph>
-                        <Paragraph style={styles.paragraph}>
+                        {
+                          item.item.code &&
+                              <Paragraph style={styles.paragraph}>
+                                {T.t('detail_code')}: {item.item.code}
+                              </Paragraph>
+                        }
+                          <Paragraph style={styles.paragraph}>
                           {T.t('title_date')}:{' '}
                           {moment(item.updatedAt).format('YYYY-MM-DD HH:mm')}
-                        </Paragraph>
-                        <Paragraph style={styles.paragraph}>
+                          </Paragraph>
+
+                          <Paragraph style={styles.paragraph}>
                           {T.t('transfer_from')}: {item.user.firstName}{' '}
                           {item.user.lastName}
-                        </Paragraph>
-                        <Paragraph style={styles.paragraph}>
+                          </Paragraph>
+                        {item.data?.recipient &&
+                          <Paragraph style={styles.paragraph}>
+                          {T.t('transfer_to')}: {item.data?.recipient?.firstName}{' '}
+                          {item.data?.recipient?.lastName}
+                          </Paragraph>
+                        }
+                          <Paragraph style={styles.paragraph}>
                           {T.t('info')}:{' '}
                           {getDescription(
-                            item,
-                            role,
-                            item.data.parent
-                              ? item.data.parent.code
-                              : !isEmpty(item.data.items)
-                              ? item.data.items[0].code ||
-                                item.data.items[0].title
-                              : T.t('error_name_item'),
-                            item.data.parent ? !!item.data.parent : null,
+                              item,
+                              role,
+                              item.data.parent
+                                  ? item.data.parent.code
+                                  : !isEmpty(item.data.items)
+                                  ? item.data.items[0].code ||
+                                  item.data.items[0].title
+                                  : T.t('error_name_item'),
+                              item.data.parent ? !!item.data.parent : null,
                           )}
-                        </Paragraph>
+                          </Paragraph>
                       </Card.Content>
                     </Card>
+
+
                   ))}
               </ScrollView>
               {transactions.transactionList.length > 5 ? (

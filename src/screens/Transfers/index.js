@@ -72,6 +72,7 @@ const Transfers = props => {
                 )}
                 {!error &&
                   transfers.transferList.map((item, index) => (
+
                     <Card
                       style={styles.card}
                       key={index}
@@ -107,6 +108,7 @@ const Transfers = props => {
                         </Paragraph>
                       </Card.Content>
                     </Card>
+
                   ))}
               </ScrollView>
               {transfers.transferList.length > 5 && (

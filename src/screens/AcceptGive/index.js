@@ -18,13 +18,16 @@ import {
 import {nfc} from "../../actions/actions";
 import MoveScaner from "./MoveToObject/MoveScaner";
 import MoveStartPage from "./MoveToObject/MoveStartPage";
-import {openMoveScan, setIsAddMove} from "../../actions/moveToObjectsActions";
+import {openMoveScan, setIsAddMove, setIsMoveScan, setIsRoleAllowThunk} from "../../actions/moveToObjectsActions";
 
 const AcceptGive = props => {
   const dispatch = useDispatch();
   const [userId, setUserId] = useState();
   const settings = useSelector(state => state.settings);
-
+  useEffect(()=>{
+    dispatch(setIsMoveScan(false));
+    dispatch(setIsRoleAllowThunk(false));
+  },[])
   useEffect(() => {
     AsyncStorage.getItem('userId').then(id => setUserId(id));
   }, [userId]);
@@ -47,7 +50,6 @@ const AcceptGive = props => {
       dispatch(getTransfers(props.navigation, id, 0));
     });
   };
-
   return (
     <>
       <Appbar
