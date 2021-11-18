@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StatusBar} from 'react-native';
 import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
 // navigation and router
@@ -81,6 +81,9 @@ import OnMe from "./screens/OnMe";
 import OnMeSearch from "./screens/OnMe/OnMeSearch";
 import OnMeSearched from "./screens/OnMe/OnMeSearched";
 import {ItemDetail} from "./components/ItemDetail";
+import {check, PERMISSIONS, RESULTS} from "react-native-permissions";
+import {useDispatch} from "react-redux";
+import {setIsAvailableCameraState} from "./actions/actions";
 
 const theme = {
   ...DefaultTheme,
@@ -98,6 +101,8 @@ const Drawer = createDrawerNavigator();
 //     GLOBAL.XMLHttpRequest;
 
 const App = () => {
+  const [isAvailableCamera, setIsAvailableCamera] = useState(true);
+  const dispatch = useDispatch();
   const requestUserPermission = async () => {
     const authStatus = await messaging().requestPermission();
     const enabled =
@@ -126,9 +131,37 @@ const App = () => {
 
   useEffect(() => {
     const unsubscribe = messaging().onMessage(getPushData);
+    checkCameraPermission();
     return unsubscribe;
   }, []);
 
+  const checkCameraPermission = ()=>{
+    check(PERMISSIONS.IOS.CAMERA)
+        .then((result) => {
+          switch (result) {
+            case RESULTS.UNAVAILABLE:
+              setIsAvailableCamera(false);
+              break;
+            case RESULTS.DENIED:
+              setIsAvailableCamera(false);
+              break;
+            case RESULTS.LIMITED:
+              setIsAvailableCamera(false);
+              break;
+            case RESULTS.GRANTED:
+              setIsAvailableCamera(true);
+              break;
+            case RESULTS.BLOCKED:
+              setIsAvailableCamera(false);
+              break;
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+        });
+  }
+
+  dispatch(setIsAvailableCameraState(isAvailableCamera));
   return (
     <NavigationContainer>
       <NativeRouter>

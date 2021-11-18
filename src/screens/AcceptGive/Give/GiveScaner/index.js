@@ -148,7 +148,8 @@ const styles = StyleSheet.create({
     color:'rgb(255,255,255)',
     fontSize: 30,
     position:'absolute',
-    left:Dimensions.get('window').width / 5,
+    width: Dimensions.get('window').width,
+    textAlign:'center',
   },
 });
 

@@ -44,7 +44,7 @@ import {
   GET_MY_ITEMS_SEARCH, GET_SEARCH_ITEMS,
   GET_USERS,
   GET_USERS_ERROR,
-  HELP,
+  HELP, IS_AVAILABLE_CAMERA,
   LANG,
   LOAD_MORE_STATUS,
   LOAD_MORE_TRANSACTIONS,
@@ -207,6 +207,12 @@ export const userRole = role => dispatch => {
   dispatch({
     type: USER_ROLE,
     role,
+  });
+};
+export const setIsAvailableCameraState = boolean => dispatch => {
+  dispatch({
+    type: IS_AVAILABLE_CAMERA,
+    boolean,
   });
 };
 export const userPostFetch = ({email, password}) => dispatch => {

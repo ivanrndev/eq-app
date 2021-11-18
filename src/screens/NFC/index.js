@@ -82,6 +82,18 @@ const NFC = () => {
 
       let codeFormat = checkFormat.exec(text);
 
+
+
+
+
+
+
+
+
+
+
+
+
       if (codeFormat) {
         setLog(text);
         dispatch(loader(true));

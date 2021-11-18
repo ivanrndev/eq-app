@@ -18,6 +18,7 @@ export const LOCATTION_LOC = 'LOCATTION_LOC';
 
 // auth
 export const LOGUT = 'LOGUT';
+export const IS_AVAILABLE_CAMERA = 'IS_AVAILABLE_CAMERA';
 export const USER_ROLE = 'USER_ROLE';
 export const LOGIN_USER = 'LOGIN_USER';
 export const LOGIN_USER_ERROR = 'LOGIN_USER_ERROR';

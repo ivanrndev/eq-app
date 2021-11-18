@@ -8,7 +8,7 @@ import {
   LOGIN_WITH_GOOGLE_ACCOUNT,
   LOGUT,
 } from '../../../actions/actionsType.js';
-import {USER_ROLE} from "../../../actions/actionsType";
+import {IS_AVAILABLE_CAMERA, USER_ROLE} from "../../../actions/actionsType";
 
 const initialState = {
   currentUser: {},
@@ -17,6 +17,7 @@ const initialState = {
   isError: false,
   isLoad: false,
   isLogOut: false,
+  isAvailableCamera: true,
   role: '',
 };
 const authReducer = (state = initialState, action) => {
@@ -30,6 +31,11 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         role: action.role,
+      };
+    case IS_AVAILABLE_CAMERA:
+      return {
+        ...state,
+        isAvailableCamera: action.boolean,
       };
     case GET_COMPANY_INFO:
       return {

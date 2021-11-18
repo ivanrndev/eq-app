@@ -1,6 +1,8 @@
 {
     "upload": "Upload",
+    "message_for_camera_permission": "In order to be able to scan a QR code with a camera, you must give permission in the application settings",
     "your_list_empty": "Your list empty",
+    "open_settings": "Open settings",
     "worker": "Worker",
     "no_allocated": "No allocated",
     "in_the_process_of_transmission": "In the process of transmission",

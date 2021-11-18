@@ -75,12 +75,13 @@ const styles = StyleSheet.create({
   },
   snackbar: {},
 
-    textStyle:{
-        color:'rgb(255,255,255)',
-        fontSize: 30,
-        position:'absolute',
-        left:Dimensions.get('window').width / 5,
-    },
+  textStyle:{
+    color:'rgb(255,255,255)',
+    fontSize: 30,
+    position:'absolute',
+    width: Dimensions.get('window').width,
+    textAlign:'center',
+  },
 });
 
 export default Service;

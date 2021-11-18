@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
-import {Dimensions, StyleSheet, View, Text} from 'react-native';
+import {Dimensions, StyleSheet, View, Text, Button, Linking} from 'react-native';
 import T from '../../i18n';
 // components
 import Appbar from '../../components/Appbar';
@@ -8,11 +8,14 @@ import Scanner from '../../components/Scanner';
 import {useSelector} from 'react-redux';
 import {searchMyCompanyItems, searchMyItem} from '../../actions/actions';
 import {useUserData} from '../../hooks/useUserData';
+import TransparentButton from "../../components/Buttons/TransparentButton";
 
 const Ident = props => {
-  const [companyItemList] = useSelector(({companyItems}) => [
+  const [companyItemList, isAvailableCamera] = useSelector(({companyItems, auth}) => [
     companyItems.myCompanyList,
+    auth.isAvailableCamera
   ]);
+
   const {role, userId} = useUserData();
 
   const [scaner, setScaner] = useState(false);
@@ -62,7 +65,17 @@ const Ident = props => {
         <View>
           <Text style={styles.textStyle}>{T.t('title_scan')}</Text>
         </View>
-
+        {!isAvailableCamera &&
+          <View style={{ flex:1, justifyContent: 'center'}}>
+            <Text style={{textAlign: 'center', marginHorizontal:30, color:'rgb(255,255,255)'}}>{T.t('message_for_camera_permission')}</Text>
+            <View style={{width: Dimensions.get('window').height / 5,alignSelf:'center'}}>
+              <TransparentButton
+                  text={T.t('open_settings')}
+                  onPress={Linking.openSettings}
+              />
+            </View>
+          </View>
+        }
         <View>
           {scaner && (
                 <Scanner
@@ -82,7 +95,8 @@ const styles = StyleSheet.create({
     color:'rgb(255,255,255)',
     fontSize: 30,
     position:'absolute',
-    left:Dimensions.get('window').width / 5,
+    width: Dimensions.get('window').width,
+    textAlign:'center',
   }
 });
 
