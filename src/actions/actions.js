@@ -501,6 +501,7 @@ export const scanInfo = (
   isWriteOff = false,
   isMoveScaner = false,
 ) => dispatch => {
+  console.log({code})
   AsyncStorage.getItem('company').then(company => {
     return axios
       .get(`${API_URL}/company/${company}/item/search`, {params: {code}})

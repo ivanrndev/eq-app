@@ -53,14 +53,10 @@ const NFC = () => {
           : NfcManager.transceive;
 
       resp = await cmd([0x3a, 4, 4]);
-      let payloadLength = parseInt(resp.toString().split(",")[1]);
-      let payloadPages = Math.ceil(payloadLength / 4);
-      let startPage = 5;
-      let endPage = startPage + payloadPages - 1;
-      resp = await cmd([0x3A, startPage, endPage]);
-      console.log({resp});
-      bytes = resp.toString().split(',');
+      let startPage = 6;
+      resp = await cmd([0x3A, startPage, 10]);
 
+      bytes = resp.toString().split(',');
       function removeElement(arrayName, arrayElement) {
         for (var i = 0; i < arrayName.length; i++) {
           if (arrayName[i] == arrayElement) {
@@ -71,31 +67,36 @@ const NFC = () => {
       removeElement(bytes, '0');
 
       let text = '';
-      const number = bytes.length <= 13 ? 5 : 10;
-      console.log(bytes);
-      for (let i = 0; i < bytes.length; i++) {
+      let textArea = [];
 
-        // if (i < number) {
-        //   continue;
-        // }
-        // if (parseInt(bytes[i]) === 254) {
-        //   break;
-        // }
-        console.log(String.fromCharCode(parseInt(bytes[i])));
+      // const number = bytes.length <= 13 ? 5 : 10;
+      for (let i = 0; i < bytes.length; i++) {
+        if (i < 3) {
+          continue;
+        }
+        if (bytes[i]==254) {
+
+          break;
+        }
         text = text + String.fromCharCode(parseInt(bytes[i]));
       }
 
-      let checkFormat = /^[a-zA-Z0-9]+$/;
+      for(let word of text){
+        textArea.push(word);
+      }
+      let codeFilter = textArea.filter((item)=>item!=='ÿ' && item!=='þ');
+      let code =codeFilter.join('');
 
-      let codeFormat = checkFormat.exec(text);
 
+      let checkFormat = /^[a-zA-Z0-9\.]+$/;
+      let codeFormat = checkFormat.exec(code);
 
-      if (codeFormat) {
-        setLog(text);
+      if (true) {
+        setLog(code);
         dispatch(loader(true));
         dispatch(
           currentScan(
-            text,
+              code,
             navigation,
             settings.NFCforMounting ? settings.nextPageMount : settings.nfcNext,
             settings.isMultiple,
