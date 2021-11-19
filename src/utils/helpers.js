@@ -73,7 +73,7 @@ export const getDescription = (tx, role, id, parent) => {
         'transaction_gave',
       )} ${tx.data.quantity} ${T.t('item')}${T.t('status_separate')} ${
         tx.data.metadata.title
-      } ${tx.data.metadata.brand} ${tx.data.metadata.model}`;
+      } `;
 
     case 12:
       return `${T.t('user')} ${tx.user.firstName ||

@@ -19,7 +19,7 @@ import T from '../../i18n';
 import {useDispatch, useSelector} from 'react-redux';
 import {currentScan, loader} from '../../actions/actions.js';
 
-const NFC = () => {
+const NFC = props => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const settings = useSelector(state => state.settings);
@@ -55,7 +55,6 @@ const NFC = () => {
       resp = await cmd([0x3a, 4, 4]);
       let startPage = 6;
       resp = await cmd([0x3A, startPage, 10]);
-
       bytes = resp.toString().split(',');
       function removeElement(arrayName, arrayElement) {
         for (var i = 0; i < arrayName.length; i++) {
@@ -69,13 +68,11 @@ const NFC = () => {
       let text = '';
       let textArea = [];
 
-      // const number = bytes.length <= 13 ? 5 : 10;
       for (let i = 0; i < bytes.length; i++) {
         if (i < 3) {
           continue;
         }
         if (bytes[i]==254) {
-
           break;
         }
         text = text + String.fromCharCode(parseInt(bytes[i]));
@@ -91,14 +88,14 @@ const NFC = () => {
       let checkFormat = /^[a-zA-Z0-9\.]+$/;
       let codeFormat = checkFormat.exec(code);
 
-      if (true) {
+      if (codeFormat) {
         setLog(code);
         dispatch(loader(true));
         dispatch(
           currentScan(
               code,
             navigation,
-            settings.NFCforMounting ? settings.nextPageMount : settings.nfcNext,
+            props.move?'MoveStartPage':(settings.NFCforMounting ? settings.nextPageMount : settings.nfcNext),
             settings.isMultiple,
             settings.NFCforMounting,
           ),
