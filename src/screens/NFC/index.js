@@ -53,7 +53,7 @@ const NFC = props => {
           : NfcManager.transceive;
 
       resp = await cmd([0x3a, 4, 4]);
-      let startPage = 6;
+      let startPage = 5;
       resp = await cmd([0x3A, startPage, 10]);
       bytes = resp.toString().split(',');
       function removeElement(arrayName, arrayElement) {
@@ -69,13 +69,14 @@ const NFC = props => {
       let textArea = [];
 
       for (let i = 0; i < bytes.length; i++) {
-        if (i < 3) {
+        if (i < 5) {
           continue;
         }
         if (bytes[i]==254) {
           break;
         }
         text = text + String.fromCharCode(parseInt(bytes[i]));
+        console.log({text});
       }
 
       for(let word of text){
@@ -84,7 +85,7 @@ const NFC = props => {
       let codeFilter = textArea.filter((item)=>item!=='ÿ' && item!=='þ');
       let code =codeFilter.join('');
 
-
+      console.log({code});
       let checkFormat = /^[a-zA-Z0-9\.]+$/;
       let codeFormat = checkFormat.exec(code);
 
