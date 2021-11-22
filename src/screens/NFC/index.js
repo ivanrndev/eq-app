@@ -9,7 +9,6 @@ import {
   StyleSheet,
   Text,
   View,
-  Alert,
 } from 'react-native';
 import NfcManager, {NfcTech, NfcEvents} from 'react-native-nfc-manager';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
@@ -93,7 +92,7 @@ const NFC = props => {
     }
 
   }
-  
+
   return (
     <View style={styles.wrap}>
       <SafeAreaView style={styles.container}>
