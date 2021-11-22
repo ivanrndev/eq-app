@@ -42,7 +42,7 @@ const Accept = props => {
   };
 
   let showEmptyError = !accept.acceptList.length;
-
+  console.log(accept.acceptList);
   return (
     <>
       <Appbar

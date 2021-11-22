@@ -11,6 +11,7 @@ import {
 
 const initialState = {
   acceptList: [],
+  acceptListId: [],
   acceptloadMore: false,
   offSet: 0,
   acceptError: false,
@@ -21,6 +22,7 @@ const initialState = {
 };
 
 const acceptReducer = (state = initialState, action) => {
+
   switch (action.type) {
     case GET_BID_LIST_ERROR:
       return {
@@ -31,7 +33,13 @@ const acceptReducer = (state = initialState, action) => {
       return {
         ...state,
         ...action.payload,
-        acceptList: state.acceptList.concat(action.payload.acceptList),
+        // acceptList: state.acceptList.concat(action.payload.acceptList),
+        acceptList: !state.acceptListId.find(item =>item === action.payload.userAcceptId)
+            ? [...state.acceptList, action.payload.acceptList].flat()
+            : [...state.acceptList],
+        acceptListId: !state.acceptListId.find(item =>item === action.payload.userAcceptId)
+            ? [...state.acceptListId, action.payload.userAcceptId]
+            : [...state.acceptListId],
         offSet: state.offSet + action.payload.offSet,
       };
     case LOAD_MORE_STATUS:

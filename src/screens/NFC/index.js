@@ -102,6 +102,7 @@ const NFC = props => {
           ),
         );
       } else {
+
         setLog(T.t('wrong_format_info'));
       }
 
