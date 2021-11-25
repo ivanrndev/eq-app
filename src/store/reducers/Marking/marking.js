@@ -7,6 +7,7 @@ import {
   MARKING_SEARCH,
   CHANGE_STATUS_LOAD_MORE,
   MAKE_MARKING_ERROR_DEFAULT,
+  MARKING_MORE_SEARCH,
 } from '../../../actions/actionsType.js';
 
 const initialState = {
@@ -37,8 +38,13 @@ const markingReducer = (state = initialState, action) => {
       return {
         ...state,
         ...action.payload,
+        markingList: action.payload.markingList,
+      };
+    case MARKING_MORE_SEARCH:
+      return {
+        ...state,
+        ...action.payload,
         markingList: state.markingList.concat(action.payload.markingList),
-
       };
     case MARKING_ERROR:
       return {

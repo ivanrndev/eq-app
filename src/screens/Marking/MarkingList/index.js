@@ -26,6 +26,7 @@ import {
   searchItem,
 } from '../../../actions/actions.js';
 import ItemListCard from '../../../components/ItemListCard';
+import {searchMarkedItems} from "../../../actions/actions";
 
 const MarkingList = props => {
   const dispatch = useDispatch();
@@ -35,17 +36,28 @@ const MarkingList = props => {
   ]);
   let error = getProperErrorMessage(marking.markingError);
   const [search, setSearch] = useState('');
+  const [offset, setOffset] = useState(10);
 
   const itemSearch = query => {
     setSearch(query);
     dispatch(loadMore(true));
-    dispatch(searchItem(marking.marking, query, 0, true));
+    dispatch(searchMarkedItems(marking.marking, query, 0, false));
+    setOffset(10);
   };
 
   const getMoreItems = () => {
+    changeOffset();
     dispatch(loadMore(true));
-    dispatch(searchItem(marking.marking, search, marking.offSet, false));
+    dispatch(searchMarkedItems(marking.marking, search, offset, true));
   };
+
+  const changeOffset = () => {
+    if (marking.searchCount > offset ) {
+      setOffset(offset + 10)
+    } else {
+      setOffset(marking.searchCount)
+    }
+  }
 
   let showEmptyError = false;
   if (!marking.marking && marking.markingList.length === 0) {
@@ -101,23 +113,26 @@ const MarkingList = props => {
             </View>
             {marking.markingList.length > 5 && (
               <>
-                {!marking.loadMore && (
+                {marking.searchCount >= offset ? (
+                  <>
+                  {!marking.loadMore && (
                   <Button
                     style={styles.button}
                     mode="Text"
                     color="#22215B"
                     onPress={getMoreItems}>
-                     {T.t('load_more')}
+                    {T.t('load_more')}
                   </Button>
                 )}
                 {marking.loadMore && (
                   <ActivityIndicator
-                    style={styles.load}
-                    size={'large'}
-                    animating={true}
-                    color={'#EDF6FF'}
+                  style={styles.load}
+                  size={'large'}
+                  animating={true}
+                  color={'#EDF6FF'}
                   />
-                )}
+                  )}
+                  </>) : null}
               </>
             )}
           </>

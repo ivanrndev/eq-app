@@ -66,6 +66,7 @@ import {
   MARKING_CURRENT_ID,
   MARKING_ERROR,
   MARKING_ERROR_DONE,
+  MARKING_MORE_SEARCH,
   MARKING_SEARCH,
   MOUNT_CAMERA_LIST,
   MOUNT_SCAN,
@@ -807,7 +808,7 @@ export const getMarkingList = (status, nav, page = true) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
       .get(`${API_URL}/company/${company}/item/`, {
-        params: {marked: status, limit: 6, offSet: 0},
+        params: {marked: status, limit: 10, offset: 0, withPhoto: true},
       })
       .then(resp => {
         if (resp.status === 200) {
@@ -816,9 +817,10 @@ export const getMarkingList = (status, nav, page = true) => dispatch => {
             payload: {
               marking: status,
               loadMore: false,
-              offSet: 6,
+              offSet: 10,
               markingList: resp.data.data,
               markingError: false,
+              searchCount: resp.data.count,
             },
           });
           if (page) {
@@ -846,7 +848,53 @@ export const getMarkingList = (status, nav, page = true) => dispatch => {
       });
   });
 };
-
+export const searchMarkedItems = (status, query, offset, isNew) => dispatch => {
+    AsyncStorage.getItem('company').then(company => {
+      return axios
+        .get(`${API_URL}/company/${company}/item/`, {
+          params: {marked: status, search: query, limit: 10, offset: offset, withPhoto: true},
+        })
+        .then(resp => {
+          if (resp.status === 200) {
+            let data = resp.data.data ? resp.data.data : resp.data;
+            if (!isNew) {
+              dispatch({
+                type: MARKING_SEARCH,
+                payload: {
+                  marking: status,
+                  loadMore: false,
+                  markingList: data,
+                  searchCount: resp.data.count,
+                },
+              });
+            } else {
+              dispatch({
+                type: MARKING_MORE_SEARCH,
+                payload: {
+                  marking: status,
+                  loadMore: false,
+                  markingList: data,
+                  searchCount: resp.data.count,
+                },
+              });
+            }
+          }
+        })
+        .catch(e => {
+          if (!e.response.data.success) {
+            let error = getProperError(e.response.data.message.name);
+            dispatch({
+              type: MARKING_ERROR,
+              payload: {
+                marking: status,
+                markingError: error,
+                loadMore: false,
+              },
+            });
+          }
+        });
+    });
+};
 export const saveCurrentItemMark = (id, nav, startPage) => dispatch => {
   dispatch({
     type: MARKING_CURRENT_ID,
@@ -914,7 +962,6 @@ export const searchItem = (status, query, offset, isNew) => dispatch => {
           limit: 10,
           offset: offset,
           withPhoto: true
-
         },
       })
       .then(resp => {
@@ -1825,7 +1872,6 @@ export const unMountItemFromParent = (
       });
   });
 };
-
 export const mountItemFromParent = (
   parent,
   items,
@@ -1854,11 +1900,7 @@ export const mountItemFromParent = (
 };
 
 //company
-
-
-
 export const searchMyCompanyItems = (query, offset, limit) => dispatch => {
-
   AsyncStorage.getItem('company').then(company => {
     return axios
       .get(`${API_URL}/company/${company}/item`, {
@@ -1892,7 +1934,6 @@ export const searchMyCompanyItems = (query, offset, limit) => dispatch => {
   });
 };
 export const searchItems = (query, offset, limit) => dispatch => {
-
   AsyncStorage.getItem('company').then(company => {
     return axios
       .get(`${API_URL}/company/${company}/item`, {

@@ -83,7 +83,6 @@ const OnMeSearched = props => {
 
   const getMoreItems = () => {
     dispatch(myloadMore(true));
-    // dispatch(searchMyItem('', offset));
     dispatch(searchMyItem({
       query,
       responsibleUser,

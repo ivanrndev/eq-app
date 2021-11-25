@@ -42,7 +42,6 @@ export const WriteOffInfo = props => {
   const units = store.scanInfo.batch
     ? store.scanInfo.batch.units
     : T.t('piece');
-  console.log(store.scanInfo);
   const {role} = useUserData();
   const [quantityToWireOff, setQuantityToWireOff] = useState(1);
   const isEnteredQuantityValid =
