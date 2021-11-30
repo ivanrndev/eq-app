@@ -1,18 +1,13 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Dimensions, StyleSheet, View, TouchableOpacity} from 'react-native';
-import {Card, Paragraph, Searchbar} from 'react-native-paper';
+import {Paragraph, Searchbar} from 'react-native-paper';
 import T from '../../i18n';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 import {useNavigation} from '@react-navigation/native';
 import ItemListCard from '../ItemListCard';
-import {actionCheckError, handleNavigateToMySingleItem} from '../../utils/helpers';
-import {
-  getSearchItem,
-  loader,
-  myloadMore,
-  updateTransfer,
-} from '../../actions/actions';
+import {actionCheckError} from '../../utils/helpers';
+import {getSearchItem, loader, myloadMore, updateTransfer} from '../../actions/actions';
 
 const Search = ({
   list,
@@ -21,8 +16,9 @@ const Search = ({
   setIsSearchOpen,
   isSearchForGiveItem,
   onSelectAction,
-  editTransfer, isSearchForMoveItem,
-    filter
+  editTransfer,
+  isSearchForMoveItem,
+  filter,
 }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -33,13 +29,19 @@ const Search = ({
 
   const [search, setSearch] = useState('');
   const showEmptyError = !list.length && search.length !== 0;
-  const renderedList = search.length === 0 ? [] : list;
+  const renderedList = list;
+  // const renderedList = search.length === 0 ? [] : list;
   const transferredItems = transfersList.find(item => item._id === transferId);
   const handleItemSearch = query => {
     setSearch(query.trim());
     dispatch(myloadMore(true));
     dispatch(listAction(query, 0, true));
   };
+
+  useEffect(() => {
+    dispatch(myloadMore(true));
+    dispatch(listAction('', 0, true));
+  }, []);
 
   const handleCurrentScan = item => {
     actionCheckError(item);
@@ -50,8 +52,8 @@ const Search = ({
         navigation,
         pageToChosenItem,
         isSearchForGiveItem,
-          isSearchForMoveItem,
-          filter,
+        isSearchForMoveItem,
+        filter,
       ),
       !!onSelectAction && dispatch(onSelectAction(item)),
       editTransfer &&
@@ -66,7 +68,6 @@ const Search = ({
     );
     setIsSearchOpen(false);
     setSearch('');
-
   };
 
   return (
@@ -78,29 +79,35 @@ const Search = ({
         style={styles.search}
       />
       <View style={styles.container}>
-      <KeyboardAwareScrollView style={{borderRadius:15}}>
-        {showEmptyError && (
-            <Paragraph style={styles.text}>{T.t('error_not_found')}</Paragraph>
-        )}
-        {renderedList.map(item => (
+        <KeyboardAwareScrollView style={{borderRadius: 15}}>
+          {showEmptyError && <Paragraph style={styles.text}>{T.t('error_not_found')}</Paragraph>}
+          {renderedList.map(item => (
             <TouchableOpacity
-                style={styles.card}
-                onPress={() => {
-                  handleCurrentScan(item)
-                }}
-                key={item._id}>
+              style={styles.card}
+              onPress={() => {
+                handleCurrentScan(item);
+              }}
+              key={item._id}>
               <ItemListCard
-                  item={item}
-                  isResponsibleShown={
-                    pageToChosenItem === 'GiveListCheck' ||
-                    pageToChosenItem === 'WriteOffInfo' ||
-                    pageToChosenItem === 'IdentInfo'
-                  }
+                item={item}
+                isResponsibleShown={
+                  pageToChosenItem === 'GiveListCheck' ||
+                  pageToChosenItem === 'WriteOffInfo' ||
+                  pageToChosenItem === 'IdentInfo'
+                }
               />
-              <View style={{ height: 1, backgroundColor: '#D3E3F2', width: '90%', marginLeft: '5%', marginTop: 10}} />
+              <View
+                style={{
+                  height: 1,
+                  backgroundColor: '#D3E3F2',
+                  width: '90%',
+                  marginLeft: '5%',
+                  marginTop: 10,
+                }}
+              />
             </TouchableOpacity>
-        ))}
-      </KeyboardAwareScrollView>
+          ))}
+        </KeyboardAwareScrollView>
       </View>
     </View>
   );
