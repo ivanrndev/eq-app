@@ -1,14 +1,10 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from '../utils/axios';
-import {
-  API_URL,
-  LOGIN_GOOGLE_URL,
-  LOGIN_URL,
-  PORGOT_PASS,
-} from '../constants/auth.js';
+import {API_URL, LOGIN_GOOGLE_URL, LOGIN_URL, PORGOT_PASS} from '../constants/auth.js';
 import {actionCheckError, getProperError} from '../utils/helpers.js';
 import {
   ADD_ITEM_TO_MOUNT_LIST,
+  ADD_ITEMS_FROM_SAVED_INVENTORY,
   ALLOW_NEW_SCAN,
   ALREADY_SCANNED_BIDS,
   BACK_PAGE_MOUNT,
@@ -16,7 +12,10 @@ import {
   CHANGE_STATUS_ERROR,
   CHANGE_STATUS_LOAD,
   CHANGE_STATUS_LOAD_MORE,
-  CHANGE_STATUS_MY_LOAD_MORE, CLEAN_CREATE_ITEM, CLEAN_SCAN, CLEAN_SEARCH_RESULT,
+  CHANGE_STATUS_MY_LOAD_MORE,
+  CLEAN_CREATE_ITEM,
+  CLEAN_SCAN,
+  CLEAN_SEARCH_RESULT,
   CLEAR_BID_LIST,
   CLEAR_GIVE_ITEM_QTY,
   CLEAR_INVENTORY,
@@ -41,10 +40,12 @@ import {
   GET_COUNT_MY_COMPANY_ITEMS_ERROR,
   GET_MY_ITEMS,
   GET_MY_ITEMS_ERROR,
-  GET_MY_ITEMS_SEARCH, GET_SEARCH_ITEMS,
+  GET_MY_ITEMS_SEARCH,
+  GET_SEARCH_ITEMS,
   GET_USERS,
   GET_USERS_ERROR,
-  HELP, IS_AVAILABLE_CAMERA,
+  HELP,
+  IS_AVAILABLE_CAMERA,
   LANG,
   LOAD_MORE_STATUS,
   LOAD_MORE_TRANSACTIONS,
@@ -83,13 +84,23 @@ import {
   SAVE_CURRENT_SEARCH,
   SAVE_CURRENT_SEARCH_ERROR,
   SAVE_GIVE_ITEM_INFO_LIST,
+  SAVE_ID_INVENTORY,
   SAVE_INVENTORY_CREATED_ITEM,
   SAVE_INVENTORY_SCANS,
-  SAVE_USER_ACCEPT_BID, SEARCH_ITEMS, SEARCH_ITEMS_ERROR,
+  SAVE_KIT_TMC,
+  SAVE_USER_ACCEPT_BID,
+  SAVE_UUID,
+  SEARCH_ITEMS,
+  SEARCH_ITEMS_ERROR,
   SEARCH_MY_COMPANY_ITEMS,
-  SEARCH_MY_COMPANY_ITEMS_ERROR, SET_FILTERS,
+  SEARCH_MY_COMPANY_ITEMS_ERROR,
+  SET_FILTERS,
   SET_GIVE_ITEM_QTY,
-  SET_INVENTORY_ITEM_QTY, SET_IS_MOVE_SCANER, SET_IS_SHOW_FILTER, SET_MOVE_SCANER, SET_SCANED_MOVE_ITEM,
+  SET_INVENTORY_ITEM_QTY,
+  SET_IS_MOVE_SCANER,
+  SET_IS_SHOW_FILTER,
+  SET_MOVE_SCANER,
+  SET_SCANED_MOVE_ITEM,
   SUCCES_IN_SERVICES,
   SUCCES_WRITE_OFF,
   TRANSACTIONS_ERROR,
@@ -101,12 +112,13 @@ import {
   TRANSFERS_UPDATE,
   TRANSFERS_UPDATE_ERROR,
   UPDATE_SCAN_GIVE_LIST,
-  USER_CURRENT_ID, USER_ROLE,
+  USER_CURRENT_ID,
+  USER_ROLE,
 } from './actionsType';
 import {setTokenToDataBase} from '../utils/pushNotifications';
 import T from '../i18n';
-import {setIsMoveScan, setIsRoleAllowThunk, setScanedMoveItem} from "./moveToObjectsActions";
-import {setScanedOnMeItem} from "./onMeActions";
+import {setIsMoveScan, setIsRoleAllowThunk, setScanedMoveItem} from './moveToObjectsActions';
+import {setScanedOnMeItem} from './onMeActions';
 
 // Settings
 export const nfc = (
@@ -203,7 +215,6 @@ export const helps = status => dispatch => {
 
 // Auth actions
 
-
 export const userRole = role => dispatch => {
   dispatch({
     type: USER_ROLE,
@@ -236,9 +247,7 @@ export const userPostFetch = ({email, password}) => dispatch => {
         AsyncStorage.setItem('help', '1');
         dispatch(helps(1));
         dispatch(currentUser());
-        AsyncStorage.getItem('fcmToken').then(token =>
-          setTokenToDataBase(token),
-        );
+        AsyncStorage.getItem('fcmToken').then(token => setTokenToDataBase(token));
       }
     })
     .catch(e => {
@@ -296,9 +305,7 @@ export const authWithGoogleAccount = token => dispatch => {
         AsyncStorage.setItem('help', '1');
         dispatch(helps(1));
         dispatch(currentUser());
-        AsyncStorage.getItem('fcmToken').then(token =>
-          setTokenToDataBase(token),
-        );
+        AsyncStorage.getItem('fcmToken').then(token => setTokenToDataBase(token));
         dispatch(loader(false));
       }
     })
@@ -395,7 +402,6 @@ export const currentScan = (
   inventory = false,
   isWriteOff = false,
   isMoveScaner = false,
-
 ) => dispatch => {
   if (mount) {
     dispatch({
@@ -408,9 +414,7 @@ export const currentScan = (
       type: SAVE_CURRENT_SCAN,
       payload: {currentScan: code, isNewScan: false},
     });
-    dispatch(
-      scanInfo(code, nav, page, saveItems, false, inventory, isWriteOff, isMoveScaner),
-    );
+    dispatch(scanInfo(code, nav, page, saveItems, false, inventory, isWriteOff, isMoveScaner));
   }
 };
 
@@ -426,8 +430,9 @@ export const getSearchItem = (
   nav,
   page,
   isSearchForGiveItem = false,
-  isSearchForMoveItem =false,
+  isSearchForMoveItem = false,
   filter = false,
+  inventoryId,
 ) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     dispatch(loader(true));
@@ -436,8 +441,7 @@ export const getSearchItem = (
       .then(resp => {
         if (resp.status === 200) {
           let checkErrors = actionCheckError(resp.data);
-          const isRepairItem =
-            page === 'BackInfo' && checkErrors === 'InRepair';
+          const isRepairItem = page === 'BackInfo' && checkErrors === 'InRepair';
           if (checkErrors && !isRepairItem) {
             dispatch({
               type: ERROR_CURRENT_SCAN_INFO,
@@ -459,9 +463,11 @@ export const getSearchItem = (
                   scanInfoError: false,
                 },
               });
-            } if(isSearchForMoveItem) {
+            }
+            if (isSearchForMoveItem) {
               dispatch(setScanedMoveItem(resp.data, resp.data._id));
-            } if(filter) {
+            }
+            if (filter) {
               dispatch(setScanedOnMeItem(resp.data, resp.data._id));
               dispatch(myloadMore(false));
             } else {
@@ -474,6 +480,14 @@ export const getSearchItem = (
                   isInfoOpen: true,
                 },
               });
+              if (resp.data.items.length) {
+                console.log('inventoryId', resp.data.items);
+                dispatch({
+                  type: SAVE_KIT_TMC,
+                  payload: {itemsKit: resp.data.items, inventoryScanList: resp.data.items},
+                });
+                // dispatch(addItemInInventory(inventoryId, resp.data.items));
+              }
             }
           }
           dispatch(loader(false));
@@ -502,7 +516,7 @@ export const scanInfo = (
   isWriteOff = false,
   isMoveScaner = false,
 ) => dispatch => {
-  console.log({code})
+  console.log({code});
   AsyncStorage.getItem('company').then(company => {
     return axios
       .get(`${API_URL}/company/${company}/item/search`, {params: {code}})
@@ -530,9 +544,7 @@ export const scanInfo = (
             AsyncStorage.getItem('userId').then(userId => {
               AsyncStorage.getItem('role').then(userRole => {
                 const isNotOwner =
-                  userRole !== 'root' &&
-                  userRole !== 'admin' &&
-                  userId !== resp.data.person._id;
+                  userRole !== 'root' && userRole !== 'admin' && userId !== resp.data.person._id;
                 if (isNotOwner) {
                   dispatch({
                     type: ERROR_CURRENT_SCAN_INFO,
@@ -561,9 +573,7 @@ export const scanInfo = (
               AsyncStorage.getItem('userId').then(userId => {
                 AsyncStorage.getItem('role').then(userRole => {
                   const isOwner =
-                    userRole !== 'root' &&
-                    userRole !== 'admin' &&
-                    userId !== resp.data.person._id;
+                    userRole !== 'root' && userRole !== 'admin' && userId !== resp.data.person._id;
                   let checkErrors = actionCheckError(resp.data, isOwner);
 
                   if (inventory) {
@@ -583,9 +593,7 @@ export const scanInfo = (
                     });
                     dispatch(loader(false));
                   } else {
-                    let role = resp.data.person
-                      ? resp.data.person.role
-                      : 'none';
+                    let role = resp.data.person ? resp.data.person.role : 'none';
                     dispatch({
                       type: SAVE_GIVE_ITEM_INFO_LIST,
                       payload: {
@@ -663,13 +671,7 @@ export const allowNewScan = status => dispatch => {
 };
 
 // Service actions
-export const sendToServices = (
-  id,
-  description,
-  place,
-  quantity,
-  nav,
-) => dispatch => {
+export const sendToServices = (id, description, place, quantity, nav) => dispatch => {
   const isFullFilled = !!description && !!place && !!quantity;
   const data = isFullFilled
     ? {
@@ -718,9 +720,7 @@ export const backFromServices = (id, nav) => dispatch => {
       })
       .then(resp => {
         if (resp.status === 200) {
-          let errorBack = resp.data.errors[0]
-            ? resp.data.errors[0].type
-            : false;
+          let errorBack = resp.data.errors[0] ? resp.data.errors[0].type : false;
           dispatch({
             type: SUCCES_IN_SERVICES,
             payload: {
@@ -849,51 +849,51 @@ export const getMarkingList = (status, nav, page = true) => dispatch => {
   });
 };
 export const searchMarkedItems = (status, query, offset, isNew) => dispatch => {
-    AsyncStorage.getItem('company').then(company => {
-      return axios
-        .get(`${API_URL}/company/${company}/item/`, {
-          params: {marked: status, search: query, limit: 10, offset: offset, withPhoto: true},
-        })
-        .then(resp => {
-          if (resp.status === 200) {
-            let data = resp.data.data ? resp.data.data : resp.data;
-            if (!isNew) {
-              dispatch({
-                type: MARKING_SEARCH,
-                payload: {
-                  marking: status,
-                  loadMore: false,
-                  markingList: data,
-                  searchCount: resp.data.count,
-                },
-              });
-            } else {
-              dispatch({
-                type: MARKING_MORE_SEARCH,
-                payload: {
-                  marking: status,
-                  loadMore: false,
-                  markingList: data,
-                  searchCount: resp.data.count,
-                },
-              });
-            }
-          }
-        })
-        .catch(e => {
-          if (!e.response.data.success) {
-            let error = getProperError(e.response.data.message.name);
+  AsyncStorage.getItem('company').then(company => {
+    return axios
+      .get(`${API_URL}/company/${company}/item/`, {
+        params: {marked: status, search: query, limit: 10, offset: offset, withPhoto: true},
+      })
+      .then(resp => {
+        if (resp.status === 200) {
+          let data = resp.data.data ? resp.data.data : resp.data;
+          if (!isNew) {
             dispatch({
-              type: MARKING_ERROR,
+              type: MARKING_SEARCH,
               payload: {
                 marking: status,
-                markingError: error,
                 loadMore: false,
+                markingList: data,
+                searchCount: resp.data.count,
+              },
+            });
+          } else {
+            dispatch({
+              type: MARKING_MORE_SEARCH,
+              payload: {
+                marking: status,
+                loadMore: false,
+                markingList: data,
+                searchCount: resp.data.count,
               },
             });
           }
-        });
-    });
+        }
+      })
+      .catch(e => {
+        if (!e.response.data.success) {
+          let error = getProperError(e.response.data.message.name);
+          dispatch({
+            type: MARKING_ERROR,
+            payload: {
+              marking: status,
+              markingError: error,
+              loadMore: false,
+            },
+          });
+        }
+      });
+  });
 };
 export const saveCurrentItemMark = (id, nav, startPage) => dispatch => {
   dispatch({
@@ -902,9 +902,7 @@ export const saveCurrentItemMark = (id, nav, startPage) => dispatch => {
       currentItemMark: id,
     },
   });
-  dispatch(
-    nfc('Marking', 'MarkingFinish', false, 'MarkingScaner', 'startPageMarking'),
-  );
+  dispatch(nfc('Marking', 'MarkingFinish', false, 'MarkingScaner', 'startPageMarking'));
   nav.navigate(startPage);
 };
 
@@ -961,14 +959,14 @@ export const searchItem = (status, query, offset, isNew) => dispatch => {
           status: query?.status?.value,
           limit: 10,
           offset: offset,
-          withPhoto: true
+          withPhoto: true,
         },
       })
       .then(resp => {
         dispatch({
           type: SET_FILTERS,
           payload: query,
-        })
+        });
         if (resp.status === 200) {
           dispatch({
             type: GET_MY_ITEMS,
@@ -1017,8 +1015,8 @@ export const getItemsOnMe = nav => dispatch => {
       .get(`${API_URL}/company/${company}/item`, {
         params: {
           limit: 10,
-          withPhoto: true
-        }
+          withPhoto: true,
+        },
       })
       .then(resp => {
         if (resp.status === 200) {
@@ -1065,7 +1063,7 @@ export const searchMyItem = (query, offset, isNew, limit) => dispatch => {
           status: query?.status?.value,
           limit: limit,
           offset: offset,
-          withPhoto: true
+          withPhoto: true,
         },
       })
       .then(resp => {
@@ -1261,9 +1259,7 @@ export const saveCurrentUser = (id, role, nav, startPage) => dispatch => {
       userRole: role,
     },
   });
-  dispatch(
-    nfc('GiveListCheck', 'GiveListCheck', true, 'GiveScaner', 'startPageGive'),
-  );
+  dispatch(nfc('GiveListCheck', 'GiveListCheck', true, 'GiveScaner', 'startPageGive'));
   nav.navigate(startPage);
 };
 
@@ -1531,9 +1527,7 @@ export const userAcceptBid = (nav, id) => dispatch => {
       userAcceptBid: id,
     },
   });
-  dispatch(
-    nfc('AcceptList', 'AcceptList', false, 'AcceptScaner', 'startPageAccept'),
-  );
+  dispatch(nfc('AcceptList', 'AcceptList', false, 'AcceptScaner', 'startPageAccept'));
   nav.navigate('AcceptList');
 };
 export const userAcceptBidPushNotification = id => dispatch => {
@@ -1543,9 +1537,7 @@ export const userAcceptBidPushNotification = id => dispatch => {
       userAcceptBid: id,
     },
   });
-  dispatch(
-    nfc('AcceptList', 'AcceptList', false, 'AcceptScaner', 'startPageAccept'),
-  );
+  dispatch(nfc('AcceptList', 'AcceptList', false, 'AcceptScaner', 'startPageAccept'));
 };
 
 export const clearUserAcceptBid = () => dispatch => {
@@ -1566,13 +1558,7 @@ export const alreadyScannedBids = arr => dispatch => {
   });
 };
 
-export const makeAccept = (
-  accept_id,
-  reject,
-  nav,
-  object = '',
-  location = '',
-) => dispatch => {
+export const makeAccept = (accept_id, reject, nav, object = '', location = '') => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
       .post(`${API_URL}/transfer/${accept_id}/complete/`, {
@@ -1630,6 +1616,7 @@ export const clearInventory = () => dispatch => {
       makeStocktaking: '',
       inventoryQuantityList: [],
       addedItems: [],
+      inventoryId: '',
     },
   });
 };
@@ -1641,16 +1628,8 @@ export const saveCurrentUserInventory = (id, nav, startPage) => dispatch => {
       currentInventoryUser: id,
     },
   });
-  dispatch(
-    nfc(
-      'Inventory',
-      'InventoryChooseMode',
-      true,
-      'InventoryScaner',
-      'startPageInventory',
-    ),
-  );
-  nav.navigate(startPage);
+  dispatch(nfc('Inventory', 'InventoryChooseMode', true, 'InventoryScaner', 'startPageInventory'));
+  nav.navigate(startPage, {id});
 };
 
 export const saveInventoryItem = arr => dispatch => {
@@ -1670,12 +1649,173 @@ export const saveCreatedInventoryItem = obj => dispatch => {
   });
 };
 
-export const makeStocktaking = (
-  userId,
-  idQtyArray,
-  addedItemsArray,
-  nav,
-) => dispatch => {
+export const makeInventory = (userId, item, selectedQuantity, added_item) => dispatch => {
+  console.log('items makeInventory', item);
+  AsyncStorage.getItem('company').then(company => {
+    return axios
+      .post(`${API_URL}/company/${company}/stocktaking/`, {
+        item_ids: item ? item : [],
+        target: userId,
+        added_items: added_item
+          ? [
+              {
+                brand: added_item?.brand,
+                model: added_item?.model,
+                serial: added_item?.serial,
+                type: added_item?.type,
+                quantity: added_item?.quantity,
+              },
+            ]
+          : [],
+      })
+      .then(resp => {
+        if (resp.status === 200) {
+          dispatch(loader(false));
+          dispatch({
+            type: SAVE_UUID,
+            payload: resp.data.items,
+          });
+          dispatch({
+            type: SAVE_ID_INVENTORY,
+            payload: {
+              inventoryId: resp.data._id,
+            },
+          });
+        }
+      })
+      .catch(e => {
+        if (!e.response.data.success) {
+          let error = getProperError(e.response.data.message.name);
+          dispatch({
+            type: MAKE_STOCKTAKING_ERROR,
+            payload: {
+              inventoryError: error,
+            },
+          });
+          // nav.navigate('InventoryDone');
+          dispatch(loader(false));
+        }
+      });
+  });
+};
+
+export const addItemInInventory = (idInventory, item, selectedQuantity, added_item) => dispatch => {
+  console.log('addItemInInventory', item);
+  AsyncStorage.getItem('company').then(company => {
+    return axios
+      .patch(`${API_URL}/company/${company}/stocktaking/${idInventory}`, {
+        item_ids: item ? item : [],
+        added_items: added_item
+          ? [
+              {
+                brand: added_item?.brand,
+                model: added_item?.model,
+                serial: added_item?.serial,
+                type: added_item?.type,
+                quantity: added_item?.quantity,
+              },
+            ]
+          : [],
+      })
+      .then(resp => {
+        if (resp.status === 200) {
+          dispatch({
+            type: SAVE_UUID,
+            payload: resp.data,
+          });
+        }
+      });
+  });
+};
+
+export const checkInventoryList = (userId, user) => dispatch => {
+  AsyncStorage.getItem('company').then(company => {
+    return axios
+      .get(`${API_URL}/company/${company}/stocktaking/`, {
+        params: {
+          limit: 1,
+          offset: 0,
+          target: userId,
+          user: user,
+          status: 'pending',
+        },
+      })
+      .then(resp => {
+        if (resp.status === 200) {
+          dispatch({
+            type: SAVE_ID_INVENTORY,
+            payload: {
+              inventoryId: resp.data?.data[0]?._id || '',
+            },
+          });
+        }
+      });
+  });
+};
+
+export const getSavedInventory = inventoryId => dispatch => {
+  AsyncStorage.getItem('company').then(company => {
+    return axios
+      .get(`${API_URL}/company/${company}/stocktaking/${inventoryId}`, {
+        params: {
+          // limit: Number.MAX_VALUE,
+          limit: 100,
+          offset: 0,
+        },
+      })
+      .then(resp => {
+        if (resp.status === 200) {
+          console.log('getSavedInventory', resp.data.data.items);
+          // dispatch({
+          //   type: SAVE_INVENTORY_CREATED_ITEM,
+          //   payload: {
+          //     addedItems: resp.data.data.items,
+          //   },
+          // });
+          dispatch({
+            type: ADD_ITEMS_FROM_SAVED_INVENTORY,
+            // type: MAKE_STOCKTAKING,
+            payload: {
+              inventoryError: false,
+              inventoryScanList: resp.data.data.items,
+            },
+          });
+        }
+      });
+  });
+};
+
+export const deleteInventory = inventoryId => dispatch => {
+  AsyncStorage.getItem('company').then(company => {
+    return axios.delete(`${API_URL}/company/${company}/stocktaking/${inventoryId}`).then(resp => {
+      if (resp.status === 200) {
+        dispatch({
+          type: SAVE_ID_INVENTORY,
+          payload: {
+            inventoryId: '',
+          },
+        });
+      }
+    });
+  });
+};
+
+export const deleteItem = (inventoryId, itemId) => () => {
+  console.log('inventoryId', inventoryId);
+  console.log('itemId', itemId[0].uuid);
+  AsyncStorage.getItem('company').then(company => {
+    return axios
+      .patch(`${API_URL}/company/${company}/stocktaking/${inventoryId}/delete-items`, {
+        uuids: [itemId[0].uuid],
+      })
+      .then(resp => {
+        console.log('resp', resp);
+      });
+  });
+};
+
+export const makeStocktaking = (userId, idQtyArray, addedItemsArray, nav) => dispatch => {
+  console.log({userId, idQtyArray, addedItemsArray, nav});
   AsyncStorage.getItem('company').then(company => {
     return axios
       .post(`${API_URL}/company/${company}/stocktaking/`, {
@@ -1685,16 +1825,17 @@ export const makeStocktaking = (
       })
       .then(resp => {
         if (resp.status === 200) {
-          dispatch({
-            type: MAKE_STOCKTAKING,
-            payload: {
-              makeStocktaking: true,
-              inventoryError: false,
-              inventoryScanList: [],
-            },
-          });
-          nav.navigate('InventoryDone');
-          dispatch(loader(false));
+          console.log('sdsds', resp);
+          // dispatch({
+          //   type: MAKE_STOCKTAKING,
+          //   payload: {
+          //     makeStocktaking: true,
+          //     inventoryError: false,
+          //     inventoryScanList: [],
+          //   },
+          // });
+          // nav.navigate('InventoryDone');
+          // dispatch(loader(false));
         }
       })
       .catch(e => {
@@ -1711,6 +1852,43 @@ export const makeStocktaking = (
         }
       });
   });
+};
+
+export const runInvetory = (inventoryId, idQtyArray, addedItemsArray, nav) => dispatch => {
+  AsyncStorage.getItem('company')
+    .then(company => {
+      return axios.put(`${API_URL}/company/${company}/stocktaking/${inventoryId}/run`, {
+        item_ids: idQtyArray,
+        added_items: addedItemsArray,
+      });
+    })
+    .then(resp => {
+      if (resp.status === 200) {
+        dispatch({
+          type: MAKE_STOCKTAKING,
+          payload: {
+            makeStocktaking: true,
+            inventoryError: false,
+            inventoryScanList: [],
+          },
+        });
+        nav.navigate('InventoryDone');
+        dispatch(loader(false));
+      }
+    })
+    .catch(e => {
+      if (!e.response.data.success) {
+        let error = getProperError(e.response.data.message.name);
+        dispatch({
+          type: MAKE_STOCKTAKING_ERROR,
+          payload: {
+            inventoryError: error,
+          },
+        });
+        nav.navigate('Home');
+        dispatch(loader(false));
+      }
+    });
 };
 
 // forgot password
@@ -1766,8 +1944,7 @@ export const updateTransfer = (nav, id, items, route) => dispatch => {
           type: TRANSFERS_UPDATE,
           payload: {
             transferUpdate: true,
-            transferUpdateError:
-              resp.data.errors.length > 0 ? resp.data.errors[0] : '',
+            transferUpdateError: resp.data.errors.length > 0 ? resp.data.errors[0] : '',
           },
         });
 
@@ -1844,14 +2021,7 @@ export const getLocations = () => dispatch => {
 };
 
 // unMount Item From Parent
-export const unMountItemFromParent = (
-  parent,
-  items,
-  code,
-  nav,
-  page,
-  itemId,
-) => dispatch => {
+export const unMountItemFromParent = (parent, items, code, nav, page, itemId) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
       .put(`${API_URL}/company/${company}/item/unmount`, {parent, items})
@@ -1872,13 +2042,7 @@ export const unMountItemFromParent = (
       });
   });
 };
-export const mountItemFromParent = (
-  parent,
-  items,
-  code,
-  nav,
-  page,
-) => dispatch => {
+export const mountItemFromParent = (parent, items, code, nav, page) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
       .put(`${API_URL}/company/${company}/item/mount`, {
@@ -1970,45 +2134,45 @@ export const searchItems = (query, offset, limit) => dispatch => {
 export const getSearchItems = (query, offset, limit) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
-        .get(`${API_URL}/company/${company}/item`, {
-          params: {
-           search: query?.query,
-           responsible: query?.responsibleUser?.id,
-           object: query?.selectedLoc?.name,
-           location: query?.selectedObj?.name,
-           type: query?.type,
-           status: query?.status?.value,
-           limit: limit,
-           offset: offset,
-           withPhoto: true
-       },
-        })
-        .then(resp => {
-          if (resp.status === 200) {
-            let data = resp.data.data ? resp.data.data : resp.data;
-            dispatch({
-              type: GET_SEARCH_ITEMS,
-              payload: {
-                offSet: offset,
-                myloadMore: true,
-                myList: data,
-                searchCount: resp.data.count,
-              },
-            });
-          }
-        })
-        .catch(e => {
-          if (!e.response.data.success) {
-            let error = getProperError(e.response.data.message.name);
-            dispatch({
-              type: SEARCH_ITEMS_ERROR,
-              payload: {
-                myError: error,
-                myloadMore: false,
-              },
-            });
-          }
-        });
+      .get(`${API_URL}/company/${company}/item`, {
+        params: {
+          search: query?.query,
+          responsible: query?.responsibleUser?.id,
+          object: query?.selectedLoc?.name,
+          location: query?.selectedObj?.name,
+          type: query?.type,
+          status: query?.status?.value,
+          limit: limit,
+          offset: offset,
+          withPhoto: true,
+        },
+      })
+      .then(resp => {
+        if (resp.status === 200) {
+          let data = resp.data.data ? resp.data.data : resp.data;
+          dispatch({
+            type: GET_SEARCH_ITEMS,
+            payload: {
+              offSet: offset,
+              myloadMore: false,
+              myList: data,
+              searchCount: resp.data.count,
+            },
+          });
+        }
+      })
+      .catch(e => {
+        if (!e.response.data.success) {
+          let error = getProperError(e.response.data.message.name);
+          dispatch({
+            type: SEARCH_ITEMS_ERROR,
+            payload: {
+              myError: error,
+              myloadMore: false,
+            },
+          });
+        }
+      });
   });
 };
 export const cleanSearchResult = () => dispatch =>

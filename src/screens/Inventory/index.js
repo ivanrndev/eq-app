@@ -5,6 +5,8 @@ import {
   ScrollView,
   StyleSheet,
   View,
+  TouchableOpacity,
+  Text,
 } from 'react-native';
 import {Card, Paragraph, Title} from 'react-native-paper';
 import T from '../../i18n';
@@ -13,11 +15,7 @@ import Appbar from '../../components/Appbar';
 import {getProperErrorMessage} from '../../utils/helpers.js';
 // redux and actions
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  clearInventory,
-  getUserList,
-  saveCurrentUserInventory,
-} from '../../actions/actions.js';
+import {clearInventory, getUserList, saveCurrentUserInventory} from '../../actions/actions.js';
 import {useUserData} from '../../hooks/useUserData';
 
 const Inventory = props => {
@@ -27,6 +25,7 @@ const Inventory = props => {
   let error = getProperErrorMessage(users.getUsetError);
   const [userLists, setUserLists] = useState(users.userList);
   const [showText, setShowText] = useState(true);
+  const [activeModal, setActiveModal] = useState(false);
   const {role, userId} = useUserData();
   useEffect(() => {
     dispatch(getUserList(props.nav, '', 'Inventory'));
@@ -62,9 +61,7 @@ const Inventory = props => {
         {!error && (
           <>
             <ScrollView>
-              {showEmptyError && (
-                <Paragraph style={styles.text}>{T.t('no_users')}</Paragraph>
-              )}
+              {showEmptyError && <Paragraph style={styles.text}>{T.t('no_users')}</Paragraph>}
               {!error &&
                 userLists.map((item, index) => (
                   <Card
@@ -72,11 +69,7 @@ const Inventory = props => {
                     key={index}
                     onPress={() => {
                       dispatch(
-                        saveCurrentUserInventory(
-                          item._id,
-                          props.navigation,
-                          'InventoryChooseMode',
-                        ),
+                        saveCurrentUserInventory(item._id, props.navigation, 'InventoryQuestion'),
                       );
                     }}>
                     <Card.Content>

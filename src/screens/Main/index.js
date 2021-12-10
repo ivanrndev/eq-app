@@ -19,14 +19,16 @@ import withLayout from '../../hooks/withLayout';
 import messaging from '@react-native-firebase/messaging';
 import {useNavigation} from '@react-navigation/native';
 import {useUserData} from '../../hooks/useUserData';
-import {getLocations} from "../../actions/actions";
+import {getLocations} from '../../actions/actions';
 
 const Main = props => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const [store, settings, acceptList] = useSelector(
-    ({auth, settings, accept}) => [auth, settings, accept.acceptList],
-  );
+  const [store, settings, acceptList] = useSelector(({auth, settings, accept}) => [
+    auth,
+    settings,
+    accept.acceptList,
+  ]);
   const {role} = useUserData();
   const canCreateItem = role !== 'worker';
   const [myRole, setMyRole] = useState();
@@ -106,11 +108,7 @@ const Main = props => {
                 nav={props.navigation}
                 text={T.t('identification')}
                 route={settings.startPageIdent}
-                onPress={() =>
-                  dispatch(
-                    nfc('Home', 'IdentInfo', false, 'Ident', 'startPageIdent'),
-                  )
-                }
+                onPress={() => dispatch(nfc('Home', 'IdentInfo', false, 'Ident', 'startPageIdent'))}
                 svg={'ident'}
               />
             </CopilotText>
@@ -129,12 +127,7 @@ const Main = props => {
           )}
           <CopilotStep text={T.t('mark_help')} order={3} name="Marking">
             <CopilotText>
-              <Button
-                nav={props.navigation}
-                text={T.t('mark')}
-                route={'Marking'}
-                svg={'marking'}
-              />
+              <Button nav={props.navigation} text={T.t('mark')} route={'Marking'} svg={'marking'} />
             </CopilotText>
           </CopilotStep>
           <CopilotStep text={T.t('invent_help')} order={4} name="Inventory">
@@ -148,7 +141,6 @@ const Main = props => {
               />
             </CopilotText>
           </CopilotStep>
-
           <CopilotStep text={T.t('accept_help')} order={5} name="AcceptGive">
             <CopilotText>
               <Button
@@ -159,7 +151,6 @@ const Main = props => {
               />
             </CopilotText>
           </CopilotStep>
-
           {myRole !== 'worker' && (
             <>
               <CopilotStep text={T.t('service_help')} order={6} name="Service">
@@ -172,25 +163,14 @@ const Main = props => {
                   />
                 </CopilotText>
               </CopilotStep>
-              <CopilotStep
-                text={T.t('write_off_help')}
-                order={7}
-                name="writeOff">
+              <CopilotStep text={T.t('write_off_help')} order={7} name="writeOff">
                 <CopilotText>
                   <Button
                     nav={props.navigation}
                     text={T.t('ban')}
                     route={settings.startPageWriteOff}
                     onPress={() =>
-                      dispatch(
-                        nfc(
-                          'Home',
-                          'WriteOffInfo',
-                          false,
-                          'WriteOff',
-                          'startPageWriteOff',
-                        ),
-                      )
+                      dispatch(nfc('Home', 'WriteOffInfo', false, 'WriteOff', 'startPageWriteOff'))
                     }
                     svg={'writeOff'}
                   />
@@ -198,7 +178,6 @@ const Main = props => {
               </CopilotStep>
             </>
           )}
-
           <CopilotStep text={T.t('my_account')} order={8} name="Who_i">
             <CopilotText>
               <Button

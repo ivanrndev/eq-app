@@ -84,6 +84,7 @@ import {ItemDetail} from "./components/ItemDetail";
 import {check, PERMISSIONS, RESULTS, request} from "react-native-permissions";
 import {useDispatch} from "react-redux";
 import {setIsAvailableCameraState} from "./actions/actions";
+import {InventoryQuestion} from "./screens/Inventory/InventoryQuestion";
 
 const theme = {
   ...DefaultTheme,
@@ -263,6 +264,7 @@ const App = () => {
             />
             <Drawer.Screen name="MountNoMarking" component={MountNoMarking} />
             <Drawer.Screen name="ItemDetail" component={ItemDetail} />
+            <Drawer.Screen name="InventoryQuestion" component={InventoryQuestion} />
           </Drawer.Navigator>
         </PaperProvider>
       </NativeRouter>

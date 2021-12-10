@@ -8,8 +8,12 @@ import {Button, Card, Menu, TextInput} from 'react-native-paper';
 import DarkButton from '../../../../components/Buttons/DarkButton';
 import TransparentButton from '../../../../components/Buttons/TransparentButton';
 import {validateFloatNumbers} from '../../../../utils/validation';
-import {saveCreatedInventoryItem} from '../../../../actions/actions';
-import {useDispatch} from 'react-redux';
+import {
+  addItemInInventory,
+  makeInventory,
+  saveCreatedInventoryItem,
+} from '../../../../actions/actions';
+import {useDispatch, useSelector} from 'react-redux';
 import {height, units, width} from '../../../../constants/dimentionsAndUnits';
 
 const initialFormValues = {
@@ -32,14 +36,16 @@ const CreateInventoryItem = () => {
   const [selectedUnits, setSelectedUnits] = useState(T.t('piece'));
   const [formValues, setFormValues] = useState(initialFormValues);
   const [errors, setErrors] = useState(initialErrors);
+  const [inventoryId, currentInventoryUser] = useSelector(({inventory}) => [
+    inventory.inventoryId,
+    inventory.currentInventoryUser,
+  ]);
 
   const handleChoseMenu = item => {
     setVisible(false);
     setSelectedUnits(item.item);
   };
-  const renderItem = item => (
-    <Menu.Item onPress={() => handleChoseMenu(item)} title={item.item} />
-  );
+  const renderItem = item => <Menu.Item onPress={() => handleChoseMenu(item)} title={item.item} />;
   const handleCancelCreate = () => {
     navigation.navigate('InventoryChooseMode');
     setFormValues(initialFormValues);
@@ -64,6 +70,11 @@ const CreateInventoryItem = () => {
       ? setErrors({...errors, type: T.t('error_required')})
       : setErrors({...errors, type: ''});
     if (errors.type.length === 0 && errors.quantity.length === 0) {
+      if (inventoryId) {
+        dispatch(addItemInInventory(inventoryId, '', '', formValues));
+      } else {
+        dispatch(makeInventory(currentInventoryUser, '', formValues));
+      }
       dispatch(
         saveCreatedInventoryItem({
           metadata: formValues,
@@ -134,25 +145,14 @@ const CreateInventoryItem = () => {
 
             <Menu
               visible={visible}
-              anchor={
-                <Button onPress={() => setVisible(true)}>
-                  {selectedUnits}
-                </Button>
-              }>
-              <FlatList
-                data={units}
-                keyExtractor={item => item}
-                renderItem={renderItem}
-              />
+              anchor={<Button onPress={() => setVisible(true)}>{selectedUnits}</Button>}>
+              <FlatList data={units} keyExtractor={item => item} renderItem={renderItem} />
             </Menu>
             <Text style={styles.qtyError}>{errors.quantity}</Text>
           </View>
           <View style={styles.btns}>
             <DarkButton text={T.t('create_item')} onPress={handleCreate} />
-            <TransparentButton
-              text={T.t('cancel')}
-              onPress={handleCancelCreate}
-            />
+            <TransparentButton text={T.t('cancel')} onPress={handleCancelCreate} />
           </View>
         </Card>
       </KeyboardAwareScrollView>

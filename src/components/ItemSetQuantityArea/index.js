@@ -12,7 +12,7 @@ const ItemSetQuantityArea = ({
   mode,
 }) => (
   <>
-    {quantity > 1 && (
+    {quantity && (
       <>
         <Text style={styles.text}>{T.t(`${mode}`)}</Text>
         <View style={styles.quantityInputWrap}>
@@ -25,9 +25,7 @@ const ItemSetQuantityArea = ({
           />
           <Text style={styles.quantityUnits}>{units}</Text>
         </View>
-        <Text style={styles.error}>
-          {!isEnteredQuantityValid && T.t('error_service_quantity')}
-        </Text>
+        <Text style={styles.error}>{!isEnteredQuantityValid && T.t('error_service_quantity')}</Text>
       </>
     )}
   </>

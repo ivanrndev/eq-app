@@ -6,8 +6,15 @@ import T from '../../i18n';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 import {useNavigation} from '@react-navigation/native';
 import ItemListCard from '../ItemListCard';
-import {actionCheckError} from '../../utils/helpers';
-import {getSearchItem, loader, myloadMore, updateTransfer} from '../../actions/actions';
+import {actionCheckError, handleNavigateToSingleItemPage} from '../../utils/helpers';
+import {
+  addItemInInventory,
+  getSearchItem,
+  loader,
+  makeInventory,
+  myloadMore,
+  updateTransfer,
+} from '../../actions/actions';
 
 const Search = ({
   list,
@@ -22,10 +29,14 @@ const Search = ({
 }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const [transfersList, transferId] = useSelector(({transfers}) => [
-    transfers.transferList,
-    transfers.transferId,
-  ]);
+  const [transfersList, transferId, inventoryId, currentInventoryUser] = useSelector(
+    ({transfers, inventory}) => [
+      transfers.transferList,
+      transfers.transferId,
+      inventory.inventoryId,
+      inventory.currentInventoryUser,
+    ],
+  );
 
   const [search, setSearch] = useState('');
   const showEmptyError = !list.length && search.length !== 0;
@@ -44,13 +55,46 @@ const Search = ({
   }, []);
 
   const handleCurrentScan = item => {
+    const normalizedItem = [
+      {
+        id: item._id,
+        quantity: item?.batch?.quantity || '1',
+      },
+    ];
+    if (pageToChosenItem === 'InventoryChooseMode') {
+      if (inventoryId) {
+        item?.batch?.quantity
+          ? handleNavigateToSingleItemPage(
+              item.code,
+              navigation,
+              item._id,
+              'SetInventoryQty',
+              dispatch,
+              inventoryId,
+            )
+          : dispatch(addItemInInventory(inventoryId, normalizedItem));
+      } else {
+        item?.batch?.quantity
+          ? handleNavigateToSingleItemPage(
+              item.code,
+              navigation,
+              item._id,
+              'SetInventoryQty',
+              dispatch,
+              inventoryId,
+            )
+          : dispatch(makeInventory(currentInventoryUser, normalizedItem));
+      }
+    }
     actionCheckError(item);
     dispatch(loader(true));
     dispatch(
       getSearchItem(
         item._id,
         navigation,
-        pageToChosenItem,
+        pageToChosenItem === 'InventoryChooseMode' && item?.batch?.quantity
+          ? 'SetInventoryQty'
+          : pageToChosenItem,
         isSearchForGiveItem,
         isSearchForMoveItem,
         filter,

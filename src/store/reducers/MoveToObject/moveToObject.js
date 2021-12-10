@@ -1,11 +1,15 @@
 import {
   CHANGE_QUANTITY,
   CHOOSED_MOVE_USER,
-  CLEAN_MOVE_TO_OBJECT, DELETE_MOVE_ITEM, IS_ROLE_ALLOW, MOVE_TO_OBJECT_ERROR,
-  SAVE_MOVE_LOCATIONS, SET_IS_ADD_MOVE,
+  CLEAN_MOVE_TO_OBJECT,
+  DELETE_MOVE_ITEM,
+  IS_ROLE_ALLOW,
+  MOVE_TO_OBJECT_ERROR,
+  SAVE_MOVE_LOCATIONS,
+  SET_IS_ADD_MOVE,
   SET_IS_MOVE_SCANER,
-  SET_SCANED_MOVE_ITEM
-} from "../../../actions/actionsType";
+  SET_SCANED_MOVE_ITEM,
+} from '../../../actions/actionsType';
 
 const initialState = {
   isMoveToObject: false,
@@ -13,16 +17,16 @@ const initialState = {
     objects: '',
     location: '',
   },
-  errorMessage: "",
+  errorMessage: '',
   isAllowed: true,
   scanedItem: [],
   scanedItemId: [],
   choosedUser: {
     id: null,
-    firstName: null
+    firstName: null,
   },
   scanedItemToMove: [],
-  isAdd:false,
+  isAdd: false,
 };
 
 const moveToObjectReducer = (state = initialState, action) => {
@@ -35,12 +39,12 @@ const moveToObjectReducer = (state = initialState, action) => {
     case SET_SCANED_MOVE_ITEM:
       return {
         ...state,
-        scanedItem: !state.scanedItemId.find(item =>item === action.itemId)
-            ? [...state.scanedItem, action.item]
-              : [...state.scanedItem],
-        scanedItemId: !state.scanedItemId.find(item =>item === action.itemId)
-            ? [...state.scanedItemId, action.itemId]
-              : [...state.scanedItemId],
+        scanedItem: !state.scanedItemId.find(item => item === action.itemId)
+          ? [...state.scanedItem, action.item]
+          : [...state.scanedItem],
+        scanedItemId: !state.scanedItemId.find(item => item === action.itemId)
+          ? [...state.scanedItemId, action.itemId]
+          : [...state.scanedItemId],
       };
     case SAVE_MOVE_LOCATIONS:
       return {
@@ -80,11 +84,19 @@ const moveToObjectReducer = (state = initialState, action) => {
       };
 
     case CHANGE_QUANTITY:
-      const newGiveList = {id:action.payload.id, quantity:action.payload.number, companyId: action.payload.companyId};
+      const newGiveList = {
+        id: action.payload.id,
+        quantity: action.payload.number,
+        companyId: action.payload.companyId,
+      };
       return {
         ...state,
-        scanedItemToMove: state.scanedItemToMove.find(item =>item.id === action.payload.id)
-          ? [...state.scanedItemToMove.map((item) => item.id === action.payload.id ? {...item, quantity: action.payload.number} : item)]
+        scanedItemToMove: state.scanedItemToMove.find(item => item.id === action.payload.id)
+          ? [
+              ...state.scanedItemToMove.map(item =>
+                item.id === action.payload.id ? {...item, quantity: action.payload.number} : item,
+              ),
+            ]
           : [...state.scanedItemToMove, newGiveList],
       };
 

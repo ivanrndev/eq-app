@@ -28,12 +28,17 @@ import {cleanMountItemsList} from '../../actions/mountActions';
 import {clearComments} from '../../actions/commentsAction';
 import {setGoBackPageGallery} from '../../actions/addItemPhotoActions';
 import {cleanCreateItem} from '../../actions/createItem';
-import OnMeSearch from "../../screens/OnMe/OnMeSearch";
-import OnMe from "../../screens/OnMe";
-import OnMeSearched from "../../screens/OnMe/OnMeSearched";
-import {cleanSearchResult, myloadMore, searchItem, searchItems, setIsShowFilter} from "../../actions/actions";
-import {useDebouncedCallback} from "use-debounce";
-
+import OnMeSearch from '../../screens/OnMe/OnMeSearch';
+import OnMe from '../../screens/OnMe';
+import OnMeSearched from '../../screens/OnMe/OnMeSearched';
+import {
+  cleanSearchResult,
+  myloadMore,
+  searchItem,
+  searchItems,
+  setIsShowFilter,
+} from '../../actions/actions';
+import {useDebouncedCallback} from 'use-debounce';
 
 const AppbarCustom = props => {
   const dispatch = useDispatch();
@@ -46,7 +51,7 @@ const AppbarCustom = props => {
 
   const filters = useSelector(state => state.filterReducer);
 
-  const isShowFilter = useSelector(({onMe})=>onMe.isShowFilter)
+  const isShowFilter = useSelector(({onMe}) => onMe.isShowFilter);
   NetInfo.fetch().then(state => {
     if (state.isConnected) {
       setIsConnection(false);
@@ -57,20 +62,26 @@ const AppbarCustom = props => {
 
   const debouncedItemSearch = useDebouncedCallback(
     // function
-    (query) => {
+    query => {
       dispatch(myloadMore(true));
 
       props.queryText(query);
-      dispatch(searchItem(true, {
-        ...filters,
-        query
-      }, 0, true));
+      dispatch(
+        searchItem(
+          true,
+          {
+            ...filters,
+            query,
+          },
+          0,
+          true,
+        ),
+      );
       // dispatch(searchItems(query, 0, 10));
     },
     // delay in ms
-    500
+    500,
   );
-
 
   const itemSearch = query => {
     setSearch(query.trim());
@@ -85,9 +96,9 @@ const AppbarCustom = props => {
 
   useEffect(() => {
     if (search.length === 0) {
-      setTimeout(() => dispatch(cleanSearchResult()),1000)
+      setTimeout(() => dispatch(cleanSearchResult()), 1000);
     }
-  }, [search])
+  }, [search]);
 
   return (
     <>
@@ -105,12 +116,12 @@ const AppbarCustom = props => {
               dispatch(clearUserList());
             }
             if (props.goTo === 'back') {
-
-                if(props.cb) props.cb();
+              if (props.cb) {
+                props.cb();
+              }
               props.navigation.goBack();
             } else {
-
-                props.navigation.navigate(props.goTo);
+              props.navigation.navigate(props.goTo);
             }
             if (props.newScan) {
               dispatch(allowNewScan(true));
@@ -159,7 +170,7 @@ const AppbarCustom = props => {
               setIsSearchOpen(false);
             }
             if (props.filter) {
-                setIsFilterOpen(false);
+              setIsFilterOpen(false);
             }
             if (props.switch) {
               setIsNFCOpen(false);
@@ -177,16 +188,16 @@ const AppbarCustom = props => {
             }
           }}
         />
-        { isSearchOpen && props.searchItem ? <Searchbar
+        {isSearchOpen && props.searchItem ? (
+          <Searchbar
             placeholder={T.t('search')}
-            onChangeText={props.searchItem ? (val => itemSearch(val)) : (val => handleItemSearch(val))}
+            onChangeText={props.searchItem ? val => itemSearch(val) : val => handleItemSearch(val)}
             value={search}
             style={styles.search}
-          />:
-          <Appbar.Content
-            title = {isNFCOpen ? 'NFC' : props.title}
-            titleStyle={styles.content}
-          />}
+          />
+        ) : (
+          <Appbar.Content title={isNFCOpen ? 'NFC' : props.title} titleStyle={styles.content} />
+        )}
         {props.switch && (
           <IconButton
             icon={isNFCOpen ? 'camera' : 'cast'}
@@ -205,31 +216,27 @@ const AppbarCustom = props => {
             size={35}
             color="#22215B"
             onPress={() => {
-                setIsSearchOpen(!isSearchOpen);
-                setIsFilterOpen(false);
+              setIsSearchOpen(!isSearchOpen);
+              setIsFilterOpen(false);
             }}
           />
         )}
         {props.filter && (
-            <IconButton
-                icon={'filter'}
-                size={30}
-                color="#22215B"
-                onPress={() => {
-                    // setIsFilterOpen(true);
-                    // setIsSearchOpen(false);
-                    // dispatch(setIsShowFilter(true));
-                    props.navigation.navigate('OnMeSearch');
-
-
-
-                }}
-            />)}
+          <IconButton
+            icon={'filter'}
+            size={30}
+            color="#22215B"
+            onPress={() => {
+              // setIsFilterOpen(true);
+              // setIsSearchOpen(false);
+              // dispatch(setIsShowFilter(true));
+              props.navigation.navigate('OnMeSearch');
+            }}
+          />
+        )}
         {props.handleSelect && (
           <IconButton
-            icon={
-              props.rejectIds.length === 0 ? 'select-inverse' : 'select-all'
-            }
+            icon={props.rejectIds.length === 0 ? 'select-inverse' : 'select-all'}
             size={25}
             color="#22215B"
             onPress={props.handleSelect}
@@ -237,7 +244,7 @@ const AppbarCustom = props => {
           />
         )}
       </Appbar.Header>
-        {/*{(props.onMe && isSearchOpen) && (<OnMeSearched/>)}*/}
+      {/*{(props.onMe && isSearchOpen) && (<OnMeSearched/>)}*/}
       {isSearchOpen && !props.searchItem && (
         <Search
           list={props.list}
@@ -251,8 +258,8 @@ const AppbarCustom = props => {
           editTransfer={props.editTransfer}
         />
       )}
-      {isFilterOpen && (<OnMeSearch/>)}
-      {isNFCOpen && <NFC move={props.move ? props.move : false}/>}
+      {isFilterOpen && <OnMeSearch />}
+      {isNFCOpen && <NFC move={props.move ? props.move : false} />}
       <View style={styles.borderRadius} />
       <Portal>
         <Snackbar
@@ -300,7 +307,7 @@ const styles = StyleSheet.create({
   },
   search: {
     backgroundColor: '#EDF6FF',
-    flex: 1
+    flex: 1,
   },
 });
 

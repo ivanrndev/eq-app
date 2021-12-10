@@ -10,14 +10,20 @@ import {useQuantityUnitsAndCurrency} from '../../hooks/useQuantityUnitsAndCurren
 import DarkButton from '../../components/Buttons/DarkButton';
 import TransparentButton from '../../components/Buttons/TransparentButton';
 import ItemSetQuantityArea from '../../components/ItemSetQuantityArea';
+import {addItemInInventory, makeInventory} from '../../actions/actions';
 
 const SetItemQuantity = ({actionName, pageToRedirect, title, mode, onSave}) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const [id, metaData] = useSelector(({scan}) => [
-    scan.scanInfo._id,
-    scan.scanInfo.metadata,
-  ]);
+  const [scanInfo, id, metaData, inventoryId, currentInventoryUser] = useSelector(
+    ({scan, inventory}) => [
+      scan.scanInfo,
+      scan.scanInfo._id,
+      scan.scanInfo.metadata,
+      inventory.inventoryId,
+      inventory.currentInventoryUser,
+    ],
+  );
   const {quantity, units} = useQuantityUnitsAndCurrency();
   const [selectedQuantity, setSelectedQuantity] = useState(quantity);
   const isEnteredQuantityValid = selectedQuantity <= quantity;
@@ -26,16 +32,23 @@ const SetItemQuantity = ({actionName, pageToRedirect, title, mode, onSave}) => {
   if (metaData) {
     nameOfProduct = metaData.title
       ? metaData.title
-      : `${metaData.type} ${metaData.brand} ${metaData.model} ${
-          metaData.serial
-        }`;
+      : `${metaData?.type} ${metaData.brand} ${metaData.model} ${metaData.serial}`;
   }
   const handleSave = () => {
-    !!onSave
-      ? onSave(id, selectedQuantity)
-      : dispatch(actionName(id, selectedQuantity));
+    onSave ? onSave(id, selectedQuantity) : dispatch(actionName(id, selectedQuantity));
     navigation.navigate(pageToRedirect);
     setSelectedQuantity(quantity);
+    const normalizedItem = [
+      {
+        id: scanInfo._id,
+        quantity: selectedQuantity || '1',
+      },
+    ];
+    if (inventoryId) {
+      dispatch(addItemInInventory(inventoryId, normalizedItem, selectedQuantity));
+    } else {
+      dispatch(makeInventory(currentInventoryUser, normalizedItem, selectedQuantity));
+    }
   };
   return (
     <>

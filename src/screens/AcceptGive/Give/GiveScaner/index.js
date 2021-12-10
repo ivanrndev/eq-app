@@ -1,17 +1,30 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
-import {AppState, Dimensions, Linking, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {
+  AppState,
+  Dimensions,
+  Linking,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  Platform,
+} from 'react-native';
 import T from '../../../../i18n';
 // components
 import Appbar from '../../../../components/Appbar';
 import Scanner from '../../../../components/Scanner';
 import {useDispatch, useSelector} from 'react-redux';
-import {searchMyCompanyItems, searchMyItem, setIsAvailableCameraState} from '../../../../actions/actions';
+import {
+  searchMyCompanyItems,
+  searchMyItem,
+  setIsAvailableCameraState,
+} from '../../../../actions/actions';
 import {Portal, Snackbar} from 'react-native-paper';
 import {getGiveMessageError} from '../../../../utils/helpers';
 import {useUserData} from '../../../../hooks/useUserData';
-import TransparentButton from "../../../../components/Buttons/TransparentButton";
-import {PERMISSIONS, request} from "react-native-permissions";
+import TransparentButton from '../../../../components/Buttons/TransparentButton';
+import {PERMISSIONS, request} from 'react-native-permissions';
 
 const GiveScaner = props => {
   const [err, companyItemList] = useSelector(({onMe, scan, companyItems}) => [
@@ -21,11 +34,11 @@ const GiveScaner = props => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    const listener = AppState.addEventListener('change', (status) => {
+    const listener = AppState.addEventListener('change', status => {
       if (Platform.OS === 'ios' && status === 'active') {
         request(PERMISSIONS.IOS.CAMERA)
-            .then((result) => result === "granted" && dispatch(setIsAvailableCameraState(true)))
-            .catch((error) => console.log(error))
+          .then(result => result === 'granted' && dispatch(setIsAvailableCameraState(true)))
+          .catch(error => console.log(error));
       }
     });
     // return listener.remove;
@@ -40,15 +53,12 @@ const GiveScaner = props => {
   useEffect(() => {
     if (role === 'root' || role === 'admin') {
       setList(
-        companyItemList.filter(
-          item => !item.is_bun && !item.repair && item.transfer === null,
-        ),
+        companyItemList.filter(item => !item.is_bun && !item.repair && item.transfer === null),
       );
     } else {
       setList(
         companyItemList.filter(item =>
-          item.person &&
-          (!item.is_bun && !item.repair && item.transfer === null)
+          item.person && (!item.is_bun && !item.repair && item.transfer === null)
             ? item.person._id === userId
             : '',
         ),
@@ -62,7 +72,7 @@ const GiveScaner = props => {
       return () => setScaner(false);
     }, []),
   );
-  const  isAvailableCamera = useSelector(({auth}) => auth.isAvailableCamera);
+  const isAvailableCamera = useSelector(({auth}) => auth.isAvailableCamera);
   useEffect(() => {
     setError(getGiveMessageError(err));
     if (err.length > 0) {
@@ -82,7 +92,7 @@ const GiveScaner = props => {
 
   return (
     <>
-      <View style={{backgroundColor: 'rgb(0,0,0)', flex:1}}>
+      <View style={{backgroundColor: 'rgb(0,0,0)', flex: 1}}>
         <Appbar
           navigation={props.navigation}
           arrow={true}
@@ -102,25 +112,18 @@ const GiveScaner = props => {
         <View>
           <Text style={styles.textStyle}>{T.t('title_scan')}</Text>
         </View>
-        {!isAvailableCamera &&
-        <View style={{ flex:1, justifyContent: 'center'}}>
-          <Text style={{textAlign: 'center', marginHorizontal:30, color:'rgb(255,255,255)'}}>{T.t('message_for_camera_permission')}</Text>
-          <View style={{width: Dimensions.get('window').height / 5,alignSelf:'center'}}>
-            <TransparentButton
-                text={T.t('open_settings')}
-                onPress={Linking.openSettings}
-            />
+        {!isAvailableCamera && (
+          <View style={{flex: 1, justifyContent: 'center'}}>
+            <Text style={{textAlign: 'center', marginHorizontal: 30, color: 'rgb(255,255,255)'}}>
+              {T.t('message_for_camera_permission')}
+            </Text>
+            <View style={{width: Dimensions.get('window').height / 5, alignSelf: 'center'}}>
+              <TransparentButton text={T.t('open_settings')} onPress={Linking.openSettings} />
+            </View>
           </View>
-        </View>
-        }
+        )}
         <View style={styles.body}>
-          {scaner && (
-            <Scanner
-              nav={props.navigation}
-              page={'GiveListCheck'}
-              saveItems={true}
-            />
-          )}
+          {scaner && <Scanner nav={props.navigation} page={'GiveListCheck'} saveItems={true} />}
         </View>
         <Portal>
           <Snackbar
@@ -169,12 +172,12 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     width: Dimensions.get('window').width / 1.3,
   },
-  textStyle:{
-    color:'rgb(255,255,255)',
+  textStyle: {
+    color: 'rgb(255,255,255)',
     fontSize: 30,
-    position:'absolute',
+    position: 'absolute',
     width: Dimensions.get('window').width,
-    textAlign:'center',
+    textAlign: 'center',
   },
 });
 

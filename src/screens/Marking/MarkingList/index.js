@@ -5,35 +5,25 @@ import {
   ScrollView,
   StyleSheet,
   View,
+  FlatList,
+  TouchableOpacity,
+  Text,
 } from 'react-native';
-import {
-  ActivityIndicator,
-  Button,
-  Card,
-  Paragraph,
-  Searchbar,
-  Title,
-} from 'react-native-paper';
+import {ActivityIndicator, Button, Card, Paragraph, Searchbar, Title} from 'react-native-paper';
 import T from '../../../i18n';
 // components
 import Appbar from '../../../components/Appbar';
 import {getProperErrorMessage} from '../../../utils/helpers.js';
 // redux and actions
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  loadMore,
-  saveCurrentItemMark,
-  searchItem,
-} from '../../../actions/actions.js';
+import {loadMore, saveCurrentItemMark} from '../../../actions/actions.js';
 import ItemListCard from '../../../components/ItemListCard';
-import {searchMarkedItems} from "../../../actions/actions";
+import {searchMarkedItems} from '../../../actions/actions';
+import {CardList} from '../../../components/ItemCardList/cardList';
 
 const MarkingList = props => {
   const dispatch = useDispatch();
-  const [marking, settings] = useSelector(({marking, settings}) => [
-    marking,
-    settings,
-  ]);
+  const [marking, settings] = useSelector(({marking, settings}) => [marking, settings]);
   let error = getProperErrorMessage(marking.markingError);
   const [search, setSearch] = useState('');
   const [offset, setOffset] = useState(10);
@@ -52,17 +42,21 @@ const MarkingList = props => {
   };
 
   const changeOffset = () => {
-    if (marking.searchCount > offset ) {
-      setOffset(offset + 10)
+    if (marking.searchCount > offset) {
+      setOffset(offset + 10);
     } else {
-      setOffset(marking.searchCount)
+      setOffset(marking.searchCount);
     }
-  }
+  };
 
   let showEmptyError = false;
   if (!marking.marking && marking.markingList.length === 0) {
     showEmptyError = true;
   }
+
+  const saveCurrentItem = (_id, navigation, settings) => {
+    dispatch(saveCurrentItemMark(_id, navigation, settings));
+  };
 
   return (
     <>
@@ -86,12 +80,17 @@ const MarkingList = props => {
         {!error && (
           <>
             <View style={styles.container}>
+              {/*<CardList*/}
+              {/*  showEmptyError={showEmptyError}*/}
+              {/*  data={marking.markingList}*/}
+              {/*  getMoreItems={getMoreItems}*/}
+              {/*  navigation={props.navigation}*/}
+              {/*  settings={settings}*/}
+              {/*  loadMore={marking.loadMore}*/}
+              {/*  saveCurrentItem={saveCurrentItem}*/}
+              {/*/>*/}
               <ScrollView style={styles.scroll}>
-                {showEmptyError && (
-                  <Paragraph style={styles.text}>
-                    {T.t('no_available')}
-                  </Paragraph>
-                )}
+                {showEmptyError && <Paragraph style={styles.text}>{T.t('no_available')}</Paragraph>}
                 {!error &&
                   marking.markingList.map((item, index) => (
                     <Card
@@ -115,24 +114,25 @@ const MarkingList = props => {
               <>
                 {marking.searchCount >= offset ? (
                   <>
-                  {!marking.loadMore && (
-                  <Button
-                    style={styles.button}
-                    mode="Text"
-                    color="#22215B"
-                    onPress={getMoreItems}>
-                    {T.t('load_more')}
-                  </Button>
-                )}
-                {marking.loadMore && (
-                  <ActivityIndicator
-                  style={styles.load}
-                  size={'large'}
-                  animating={true}
-                  color={'#EDF6FF'}
-                  />
-                  )}
-                  </>) : null}
+                    {!marking.loadMore && (
+                      <Button
+                        style={styles.button}
+                        mode="Text"
+                        color="#22215B"
+                        onPress={getMoreItems}>
+                        {T.t('load_more')}
+                      </Button>
+                    )}
+                    {marking.loadMore && (
+                      <ActivityIndicator
+                        style={styles.load}
+                        size={'large'}
+                        animating={true}
+                        color={'#EDF6FF'}
+                      />
+                    )}
+                  </>
+                ) : null}
               </>
             )}
           </>
@@ -179,6 +179,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingBottom: 20,
     width: Dimensions.get('window').width / 1.2,
+  },
+  scroll: {
+    backgroundColor: '#D3E3F2',
   },
 });
 

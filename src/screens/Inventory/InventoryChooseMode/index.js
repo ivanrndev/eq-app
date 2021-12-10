@@ -1,12 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Dimensions,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import T from '../../../i18n';
@@ -18,41 +11,37 @@ import DarkButton from '../../../components/Buttons/DarkButton';
 import ItemListCard from '../../../components/ItemListCard';
 
 import {
+  addItemInInventory,
   allowNewScan,
   clearGiveList,
   clearInventory,
+  deleteItem,
   loader,
-  makeStocktaking,
+  runInvetory,
   saveInventoryItem,
 } from '../../../actions/actions';
-import {
-  getInventoryMesageError,
-  handleNavigateToSingleItemPage,
-} from '../../../utils/helpers';
+import {getInventoryMesageError, handleNavigateToSingleItemPage} from '../../../utils/helpers';
 
 const InventoryChooseMode = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const [settings, inventory, scan] = useSelector(
-    ({settings, inventory, scan}) => [settings, inventory, scan],
-  );
+  const [settings, inventory, scan] = useSelector(({settings, inventory, scan}) => [
+    settings,
+    inventory,
+    scan,
+  ]);
   const [error, setError] = useState('');
 
-  const setQtyItem = itemId =>
-    inventory.inventoryQuantityList.find(pc => pc.id === itemId);
+  const setQtyItem = itemId => inventory.inventoryQuantityList.find(pc => pc.id === itemId);
 
-  const isAlreadyScaned = id =>
-    inventory.inventoryScanList.find(item => item._id === id);
-  const renderedList = [
-    ...inventory.inventoryScanList,
-    ...inventory.addedItems,
-  ];
+  const isAlreadyScaned = id => inventory.inventoryScanList.find(item => item._id === id);
+  const renderedList = [...inventory.inventoryScanList, ...inventory.addedItems];
 
-  const itemsInventoriedQty =
-    renderedList.length > 0 ? `(${renderedList.length})` : '';
+  const itemsInventoriedQty = renderedList.length > 0 ? `(${renderedList.length})` : '';
 
   const isSetQtyBtnShown = item =>
     item.batch &&
+    !item.uuid &&
     !item.metadata.quantity &&
     item.batch.quantity &&
     +item.batch.quantity !== 1 &&
@@ -63,9 +52,7 @@ const InventoryChooseMode = () => {
       setError(getInventoryMesageError(scan.scanInfoError, scan.currentScan));
     }
     if (scan.scanInfoError === 'InRepair') {
-      setError(
-        `${T.t('item')}  "${scan.selectGiveId}" ${T.t('error_services')}`,
-      );
+      setError(`${T.t('item')}  "${scan.selectGiveId}" ${T.t('error_services')}`);
     }
     let isDuplicate = isAlreadyScaned(scan.selectGiveId);
     if (isDuplicate) {
@@ -76,9 +63,7 @@ const InventoryChooseMode = () => {
       scan.scanInfoError !== 'NotFound' &&
       Object.keys(scan.scanInfo).length > 0
     ) {
-      dispatch(
-        saveInventoryItem([...inventory.inventoryScanList, scan.scanInfo]),
-      );
+      dispatch(saveInventoryItem([...inventory.inventoryScanList, scan.scanInfo]));
     }
   }, [scan]);
 
@@ -88,9 +73,7 @@ const InventoryChooseMode = () => {
   };
 
   const inventorsItemIdAndQty = inventory.inventoryScanList
-    .filter(
-      item => !inventory.inventoryQuantityList.find(pc => pc.id === item._id),
-    )
+    .filter(item => !inventory.inventoryQuantityList.find(pc => pc.id === item._id))
     .map(item => ({
       id: item._id,
       quantity: item.batch ? item.batch.quantity : 1,
@@ -105,20 +88,50 @@ const InventoryChooseMode = () => {
     quantity: item.batch.quantity,
   }));
 
+  const normalizedKitItems = inventory.itemsKit.map(item => ({
+    id: item._id,
+    quantity: item?.batch?.quantity || '1',
+  }));
+
+  useEffect(() => {
+    if (inventory.itemsKit.length) {
+      dispatch(addItemInInventory(inventory.inventoryId, normalizedKitItems));
+    }
+  }, [inventory.itemsKit]);
+
   const handleEndInventory = () => {
     navigation.navigate('Home');
     dispatch(clearGiveList());
     dispatch(allowNewScan(true));
     dispatch(loader(true));
+    // dispatch(
+    //   makeStocktaking(
+    //     inventory.currentInventoryUser,
+    //     [...inventory.inventoryQuantityList, ...inventorsItemIdAndQty],
+    //     normalizedAddedItems,
+    //     navigation,
+    //   ),
+    // );
     dispatch(
-      makeStocktaking(
-        inventory.currentInventoryUser,
+      runInvetory(
+        inventory.inventoryId,
         [...inventory.inventoryQuantityList, ...inventorsItemIdAndQty],
         normalizedAddedItems,
         navigation,
       ),
     );
     dispatch(clearInventory());
+  };
+
+  const saveInventorySession = () => {
+    navigation.navigate('Home');
+    dispatch(clearInventory());
+  };
+
+  const correctItems = item => {
+    const uid = inventory.itemsUuid.filter(i => i.id === item._id);
+    handleNavigateToSingleItemPage(item.code, navigation, item._id, 'SetInventoryQty', dispatch);
+    dispatch(deleteItem(inventory.inventoryId, uid));
   };
 
   return (
@@ -134,7 +147,6 @@ const InventoryChooseMode = () => {
         title={T.t('inventori')}
         isSearchForGiveItem={false}
       />
-
       <ScrollView contentContainerStyle={styles.cards}>
         {renderedList.length > 0 &&
           renderedList.map(item => (
@@ -159,19 +171,20 @@ const InventoryChooseMode = () => {
               {setQtyItem(item._id) && (
                 <Card.Content style={styles.editArea}>
                   <Text style={styles.cardTitle}>
-                    {T.t('current_inventori_qty')}:{' '}
-                    {setQtyItem(item._id).quantity}
+                    {T.t('current_inventori_qty')}: {setQtyItem(item._id).quantity}
                   </Text>
                   <TouchableOpacity
-                    onPress={() =>
-                      handleNavigateToSingleItemPage(
-                        item.code,
-                        navigation,
-                        item._id,
-                        'SetInventoryQty',
-                        dispatch,
-                      )
-                    }>
+                    onPress={() => {
+                      // handleNavigateToSingleItemPage(
+                      //   item.code,
+                      //   navigation,
+                      //   item._id,
+                      //   'SetInventoryQty',
+                      //   dispatch,
+                      // );
+                      correctItems(item);
+                      // dispatch(deleteItem(inventory.inventoryId, item._id));
+                    }}>
                     <Text style={styles.edit}>Edit</Text>
                   </TouchableOpacity>
                 </Card.Content>
@@ -188,11 +201,58 @@ const InventoryChooseMode = () => {
           onPress={() => navigation.navigate('CreateInventoryItem')}
           text={`${T.t('create')} ${T.t('qr_code')}`}
         />
-        <DarkButton
-          onPress={handleEndInventory}
-          disabled={renderedList.length === 0}
-          text={`${T.t('finish_inventory')}${itemsInventoriedQty}`}
-        />
+        <View style={styles.buttonsContainer}>
+          <TouchableOpacity
+            onPress={saveInventorySession}
+            disabled={renderedList.length === 0}
+            style={{
+              padding: 17,
+              borderRadius: 10,
+              borderWidth: 1,
+              borderColor: '#2D2C71',
+              width: Dimensions.get('window').width / 2.3,
+              margin: 5,
+            }}>
+            <Text
+              style={{
+                textAlign: 'center',
+                padding: 5,
+                borderRadius: 40,
+              }}>
+              {`На паузу${itemsInventoriedQty}`}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={handleEndInventory}
+            style={{
+              padding: 10,
+              borderRadius: 10,
+              backgroundColor: '#2D2C71',
+              width: Dimensions.get('window').width / 2.3,
+              margin: 5,
+            }}>
+            <Text
+              style={{
+                textAlign: 'center',
+                padding: 5,
+                borderRadius: 40,
+                color: '#ffffff',
+              }}>
+              {`${T.t('finish_inventory')}${itemsInventoriedQty}`}
+            </Text>
+          </TouchableOpacity>
+        </View>
+        {/*<View style={styles.buttonsContainer}>*/}
+        {/*  <TransparentButton*/}
+        {/*    onPress={saveInventorySession}*/}
+        {/*    text={`На паузу${itemsInventoriedQty}`}*/}
+        {/*  />*/}
+        {/*  <DarkButton*/}
+        {/*    onPress={handleEndInventory}*/}
+        {/*    disabled={renderedList.length === 0}*/}
+        {/*    text={`${T.t('finish_inventory')}${itemsInventoriedQty}`}*/}
+        {/*  />*/}
+        {/*</View>*/}
       </View>
       <Snackbar
         visible={error}
@@ -215,6 +275,14 @@ const styles = StyleSheet.create({
   body: {
     backgroundColor: '#D3E3F2',
     height: Dimensions.get('window').height,
+  },
+  buttonsContainer: {
+    // flex: 1,
+    width: Dimensions.get('window').width / 1.8,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    // margin: 10,
   },
   cards: {
     marginTop: -10,
