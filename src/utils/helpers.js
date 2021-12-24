@@ -455,6 +455,9 @@ export const handleNavigateToMySingleItem = (
     dispatch(loader(true));
     dispatch(getSearchItem(id, navigation, page));
   }
+  if (!code && page === 'OnMeInfo') {
+    dispatch(getSearchItem(id, navigation, page));
+  }
   dispatch(saveCurrentMyItem(id, code, navigation, page));
 };
 

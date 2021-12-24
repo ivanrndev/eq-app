@@ -80,11 +80,11 @@ const AppbarCustom = props => {
       // dispatch(searchItems(query, 0, 10));
     },
     // delay in ms
-    500,
+    800,
   );
 
   const itemSearch = query => {
-    setSearch(query.trim());
+    setSearch(query);
     debouncedItemSearch(query);
   };
 

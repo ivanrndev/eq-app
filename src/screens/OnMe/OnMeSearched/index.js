@@ -197,11 +197,11 @@ const OnMeSearched = props => {
                 bounces={false}
                 style={{marginTop: 15, borderRadius: 15}}
                 showsVerticalScrollIndicator={false}>
-                {!myList?.length && (
-                  <View>
-                    <Text style={{fontSize: 20}}>{T.t('your_list_empty')}</Text>
-                  </View>
-                )}
+                {/*{!myList?.length && (*/}
+                {/*  <View>*/}
+                {/*    <Text style={{fontSize: 20}}>{T.t('your_list_empty')}</Text>*/}
+                {/*  </View>*/}
+                {/*)}*/}
                 {!!myList?.length && (
                   <>
                     {showEmptyError && (

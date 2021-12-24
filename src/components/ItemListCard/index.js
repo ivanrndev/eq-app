@@ -4,7 +4,7 @@ import {Card} from 'react-native-paper';
 import T from '../../i18n';
 import {getTotalLotPrice} from '../../utils/helpers';
 import {useQuantityUnitsAndCurrency} from '../../hooks/useQuantityUnitsAndCurrency';
-import {getUserList} from '../../actions/actions';
+import {deleteItem, deleteItemInventory, getUserList} from '../../actions/actions';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {deleteMoveItem} from '../../actions/moveToObjectsActions';
@@ -16,12 +16,15 @@ const ItemListCard = ({
   isPriceShown = true,
   isResponsibleShown = false,
   isBacket = false,
+  isStocktaking = false,
   children,
 }) => {
   const {currency} = useQuantityUnitsAndCurrency();
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const userList = useSelector(({give}) => give.userList);
+  const itemsUuid = useSelector(({inventory}) => inventory.itemsUuid);
+  const inventoryId = useSelector(({inventory}) => inventory.inventoryId);
   const [userInfo, setUserInfo] = useState({});
   useEffect(() => {
     if (!!item.person && !item.person.firstName) {
@@ -29,6 +32,11 @@ const ItemListCard = ({
     }
   }, []);
   useEffect(() => setUserInfo(userList.find(user => user._id === item.responsible)), [userList]);
+  const deleteInventoryItem = id => {
+    const uid = itemsUuid.filter(i => i.id === id);
+    dispatch(deleteItemInventory(id));
+    dispatch(deleteItem(inventoryId, uid));
+  };
   return (
     <Card.Content icon={'delete'} style={{width}}>
       <View style={{flexDirection: 'row'}}>
@@ -42,14 +50,14 @@ const ItemListCard = ({
                   uri: item.photos[0].url ? item.photos[0].url : item.photos[0],
                 }}
               />
-            ) : (
-              item.metadata.title && <Text style={styles.titleText}>{T.t('detail_title')}:</Text>
-            )}
+            ) : item.metadata?.title ? (
+              <Text style={styles.titleText}>{T.t('detail_title')}:</Text>
+            ) : null}
             <Text style={!item?.photos?.length > 0 ? styles.marginText : {marginLeft: 60}}>
-              {item.metadata.title}
+              {item.metadata?.title}
             </Text>
           </View>
-          {item.metadata.type && (
+          {!!item.metadata.type ? (
             <View style={{flexDirection: 'row'}}>
               <Text style={styles.titleText}>{T.t('detail_type')}:</Text>
               <Text style={styles.marginText}>
@@ -57,29 +65,29 @@ const ItemListCard = ({
                 {item.code && '/ ' + item.code}
               </Text>
             </View>
-          )}
-          {item.metadata.brand && (
+          ) : null}
+          {!!item.metadata.brand ? (
             <View style={{flexDirection: 'row'}}>
               <Text style={styles.titleText}>{T.t('detail_brand')}:</Text>
               <Text style={styles.marginText}>{item.metadata.brand}</Text>
             </View>
-          )}
+          ) : null}
 
-          {item.metadata.model && (
+          {!!item.metadata.model ? (
             <View style={{flexDirection: 'row'}}>
               <Text style={styles.titleText}>{T.t('detail_model')}:</Text>
               <Text style={styles.marginText}>{item.metadata.model}</Text>
             </View>
-          )}
+          ) : null}
 
-          {item.metadata.serial && (
+          {!!item.metadata.serial ? (
             <View style={{flexDirection: 'row'}}>
               <Text style={styles.titleText}>{T.t('detail_serial')}:</Text>
               <Text style={styles.marginText}>{item.metadata.serial}</Text>
             </View>
-          )}
+          ) : null}
 
-          {item.batch && (
+          {!!item.batch && (
             <>
               <View style={{flexDirection: 'row'}}>
                 <Text style={styles.titleText}>{T.t('detail_quantity')}:</Text>
@@ -138,6 +146,16 @@ const ItemListCard = ({
           <View style={styles.iconWrap}>
             <Icon
               onPress={() => dispatch(deleteMoveItem(item._id))}
+              name="trash"
+              size={30}
+              color="rgb(0, 0, 0)"
+            />
+          </View>
+        )}
+        {isStocktaking && (
+          <View style={styles.iconWrap}>
+            <Icon
+              onPress={() => deleteInventoryItem(item._id)}
               name="trash"
               size={30}
               color="rgb(0, 0, 0)"

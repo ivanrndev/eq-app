@@ -25,7 +25,7 @@ const ItemSetQuantityArea = ({
           />
           <Text style={styles.quantityUnits}>{units}</Text>
         </View>
-        <Text style={styles.error}>{!isEnteredQuantityValid && T.t('error_service_quantity')}</Text>
+        {/*<Text style={styles.error}>{!isEnteredQuantityValid && T.t('error_service_quantity')}</Text>*/}
       </>
     )}
   </>

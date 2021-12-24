@@ -1,12 +1,5 @@
 import React, {useState} from 'react';
-import {
-  Dimensions,
-  FlatList,
-  Image,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {Dimensions, FlatList, Image, StyleSheet, Text, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 import {TextInput} from 'react-native-paper';
@@ -16,32 +9,24 @@ import DarkButton from '../../components/Buttons/DarkButton';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 import {useDispatch, useSelector} from 'react-redux';
 import {height, width} from '../../constants/dimentionsAndUnits';
-import {
-  cleanCreateItem,
-  createItem,
-  createItemAndUser,
-} from '../../actions/createItem';
+import {cleanCreateItem, createItem, createItemAndUser} from '../../actions/createItem';
 import {isEmpty} from 'lodash';
+import {cleanScanInfo} from '../../actions/actions';
 
 const CreateItem = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [instanceAmount, setInstanceAmount] = useState(1);
-  const [
-    baseInfo,
-    accountType,
-    location,
-    photos,
-    responsible,
-    additionalInfo,
-  ] = useSelector(({createItem}) => [
-    createItem.baseInfo,
-    createItem.accountType,
-    createItem.location,
-    createItem.photos,
-    createItem.responsible,
-    createItem.additionalInfo,
-  ]);
+  const [baseInfo, accountType, location, photos, responsible, additionalInfo] = useSelector(
+    ({createItem}) => [
+      createItem.baseInfo,
+      createItem.accountType,
+      createItem.location,
+      createItem.photos,
+      createItem.responsible,
+      createItem.additionalInfo,
+    ],
+  );
 
   const item = {
     ...(baseInfo.type && {type: baseInfo.type}),
@@ -84,23 +69,14 @@ const CreateItem = () => {
   const createNewItem = () => {
     if (baseInfo.type) {
       if (user) {
-        dispatch(
-          createItemAndUser(
-            user,
-            item,
-            navigation,
-            photos.length && itemPhotos,
-          ),
-        );
+        dispatch(createItemAndUser(user, item, navigation, photos.length && itemPhotos));
       } else {
         dispatch(createItem(item, navigation, photos.length && itemPhotos));
         dispatch(cleanCreateItem());
       }
     }
   };
-  const pricePerLot =
-    accountType.batch &&
-    +accountType.batch.quantity * +accountType.pricePerPiece;
+  const pricePerLot = accountType.batch && +accountType.batch.quantity * +accountType.pricePerPiece;
 
   const renderPhotoItem = ({item}) => {
     return (
@@ -185,13 +161,12 @@ const CreateItem = () => {
           {accountType.pricePerPiece ? (
             <View style={styles.itemContent}>
               <Text style={styles.itemContentText}>
-                {T.t('detail_type')}:{' '}
-                {accountType.batch ? T.t('quantitative') : T.t('single')}
+                {T.t('detail_type')}: {accountType.batch ? T.t('quantitative') : T.t('single')}
               </Text>
               {accountType.batch && (
                 <>
                   <Text style={styles.itemContentText}>
-                    {T.t('detail_quantity')}: {accountType.batch.quantity}{' '}
+                    {T.t('detail_quantity')}: {accountType.batch.quantity}
                     {accountType.batch.units}
                   </Text>
                   <Text style={styles.itemContentText}>
@@ -207,7 +182,10 @@ const CreateItem = () => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.menuItem}
-          onPress={() => navigation.navigate('CreateItemsPhotos')}>
+          onPress={() => {
+            navigation.navigate('CreateItemsPhotos');
+            dispatch(cleanScanInfo());
+          }}>
           <Text style={styles.itemText}>{T.t('photos')}</Text>
           {photos.length ? (
             <View style={styles.itemContent}>
@@ -277,11 +255,7 @@ const CreateItem = () => {
           />
         </View>
         <View style={styles.btn}>
-          <DarkButton
-            onPress={createNewItem}
-            text={`${T.t('create')}`}
-            disabled={!baseInfo.type}
-          />
+          <DarkButton onPress={createNewItem} text={`${T.t('create')}`} disabled={!baseInfo.type} />
         </View>
       </KeyboardAwareScrollView>
     </>

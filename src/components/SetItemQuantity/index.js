@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Dimensions, StyleSheet, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
@@ -37,7 +37,8 @@ const SetItemQuantity = ({actionName, pageToRedirect, title, mode, onSave}) => {
   const handleSave = () => {
     onSave ? onSave(id, selectedQuantity) : dispatch(actionName(id, selectedQuantity));
     navigation.navigate(pageToRedirect);
-    setSelectedQuantity(quantity);
+    setSelectedQuantity(1);
+    // setSelectedQuantity(quantity);
     const normalizedItem = [
       {
         id: scanInfo._id,
@@ -85,7 +86,7 @@ const SetItemQuantity = ({actionName, pageToRedirect, title, mode, onSave}) => {
                 <DarkButton
                   text={T.t('save')}
                   onPress={handleSave}
-                  disabled={!isEnteredQuantityValid}
+                  // disabled={!isEnteredQuantityValid}
                 />
               </View>
               <View style={styles.btn}>

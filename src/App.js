@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, {useEffect, useState} from 'react';
-import {StatusBar, AppState} from 'react-native';
+import {StatusBar} from 'react-native';
 import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
 // navigation and router
 import {NavigationContainer} from '@react-navigation/native';
@@ -42,7 +42,7 @@ import AcceptFinish from './screens/AcceptGive/Accept/AcceptFinish';
 import Inventory from './screens/Inventory';
 import InventoryScaner from './screens/Inventory/InventoryScaner';
 import InventoryDone from './screens/Inventory/InventoryDone';
-import Comments from './screens/Сomments/';
+
 import CustomDrawer from './components/Drawer';
 import Settings from './screens/Settings';
 import TransfersEdit from './screens/Transfers/TransferEdit';
@@ -62,7 +62,7 @@ import ChooseItemPhotoMode from './components/Gallery/ChooseItemPhotoMode';
 import AsyncStorage from '@react-native-community/async-storage';
 import messaging from '@react-native-firebase/messaging';
 import PushNotification from 'react-native-push-notification';
-
+import Comments from './screens/Comments';
 import CreateItem from './screens/CreateItem';
 import CreateInventoryItem from './screens/Inventory/InventoryChooseMode/CreateInventoryItem';
 import BaseInfo from './screens/CreateItem/BaseInfo';
@@ -71,20 +71,18 @@ import AddPhoto from './screens/CreateItem/AddPhoto';
 import ItemLocation from './screens/CreateItem/ItemLocation';
 import Responsible from './screens/CreateItem/Responsible';
 import AdditionalInfo from './screens/CreateItem/AdditionalInfo';
-import MoveStartPage from "./screens/AcceptGive/MoveToObject/MoveStartPage";
-import MoveScaner from "./screens/AcceptGive/MoveToObject/MoveScaner";
-import MoveLocation from "./screens/AcceptGive/MoveToObject/MoveLocation";
-import MoveSuccess from "./screens/AcceptGive/MoveToObject/MoveSuccess/MoveSuccess";
+import MoveStartPage from './screens/AcceptGive/MoveToObject/MoveStartPage';
+import MoveScaner from './screens/AcceptGive/MoveToObject/MoveScaner';
+import MoveLocation from './screens/AcceptGive/MoveToObject/MoveLocation';
+import MoveSuccess from './screens/AcceptGive/MoveToObject/MoveSuccess/MoveSuccess';
 import CreateFinish from './screens/CreateItem/CreateFinish/CreateFinish';
-import {OnMeNavigation} from "./screens/OnMe/OnMeNavigation";
-import OnMe from "./screens/OnMe";
-import OnMeSearch from "./screens/OnMe/OnMeSearch";
-import OnMeSearched from "./screens/OnMe/OnMeSearched";
-import {ItemDetail} from "./components/ItemDetail";
-import {check, PERMISSIONS, RESULTS, request} from "react-native-permissions";
-import {useDispatch} from "react-redux";
-import {setIsAvailableCameraState} from "./actions/actions";
-import {InventoryQuestion} from "./screens/Inventory/InventoryQuestion";
+import OnMe from './screens/OnMe';
+import OnMeSearch from './screens/OnMe/OnMeSearch';
+import {ItemDetail} from './components/ItemDetail';
+import {check, PERMISSIONS, RESULTS} from 'react-native-permissions';
+import {useDispatch} from 'react-redux';
+import {setIsAvailableCameraState} from './actions/actions';
+import {InventoryQuestion} from './screens/Inventory/InventoryQuestion';
 
 const theme = {
   ...DefaultTheme,
@@ -97,10 +95,6 @@ const theme = {
 };
 
 const Drawer = createDrawerNavigator();
-// XMLHttpRequest = GLOBAL.originalXMLHttpRequest ?
-//     GLOBAL.originalXMLHttpRequest :
-//     GLOBAL.XMLHttpRequest;
-
 const App = () => {
   const [isAvailableCamera, setIsAvailableCamera] = useState(true);
   const dispatch = useDispatch();
@@ -154,14 +148,14 @@ const App = () => {
               dispatch(setIsAvailableCameraState(true));
               break;
             case RESULTS.BLOCKED:
-              dispatch(setIsAvailableCameraState(false));;
+              dispatch(setIsAvailableCameraState(false));
               break;
           }
         })
         .catch((error) => {
-          console.log(error)
+          console.log(error);
         });
-  }
+  };
 
 
   return (

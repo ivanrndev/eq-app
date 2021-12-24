@@ -28,7 +28,7 @@ import {
 } from '../../../actions/actionsType.js';
 import T from '../../../i18n';
 import {getMountTransferError} from '../../../utils/helpers';
-import {CLEAN_MOVE_TO_OBJECT, CLEAN_SCAN} from "../../../actions/actionsType";
+import {CLEAN_SCAN, CLEAN_SCAN_INFO} from '../../../actions/actionsType';
 
 const initialState = {
   currentScan: '',
@@ -87,6 +87,11 @@ const scanReducer = (state = initialState, action) => {
         ...state,
         ...initialState,
       };
+    case CLEAN_SCAN_INFO:
+      return {
+        ...state,
+        scanInfo: {},
+      };
     case CLEAR_SCAN_GIVE_LIST:
       return {
         ...state,
@@ -135,9 +140,7 @@ const scanReducer = (state = initialState, action) => {
       };
     case ADD_ITEM_TO_MOUNT_LIST:
       const transferErr = getMountTransferError(action.payload);
-      const isItemAdded = [...state.mountList].find(
-        item => item._id === action.payload._id,
-      );
+      const isItemAdded = [...state.mountList].find(item => item._id === action.payload._id);
       if (isItemAdded) {
         return {
           ...state,
@@ -171,9 +174,7 @@ const scanReducer = (state = initialState, action) => {
         };
       }
     case DELETE_ITEM_FROM_MOUNT_LIST:
-      const filteredList = [...state.mountList].filter(
-        item => item._id !== action.payload,
-      );
+      const filteredList = [...state.mountList].filter(item => item._id !== action.payload);
       const filteredQtyList = [...state.mountListWithQty].filter(
         item => item._id !== action.payload,
       );
@@ -183,9 +184,7 @@ const scanReducer = (state = initialState, action) => {
         mountListWithQty: filteredQtyList,
       };
     case SET_ITEM_QTY_FOR_MOUNT:
-      const existedItem = [...state.mountListWithQty].filter(
-        item => item.id !== action.payload.id,
-      );
+      const existedItem = [...state.mountListWithQty].filter(item => item.id !== action.payload.id);
       const newMountList = [
         ...existedItem,
         {

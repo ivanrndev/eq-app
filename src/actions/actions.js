@@ -13,8 +13,8 @@ import {
   CHANGE_STATUS_LOAD,
   CHANGE_STATUS_LOAD_MORE,
   CHANGE_STATUS_MY_LOAD_MORE,
-  CLEAN_CREATE_ITEM,
   CLEAN_SCAN,
+  CLEAN_SCAN_INFO,
   CLEAN_SEARCH_RESULT,
   CLEAR_BID_LIST,
   CLEAR_GIVE_ITEM_QTY,
@@ -24,6 +24,8 @@ import {
   CLEAR_TRANSACTIONS_LIST,
   CLEAR_TRANSFERS_LIST,
   CLEAR_USER_LIST,
+  DELETE_INVENTORY_ITEM,
+  DELETE_MOVE_ITEM,
   DIALOG_INPUT,
   ERROR_CURRENT_MOUNT_SCAN_INFO,
   ERROR_CURRENT_SCAN_INFO,
@@ -87,7 +89,6 @@ import {
   SAVE_ID_INVENTORY,
   SAVE_INVENTORY_CREATED_ITEM,
   SAVE_INVENTORY_SCANS,
-  SAVE_KIT_TMC,
   SAVE_USER_ACCEPT_BID,
   SAVE_UUID,
   SEARCH_ITEMS,
@@ -97,10 +98,7 @@ import {
   SET_FILTERS,
   SET_GIVE_ITEM_QTY,
   SET_INVENTORY_ITEM_QTY,
-  SET_IS_MOVE_SCANER,
   SET_IS_SHOW_FILTER,
-  SET_MOVE_SCANER,
-  SET_SCANED_MOVE_ITEM,
   SUCCES_IN_SERVICES,
   SUCCES_WRITE_OFF,
   TRANSACTIONS_ERROR,
@@ -116,9 +114,9 @@ import {
   USER_ROLE,
 } from './actionsType';
 import {setTokenToDataBase} from '../utils/pushNotifications';
-import T from '../i18n';
 import {setIsMoveScan, setIsRoleAllowThunk, setScanedMoveItem} from './moveToObjectsActions';
 import {setScanedOnMeItem} from './onMeActions';
+import {add} from 'react-native-reanimated';
 
 // Settings
 export const nfc = (
@@ -393,6 +391,12 @@ export const cleanScan = () => dispatch => {
   });
 };
 
+export const cleanScanInfo = () => dispatch => {
+  dispatch({
+    type: CLEAN_SCAN_INFO,
+  });
+};
+
 export const currentScan = (
   code,
   nav,
@@ -480,14 +484,6 @@ export const getSearchItem = (
                   isInfoOpen: true,
                 },
               });
-              if (resp.data.items.length) {
-                console.log('inventoryId', resp.data.items);
-                dispatch({
-                  type: SAVE_KIT_TMC,
-                  payload: {itemsKit: resp.data.items, inventoryScanList: resp.data.items},
-                });
-                // dispatch(addItemInInventory(inventoryId, resp.data.items));
-              }
             }
           }
           dispatch(loader(false));
@@ -516,7 +512,6 @@ export const scanInfo = (
   isWriteOff = false,
   isMoveScaner = false,
 ) => dispatch => {
-  console.log({code});
   AsyncStorage.getItem('company').then(company => {
     return axios
       .get(`${API_URL}/company/${company}/item/search`, {params: {code}})
@@ -1510,6 +1505,7 @@ export const clearBidList = () => dispatch => {
     type: CLEAR_BID_LIST,
     payload: {
       acceptList: [],
+      acceptListId: [],
       alreadyScannedBids: [],
       acceptloadMore: false,
       offSet: 0,
@@ -1611,12 +1607,14 @@ export const clearInventory = () => dispatch => {
     type: CLEAR_INVENTORY,
     payload: {
       inventoryScanList: [],
-      currentInventoryUser: '',
+      // currentInventoryUser: '',
       inventoryError: false,
       makeStocktaking: '',
       inventoryQuantityList: [],
       addedItems: [],
       inventoryId: '',
+      itemsUuid: [],
+      itemsKit: [],
     },
   });
 };
@@ -1639,6 +1637,13 @@ export const saveInventoryItem = arr => dispatch => {
       inventoryScanList: arr,
     },
   });
+  // if (arr[0]?.items?.length) {
+  //   console.log('enter if');
+  //   dispatch({
+  //     type: SAVE_KIT_TMC,
+  //     payload: {itemsKit: arr[0].items, inventoryScanList: arr[0].items},
+  //   });
+  // }
 };
 export const saveCreatedInventoryItem = obj => dispatch => {
   dispatch({
@@ -1650,7 +1655,6 @@ export const saveCreatedInventoryItem = obj => dispatch => {
 };
 
 export const makeInventory = (userId, item, selectedQuantity, added_item) => dispatch => {
-  console.log('items makeInventory', item);
   AsyncStorage.getItem('company').then(company => {
     return axios
       .post(`${API_URL}/company/${company}/stocktaking/`, {
@@ -1700,22 +1704,19 @@ export const makeInventory = (userId, item, selectedQuantity, added_item) => dis
 };
 
 export const addItemInInventory = (idInventory, item, selectedQuantity, added_item) => dispatch => {
-  console.log('addItemInInventory', item);
+  const obj = {};
+  if (added_item) {
+    Object.keys(added_item).forEach(i => {
+      if (added_item[i]?.length > 0) {
+        obj[i] = added_item[i];
+      }
+    });
+  }
   AsyncStorage.getItem('company').then(company => {
     return axios
       .patch(`${API_URL}/company/${company}/stocktaking/${idInventory}`, {
         item_ids: item ? item : [],
-        added_items: added_item
-          ? [
-              {
-                brand: added_item?.brand,
-                model: added_item?.model,
-                serial: added_item?.serial,
-                type: added_item?.type,
-                quantity: added_item?.quantity,
-              },
-            ]
-          : [],
+        added_items: added_item ? [obj] : [],
       })
       .then(resp => {
         if (resp.status === 200) {
@@ -1765,13 +1766,6 @@ export const getSavedInventory = inventoryId => dispatch => {
       })
       .then(resp => {
         if (resp.status === 200) {
-          console.log('getSavedInventory', resp.data.data.items);
-          // dispatch({
-          //   type: SAVE_INVENTORY_CREATED_ITEM,
-          //   payload: {
-          //     addedItems: resp.data.data.items,
-          //   },
-          // });
           dispatch({
             type: ADD_ITEMS_FROM_SAVED_INVENTORY,
             // type: MAKE_STOCKTAKING,
@@ -1779,6 +1773,10 @@ export const getSavedInventory = inventoryId => dispatch => {
               inventoryError: false,
               inventoryScanList: resp.data.data.items,
             },
+          });
+          dispatch({
+            type: SAVE_UUID,
+            payload: resp.data.data.items,
           });
         }
       });
@@ -1801,8 +1799,6 @@ export const deleteInventory = inventoryId => dispatch => {
 };
 
 export const deleteItem = (inventoryId, itemId) => () => {
-  console.log('inventoryId', inventoryId);
-  console.log('itemId', itemId[0].uuid);
   AsyncStorage.getItem('company').then(company => {
     return axios
       .patch(`${API_URL}/company/${company}/stocktaking/${inventoryId}/delete-items`, {
@@ -1815,7 +1811,6 @@ export const deleteItem = (inventoryId, itemId) => () => {
 };
 
 export const makeStocktaking = (userId, idQtyArray, addedItemsArray, nav) => dispatch => {
-  console.log({userId, idQtyArray, addedItemsArray, nav});
   AsyncStorage.getItem('company').then(company => {
     return axios
       .post(`${API_URL}/company/${company}/stocktaking/`, {
@@ -1854,13 +1849,10 @@ export const makeStocktaking = (userId, idQtyArray, addedItemsArray, nav) => dis
   });
 };
 
-export const runInvetory = (inventoryId, idQtyArray, addedItemsArray, nav) => dispatch => {
+export const runInvetory = (inventoryId, nav) => dispatch => {
   AsyncStorage.getItem('company')
     .then(company => {
-      return axios.put(`${API_URL}/company/${company}/stocktaking/${inventoryId}/run`, {
-        item_ids: idQtyArray,
-        added_items: addedItemsArray,
-      });
+      return axios.put(`${API_URL}/company/${company}/stocktaking/${inventoryId}/run`);
     })
     .then(resp => {
       if (resp.status === 200) {
@@ -1890,6 +1882,12 @@ export const runInvetory = (inventoryId, idQtyArray, addedItemsArray, nav) => di
       }
     });
 };
+
+export const deleteItemInventory = id => dispatch =>
+  dispatch({
+    type: DELETE_INVENTORY_ITEM,
+    id,
+  });
 
 // forgot password
 export const forgotPassword = key => dispatch => {

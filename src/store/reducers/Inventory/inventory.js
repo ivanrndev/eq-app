@@ -6,14 +6,13 @@ import {
   SET_INVENTORY_ITEM_QTY,
   CLEAR_INVENTORY,
   SAVE_INVENTORY_CREATED_ITEM,
-} from '../../../actions/actionsType.js';
-import {
   ADD_ITEMS_FROM_SAVED_INVENTORY,
+  DELETE_INVENTORY_ITEM,
   SAVE_ID_INVENTORY,
   SAVE_KIT_TMC,
   SAVE_UUID,
-} from '../../../actions/actionsType';
-
+} from '../../../actions/actionsType.js';
+import {uniqBy} from 'lodash';
 const initialState = {
   inventoryScanList: [],
   currentInventoryUser: '',
@@ -65,8 +64,11 @@ const inventoryReducer = (state = initialState, action) => {
           person: {
             role: item.person.role,
             firstName: item.person.firstName,
+            lastName: item.person?.lastName,
           },
           uuid: item.uuid,
+          _id: item.item._id,
+          code: item.item.code,
         };
         return tmc;
       });
@@ -108,10 +110,7 @@ const inventoryReducer = (state = initialState, action) => {
         inventoryQuantityList: newList,
       };
     case SAVE_KIT_TMC: {
-      const itemFromKit = action.payload.itemsKit.filter(
-        item => item._id !== state.inventoryScanList._id,
-      );
-      const updateScan = [...state.inventoryScanList, ...itemFromKit];
+      let updateScan = uniqBy([...state.inventoryScanList, ...action.payload.itemsKit], '_id');
       return {
         ...state,
         itemsKit: action.payload.itemsKit,
@@ -124,6 +123,12 @@ const inventoryReducer = (state = initialState, action) => {
         ...action.payload,
       };
     }
+    case DELETE_INVENTORY_ITEM:
+      return {
+        ...state,
+        itemsUuid: state.itemsUuid.filter(item => item._id !== action.id),
+        inventoryScanList: state.inventoryScanList.filter(item => item._id !== action.id),
+      };
     case SAVE_INVENTORY_CREATED_ITEM:
       return {
         ...state,

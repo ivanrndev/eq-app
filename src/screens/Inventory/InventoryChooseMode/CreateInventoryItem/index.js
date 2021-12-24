@@ -73,7 +73,7 @@ const CreateInventoryItem = () => {
       if (inventoryId) {
         dispatch(addItemInInventory(inventoryId, '', '', formValues));
       } else {
-        dispatch(makeInventory(currentInventoryUser, '', formValues));
+        dispatch(makeInventory(currentInventoryUser, '', '', formValues));
       }
       dispatch(
         saveCreatedInventoryItem({

@@ -39,12 +39,7 @@ const Marking = props => {
       <Portal>
         {settings.loader && (
           <View style={styles.loader}>
-            <ActivityIndicator
-              style={styles.load}
-              size={80}
-              animating={true}
-              color={'#EDF6FF'}
-            />
+            <ActivityIndicator style={styles.load} size={80} animating={true} color={'#EDF6FF'} />
           </View>
         )}
       </Portal>
@@ -52,10 +47,7 @@ const Marking = props => {
         <View style={styles.buttons}>
           <View style={styles.buttonBlock}>
             <DarkButton text={T.t('title_to_mark')} onPress={getMarking} />
-            <TransparentButton
-              text={T.t('title_to_remark')}
-              onPress={getReMarking}
-            />
+            <TransparentButton text={T.t('title_to_remark')} onPress={getReMarking} />
           </View>
         </View>
       </View>

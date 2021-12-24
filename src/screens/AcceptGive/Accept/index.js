@@ -1,26 +1,11 @@
 import React from 'react';
 import moment from 'moment';
-import {
-  StyleSheet,
-  View,
-  Dimensions,
-  SafeAreaView,
-  ScrollView,
-} from 'react-native';
-import {
-  Card,
-  Title,
-  Paragraph,
-  Button,
-  ActivityIndicator,
-} from 'react-native-paper';
+import {StyleSheet, View, Dimensions, SafeAreaView, ScrollView} from 'react-native';
+import {Card, Title, Paragraph, Button, ActivityIndicator} from 'react-native-paper';
 import T from '../../../i18n';
 // components
 import Appbar from '../../../components/Appbar';
-import {
-  getProperErrorMessage,
-  getProperTransferStatus,
-} from '../../../utils/helpers.js';
+import {getProperErrorMessage, getProperTransferStatus} from '../../../utils/helpers.js';
 // redux and actions
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -42,7 +27,6 @@ const Accept = props => {
   };
 
   let showEmptyError = !accept.acceptList.length;
-  console.log(accept.acceptList);
   return (
     <>
       <Appbar
@@ -59,11 +43,7 @@ const Accept = props => {
           <>
             <View style={styles.container}>
               <ScrollView>
-                {showEmptyError && (
-                  <Paragraph style={styles.text}>
-                    {T.t('no_available')}
-                  </Paragraph>
-                )}
+                {showEmptyError && <Paragraph style={styles.text}>{T.t('no_available')}</Paragraph>}
                 {!error
                   ? accept.acceptList.map((item, index) => (
                       <Card
@@ -75,16 +55,13 @@ const Accept = props => {
                         }}>
                         <Card.Content>
                           <Title style={styles.cardTitle}>
-                            {T.t('transfer_from')}: {item.sender.firstName}{' '}
-                            {item.sender.lastName}
+                            {T.t('transfer_from')}: {item.sender.firstName} {item.sender.lastName}
                           </Title>
                           <Paragraph style={styles.paragraph}>
-                            {T.t('transfer_status')}:{' '}
-                            {getProperTransferStatus(item.status)}
+                            {T.t('transfer_status')}: {getProperTransferStatus(item.status)}
                           </Paragraph>
                           <Paragraph style={styles.paragraph}>
-                            {T.t('title_date')}:{' '}
-                            {moment(item.createdAt).format('YYYY-MM-DD HH:mm')}
+                            {T.t('title_date')}: {moment(item.createdAt).format('YYYY-MM-DD HH:mm')}
                           </Paragraph>
                           <Paragraph style={styles.paragraph}>
                             {T.t('transfer_count')}: {item.items.length}
@@ -98,11 +75,7 @@ const Accept = props => {
             {accept.acceptList.length > 5 && (
               <>
                 {!accept.acceptloadMore && (
-                  <Button
-                    style={styles.button}
-                    mode="Text"
-                    color="#22215B"
-                    onPress={getMoreItems}>
+                  <Button style={styles.button} mode="Text" color="#22215B" onPress={getMoreItems}>
                      {T.t('load_more')}
                   </Button>
                 )}

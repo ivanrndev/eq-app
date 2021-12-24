@@ -18,23 +18,15 @@ import {useUserData} from '../../../hooks/useUserData';
 
 const image = require('./../../../assets/svg/empty.png');
 
-const GalleryForItem = ({
-  page,
-  setIsGalleryOpen,
-  setChosenPhoto,
-  setPhotoDel,
-}) => {
+const GalleryForItem = ({page, setIsGalleryOpen, setChosenPhoto, setPhotoDel}) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const [itemInfo, goBackPageGallery, createItemPhotos] = useSelector(
-    ({scan, createItem}) => [
-      scan.scanInfo,
-      scan.goBackPageGallery,
-      createItem.photos,
-    ],
-  );
-  const initialPhoto =
-    goBackPageGallery === 'CreateItem' ? createItemPhotos : itemInfo.photos;
+  const [itemInfo, goBackPageGallery, createItemPhotos] = useSelector(({scan, createItem}) => [
+    scan.scanInfo,
+    scan.goBackPageGallery,
+    createItem.photos,
+  ]);
+  const initialPhoto = goBackPageGallery === 'CreateItem' ? createItemPhotos : itemInfo.photos;
   const itemPhotos = initialPhoto ?? [];
 
   const bigPhoto = !isEmpty(itemPhotos) && itemPhotos[0];
@@ -58,7 +50,7 @@ const GalleryForItem = ({
     dispatch(setGoBackPageGallery(page));
   };
 
-  const renderItem = ({item, index}) => {
+  const renderItem = ({item}) => {
     return (
       <View>
         <Image
@@ -74,8 +66,7 @@ const GalleryForItem = ({
       {!isEmpty(itemPhotos) ? (
         <>
           <ImageBackground source={image} style={styles.bgSvgBig}>
-            <TouchableWithoutFeedback
-              onPress={() => handlePressPhoto(bigPhoto, 0)}>
+            <TouchableWithoutFeedback onPress={() => handlePressPhoto(bigPhoto, 0)}>
               <Image
                 style={styles.bigImg}
                 source={{

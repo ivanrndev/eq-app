@@ -16,7 +16,12 @@ import {useDispatch, useSelector} from 'react-redux';
 import TransparentButton from '../../../components/Buttons/TransparentButton';
 import DarkButton from '../../../components/Buttons/DarkButton';
 import {Modal} from 'react-native-paper';
-import {checkInventoryList, deleteInventory, getSavedInventory} from '../../../actions/actions';
+import {
+  checkInventoryList,
+  clearInventory,
+  deleteInventory,
+  getSavedInventory,
+} from '../../../actions/actions';
 import AsyncStorage from '@react-native-community/async-storage';
 
 export const InventoryQuestion = item => {
@@ -37,6 +42,7 @@ export const InventoryQuestion = item => {
 
   const newInventory = () => {
     dispatch(deleteInventory(inventoryId));
+    dispatch(clearInventory());
     navigation.navigate('InventoryChooseMode');
     setActiveModal(false);
   };

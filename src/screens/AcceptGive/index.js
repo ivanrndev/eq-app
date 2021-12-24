@@ -9,25 +9,25 @@ import TransparentButton from '../../components/Buttons/TransparentButton';
 import {Portal, ActivityIndicator} from 'react-native-paper';
 // redux and actions
 import {useDispatch, useSelector} from 'react-redux';
+import {loader, getUserList, getBidList, getTransfers} from '../../actions/actions.js';
+import {nfc} from '../../actions/actions';
+import MoveScaner from './MoveToObject/MoveScaner';
+import MoveStartPage from './MoveToObject/MoveStartPage';
 import {
-  loader,
-  getUserList,
-  getBidList,
-  getTransfers,
-} from '../../actions/actions.js';
-import {nfc} from "../../actions/actions";
-import MoveScaner from "./MoveToObject/MoveScaner";
-import MoveStartPage from "./MoveToObject/MoveStartPage";
-import {openMoveScan, setIsAddMove, setIsMoveScan, setIsRoleAllowThunk} from "../../actions/moveToObjectsActions";
+  openMoveScan,
+  setIsAddMove,
+  setIsMoveScan,
+  setIsRoleAllowThunk,
+} from '../../actions/moveToObjectsActions';
 
 const AcceptGive = props => {
   const dispatch = useDispatch();
   const [userId, setUserId] = useState();
   const settings = useSelector(state => state.settings);
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(setIsMoveScan(false));
     dispatch(setIsRoleAllowThunk(false));
-  },[])
+  }, []);
   useEffect(() => {
     AsyncStorage.getItem('userId').then(id => setUserId(id));
   }, [userId]);
@@ -63,12 +63,7 @@ const AcceptGive = props => {
       <Portal>
         {settings.loader && (
           <View style={styles.loader}>
-            <ActivityIndicator
-              style={styles.load}
-              size={80}
-              animating={true}
-              color={'#EDF6FF'}
-            />
+            <ActivityIndicator style={styles.load} size={80} animating={true} color={'#EDF6FF'} />
           </View>
         )}
       </Portal>
@@ -77,19 +72,18 @@ const AcceptGive = props => {
           <View style={styles.buttonBlock}>
             <DarkButton text={T.t('accept')} onPress={bidList} />
             <DarkButton text={T.t('give')} onPress={userList} />
-            <DarkButton text={T.t('move_item')} onPress={() => {
-              dispatch(openMoveScan(props.navigation, settings.moveScanPage));
-              dispatch(setIsAddMove(false));
-
-            }} />
+            <DarkButton
+              text={T.t('move_item')}
+              onPress={() => {
+                dispatch(openMoveScan(props.navigation, settings.moveScanPage));
+                dispatch(setIsAddMove(false));
+              }}
+            />
           </View>
         </View>
         <View style={styles.BottomButton}>
           <View style={styles.buttonBlock}>
-            <TransparentButton
-              text={T.t('history_of_transfer')}
-              onPress={() => transfers()}
-            />
+            <TransparentButton text={T.t('history_of_transfer')} onPress={() => transfers()} />
           </View>
         </View>
       </View>

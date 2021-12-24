@@ -17,10 +17,12 @@ import {
   clearInventory,
   deleteItem,
   loader,
+  makeInventory,
   runInvetory,
   saveInventoryItem,
 } from '../../../actions/actions';
 import {getInventoryMesageError, handleNavigateToSingleItemPage} from '../../../utils/helpers';
+import {SAVE_KIT_TMC} from '../../../actions/actionsType';
 
 const InventoryChooseMode = () => {
   const navigation = useNavigation();
@@ -42,9 +44,10 @@ const InventoryChooseMode = () => {
   const isSetQtyBtnShown = item =>
     item.batch &&
     !item.uuid &&
-    !item.metadata.quantity &&
+    item._id &&
+    // !item.metadata.quantity &&
     item.batch.quantity &&
-    +item.batch.quantity !== 1 &&
+    // +item.batch.quantity !== 1 &&
     !setQtyItem(item._id);
 
   useEffect(() => {
@@ -64,6 +67,17 @@ const InventoryChooseMode = () => {
       Object.keys(scan.scanInfo).length > 0
     ) {
       dispatch(saveInventoryItem([...inventory.inventoryScanList, scan.scanInfo]));
+      const normalizedItem = [
+        {
+          id: scan.scanInfo._id,
+          quantity: scan.scanInfo?.batch?.quantity || '1',
+        },
+      ];
+      if (inventory.inventoryId) {
+        dispatch(addItemInInventory(inventory.inventoryId, normalizedItem, ''));
+      } else {
+        dispatch(makeInventory(inventory.currentInventoryUser, normalizedItem, ''));
+      }
     }
   }, [scan]);
 
@@ -97,7 +111,16 @@ const InventoryChooseMode = () => {
     if (inventory.itemsKit.length) {
       dispatch(addItemInInventory(inventory.inventoryId, normalizedKitItems));
     }
-  }, [inventory.itemsKit]);
+  }, [inventory.itemsKit, inventory.inventoryId]);
+
+  useEffect(() => {
+    if (scan.scanInfo?.items?.length) {
+      dispatch({
+        type: SAVE_KIT_TMC,
+        payload: {itemsKit: scan.scanInfo.items, inventoryScanList: scan.scanInfo.items},
+      });
+    }
+  }, [scan.scanInfo]);
 
   const handleEndInventory = () => {
     navigation.navigate('Home');
@@ -112,14 +135,7 @@ const InventoryChooseMode = () => {
     //     navigation,
     //   ),
     // );
-    dispatch(
-      runInvetory(
-        inventory.inventoryId,
-        [...inventory.inventoryQuantityList, ...inventorsItemIdAndQty],
-        normalizedAddedItems,
-        navigation,
-      ),
-    );
+    dispatch(runInvetory(inventory.inventoryId, navigation));
     dispatch(clearInventory());
   };
 
@@ -151,21 +167,10 @@ const InventoryChooseMode = () => {
         {renderedList.length > 0 &&
           renderedList.map(item => (
             <Card style={styles.card} key={item._id}>
-              <ItemListCard item={item} isPriceShown={false} />
+              <ItemListCard item={item} isPriceShown={false} isStocktaking={true} />
               <View style={styles.setQtyBtn}>
                 {isSetQtyBtnShown(item) && (
-                  <DarkButton
-                    onPress={() =>
-                      handleNavigateToSingleItemPage(
-                        item.code,
-                        navigation,
-                        item._id,
-                        'SetInventoryQty',
-                        dispatch,
-                      )
-                    }
-                    text={T.t('set_quantity')}
-                  />
+                  <DarkButton onPress={() => correctItems(item)} text={T.t('set_quantity')} />
                 )}
               </View>
               {setQtyItem(item._id) && (
