@@ -45,6 +45,7 @@ const InventoryChooseMode = () => {
     item.batch &&
     !item.uuid &&
     item._id &&
+    item.createdAt &&
     // !item.metadata.quantity &&
     item.batch.quantity &&
     // +item.batch.quantity !== 1 &&

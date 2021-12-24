@@ -1637,13 +1637,6 @@ export const saveInventoryItem = arr => dispatch => {
       inventoryScanList: arr,
     },
   });
-  // if (arr[0]?.items?.length) {
-  //   console.log('enter if');
-  //   dispatch({
-  //     type: SAVE_KIT_TMC,
-  //     payload: {itemsKit: arr[0].items, inventoryScanList: arr[0].items},
-  //   });
-  // }
 };
 export const saveCreatedInventoryItem = obj => dispatch => {
   dispatch({
@@ -1696,7 +1689,6 @@ export const makeInventory = (userId, item, selectedQuantity, added_item) => dis
               inventoryError: error,
             },
           });
-          // nav.navigate('InventoryDone');
           dispatch(loader(false));
         }
       });

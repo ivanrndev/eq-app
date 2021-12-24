@@ -69,7 +69,7 @@ const CreateInventoryItem = () => {
     formValues.type.length === 0
       ? setErrors({...errors, type: T.t('error_required')})
       : setErrors({...errors, type: ''});
-    if (errors.type.length === 0 && errors.quantity.length === 0) {
+    if (errors.type.length === 0 && errors.quantity.length === 0 && formValues.type.length !== 0) {
       if (inventoryId) {
         dispatch(addItemInInventory(inventoryId, '', '', formValues));
       } else {
@@ -79,6 +79,7 @@ const CreateInventoryItem = () => {
         saveCreatedInventoryItem({
           metadata: formValues,
           batch: {quantity: formValues.quantity, units: selectedUnits},
+          _id: `${formValues.type}${formValues.quantity}`,
         }),
       );
       navigation.navigate('InventoryChooseMode');

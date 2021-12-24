@@ -32,7 +32,8 @@ const ItemListCard = ({
     }
   }, []);
   useEffect(() => setUserInfo(userList.find(user => user._id === item.responsible)), [userList]);
-  const deleteInventoryItem = id => {
+  const deleteInventoryItem = (id, item) => {
+    console.log('item', item);
     const uid = itemsUuid.filter(i => i.id === id);
     dispatch(deleteItemInventory(id));
     dispatch(deleteItem(inventoryId, uid));
@@ -155,7 +156,7 @@ const ItemListCard = ({
         {isStocktaking && (
           <View style={styles.iconWrap}>
             <Icon
-              onPress={() => deleteInventoryItem(item._id)}
+              onPress={() => deleteInventoryItem(item._id, item)}
               name="trash"
               size={30}
               color="rgb(0, 0, 0)"

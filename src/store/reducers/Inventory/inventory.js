@@ -67,7 +67,7 @@ const inventoryReducer = (state = initialState, action) => {
             lastName: item.person?.lastName,
           },
           uuid: item.uuid,
-          _id: item.item._id,
+          _id: item.item._id || item.item.type + item.amountReal,
           code: item.item.code,
         };
         return tmc;
@@ -82,8 +82,9 @@ const inventoryReducer = (state = initialState, action) => {
         ...action.payload,
       };
     case SAVE_UUID:
+      console.log('save_uuid', action.payload);
       const newUuidItem = action.payload.map(i => ({
-        id: i.item._id,
+        id: i.item._id || i.item.type + i.amountReal,
         uuid: i.uuid,
       }));
       const filterItemUid = state.itemsUuid.filter(i => i.id !== newUuidItem[0].id);
@@ -124,10 +125,12 @@ const inventoryReducer = (state = initialState, action) => {
       };
     }
     case DELETE_INVENTORY_ITEM:
+      console.log('delete', action);
       return {
         ...state,
         itemsUuid: state.itemsUuid.filter(item => item._id !== action.id),
         inventoryScanList: state.inventoryScanList.filter(item => item._id !== action.id),
+        addedItems: state.addedItems.filter(item => item._id !== action.id),
       };
     case SAVE_INVENTORY_CREATED_ITEM:
       return {
