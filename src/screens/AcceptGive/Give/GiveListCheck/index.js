@@ -25,6 +25,7 @@ import {
 import TariffLimitModal from '../../../../components/TariffLimitModal';
 import SetQtyCard from '../../../../components/SetQtyCard';
 import {SelectLocationModal} from '../../SelectLocationModal';
+import {clearGiveList} from '../../../../actions/actions';
 
 const GiveListCheck = props => {
   const dispatch = useDispatch();
@@ -86,7 +87,7 @@ const GiveListCheck = props => {
       item => item._id === scan.selectGiveId,
     );
 
-    const responsible = correctItem && correctItem.person._id;
+    const responsible = correctItem && correctItem.person?._id;
     if (responsible === give.userCurrentId) {
       setError(
         `${T.t('give_alredy_user_first')} "${scan.currentScan}" ${T.t(
@@ -162,6 +163,7 @@ const GiveListCheck = props => {
         clearGiveList={true}
         goTo={'GiveList'}
         title={T.t('create_request')}
+        listAction={clearGiveList}
       />
       {isModalShown && <TariffLimitModal handleClose={setIsModalShown} />}
       <View style={styles.body}>

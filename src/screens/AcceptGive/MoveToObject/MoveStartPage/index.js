@@ -4,31 +4,27 @@ import {
   ScrollView,
   StyleSheet,
   View,
-  TextInput,
   TouchableOpacity,
   Text
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import T from '../../../../i18n';
-import {Button, Card, Menu, Snackbar} from 'react-native-paper';
+import {Button, Menu} from 'react-native-paper';
 import Appbar from '../../../../components/Appbar';
 import DarkButton from '../../../../components/Buttons/DarkButton';
 import ItemListCard from '../../../../components/ItemListCard';
 import {
-  actionCheckError,
   getInventoryMesageError,
 } from '../../../../utils/helpers';
 import {
   changeLocation, changeLocationWithoutUser, changeQuantity,
-  deleteMoveItem,
   openMoveScan, setChoosedUser, setIsAddMove,
-  setScanedMoveItem
-} from "../../../../actions/moveToObjectsActions";
-import Icon from 'react-native-vector-icons/FontAwesome';
+  setScanedMoveItem,
+} from '../../../../actions/moveToObjectsActions';
 import Arrow from "../../../../assets/svg/arrow-down.svg";
 import {width} from "../../../../constants/dimentionsAndUnits";
-import {cleanScan, getSearchItem, getUserList, loader, updateTransfer} from "../../../../actions/actions";
+import {getUserList} from "../../../../actions/actions";
 
 
 const MoveStartPage = (props) => {

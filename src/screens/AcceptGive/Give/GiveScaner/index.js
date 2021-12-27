@@ -51,7 +51,7 @@ const GiveScaner = props => {
   const [list, setList] = useState([]);
 
   useEffect(() => {
-    if (role === 'root' || role === 'admin') {
+    if (role === 'root' || role === 'admin' || role === 'stockman') {
       setList(
         companyItemList.filter(item => !item.is_bun && !item.repair && item.transfer === null),
       );
@@ -75,7 +75,7 @@ const GiveScaner = props => {
   const isAvailableCamera = useSelector(({auth}) => auth.isAvailableCamera);
   useEffect(() => {
     setError(getGiveMessageError(err));
-    if (err.length > 0) {
+    if (err?.length > 0) {
       setIsSnackBar(true);
       setError(getGiveMessageError(err));
     }

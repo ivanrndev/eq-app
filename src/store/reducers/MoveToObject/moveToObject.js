@@ -81,6 +81,7 @@ const moveToObjectReducer = (state = initialState, action) => {
         ...state,
         scanedItem: state.scanedItem.filter(item => item._id !== action.id),
         scanedItemId: state.scanedItem.filter(item => item._id !== action.id),
+        scanedItemToMove: state.scanedItemToMove.filter(item => item.id !== action.id),
       };
 
     case CHANGE_QUANTITY:

@@ -116,7 +116,6 @@ import {
 import {setTokenToDataBase} from '../utils/pushNotifications';
 import {setIsMoveScan, setIsRoleAllowThunk, setScanedMoveItem} from './moveToObjectsActions';
 import {setScanedOnMeItem} from './onMeActions';
-import {add} from 'react-native-reanimated';
 
 // Settings
 export const nfc = (
@@ -539,7 +538,10 @@ export const scanInfo = (
             AsyncStorage.getItem('userId').then(userId => {
               AsyncStorage.getItem('role').then(userRole => {
                 const isNotOwner =
-                  userRole !== 'root' && userRole !== 'admin' && userId !== resp.data.person._id;
+                  userRole !== 'root' &&
+                  userRole !== 'admin' &&
+                  userRole !== 'stockman' &&
+                  userId !== resp.data.person._id;
                 if (isNotOwner) {
                   dispatch({
                     type: ERROR_CURRENT_SCAN_INFO,
@@ -568,9 +570,11 @@ export const scanInfo = (
               AsyncStorage.getItem('userId').then(userId => {
                 AsyncStorage.getItem('role').then(userRole => {
                   const isOwner =
-                    userRole !== 'root' && userRole !== 'admin' && userId !== resp.data.person._id;
+                    userRole !== 'root' &&
+                    userRole !== 'admin' &&
+                    userRole !== 'stockman' &&
+                    userId !== resp.data.person._id;
                   let checkErrors = actionCheckError(resp.data, isOwner);
-
                   if (inventory) {
                     checkErrors = false;
                   }

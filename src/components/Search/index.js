@@ -46,7 +46,7 @@ const Search = ({
   const handleItemSearch = query => {
     setSearch(query.trim());
     dispatch(myloadMore(true));
-    dispatch(listAction(query, 0, true));
+    dispatch(listAction(query, 0, 50));
   };
 
   useEffect(() => {
