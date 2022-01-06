@@ -10,7 +10,7 @@ import {Portal, ActivityIndicator} from 'react-native-paper';
 // redux and actions
 import {useDispatch, useSelector} from 'react-redux';
 import {loader, getUserList, getBidList, getTransfers} from '../../actions/actions.js';
-import {nfc} from '../../actions/actions';
+import {allowNewScan, nfc} from '../../actions/actions';
 import MoveScaner from './MoveToObject/MoveScaner';
 import MoveStartPage from './MoveToObject/MoveStartPage';
 import {
@@ -77,6 +77,7 @@ const AcceptGive = props => {
               onPress={() => {
                 dispatch(openMoveScan(props.navigation, settings.moveScanPage));
                 dispatch(setIsAddMove(false));
+                dispatch(allowNewScan(true));
               }}
             />
           </View>
