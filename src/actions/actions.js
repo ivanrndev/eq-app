@@ -2210,31 +2210,14 @@ export const getTotalCountMyCompanyItems = () => dispatch => {
 export const getEditItem = (idItem, data) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
-      .put(`${API_URL}/company/${company}/item/${idItem}/edit`, {
-        data,
-        //   type: 'string',
-        //   brand: 'string',
-        //   model: 'string',
-        //   serial: 'string',
-        //   title: 'string',
-        //   object: 'string',
-        //   location: 'string',
-        //   customFields: [
-        //     {
-        //       label: 'string',
-        //       value: 'string',
-        //     },
-        //   ],
-        //   price: 0,
-        //   changedPriceType: 'price',
-        //   batch: {
-        //     quantity: 0,
-        //     units: 'string',
-        //     parent: 'string',
-        //     ancestors: ['string'],
-        //   },
+      .put(`${API_URL}/company/${company}/item/${idItem}/edit`, data)
+      .then(resp => {
+        if (resp.status === 200) {
+          dispatch(getSearchItem(resp.data._id));
+          dispatch(loader(true));
+          console.log('resp', resp);
+        }
       })
-      .then(resp => console.log('resp', resp))
       .catch(e => console.log('error', e));
   });
 };

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Dimensions,
   ScrollView,
@@ -39,7 +39,7 @@ export const IdentInfo = props => {
   const {isNotFreePlan} = useUserPlan();
   const dispatch = useDispatch();
   const [settings, store] = useSelector(({settings, scan}) => [settings, scan]);
-  const [metaData, setMetedata] = useState(store.scanInfo.metadata)
+  const [metaData, setMetedata] = useState(store.scanInfo.metadata);
   // const metaData = store.scanInfo.metadata;
   const width = Dimensions.get('window').width;
   const [isOpen, setIsOpen] = useState(false);
@@ -67,13 +67,9 @@ export const IdentInfo = props => {
     dispatch(getComments(props.navigation, itemId, 0, 'IdentInfo'));
   };
 
-  const customData = {
-    ...metaData,
-    batch: {quantity, units},
-  };
-
-  const [updateData, setUpdateData] = useState(customData);
-  // console.log('custom', updateData);
+  useEffect(() => {
+    setMetedata(store.scanInfo.metadata);
+  }, [store.scanInfo]);
 
   const handleTransactions = () => {
     dispatch(loader(true));
@@ -121,31 +117,24 @@ export const IdentInfo = props => {
   };
 
   const putData = {
-    type: metaData.type,
-    brand: metaData.brand,
-    model: metaData.model,
-    serial: metaData.serial,
-    title: metaData.title,
-    object: metaData.object,
-    location: metaData.location,
+    type: metaData?.type,
+    brand: metaData?.brand,
+    model: metaData?.model,
+    // serial: metaData.serial,
+    title: metaData?.title,
     // customFields: [
     //   {
     //     label: 'string',
     //     value: 'string',
     //   },
     // ],
-    price: 120,
-    // changedPriceType: 'price',
+    price: '120',
+    changedPriceType: 'price',
     batch: {
-      quantity: 10,
+      quantity: '10',
       units: 'шт',
-      // parent: 'string',
-      // ancestors: ['string'],
     },
   };
-
-  console.log('role', role);
-  console.log('putData', putData);
 
   return (
     <>
@@ -186,7 +175,6 @@ export const IdentInfo = props => {
                   }}>
                   <TouchableOpacity
                     onPress={() => {
-                      console.log('press');
                       setEdit(!edit);
                     }}>
                     <Text>{T.t('edit')}</Text>
@@ -478,7 +466,11 @@ export const IdentInfo = props => {
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    onPress={() => dispatch(getEditItem(store.scanInfo._id, putData))}
+                    onPress={() => {
+                      dispatch(getEditItem(store.scanInfo._id, putData));
+                      setMetedata(store.scanInfo.metadata);
+                      setEdit(!edit);
+                    }}
                     style={{
                       flex: 0.5,
                       padding: 14,
@@ -499,56 +491,6 @@ export const IdentInfo = props => {
                   </TouchableOpacity>
                 </View>
               )}
-              {/*<View style={styles.buttonBlock}>*/}
-              {/*  {gaveAcess &&*/}
-              {/*    !isEmpty(store.scanInfo) &&*/}
-              {/*    store.scanInfo.transfer === null &&*/}
-              {/*    !store.scanInfo.repair && (*/}
-              {/*      <View>*/}
-              {/*        {!isEmpty(store.scanInfo.parent) ? (*/}
-              {/*          <DarkButton*/}
-              {/*            size={fontSizer(width)}*/}
-              {/*            text={T.t('dismantle')}*/}
-              {/*            onPress={unmount}*/}
-              {/*          />*/}
-              {/*        ) : (*/}
-              {/*          <DarkButton*/}
-              {/*            size={fontSizer(width)}*/}
-              {/*            text={T.t('setupItem')}*/}
-              {/*            onPress={() => {*/}
-              {/*              dispatch(backPageMount('IdentInfo'));*/}
-              {/*              dispatch(nextPageMount('MountList'));*/}
-              {/*              dispatch(*/}
-              {/*                nfc(*/}
-              {/*                  settings.nfcBack,*/}
-              {/*                  settings.nfcNext,*/}
-              {/*                  false,*/}
-              {/*                  'Ident',*/}
-              {/*                  'startPageMountList',*/}
-              {/*                  true,*/}
-              {/*                ),*/}
-              {/*              );*/}
-
-              {/*              dispatch(addMountParent(store.scanInfo._id));*/}
-              {/*              props.navigation.navigate('MountList');*/}
-              {/*            }}*/}
-              {/*          />*/}
-              {/*        )}*/}
-              {/*      </View>*/}
-              {/*    )}*/}
-
-              {/*  <DarkButton*/}
-              {/*    size={fontSizer(width)}*/}
-              {/*    text={T.t('title_comments')}*/}
-              {/*    onPress={getAllComments}*/}
-              {/*  />*/}
-
-              {/*  <DarkButton*/}
-              {/*    size={fontSizer(width)}*/}
-              {/*    text={T.t('title_history_of_transaction')}*/}
-              {/*    onPress={handleTransactions}*/}
-              {/*  />*/}
-              {/*</View>*/}
             </View>
           </View>
         )}
