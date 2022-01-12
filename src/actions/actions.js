@@ -2204,3 +2204,37 @@ export const getTotalCountMyCompanyItems = () => dispatch => {
       });
   });
 };
+
+//edit item
+
+export const getEditItem = (idItem, data) => dispatch => {
+  AsyncStorage.getItem('company').then(company => {
+    return axios
+      .put(`${API_URL}/company/${company}/item/${idItem}/edit`, {
+        data,
+        //   type: 'string',
+        //   brand: 'string',
+        //   model: 'string',
+        //   serial: 'string',
+        //   title: 'string',
+        //   object: 'string',
+        //   location: 'string',
+        //   customFields: [
+        //     {
+        //       label: 'string',
+        //       value: 'string',
+        //     },
+        //   ],
+        //   price: 0,
+        //   changedPriceType: 'price',
+        //   batch: {
+        //     quantity: 0,
+        //     units: 'string',
+        //     parent: 'string',
+        //     ancestors: ['string'],
+        //   },
+      })
+      .then(resp => console.log('resp', resp))
+      .catch(e => console.log('error', e));
+  });
+};

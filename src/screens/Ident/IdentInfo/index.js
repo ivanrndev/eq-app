@@ -1,6 +1,13 @@
-/* eslint-disable prettier/prettier */
 import React, {useState} from 'react';
-import {Dimensions, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  Dimensions,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  TextInput,
+} from 'react-native';
 import {Button, Dialog, IconButton, Portal} from 'react-native-paper';
 import {isEmpty} from 'lodash';
 // components
@@ -25,15 +32,19 @@ import Gallery from '../../../components/Gallery';
 import {addMountParent} from '../../../actions/mountActions';
 import {useUserData} from '../../../hooks/useUserData';
 import {useUserPlan} from '../../../hooks/useUserPlan';
+import {validateFloatNumbers} from '../../../utils/validation';
+import {getEditItem} from '../../../actions/actions';
 
 export const IdentInfo = props => {
   const {isNotFreePlan} = useUserPlan();
   const dispatch = useDispatch();
   const [settings, store] = useSelector(({settings, scan}) => [settings, scan]);
-  const metaData = store.scanInfo.metadata;
+  const [metaData, setMetedata] = useState(store.scanInfo.metadata)
+  // const metaData = store.scanInfo.metadata;
   const width = Dimensions.get('window').width;
   const [isOpen, setIsOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(false);
+  const [edit, setEdit] = useState(false);
 
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [chosenPhoto, setChosenPhoto] = useState(0);
@@ -43,24 +54,26 @@ export const IdentInfo = props => {
   if (metaData) {
     nameOfProduct = metaData.title
       ? metaData.title
-      : `${metaData.type} ${metaData.brand} ${metaData.model} ${
-          metaData.serial
-        }`;
+      : `${metaData.type} ${metaData.brand} ${metaData.model} ${metaData.serial}`;
   }
-  const [photoDel, setPhotoDel] = useState(
-    itemPhotos[0] ? itemPhotos[0].name : '',
-  );
+  const [photoDel, setPhotoDel] = useState(itemPhotos[0] ? itemPhotos[0].name : '');
 
   let itemId = store.scanInfo._id;
   const quantity = store.scanInfo.batch ? store.scanInfo.batch.quantity : 1;
   const price = store.scanInfo.metadata && store.scanInfo.metadata.price;
-  const units = store.scanInfo.batch
-    ? store.scanInfo.batch.units
-    : T.t('piece');
+  const units = store.scanInfo.batch ? store.scanInfo.batch.units : T.t('piece');
   const getAllComments = () => {
     dispatch(loader(true));
     dispatch(getComments(props.navigation, itemId, 0, 'IdentInfo'));
   };
+
+  const customData = {
+    ...metaData,
+    batch: {quantity, units},
+  };
+
+  const [updateData, setUpdateData] = useState(customData);
+  // console.log('custom', updateData);
 
   const handleTransactions = () => {
     dispatch(loader(true));
@@ -103,6 +116,37 @@ export const IdentInfo = props => {
     setChosenPhoto(0);
   };
 
+  const handleTextChange = (text, name) => {
+    setMetedata({...metaData, [name]: text});
+  };
+
+  const putData = {
+    type: metaData.type,
+    brand: metaData.brand,
+    model: metaData.model,
+    serial: metaData.serial,
+    title: metaData.title,
+    object: metaData.object,
+    location: metaData.location,
+    // customFields: [
+    //   {
+    //     label: 'string',
+    //     value: 'string',
+    //   },
+    // ],
+    price: 120,
+    // changedPriceType: 'price',
+    batch: {
+      quantity: 10,
+      units: 'шт',
+      // parent: 'string',
+      // ancestors: ['string'],
+    },
+  };
+
+  console.log('role', role);
+  console.log('putData', putData);
+
   return (
     <>
       <Appbar
@@ -117,9 +161,7 @@ export const IdentInfo = props => {
         {store.scanInfoError === 'NotFound' && (
           <View style={styles.notFoundContainer}>
             <Text style={styles.notFoundText}>
-              {`${T.t('error_code_incorrect')} "${store.currentScan}" ${T.t(
-                'error_not_found',
-              )}`}
+              {`${T.t('error_code_incorrect')} "${store.currentScan}" ${T.t('error_not_found')}`}
             </Text>
           </View>
         )}
@@ -129,11 +171,27 @@ export const IdentInfo = props => {
               <View style={styles.info}>
                 {store.scanInfoError === 'NotFound' && (
                   <Text style={styles.notFoundText}>
-                    {`${T.t('error_code_incorrect')} "${
-                      store.currentScan
-                    }" ${T.t('error_not_found')}`}
+                    {`${T.t('error_code_incorrect')} "${store.currentScan}" ${T.t(
+                      'error_not_found',
+                    )}`}
                   </Text>
                 )}
+                <View
+                  style={{
+                    alignItems: 'flex-end',
+                    justifyContent: 'flex-end',
+                    width: '100%',
+                    marginRight: 15,
+                    marginBottom: 15,
+                  }}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      console.log('press');
+                      setEdit(!edit);
+                    }}>
+                    <Text>{T.t('edit')}</Text>
+                  </TouchableOpacity>
+                </View>
                 {isNotFreePlan ? (
                   <GalleryForItem
                     setChosenPhoto={setChosenPhoto}
@@ -147,29 +205,113 @@ export const IdentInfo = props => {
                     {T.t('transfer_status')}: {getStatus(store.scanInfo, role)}
                   </Text>
                 )}
-                <Text style={styles.text}>
-                  {T.t('detail_title')}: {nameOfProduct}
-                </Text>
-                {metaData.brand && (
+                {!edit ? (
+                  <Text style={styles.text}>
+                    {T.t('detail_title')}: {nameOfProduct}
+                  </Text>
+                ) : (
+                  <View
+                    style={{
+                      width: Dimensions.get('window').width / 1.3,
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'flex-start',
+                    }}>
+                    <Text style={{fontSize: 16, paddingBottom: 5, color: '#7A7A9D'}}>
+                      {T.t('detail_title')}:
+                    </Text>
+                    <TextInput
+                      onChangeText={text => handleTextChange(text, 'title')}
+                      style={{fontSize: 16, paddingBottom: 5, marginLeft: 5}}
+                      defaultValue={metaData.title}
+                    />
+                  </View>
+                )}
+                {metaData.brand && !edit ? (
                   <Text style={styles.text}>
                     {T.t('detail_brand')}: {metaData.brand}
                   </Text>
+                ) : (
+                  <View
+                    style={{
+                      width: Dimensions.get('window').width / 1.3,
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'flex-start',
+                    }}>
+                    <Text style={{fontSize: 16, paddingBottom: 5, color: '#7A7A9D'}}>
+                      {T.t('detail_brand')}:
+                    </Text>
+                    <TextInput
+                      onChangeText={text => handleTextChange(text, 'brand')}
+                      style={{fontSize: 16, paddingBottom: 5, marginLeft: 5}}
+                      defaultValue={metaData.brand}
+                    />
+                  </View>
                 )}
-                {metaData.model && (
+
+                {metaData.model && !edit ? (
                   <Text style={styles.text}>
                     {T.t('detail_model')}: {metaData.model}
                   </Text>
+                ) : (
+                  <View
+                    style={{
+                      width: Dimensions.get('window').width / 1.3,
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'flex-start',
+                    }}>
+                    <Text style={{fontSize: 16, paddingBottom: 5, color: '#7A7A9D'}}>
+                      {T.t('detail_model')}:
+                    </Text>
+                    <TextInput
+                      onChangeText={text => handleTextChange(text, 'model')}
+                      style={{fontSize: 16, paddingBottom: 5, marginLeft: 5}}
+                      defaultValue={metaData.model}
+                    />
+                  </View>
                 )}
+
+                {/*{metaData.model && (*/}
+                {/*  <Text style={styles.text}>*/}
+                {/*    {T.t('detail_model')}: {metaData.model}*/}
+                {/*  </Text>*/}
+                {/*)}*/}
                 {metaData.capacity && (
                   <Text style={styles.text}>
                     {T.t('detail_capacity')}: {metaData.capacity}
                   </Text>
                 )}
-                {metaData.serial && (
+
+                {metaData.serial && !edit ? (
                   <Text style={styles.text}>
                     {T.t('detail_serial')}: {metaData.serial}
                   </Text>
+                ) : (
+                  <View
+                    style={{
+                      width: Dimensions.get('window').width / 1.3,
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'flex-start',
+                    }}>
+                    <Text style={{fontSize: 16, paddingBottom: 5, color: '#7A7A9D'}}>
+                      {T.t('detail_serial')}:
+                    </Text>
+                    <TextInput
+                      onChangeText={text => handleTextChange(text, 'serial')}
+                      style={{fontSize: 16, paddingBottom: 5, marginLeft: 5}}
+                      defaultValue={metaData.serial}
+                    />
+                  </View>
                 )}
+
+                {/*{metaData.serial && (*/}
+                {/*  <Text style={styles.text}>*/}
+                {/*    {T.t('detail_serial')}: {metaData.serial}*/}
+                {/*  </Text>*/}
+                {/*)}*/}
                 {metaData.type && (
                   <Text style={styles.text}>
                     {T.t('detail_type')}: {metaData.type}
@@ -251,9 +393,8 @@ export const IdentInfo = props => {
                   <>
                     <Text style={styles.textTmc}>{T.t('this_setup')}</Text>
                     <Text style={styles.text}>
-                      {store.scanInfo.parent.metadata.title},{' '}
-                      {store.scanInfo.parent.metadata.brand},{' '}
-                      {store.scanInfo.parent.metadata.model},{' '}
+                      {store.scanInfo.parent.metadata.title}, {store.scanInfo.parent.metadata.brand}
+                      , {store.scanInfo.parent.metadata.model},{' '}
                       {store.scanInfo.parent.metadata.serial}
                     </Text>
                   </>
@@ -262,56 +403,152 @@ export const IdentInfo = props => {
             </ScrollView>
 
             <View style={styles.buttonsBlock}>
-              <View style={styles.buttonBlock}>
-                {gaveAcess &&
-                  !isEmpty(store.scanInfo) &&
-                  store.scanInfo.transfer === null &&
-                  !store.scanInfo.repair && (
-                    <View>
-                      {!isEmpty(store.scanInfo.parent) ? (
-                        <DarkButton
-                          size={fontSizer(width)}
-                          text={T.t('dismantle')}
-                          onPress={unmount}
-                        />
-                      ) : (
-                        <DarkButton
-                          size={fontSizer(width)}
-                          text={T.t('setupItem')}
-                          onPress={() => {
-                            dispatch(backPageMount('IdentInfo'));
-                            dispatch(nextPageMount('MountList'));
-                            dispatch(
-                              nfc(
-                                settings.nfcBack,
-                                settings.nfcNext,
-                                false,
-                                'Ident',
-                                'startPageMountList',
-                                true,
-                              ),
-                            );
+              {!edit ? (
+                <View style={styles.buttonBlock}>
+                  {gaveAcess &&
+                    !isEmpty(store.scanInfo) &&
+                    store.scanInfo.transfer === null &&
+                    !store.scanInfo.repair && (
+                      <View>
+                        {!isEmpty(store.scanInfo.parent) ? (
+                          <DarkButton
+                            size={fontSizer(width)}
+                            text={T.t('dismantle')}
+                            onPress={unmount}
+                          />
+                        ) : (
+                          <DarkButton
+                            size={fontSizer(width)}
+                            text={T.t('setupItem')}
+                            onPress={() => {
+                              dispatch(backPageMount('IdentInfo'));
+                              dispatch(nextPageMount('MountList'));
+                              dispatch(
+                                nfc(
+                                  settings.nfcBack,
+                                  settings.nfcNext,
+                                  false,
+                                  'Ident',
+                                  'startPageMountList',
+                                  true,
+                                ),
+                              );
 
-                            dispatch(addMountParent(store.scanInfo._id));
-                            props.navigation.navigate('MountList');
-                          }}
-                        />
-                      )}
-                    </View>
-                  )}
+                              dispatch(addMountParent(store.scanInfo._id));
+                              props.navigation.navigate('MountList');
+                            }}
+                          />
+                        )}
+                      </View>
+                    )}
 
-                <DarkButton
-                  size={fontSizer(width)}
-                  text={T.t('title_comments')}
-                  onPress={getAllComments}
-                />
+                  <DarkButton
+                    size={fontSizer(width)}
+                    text={T.t('title_comments')}
+                    onPress={getAllComments}
+                  />
 
-                <DarkButton
-                  size={fontSizer(width)}
-                  text={T.t('title_history_of_transaction')}
-                  onPress={handleTransactions}
-                />
-              </View>
+                  <DarkButton
+                    size={fontSizer(width)}
+                    text={T.t('title_history_of_transaction')}
+                    onPress={handleTransactions}
+                  />
+                </View>
+              ) : (
+                <View style={styles.buttonsContainer}>
+                  <TouchableOpacity
+                    onPress={() => setEdit(!edit)}
+                    // disabled={renderedList.length === 0}
+                    style={{
+                      flex: 0.5,
+                      padding: 14,
+                      borderRadius: 10,
+                      borderWidth: 1,
+                      borderColor: '#2D2C71',
+                      width: Dimensions.get('window').width / 2.2,
+                      margin: 5,
+                    }}>
+                    <Text
+                      style={{
+                        textAlign: 'center',
+                        padding: 5,
+                        borderRadius: 40,
+                      }}>
+                      {`${T.t('cancel')}`}
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => dispatch(getEditItem(store.scanInfo._id, putData))}
+                    style={{
+                      flex: 0.5,
+                      padding: 14,
+                      borderRadius: 10,
+                      backgroundColor: '#2D2C71',
+                      width: Dimensions.get('window').width / 2.2,
+                      margin: 5,
+                    }}>
+                    <Text
+                      style={{
+                        textAlign: 'center',
+                        padding: 5,
+                        borderRadius: 40,
+                        color: '#ffffff',
+                      }}>
+                      {`${T.t('save')}`}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+              {/*<View style={styles.buttonBlock}>*/}
+              {/*  {gaveAcess &&*/}
+              {/*    !isEmpty(store.scanInfo) &&*/}
+              {/*    store.scanInfo.transfer === null &&*/}
+              {/*    !store.scanInfo.repair && (*/}
+              {/*      <View>*/}
+              {/*        {!isEmpty(store.scanInfo.parent) ? (*/}
+              {/*          <DarkButton*/}
+              {/*            size={fontSizer(width)}*/}
+              {/*            text={T.t('dismantle')}*/}
+              {/*            onPress={unmount}*/}
+              {/*          />*/}
+              {/*        ) : (*/}
+              {/*          <DarkButton*/}
+              {/*            size={fontSizer(width)}*/}
+              {/*            text={T.t('setupItem')}*/}
+              {/*            onPress={() => {*/}
+              {/*              dispatch(backPageMount('IdentInfo'));*/}
+              {/*              dispatch(nextPageMount('MountList'));*/}
+              {/*              dispatch(*/}
+              {/*                nfc(*/}
+              {/*                  settings.nfcBack,*/}
+              {/*                  settings.nfcNext,*/}
+              {/*                  false,*/}
+              {/*                  'Ident',*/}
+              {/*                  'startPageMountList',*/}
+              {/*                  true,*/}
+              {/*                ),*/}
+              {/*              );*/}
+
+              {/*              dispatch(addMountParent(store.scanInfo._id));*/}
+              {/*              props.navigation.navigate('MountList');*/}
+              {/*            }}*/}
+              {/*          />*/}
+              {/*        )}*/}
+              {/*      </View>*/}
+              {/*    )}*/}
+
+              {/*  <DarkButton*/}
+              {/*    size={fontSizer(width)}*/}
+              {/*    text={T.t('title_comments')}*/}
+              {/*    onPress={getAllComments}*/}
+              {/*  />*/}
+
+              {/*  <DarkButton*/}
+              {/*    size={fontSizer(width)}*/}
+              {/*    text={T.t('title_history_of_transaction')}*/}
+              {/*    onPress={handleTransactions}*/}
+              {/*  />*/}
+              {/*</View>*/}
             </View>
           </View>
         )}
@@ -448,6 +685,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'gray',
     marginBottom: 10,
     marginLeft: 15,
+  },
+  buttonsContainer: {
+    width: Dimensions.get('window').width / 1.2,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });
 
