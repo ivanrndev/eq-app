@@ -1733,7 +1733,7 @@ export const checkInventoryList = (userId, user) => dispatch => {
           limit: 1,
           offset: 0,
           target: userId,
-          user: user,
+          // user: user,
           status: 'pending',
         },
       })
