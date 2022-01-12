@@ -61,33 +61,13 @@ const Search = ({
         quantity: item?.batch?.quantity || '1',
       },
     ];
-    // if (pageToChosenItem === 'InventoryChooseMode') {
-    if (inventoryId) {
-      // item?.batch?.quantity
-      //   ? handleNavigateToSingleItemPage(
-      //       item.code,
-      //       navigation,
-      //       item._id,
-      //       'SetInventoryQty',
-      //       dispatch,
-      //       inventoryId,
-      //     )
-      //   :
-      dispatch(addItemInInventory(inventoryId, normalizedItem));
-    } else {
-      // item?.batch?.quantity
-      //   ? handleNavigateToSingleItemPage(
-      //       item.code,
-      //       navigation,
-      //       item._id,
-      //       'SetInventoryQty',
-      //       dispatch,
-      //       inventoryId,
-      //     )
-      //   :
-      dispatch(makeInventory(currentInventoryUser, normalizedItem));
+    if (pageToChosenItem === 'InventoryChooseMode') {
+      if (inventoryId) {
+        dispatch(addItemInInventory(inventoryId, normalizedItem));
+      } else {
+        dispatch(makeInventory(currentInventoryUser, normalizedItem));
+      }
     }
-    // }
     actionCheckError(item);
     dispatch(loader(true));
     dispatch(

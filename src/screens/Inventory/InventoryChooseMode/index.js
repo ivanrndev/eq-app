@@ -74,10 +74,12 @@ const InventoryChooseMode = () => {
           quantity: scan.scanInfo?.batch?.quantity || '1',
         },
       ];
-      if (inventory.inventoryId) {
-        dispatch(addItemInInventory(inventory.inventoryId, normalizedItem, ''));
-      } else {
-        dispatch(makeInventory(inventory.currentInventoryUser, normalizedItem, ''));
+      if (inventory?.currentInventoryUser) {
+        if (inventory.inventoryId) {
+          dispatch(addItemInInventory(inventory.inventoryId, normalizedItem, ''));
+        } else {
+          dispatch(makeInventory(inventory.currentInventoryUser, normalizedItem, ''));
+        }
       }
     }
   }, [scan]);
