@@ -27,7 +27,7 @@ import {
 } from '../../../../actions/moveToObjectsActions';
 import Arrow from '../../../../assets/svg/arrow-down.svg';
 import {width} from '../../../../constants/dimentionsAndUnits';
-import {getUserList} from '../../../../actions/actions';
+import {allowNewScan, getUserList} from '../../../../actions/actions';
 
 const MoveStartPage = props => {
   const navigation = useNavigation();
@@ -238,6 +238,7 @@ const MoveStartPage = props => {
           onPress={() => {
             dispatch(openMoveScan(props.navigation, settings.moveScanPage));
             dispatch(setIsAddMove(true));
+            dispatch(allowNewScan(true));
           }}
           text={T.t('add')}
         />
