@@ -23,9 +23,7 @@ export const QtyForm = () => {
   const [visible, setVisible] = useState(false);
   const [formValues, setFormValues] = useState(initialValues);
   const [error, setError] = useState('');
-  const renderItem = item => (
-    <Menu.Item onPress={() => handleChoseMenu(item)} title={item.item} />
-  );
+  const renderItem = item => <Menu.Item onPress={() => handleChoseMenu(item)} title={item.item} />;
   useEffect(() => {
     if (+accountType.batch.quantity === 1 && +accountType.pricePerPiece === 1) {
       setFormValues(initialValues);
@@ -61,11 +59,9 @@ export const QtyForm = () => {
   };
 
   const handleTextChange = (text, name) => {
-    setFormValues({...formValues, [name]: text});
+    setFormValues({...formValues, [name]: text.replace(/,/, '.')});
     if (name === 'qty') {
-      !validateFloatNumbers(text)
-        ? setError(T.t('error_only_positive_numbers'))
-        : setError('');
+      !validateFloatNumbers(text) ? setError(T.t('error_only_positive_numbers')) : setError('');
     }
   };
   const normalizedValues = {
@@ -104,11 +100,7 @@ export const QtyForm = () => {
               </View>
             </Button>
           }>
-          <FlatList
-            data={units}
-            keyExtractor={item => item}
-            renderItem={renderItem}
-          />
+          <FlatList data={units} keyExtractor={item => item} renderItem={renderItem} />
         </Menu>
         <Text style={styles.qtyError}>{error}</Text>
       </View>
