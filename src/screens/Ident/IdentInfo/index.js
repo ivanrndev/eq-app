@@ -33,19 +33,18 @@ import {addMountParent} from '../../../actions/mountActions';
 import {useUserData} from '../../../hooks/useUserData';
 import {useUserPlan} from '../../../hooks/useUserPlan';
 import {validateFloatNumbers} from '../../../utils/validation';
-import {getEditItem} from '../../../actions/actions';
+import {getEditItem, getSearchItem} from '../../../actions/actions';
 
 export const IdentInfo = props => {
   const {isNotFreePlan} = useUserPlan();
   const dispatch = useDispatch();
   const [settings, store] = useSelector(({settings, scan}) => [settings, scan]);
   const [metaData, setMetedata] = useState(store.scanInfo.metadata);
-  // const metaData = store.scanInfo.metadata;
   const width = Dimensions.get('window').width;
   const [isOpen, setIsOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(false);
   const [edit, setEdit] = useState(false);
-
+  const [customField, setCustomField] = useState(store.scanInfo.customFields);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [chosenPhoto, setChosenPhoto] = useState(0);
   const {role, userId} = useUserData();
@@ -66,6 +65,7 @@ export const IdentInfo = props => {
     dispatch(loader(true));
     dispatch(getComments(props.navigation, itemId, 0, 'IdentInfo'));
   };
+  const [quantit, setQuantit] = useState(quantity);
 
   useEffect(() => {
     setMetedata(store.scanInfo.metadata);
@@ -116,28 +116,33 @@ export const IdentInfo = props => {
     setMetedata({...metaData, [name]: text});
   };
 
+  const onChangeCustom = (text, index) => {
+    const newArr = [...customField];
+    newArr[index].value = text;
+    setCustomField(newArr);
+  };
+
+  const onChangeQuantity = text => {
+    setQuantit(text);
+  };
+
   const putData = {
     type: metaData?.type,
     brand: metaData?.brand,
     model: metaData?.model,
-    // serial: metaData.serial,
+    serial: metaData?.serial,
     title: metaData?.title,
-    // customFields: [
-    //   {
-    //     label: 'string',
-    //     value: 'string',
-    //   },
-    // ],
-    price: '120',
+    customFields: customField,
+    price: metaData?.price,
     changedPriceType: 'price',
     batch: {
-      quantity: '10',
-      units: 'шт',
+      quantity: quantit,
+      units: units,
     },
   };
 
   return (
-    <>
+    <ScrollView>
       <Appbar
         navigation={props.navigation}
         newScan={true}
@@ -165,21 +170,23 @@ export const IdentInfo = props => {
                     )}`}
                   </Text>
                 )}
-                <View
-                  style={{
-                    alignItems: 'flex-end',
-                    justifyContent: 'flex-end',
-                    width: '100%',
-                    marginRight: 15,
-                    marginBottom: 15,
-                  }}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      setEdit(!edit);
+                {(role === 'root' || role === 'stockman') && !edit ? (
+                  <View
+                    style={{
+                      alignItems: 'flex-end',
+                      justifyContent: 'flex-end',
+                      width: '100%',
+                      marginRight: 15,
+                      marginBottom: 15,
                     }}>
-                    <Text>{T.t('edit')}</Text>
-                  </TouchableOpacity>
-                </View>
+                    <TouchableOpacity
+                      onPress={() => {
+                        setEdit(!edit);
+                      }}>
+                      <Text>{T.t('edit')}</Text>
+                    </TouchableOpacity>
+                  </View>
+                ) : null}
                 {isNotFreePlan ? (
                   <GalleryForItem
                     setChosenPhoto={setChosenPhoto}
@@ -205,12 +212,10 @@ export const IdentInfo = props => {
                       justifyContent: 'flex-start',
                       alignItems: 'flex-start',
                     }}>
-                    <Text style={{fontSize: 16, paddingBottom: 5, color: '#7A7A9D'}}>
-                      {T.t('detail_title')}:
-                    </Text>
+                    <Text style={styles.editText}>{T.t('detail_title')}:</Text>
                     <TextInput
                       onChangeText={text => handleTextChange(text, 'title')}
-                      style={{fontSize: 16, paddingBottom: 5, marginLeft: 5}}
+                      style={styles.editInput}
                       defaultValue={metaData.title}
                     />
                   </View>
@@ -227,17 +232,14 @@ export const IdentInfo = props => {
                       justifyContent: 'flex-start',
                       alignItems: 'flex-start',
                     }}>
-                    <Text style={{fontSize: 16, paddingBottom: 5, color: '#7A7A9D'}}>
-                      {T.t('detail_brand')}:
-                    </Text>
+                    <Text style={styles.editText}>{T.t('detail_brand')}:</Text>
                     <TextInput
                       onChangeText={text => handleTextChange(text, 'brand')}
-                      style={{fontSize: 16, paddingBottom: 5, marginLeft: 5}}
+                      style={styles.editInput}
                       defaultValue={metaData.brand}
                     />
                   </View>
                 )}
-
                 {metaData.model && !edit ? (
                   <Text style={styles.text}>
                     {T.t('detail_model')}: {metaData.model}
@@ -250,22 +252,14 @@ export const IdentInfo = props => {
                       justifyContent: 'flex-start',
                       alignItems: 'flex-start',
                     }}>
-                    <Text style={{fontSize: 16, paddingBottom: 5, color: '#7A7A9D'}}>
-                      {T.t('detail_model')}:
-                    </Text>
+                    <Text style={styles.editText}>{T.t('detail_model')}:</Text>
                     <TextInput
                       onChangeText={text => handleTextChange(text, 'model')}
-                      style={{fontSize: 16, paddingBottom: 5, marginLeft: 5}}
+                      style={styles.editInput}
                       defaultValue={metaData.model}
                     />
                   </View>
                 )}
-
-                {/*{metaData.model && (*/}
-                {/*  <Text style={styles.text}>*/}
-                {/*    {T.t('detail_model')}: {metaData.model}*/}
-                {/*  </Text>*/}
-                {/*)}*/}
                 {metaData.capacity && (
                   <Text style={styles.text}>
                     {T.t('detail_capacity')}: {metaData.capacity}
@@ -284,22 +278,14 @@ export const IdentInfo = props => {
                       justifyContent: 'flex-start',
                       alignItems: 'flex-start',
                     }}>
-                    <Text style={{fontSize: 16, paddingBottom: 5, color: '#7A7A9D'}}>
-                      {T.t('detail_serial')}:
-                    </Text>
+                    <Text style={styles.editText}>{T.t('detail_serial')}:</Text>
                     <TextInput
                       onChangeText={text => handleTextChange(text, 'serial')}
-                      style={{fontSize: 16, paddingBottom: 5, marginLeft: 5}}
+                      style={styles.editInput}
                       defaultValue={metaData.serial}
                     />
                   </View>
                 )}
-
-                {/*{metaData.serial && (*/}
-                {/*  <Text style={styles.text}>*/}
-                {/*    {T.t('detail_serial')}: {metaData.serial}*/}
-                {/*  </Text>*/}
-                {/*)}*/}
                 {metaData.type && (
                   <Text style={styles.text}>
                     {T.t('detail_type')}: {metaData.type}
@@ -307,10 +293,29 @@ export const IdentInfo = props => {
                 )}
                 {store.scanInfo.customFields &&
                   store.scanInfo.customFields.map((item, index) => {
-                    return (
+                    return !edit ? (
                       <Text key={index} style={styles.text}>
                         {item.label}: {item.value}
                       </Text>
+                    ) : (
+                      <View
+                        style={{
+                          width: Dimensions.get('window').width / 1.3,
+                          flexDirection: 'row',
+                          justifyContent: 'flex-start',
+                          alignItems: 'flex-start',
+                        }}>
+                        <Text key={index} style={styles.editText}>
+                          {item.label}:
+                        </Text>
+                        <TextInput
+                          onChangeText={text => {
+                            onChangeCustom(text, index);
+                          }}
+                          style={styles.editInput}
+                          defaultValue={item.value}
+                        />
+                      </View>
                     );
                   })}
                 {store.scanInfo.person && (
@@ -329,12 +334,48 @@ export const IdentInfo = props => {
                     {T.t('location')}: {metaData.location}
                   </Text>
                 )}
-                <ItemCardQuantityAndPrice
-                  quantity={quantity}
-                  price={price}
-                  units={units}
-                  styles={styles}
-                />
+                {!edit && (
+                  <ItemCardQuantityAndPrice
+                    quantity={quantity}
+                    price={price}
+                    units={units}
+                    styles={styles}
+                  />
+                )}
+                {edit && quantity && (
+                  <View
+                    style={{
+                      width: Dimensions.get('window').width / 1.3,
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'flex-start',
+                    }}>
+                    <Text style={styles.editText}>{T.t('detail_quantity')}:</Text>
+                    <TextInput
+                      keyboardType="numeric"
+                      onChangeText={text => onChangeQuantity(text)}
+                      style={styles.editInput}
+                      defaultValue={`${quantity}`}
+                    />
+                  </View>
+                )}
+                {edit && price && (
+                  <View
+                    style={{
+                      width: Dimensions.get('window').width / 1.3,
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'flex-start',
+                    }}>
+                    <Text style={styles.editText}>{T.t('detail_price_per_item')}:</Text>
+                    <TextInput
+                      keyboardType="numeric"
+                      onChangeText={text => handleTextChange(text, 'price')}
+                      style={styles.editInput}
+                      defaultValue={`${price}`}
+                    />
+                  </View>
+                )}
                 {!isEmpty(store.scanInfo.items) && (
                   <>
                     <Text style={styles.textTmc}>{T.t('om_this_setup')}</Text>
@@ -445,8 +486,11 @@ export const IdentInfo = props => {
               ) : (
                 <View style={styles.buttonsContainer}>
                   <TouchableOpacity
-                    onPress={() => setEdit(!edit)}
-                    // disabled={renderedList.length === 0}
+                    onPress={() => {
+                      setEdit(!edit);
+                      setMetedata(store.scanInfo.metadata);
+                      dispatch(getSearchItem(store.scanInfo._id));
+                    }}
                     style={{
                       flex: 0.5,
                       padding: 14,
@@ -517,7 +561,7 @@ export const IdentInfo = props => {
         setPhotoDel={setPhotoDel}
         photoDel={photoDel}
       />
-    </>
+    </ScrollView>
   );
 };
 
@@ -632,6 +676,17 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width / 1.2,
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  editInput: {
+    fontSize: 16,
+    paddingBottom: 5,
+    marginLeft: 5,
+    paddingRight: 30,
+  },
+  editText: {
+    fontSize: 16,
+    paddingBottom: 5,
+    color: '#7A7A9D',
   },
 });
 
