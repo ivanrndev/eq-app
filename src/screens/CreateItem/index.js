@@ -35,7 +35,7 @@ const CreateItem = () => {
     ...(baseInfo.serial && {serial: baseInfo.serial}),
     ...(baseInfo.title && {title: baseInfo.title}),
     ...(responsible.id && {person: responsible.id}),
-    ...(location.object && {location: location.object}),
+    ...(location.objects && {location: location.objects}),
     ...(location.location && {object: location.location}),
     ...(accountType.batch &&
       accountType.batch.quantity && {
