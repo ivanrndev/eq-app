@@ -2213,9 +2213,8 @@ export const getEditItem = (idItem, data) => dispatch => {
       .put(`${API_URL}/company/${company}/item/${idItem}/edit`, data)
       .then(resp => {
         if (resp.status === 200) {
-          dispatch(getSearchItem(resp.data._id));
+          dispatch(getSearchItem(resp.data?._id));
           dispatch(loader(true));
-          console.log('resp', resp);
         }
       })
       .catch(e => console.log('error', e));

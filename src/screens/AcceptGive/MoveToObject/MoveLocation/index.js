@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Dimensions, StyleSheet, Text, View} from 'react-native';
-import {CreateLocationContainer} from "./CreateLocationContainer";
+import {CreateLocationContainer} from './CreateLocationContainer';
 import {useDispatch, useSelector} from 'react-redux';
 import {getLocations} from '../../../../actions/actions';
 
@@ -8,7 +8,7 @@ import T from '../../../../i18n';
 import {width} from '../../../../constants/dimentionsAndUnits';
 import {useNavigation} from '@react-navigation/native';
 import {AutocompleteDropdown} from 'react-native-autocomplete-dropdown';
-import {saveMoveLocation} from "../../../../actions/moveToObjectsActions";
+import {saveMoveLocation} from '../../../../actions/moveToObjectsActions';
 
 const MoveLocation = () => {
   const dispatch = useDispatch();
@@ -27,104 +27,103 @@ const MoveLocation = () => {
   useEffect(() => {
     if (!location.location && !location.object) {
       setSelectedLoc('');
-      setSelectedLoc('');
       setSelectedObj('');
-      setSelectedObjObj('');
+      setSelectedObjObj([]);
     }
   }, [location]);
   const handleChangeLocation = itemValue => {
     dispatch(
-        saveMoveLocation({
-          objects: selectedObj.name,
-          location: selectedLoc.name,
-        })
+      saveMoveLocation({
+        objects: selectedObj.name,
+        location: selectedLoc.name,
+      }),
     );
     navigation.navigate('MoveStartPage');
   };
 
-
   const handleSelectObj = item => {
     setSelectedLoc(item);
-    if (!!item) {
-      const selectedObj =
-          objects.length > 0 ? objects.find(obj => obj._id === item.id) : [];
+    if (item) {
+      const selectedObj = objects.length > 0 ? objects.find(obj => obj._id === item.id) : [];
       setSelectedLocObj(selectedObj);
       !!selectedObj && setSelectedObjObj(selectedObj.locations);
     }
   };
   const objectLoc = selectedObjObj
-      ? selectedObjObj.map(item => ({
+    ? selectedObjObj.map(item => ({
         name: item,
         id: Math.floor(Math.random() * 1000),
       }))
-      : [];
+    : [];
 
   return (
-      <CreateLocationContainer handleSave={handleChangeLocation} setSelectedObj={setSelectedObj} setSelectedLoc={setSelectedLoc}>
-        <View style={styles.inputWrap}>
-          <Text style={styles.left}>{T.t('object')}:</Text>
-          <AutocompleteDropdown
-              clearOnFocus={false}
-              closeOnBlur={false}
-              closeOnSubmit={true}
-              showClear={false}
-              onChangeText={text => setSelectedObj({name: text})}
-              onSelectItem={item => {
-                handleSelectObj(item);
-                setSelectedObj({name: item ? item.title : ''});
-              }}
-              dataSet={() =>
-                  objects.length
-                      ? objects.map(item => ({
-                        title: item ? item.title : '',
-                        id: item ? item._id : '',
-                      }))
-                      : []
-              }
-              textInputProps={{
-                placeholder: T.t('choose_object'),
-                autoCorrect: false,
-                autoCapitalize: 'none',
-                style: styles.inputDropdown,
-                placeholderTextColor: 'gray',
-                defaultValue: selectedObj.name || '',
-                value: selectedObj.name || '',
+    <CreateLocationContainer
+      handleSave={handleChangeLocation}
+      setSelectedObj={setSelectedObj}
+      setSelectedLoc={setSelectedLoc}>
+      <View style={styles.inputWrap}>
+        <Text style={styles.left}>{T.t('object')}:</Text>
+        <AutocompleteDropdown
+          clearOnFocus={false}
+          closeOnBlur={false}
+          closeOnSubmit={true}
+          showClear={false}
+          onChangeText={text => setSelectedObj({name: text})}
+          onSelectItem={item => {
+            handleSelectObj(item);
+            setSelectedObj({name: item ? item.title : ''});
+          }}
+          dataSet={() =>
+            objects.length
+              ? objects.map(item => ({
+                  title: item ? item.title : '',
+                  id: item ? item._id : '',
+                }))
+              : []
+          }
+          textInputProps={{
+            placeholder: T.t('choose_object'),
+            autoCorrect: false,
+            autoCapitalize: 'none',
+            style: styles.inputDropdown,
+            placeholderTextColor: 'gray',
+            defaultValue: selectedObj.name || '',
+            value: selectedObj.name || '',
+          }}
+          rightButtonsContainerStyle={styles.inputBtn}
+          suggestionsListContainerStyle={styles.dropdown}
+        />
 
-              }}
-              rightButtonsContainerStyle={styles.inputBtn}
-              suggestionsListContainerStyle={styles.dropdown}
-          />
-
-          <Text style={styles.left}>{T.t('location')}:</Text>
-          <AutocompleteDropdown
-              clearOnFocus={false}
-              closeOnBlur={false}
-              closeOnSubmit={true}
-              showClear={false}
-              onChangeText={text => setSelectedLoc({name: text})}
-              onSelectItem={item => setSelectedLoc({name: item ? item.title : ''})}
-              dataSet={() =>
-                  objects.length
-                      ? objectLoc.map(item => ({
-                        title: item ? item.name : '',
-                        id: item ? item._id : '',
-                      }))
-                      : []
-              }
-              textInputProps={{
-                placeholder: T.t('choose_location'),
-                autoCorrect: false,
-                autoCapitalize: 'none',
-                style: styles.inputDropdown,
-                placeholderTextColor: 'gray',
-                defaultValue: selectedLoc.name || '',
-                value: selectedLoc.name || '',
-              }}
-              rightButtonsContainerStyle={styles.inputBtn}
-              suggestionsListContainerStyle={styles.dropdown}
-          />
-        </View>
-      </CreateLocationContainer>
+        <Text style={styles.left}>{T.t('location')}:</Text>
+        <AutocompleteDropdown
+          clearOnFocus={false}
+          closeOnBlur={false}
+          closeOnSubmit={true}
+          showClear={false}
+          onChangeText={text => setSelectedLoc({name: text})}
+          onSelectItem={item => setSelectedLoc({name: item ? item.title : ''})}
+          dataSet={() =>
+            objects.length
+              ? objectLoc.map(item => ({
+                  title: item ? item.name : '',
+                  id: item ? item._id : '',
+                }))
+              : []
+          }
+          textInputProps={{
+            placeholder: T.t('choose_location'),
+            autoCorrect: false,
+            autoCapitalize: 'none',
+            style: styles.inputDropdown,
+            placeholderTextColor: 'gray',
+            defaultValue: selectedLoc.name || '',
+            value: selectedLoc.name || '',
+          }}
+          rightButtonsContainerStyle={styles.inputBtn}
+          suggestionsListContainerStyle={styles.dropdown}
+        />
+      </View>
+    </CreateLocationContainer>
   );
 };
 export default MoveLocation;

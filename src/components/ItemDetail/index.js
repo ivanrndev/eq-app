@@ -35,6 +35,9 @@ export const ItemDetail = item => {
           id: item.route.params._id,
           number,
           companyId: item.route.params.company._id,
+          userId: item.route.params?.person?._id,
+          object: item.route.params.metadata?.object,
+          location: item.route.params.metadata?.location,
         }),
       );
       navigation.navigate('MoveStartPage');

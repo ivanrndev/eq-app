@@ -421,7 +421,7 @@
 				CODE_SIGN_ENTITLEMENTS = EqMan/EqManDebug.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 8G27Y4Z7P8;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = EqMan/Info.plist;
@@ -429,7 +429,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.76;
+				MARKETING_VERSION = 1.79;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -453,14 +453,14 @@
 				CODE_SIGN_ENTITLEMENTS = EqMan/EqMan.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 8G27Y4Z7P8;
 				INFOPLIST_FILE = EqMan/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.76;
+				MARKETING_VERSION = 1.79;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

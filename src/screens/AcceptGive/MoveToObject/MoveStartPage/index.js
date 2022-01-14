@@ -76,6 +76,10 @@ const MoveStartPage = props => {
             },
           ],
           user: choosedUser.id,
+          object: {
+            object: location.objects ? location.objects : item?.object,
+            location: location.objects ? location.location : item?.location,
+          },
         };
         const locationObjectWithoutUser = {
           item_ids: [
@@ -138,7 +142,9 @@ const MoveStartPage = props => {
         changeQuantity({
           id: scan.scanInfo._id,
           companyId: scan.scanInfo.company._id,
-          userId: scan.scanInfo.person._id,
+          userId: scan.scanInfo?.person?._id,
+          object: scan.scanInfo.metadata?.object,
+          location: scan.scanInfo.metadata?.location,
         }),
       );
     }

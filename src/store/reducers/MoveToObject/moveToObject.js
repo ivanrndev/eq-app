@@ -90,6 +90,8 @@ const moveToObjectReducer = (state = initialState, action) => {
         quantity: action.payload.number,
         companyId: action.payload.companyId,
         userId: action.payload.userId,
+        object: action.payload.object,
+        location: action.payload.location,
       };
       return {
         ...state,
