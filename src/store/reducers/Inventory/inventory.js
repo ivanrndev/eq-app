@@ -125,7 +125,6 @@ const inventoryReducer = (state = initialState, action) => {
       };
     }
     case DELETE_INVENTORY_ITEM:
-      console.log('delete', action);
       return {
         ...state,
         itemsUuid: state.itemsUuid.filter(item => item._id !== action.id),

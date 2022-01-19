@@ -32,8 +32,7 @@ const ItemListCard = ({
     }
   }, []);
   useEffect(() => setUserInfo(userList.find(user => user._id === item.responsible)), [userList]);
-  const deleteInventoryItem = (id, item) => {
-    console.log('item', item);
+  const deleteInventoryItem = id => {
     const uid = itemsUuid.filter(i => i.id === id);
     dispatch(deleteItemInventory(id));
     dispatch(deleteItem(inventoryId, uid));
@@ -54,7 +53,8 @@ const ItemListCard = ({
             ) : item.metadata?.title ? (
               <Text style={styles.titleText}>{T.t('detail_title')}:</Text>
             ) : null}
-            <Text style={!item?.photos?.length > 0 ? styles.marginText : {marginLeft: 60}}>
+            <Text
+              style={!item?.photos?.length > 0 ? styles.marginText : {marginLeft: 55, width: 110}}>
               {item.metadata?.title}
             </Text>
           </View>

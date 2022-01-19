@@ -30,7 +30,7 @@ const InventoryScaner = props => {
     ],
   );
   const [list, setList] = useState([]);
-  const  isAvailableCamera = useSelector(({auth}) => auth.isAvailableCamera);
+  const isAvailableCamera = useSelector(({auth}) => auth.isAvailableCamera);
   useEffect(
     () =>
       setList(
