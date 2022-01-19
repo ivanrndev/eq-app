@@ -70,7 +70,7 @@ import {
   MARKING_ERROR,
   MARKING_ERROR_DONE,
   MARKING_MORE_SEARCH,
-  MARKING_SEARCH,
+  MARKING_SEARCH, MORE_MY_COMPANYITEMS,
   MOUNT_CAMERA_LIST,
   MOUNT_SCAN,
   MY_CURRENT_INFO_ID,
@@ -2058,7 +2058,7 @@ export const mountItemFromParent = (parent, items, code, nav, page) => dispatch 
 };
 
 //company
-export const searchMyCompanyItems = (query, offset, limit) => dispatch => {
+export const searchMyCompanyItems = (query, offset, limit, more) => dispatch => {
   AsyncStorage.getItem('company').then(company => {
     return axios
       .get(`${API_URL}/company/${company}/item`, {
@@ -2066,15 +2066,28 @@ export const searchMyCompanyItems = (query, offset, limit) => dispatch => {
       })
       .then(resp => {
         if (resp.status === 200) {
-          let data = resp.data.data ? resp.data.data : resp.data;
-          dispatch({
-            type: SEARCH_MY_COMPANY_ITEMS,
-            payload: {
-              offSet: offset,
-              myloadMore: true,
-              myCompanyList: data,
-            },
-          });
+          if (!more) {
+            let data = resp.data.data ? resp.data.data : resp.data;
+            dispatch({
+              type: SEARCH_MY_COMPANY_ITEMS,
+              payload: {
+                offSet: offset,
+                myloadMore: true,
+                myCompanyList: data,
+                totalItemsCount: resp.data.count,
+              },
+            });
+          } else {
+            let data = resp.data.data ? resp.data.data : resp.data;
+            dispatch({
+              type: MORE_MY_COMPANYITEMS,
+              payload: {
+                myloadMore: true,
+                myCompanyList: data,
+                totalItemsCount: resp.data.count,
+              }
+            })
+          }
         }
       })
       .catch(e => {

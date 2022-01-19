@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Dimensions, StyleSheet, View, TouchableOpacity} from 'react-native';
-import {Paragraph, Searchbar} from 'react-native-paper';
+import {Button, Paragraph, Searchbar} from 'react-native-paper';
 import T from '../../i18n';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 import {useNavigation} from '@react-navigation/native';
@@ -29,29 +29,41 @@ const Search = ({
 }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const [transfersList, transferId, inventoryId, currentInventoryUser] = useSelector(
-    ({transfers, inventory}) => [
-      transfers.transferList,
-      transfers.transferId,
-      inventory.inventoryId,
-      inventory.currentInventoryUser,
-    ],
-  );
+  const [
+    transfersList,
+    transferId,
+    inventoryId,
+    currentInventoryUser,
+    totalItemsCount,
+  ] = useSelector(({transfers, inventory, companyItems}) => [
+    transfers.transferList,
+    transfers.transferId,
+    inventory.inventoryId,
+    inventory.currentInventoryUser,
+    companyItems.totalItemsCount,
+  ]);
 
   const [search, setSearch] = useState('');
+  const [limit, setLimit] = useState(10);
+  const [offset, setOffset] = useState(10);
   const showEmptyError = !list.length && search.length !== 0;
   const renderedList = list;
   // const renderedList = search.length === 0 ? [] : list;
   const transferredItems = transfersList.find(item => item._id === transferId);
+
   const handleItemSearch = query => {
-    setSearch(query.trim());
+    setLimit(60);
+    setOffset(limit);
+    setSearch(query);
     dispatch(myloadMore(true));
-    dispatch(listAction(query, 0, 50));
+    dispatch(listAction(search, 0, 60));
   };
 
   useEffect(() => {
     dispatch(myloadMore(true));
     dispatch(listAction('', 0, true));
+    setLimit(10);
+    setOffset(10);
   }, []);
 
   const handleCurrentScan = item => {
@@ -74,9 +86,6 @@ const Search = ({
       getSearchItem(
         item._id,
         navigation,
-        // pageToChosenItem === 'InventoryChooseMode' && item?.batch?.quantity
-        //   ? 'SetInventoryQty'
-        //   : pageToChosenItem,
         pageToChosenItem,
         isSearchForGiveItem,
         isSearchForMoveItem,
@@ -135,6 +144,19 @@ const Search = ({
             </TouchableOpacity>
           ))}
         </KeyboardAwareScrollView>
+        {totalItemsCount > offset ? (
+          <Button
+            style={{paddingBottom: 10}}
+            mode="Text"
+            color="#22215B"
+            onPress={() => {
+              setOffset(limit + 10);
+              dispatch(listAction(search, offset, limit, true));
+              dispatch(myloadMore(true));
+            }}>
+            {T.t('load_more')}
+          </Button>
+        ) : null}
       </View>
     </View>
   );
