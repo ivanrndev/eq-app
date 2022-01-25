@@ -1,23 +1,10 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {isEmpty} from 'lodash';
 import T from '../../../../i18n';
 import CheckBox from '@react-native-community/checkbox';
-import {
-  Dimensions,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native';
-import {
-  ActivityIndicator,
-  IconButton,
-  Paragraph,
-  Portal,
-  Snackbar,
-} from 'react-native-paper';
+import {Dimensions, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, IconButton, Paragraph, Portal, Snackbar} from 'react-native-paper';
 // components
 import Appbar from '../../../../components/Appbar';
 import DarkButton from '../../../../components/Buttons/DarkButton';
@@ -53,10 +40,7 @@ const AcceptList = () => {
   );
 
   useEffect(
-    () =>
-      setBidItems(
-        accept.acceptList.filter(item => item._id === accept.userAcceptBid),
-      ),
+    () => setBidItems(accept.acceptList.filter(item => item._id === accept.userAcceptBid)),
     [accept.acceptList],
   );
   const [error, setError] = useState('');
@@ -71,13 +55,9 @@ const AcceptList = () => {
   const isItemSelected = id => acceptedIds.includes(id);
   const acceptItemsCount = accept.length > 0 ? `(${acceptedIds.length})` : '';
 
-  useEffect(
-    () =>
-      AsyncStorage.getItem('userId').then(id =>
-        dispatch(getBidListPush(id, 0)),
-      ),
-    [accept.userAcceptBid],
-  );
+  useEffect(() => AsyncStorage.getItem('userId').then(id => dispatch(getBidListPush(id, 0))), [
+    accept.userAcceptBid,
+  ]);
   useEffect(() => {
     if (!isEmpty(bidItems)) {
       const filteredBids = bidItems[0].items.filter(x => {
@@ -91,11 +71,7 @@ const AcceptList = () => {
         }
       } else {
         if (scan.currentScan) {
-          setError(
-            `${T.t('service_identifier_first')} ${scan.currentScan} ${T.t(
-              'do_not_apply',
-            )}`,
-          );
+          setError(`${T.t('service_identifier_first')} ${scan.currentScan} ${T.t('do_not_apply')}`);
         }
       }
     }
@@ -104,13 +80,7 @@ const AcceptList = () => {
   const makeAcceptBid = () => {
     dispatch(loader(true));
     dispatch(
-      makeAccept(
-        accept.userAcceptBid,
-        rejectIds,
-        navigation,
-        selectedValue,
-        selectedValueLoc,
-      ),
+      makeAccept(accept.userAcceptBid, rejectIds, navigation, selectedValue, selectedValueLoc),
     );
   };
   useEffect(() => {
@@ -150,6 +120,18 @@ const AcceptList = () => {
     }
   };
 
+  console.log({bidItems});
+
+  const deleteItem = id => {
+    const item_ids = bidItems[0].items
+      .filter(item => item._id !== id)
+      .map(element => ({
+        id: element._id,
+        quantity: element.batch ? element.batch.quantity : 1,
+      }));
+    console.log('dkflmvdlkfmvdklfmv', item_ids)
+  };
+
   return (
     <>
       <Appbar
@@ -170,40 +152,38 @@ const AcceptList = () => {
       <Portal>
         {settings.loader && (
           <View style={styles.loader}>
-            <ActivityIndicator
-              style={styles.load}
-              size={80}
-              animating={true}
-              color={'#EDF6FF'}
-            />
+            <ActivityIndicator style={styles.load} size={80} animating={true} color={'#EDF6FF'} />
           </View>
         )}
       </Portal>
       <View style={styles.body}>
         <ScrollView>
-          {showEmptyError && (
-            <Paragraph style={styles.title}>
-              {T.t('accept_not_added')}
-            </Paragraph>
-          )}
+          {showEmptyError && <Paragraph style={styles.title}>{T.t('accept_not_added')}</Paragraph>}
 
           {!isEmpty(bidItems) &&
             bidItems[0].items.map(item => (
               <View style={styles.card} key={item._id}>
                 <ItemListCard isPriceShown={false} item={item} width="70%" />
                 {!item.is_marked || isItemSelected(item._id) ? (
-                  <CheckBox
-                    value={isItemSelected(item._id)}
-                    tintColor="#22215B"
-                    onCheckColor="#22215B"
-                    disabled={false}
-                    boxType="square"
-                    style={styles.checkBox}
-                    lineWidth={1}
-                    onValueChange={isChecked =>
-                      handleSelectCheckbox(isChecked, item._id)
-                    }
-                  />
+                  <View
+                    style={{
+                      height: 90,
+                      width: 70,
+                      alignItems: 'flex-end',
+                      justifyContent: 'center',
+                    }}>
+                    <CheckBox
+                      value={isItemSelected(item._id)}
+                      tintColor="#22215B"
+                      onCheckColor="#22215B"
+                      disabled={false}
+                      boxType="square"
+                      style={styles.checkBox}
+                      lineWidth={1}
+                      onValueChange={isChecked => handleSelectCheckbox(isChecked, item._id)}
+                    />
+                    <IconButton icon="delete" size={35} onPress={() => deleteItem(item._id)} />
+                  </View>
                 ) : (
                   <IconButton
                     icon="qrcode-scan"
@@ -216,10 +196,7 @@ const AcceptList = () => {
         </ScrollView>
         <>
           <View style={styles.buttonObject}>
-            <DarkButton
-              text={T.t('select_location')}
-              onPress={() => setShowModal(!showModal)}
-            />
+            <DarkButton text={T.t('select_location')} onPress={() => setShowModal(!showModal)} />
           </View>
           <View style={styles.buttons}>
             <View style={styles.buttonBlock}>
@@ -298,7 +275,7 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     textAlign: 'center',
   },
-  checkBox: {height: 20, marginRight: 3},
+  checkBox: {height: 20, marginRight: 12},
   buttons: {
     marginTop: 15,
     display: 'flex',

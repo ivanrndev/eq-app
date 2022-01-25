@@ -144,6 +144,8 @@ const TransferEdit = props => {
                   deleteItem={() => deleteItem(item._id)}
                   handleChangeQty={() => handleChangeQty(item)}
                   setItemQty={() => false}
+                  navigation={props.navigation}
+                  dispatch={dispatch}
                 />
               ))}
           </ScrollView>

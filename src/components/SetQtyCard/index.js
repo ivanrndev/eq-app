@@ -3,8 +3,10 @@ import {Dimensions, Text, View, StyleSheet} from 'react-native';
 import T from '../../i18n';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import DarkButton from '../Buttons/DarkButton';
-import {Card, IconButton} from 'react-native-paper';
-import React from 'react';
+import {Button, Card, Dialog, IconButton, Portal} from 'react-native-paper';
+import React, {useState} from 'react';
+import {isEmpty} from 'lodash';
+import {loader, unMountItemFromParent} from '../../actions/actions';
 
 const SetQtyCard = ({
   item,
@@ -12,21 +14,21 @@ const SetQtyCard = ({
   deleteItem,
   setItemQty,
   isResponsibleShown,
+  dispatch,
 }) => {
-  const isQtyBtnShow = item =>
-    item.batch && +item.batch.quantity !== 1 && !setItemQty(item._id);
+  const isQtyBtnShow = item => item.batch && +item.batch.quantity !== 1 && !setItemQty(item._id);
+
+  const deleteItemModal = (parent, id) => {
+    dispatch(unMountItemFromParent(parent, [id]));
+  };
 
   return (
     <Card style={styles.card} key={item._id}>
-      <ItemListCard
-        item={item}
-        isPriceShown={false}
-        isResponsibleShown={isResponsibleShown}>
+      <ItemListCard item={item} isPriceShown={false} isResponsibleShown={isResponsibleShown}>
         {setItemQty(item._id) && (
           <View style={styles.giveArea}>
             <Text style={styles.cardTitle}>
-              {T.t('give')}:{' '}
-              {setItemQty(item._id) && setItemQty(item._id).quantity}
+              {T.t('give')}: {setItemQty(item._id) && setItemQty(item._id).quantity}
             </Text>
             <TouchableOpacity onPress={() => handleChangeQty(item)}>
               <Text style={styles.edit}>Edit</Text>
@@ -36,13 +38,17 @@ const SetQtyCard = ({
         <View style={styles.cardBottom}>
           <View style={styles.setQtyBtn}>
             {isQtyBtnShow(item) && (
-              <DarkButton
-                onPress={() => handleChangeQty(item)}
-                text={T.t('set_quantity')}
-              />
+              <DarkButton onPress={() => handleChangeQty(item)} text={T.t('set_quantity')} />
             )}
           </View>
-          <IconButton icon="delete" onPress={() => deleteItem(item._id)} />
+          <IconButton
+            icon="delete"
+            size={35}
+            onPress={() => {
+              deleteItem(item._id);
+              item?.parent && deleteItemModal(item.parent, item._id);
+            }}
+          />
         </View>
       </ItemListCard>
     </Card>
@@ -78,6 +84,25 @@ const styles = StyleSheet.create({
   },
   edit: {
     color: '#8c03fc',
+  },
+  deleteBtn: {
+    alignSelf: 'flex-end',
+    width: 20,
+    marginTop: -60,
+    marginRight: 0,
+    paddingLeft: 14,
+    marginBottom: 10,
+    height: Dimensions.get('window').height / 15,
+  },
+  textTmc: {
+    fontSize: 16,
+    marginTop: 20,
+    paddingBottom: 10,
+    color: '#22215B',
+    width: Dimensions.get('window').width / 1.3,
+  },
+  buttonContentStyle: {
+    marginLeft: -13,
   },
 });
 export default SetQtyCard;

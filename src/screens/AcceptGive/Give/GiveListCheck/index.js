@@ -179,6 +179,8 @@ const GiveListCheck = props => {
               handleChangeQty={handleChangeQty}
               setItemQty={setItemQty}
               isResponsibleShown={true}
+              navigation={props.navigation}
+              dispatch={dispatch}
             />
           ))}
         </ScrollView>
