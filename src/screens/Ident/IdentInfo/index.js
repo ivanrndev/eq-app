@@ -132,9 +132,11 @@ export const IdentInfo = props => {
     model: metaData?.model,
     serial: metaData?.serial,
     title: metaData?.title,
+    object: metaData?.object,
+    location: metaData?.location,
     customFields: customField,
     price: metaData?.price,
-    changedPriceType: 'price',
+    // changedPriceType: 'price',
     batch: {
       quantity: quantit,
       units: units,
@@ -687,6 +689,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingBottom: 5,
     color: '#7A7A9D',
+    width: 120,
   },
 });
 
