@@ -128,8 +128,10 @@ const AcceptList = () => {
       .map(element => ({
         id: element._id,
         quantity: element.batch ? element.batch.quantity : 1,
+        parent: element.batch?.parent ? element.batch.parent : null,
       }));
-    console.log('dkflmvdlkfmvdklfmv', item_ids)
+    console.log('dkflmvdlkfmvdklfmv', item_ids);
+    console.log('bidItems', bidItems);
   };
 
   return (

@@ -1924,6 +1924,7 @@ export const resetPassInfo = () => dispatch => {
 
 // Update Transfer
 export const updateTransfer = (nav, id, items, route) => dispatch => {
+  console.log(items);
   dispatch(loader(true));
   return axios
     .patch(`${API_URL}/transfer/${id}/edit`, {
@@ -2016,6 +2017,7 @@ export const getLocations = () => dispatch => {
 
 // unMount Item From Parent
 export const unMountItemFromParent = (parent, items, code, nav, page, itemId) => dispatch => {
+  console.log('sdfsdfsdfdsfdsfdsfdsfdsf', {parent, items});
   AsyncStorage.getItem('company').then(company => {
     return axios
       .put(`${API_URL}/company/${company}/item/unmount`, {parent, items})

@@ -106,6 +106,18 @@ const Search = ({
     setSearch('');
   };
 
+  const loadMore = () => {
+    setOffset(limit + 10);
+    dispatch(listAction(search, offset, limit, true));
+    dispatch(myloadMore(true));
+  };
+
+  useEffect(() => {
+    if (list.length < 1 && totalItemsCount > offset) {
+      loadMore();
+    }
+  }, [list]);
+
   return (
     <View style={styles.body}>
       <Searchbar
@@ -145,15 +157,7 @@ const Search = ({
           ))}
         </KeyboardAwareScrollView>
         {totalItemsCount > offset ? (
-          <Button
-            style={{paddingBottom: 10}}
-            mode="Text"
-            color="#22215B"
-            onPress={() => {
-              setOffset(limit + 10);
-              dispatch(listAction(search, offset, limit, true));
-              dispatch(myloadMore(true));
-            }}>
+          <Button style={{paddingBottom: 10}} mode="Text" color="#22215B" onPress={loadMore}>
             {T.t('load_more')}
           </Button>
         ) : null}
