@@ -56,7 +56,7 @@ const Search = ({
     setOffset(limit);
     setSearch(query);
     dispatch(myloadMore(true));
-    dispatch(listAction(search, 0, 60));
+    dispatch(listAction(query, 0, 60));
   };
 
   useEffect(() => {

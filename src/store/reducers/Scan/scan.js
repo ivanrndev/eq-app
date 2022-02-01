@@ -103,10 +103,11 @@ const scanReducer = (state = initialState, action) => {
         ...action.payload,
       };
     case SAVE_GIVE_ITEM_INFO_LIST:
+      const itemses = action.payload.scanGiveList?.items ? action.payload.scanGiveList.items : [];
       return {
         ...state,
         ...action.payload,
-        scanGiveList: state.scanGiveList.concat(action.payload.scanGiveList),
+        scanGiveList: state.scanGiveList.concat(action.payload.scanGiveList, ...itemses),
       };
     case ERROR_CURRENT_SCAN_INFO:
       return {
