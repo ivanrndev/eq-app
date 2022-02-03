@@ -145,14 +145,14 @@ const Responsible = () => {
           <Text style={styles.left}>{T.t('choose_user')}:</Text>
           <AutocompleteDropdown
             clearOnFocus={false}
-            closeOnBlur={true}
+            closeOnBlur={false}
             closeOnSubmit={true}
             showClear={false}
             onChangeText={text => handleSelectTextChange({title: text})}
             onSelectItem={item => handleSelectResp(item)}
             dataSet={() =>
               users.map(item => ({
-                title: item.firstName,
+                title: item.lastName ? `${item.firstName} ${item.lastName}` : item.firstName,
                 id: item._id,
               }))
             }
