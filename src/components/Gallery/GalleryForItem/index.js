@@ -15,7 +15,6 @@ import {useNavigation} from '@react-navigation/native';
 import T from '../../../i18n';
 import {setGoBackPageGallery} from '../../../actions/addItemPhotoActions';
 import {useUserData} from '../../../hooks/useUserData';
-import FastImage from 'react-native-fast-image';
 
 const image = require('./../../../assets/svg/empty.png');
 
@@ -29,9 +28,7 @@ const GalleryForItem = ({page, setIsGalleryOpen, setChosenPhoto, setPhotoDel}) =
   ]);
   const initialPhoto = goBackPageGallery === 'CreateItem' ? createItemPhotos : itemInfo.photos;
   const itemPhotos = initialPhoto ?? [];
-
   const bigPhoto = !isEmpty(itemPhotos) && itemPhotos[0];
-
   const {role, userId} = useUserData();
   const isEditingPhotoAllowed =
     itemPhotos.length < 8 &&
@@ -54,7 +51,7 @@ const GalleryForItem = ({page, setIsGalleryOpen, setChosenPhoto, setPhotoDel}) =
   const renderItem = ({item}) => {
     return (
       <View>
-        <FastImage
+        <Image
           source={{uri: item.path ?? item.url}}
           containerStyle={styles.imageContainer}
           style={styles.bigImg}
@@ -68,7 +65,7 @@ const GalleryForItem = ({page, setIsGalleryOpen, setChosenPhoto, setPhotoDel}) =
         <>
           <ImageBackground source={image} style={styles.bgSvgBig}>
             <TouchableWithoutFeedback onPress={() => handlePressPhoto(bigPhoto, 0)}>
-              <FastImage
+              <Image
                 style={styles.bigImg}
                 source={{
                   uri: bigPhoto.path ?? bigPhoto.url,
@@ -83,7 +80,7 @@ const GalleryForItem = ({page, setIsGalleryOpen, setChosenPhoto, setPhotoDel}) =
                 key={photo.name}>
                 <View>
                   <ImageBackground source={image} style={styles.bgSvg}>
-                    <FastImage
+                    <Image
                       style={styles.smallImg}
                       source={{
                         uri: photo.url ?? photo.path,

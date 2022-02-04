@@ -113,7 +113,7 @@ const Search = ({
   };
 
   useEffect(() => {
-    if (list.length < 1 && totalItemsCount > offset) {
+    if (list.length < 9 && totalItemsCount > offset) {
       loadMore();
     }
   }, [list]);
