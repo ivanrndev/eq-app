@@ -16,34 +16,28 @@ const ChooseItemPhotoMode = () => {
   const dispatch = useDispatch();
   const didMount = useRef(true);
   const [newPhoto, setNewPhoto] = useState([]);
-  const [
-    itemInfo,
-    currentParent,
-    goBackPageGallery,
-    onMeId,
-    createItemPhotos,
-  ] = useSelector(({scan, onMe, createItem}) => [
-    scan.scanInfo,
-    scan.currentParent,
-    scan.goBackPageGallery,
-    onMe.myCurrentId,
-    createItem.photos,
-  ]);
-  const initialPhoto =
-    goBackPageGallery === 'CreateItem' ? createItemPhotos : itemInfo.photos;
+  const [itemInfo, currentParent, goBackPageGallery, onMeId, createItemPhotos] = useSelector(
+    ({scan, onMe, createItem}) => [
+      scan.scanInfo,
+      scan.currentParent,
+      scan.goBackPageGallery,
+      onMe.myCurrentId,
+      createItem.photos,
+    ],
+  );
+  const initialPhoto = goBackPageGallery === 'CreateItem' ? createItemPhotos : itemInfo.photos;
   const id = itemInfo._id ?? currentParent;
-  const itemId = !!id ? id : onMeId;
+  const itemId = id ? id : onMeId;
   const itemPhotos = initialPhoto ?? [];
   const maxPhotoCount = 8;
   const maxAddPhotoCount = maxPhotoCount - itemPhotos.length;
   let photos = new FormData();
-
   if (!isEmpty(newPhoto)) {
     newPhoto.forEach(file => {
       photos.append('file', {
-        uri: `file:///${file.path}`,
+        uri: `${file.path}`,
         type: file.mime,
-        name: file.filename ?? 'file.path',
+        name: file.filename ?? `${file.path}`,
       });
     });
   }
@@ -90,10 +84,7 @@ const ChooseItemPhotoMode = () => {
         <Card style={styles.card}>
           <View style={styles.btns}>
             <DarkButton text={T.t('take_a_photo')} onPress={handleTakePhoto} />
-            <DarkButton
-              text={T.t('choose_from_gallery')}
-              onPress={handleChoosePhoto}
-            />
+            <DarkButton text={T.t('choose_from_gallery')} onPress={handleChoosePhoto} />
           </View>
         </Card>
       </View>

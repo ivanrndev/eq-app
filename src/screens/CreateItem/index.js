@@ -59,12 +59,14 @@ const CreateItem = () => {
   if (!isEmpty(photos)) {
     photos.forEach(file => {
       itemPhotos.append('file', {
-        uri: `file:///${file.path}`,
+        uri: `${file.path}`,
         type: file.mime,
-        name: file.filename ?? 'file.path',
+        name: file.filename ?? `${file.path}`,
       });
     });
   }
+
+
 
   const createNewItem = () => {
     if (baseInfo.type) {

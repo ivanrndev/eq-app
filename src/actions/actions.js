@@ -1816,7 +1816,6 @@ export const makeStocktaking = (userId, idQtyArray, addedItemsArray, nav) => dis
       })
       .then(resp => {
         if (resp.status === 200) {
-          console.log('sdsds', resp);
           // dispatch({
           //   type: MAKE_STOCKTAKING,
           //   payload: {
