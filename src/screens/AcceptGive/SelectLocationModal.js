@@ -69,7 +69,7 @@ export const SelectLocationModal = ({showModal, setShowModal}) => {
           </View>
         </Dialog.Content>
         <Dialog.Actions>
-          <Button onPress={() => setShowModal(false)}>Done</Button>
+          <Button onPress={() => setShowModal(false)}>Ok</Button>
         </Dialog.Actions>
       </Dialog>
     </Portal>
