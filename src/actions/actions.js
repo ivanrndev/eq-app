@@ -25,6 +25,7 @@ import {
   CLEAR_TRANSFERS_LIST,
   CLEAR_USER_LIST,
   DELETE_INVENTORY_ITEM,
+  DELETE_ITEM_ACCEPR,
   DELETE_MOVE_ITEM,
   DIALOG_INPUT,
   ERROR_CURRENT_MOUNT_SCAN_INFO,
@@ -70,7 +71,8 @@ import {
   MARKING_ERROR,
   MARKING_ERROR_DONE,
   MARKING_MORE_SEARCH,
-  MARKING_SEARCH, MORE_MY_COMPANYITEMS,
+  MARKING_SEARCH,
+  MORE_MY_COMPANYITEMS,
   MOUNT_CAMERA_LIST,
   MOUNT_SCAN,
   MY_CURRENT_INFO_ID,
@@ -1599,6 +1601,13 @@ export const makeAccept = (accept_id, reject, nav, object = '', location = '') =
   });
 };
 
+export const deleteItemAccept = items => dispatch => {
+  dispatch({
+    type: DELETE_ITEM_ACCEPR,
+    payload: items,
+  });
+};
+
 // inventory actions
 export const setInventoryItemsQty = (id, quantity) => dispatch => {
   dispatch({
@@ -2086,8 +2095,8 @@ export const searchMyCompanyItems = (query, offset, limit, more) => dispatch => 
                 myloadMore: true,
                 myCompanyList: data,
                 totalItemsCount: resp.data.count,
-              }
-            })
+              },
+            });
           }
         }
       })

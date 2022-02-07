@@ -1,13 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Dimensions,
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  Keyboard,
-} from 'react-native';
+import {Dimensions, FlatList, StyleSheet, Text, View, ScrollView, Keyboard} from 'react-native';
 import {CreateItemContainer} from '../CreateItemContainer';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
@@ -45,12 +37,7 @@ const Responsible = () => {
   const [errors, setError] = useState(initialErrors);
 
   useEffect(() => {
-    if (
-      !responsible.firstName &&
-      !responsible.email &&
-      !responsible.id &&
-      !responsible.role
-    ) {
+    if (!responsible.firstName && !responsible.email && !responsible.id && !responsible.role) {
       setFormValues(initialValues);
       setResponsibleUser({title: ''});
       seteErrorSelectedUser('');
@@ -68,9 +55,7 @@ const Responsible = () => {
   const handleSelectTextChange = text => {
     setResponsibleUser({title: text});
     const selectedUser = users.find(user => user.firstName === text);
-    selectedUser
-      ? seteErrorSelectedUser('')
-      : seteErrorSelectedUser(T.t('error_user_not_exist'));
+    selectedUser ? seteErrorSelectedUser('') : seteErrorSelectedUser(T.t('error_user_not_exist'));
   };
   const handleTextChange = (text, name) => {
     setFormValues({...formValues, [name]: text});
@@ -108,35 +93,35 @@ const Responsible = () => {
       }
     />
   );
-  const newUser =
-    !!formValues.firstName && !!formValues.email && errors.email.length === 0;
+  const newUser = !!formValues.firstName && !!formValues.email && errors.email.length === 0;
 
   const handleSave = () => {
     if (newUser) {
       dispatch(saveResponsible(formValues));
     } else {
-      const data = !!responsibleUser
+      const data = responsibleUser
         ? {firstName: responsibleUser.title ?? '', id: responsibleUser.id}
         : formValues;
       if (
         !!responsibleUser ||
-        (formValues.firstName &&
-          formValues.email &&
-          !errors.firstName &&
-          !errors.email)
+        (formValues.firstName && formValues.email && !errors.firstName && !errors.email)
       ) {
         dispatch(saveResponsible(data));
       }
     }
     navigation.navigate('CreateItem');
   };
+
   const isSaveBtnEnabled =
-    newUser || !!users.find(user => user.firstName === responsibleUser.title);
+    newUser ||
+    !!users.find(user =>
+      user.lastName
+        ? `${user.firstName} ${user.lastName}`
+        : user.firstName === responsibleUser.title,
+    );
 
   return (
-    <CreateItemContainer
-      handleSave={handleSave}
-      isSaveBtnEnabled={isSaveBtnEnabled}>
+    <CreateItemContainer handleSave={handleSave} isSaveBtnEnabled={isSaveBtnEnabled}>
       <TouchableWithoutFeedback
         style={styles.inputWrap}
         contantContainerStyle={styles.contentStyle}
@@ -207,11 +192,7 @@ const Responsible = () => {
               </View>
             </Button>
           }>
-          <FlatList
-            data={roles}
-            keyExtractor={item => item}
-            renderItem={renderItem}
-          />
+          <FlatList data={roles} keyExtractor={item => item} renderItem={renderItem} />
         </Menu>
       </View>
     </CreateItemContainer>

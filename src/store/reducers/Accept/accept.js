@@ -8,6 +8,7 @@ import {
   MAKE_ACCEPT,
   MAKE_ACCEPT_ERROR,
 } from '../../../actions/actionsType.js';
+import {DELETE_ITEM_ACCEPR} from '../../../actions/actionsType';
 
 const initialState = {
   acceptList: [],
@@ -70,6 +71,12 @@ const acceptReducer = (state = initialState, action) => {
       return {
         ...state,
         ...action.payload,
+      };
+    case DELETE_ITEM_ACCEPR:
+      console.log(';dslf,ds;lf,dsl;f,\ds;f', action.payload)
+      return {
+        ...state,
+        acceptList: action.payload,
       };
     default:
       return state;
