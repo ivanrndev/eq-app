@@ -24,6 +24,7 @@ const Ident = props => {
         request(PERMISSIONS.IOS.CAMERA)
             .then((result) => result === "granted" && dispatch(setIsAvailableCameraState(true)))
             .catch((error) => console.log(error))
+
       }
     });
     // return listener.remove;
@@ -32,6 +33,7 @@ const Ident = props => {
   const [scaner, setScaner] = useState(false);
   const [list, setList] = useState([]);
 
+  const { isHide } = useSelector(state => state.hideScanReducer)
   useFocusEffect(
     useCallback(() => {
       setScaner(true);
@@ -41,10 +43,12 @@ const Ident = props => {
 
   useEffect(() => {
     if (role === 'root' || role === 'admin') {
+
       setList(
         companyItemList.filter(
           item => !item.is_bun && !item.repair && item.transfer === null,
         ),
+
       );
     } else {
       setList(
@@ -61,6 +65,7 @@ const Ident = props => {
     <>
       <View style={{backgroundColor: 'rgb(0,0,0)', flex:1}}>
         <Appbar
+          hideScanner={() => dispatch(myActionToHideScaner())}
           navigation={props.navigation}
           newScan={true}
           arrow={true}
@@ -88,7 +93,7 @@ const Ident = props => {
           </View>
         }
         <View>
-          {scaner && (
+          {!isHide && scaner && (
                 <Scanner
                   nav={props.navigation}
                   page={'IdentInfo'}

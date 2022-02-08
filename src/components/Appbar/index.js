@@ -39,6 +39,7 @@ import {
   setIsShowFilter,
 } from '../../actions/actions';
 import {useDebouncedCallback} from 'use-debounce';
+import {hideScanAction} from '../../actions/hideScanAction';
 
 const AppbarCustom = props => {
   const dispatch = useDispatch();
@@ -96,6 +97,7 @@ const AppbarCustom = props => {
 
   useEffect(() => {
     if (search.length === 0) {
+
       setTimeout(() => dispatch(cleanSearchResult()), 1000);
     }
   }, [search]);
@@ -216,6 +218,7 @@ const AppbarCustom = props => {
             size={35}
             color="#22215B"
             onPress={() => {
+              dispatch(hideScanAction())
               setIsSearchOpen(!isSearchOpen);
               setIsFilterOpen(false);
             }}

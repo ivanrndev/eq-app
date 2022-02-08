@@ -7,22 +7,20 @@ import Appbar from '../../components/Appbar';
 import Scanner from '../../components/Scanner';
 import {useDispatch, useSelector} from 'react-redux';
 import {searchMyCompanyItems, setIsAvailableCameraState} from '../../actions/actions';
-import TransparentButton from "../../components/Buttons/TransparentButton";
-import {PERMISSIONS, request} from "react-native-permissions";
+import TransparentButton from '../../components/Buttons/TransparentButton';
+import {PERMISSIONS, request} from 'react-native-permissions';
 
 const Service = props => {
   const [scaner, setScaner] = useState(false);
-  const  isAvailableCamera = useSelector(({auth}) => auth.isAvailableCamera);
-  const companyItemList = useSelector(
-    ({companyItems}) => companyItems.myCompanyList,
-  );
+  const isAvailableCamera = useSelector(({auth}) => auth.isAvailableCamera);
+  const companyItemList = useSelector(({companyItems}) => companyItems.myCompanyList);
   const dispatch = useDispatch();
   useEffect(() => {
-    const listener = AppState.addEventListener('change', (status) => {
+    const listener = AppState.addEventListener('change', status => {
       if (Platform.OS === 'ios' && status === 'active') {
         request(PERMISSIONS.IOS.CAMERA)
-            .then((result) => result === "granted" && dispatch(setIsAvailableCameraState(true)))
-            .catch((error) => console.log(error))
+          .then(result => result === 'granted' && dispatch(setIsAvailableCameraState(true)))
+          .catch(error => console.log(error));
       }
     });
     // return listener.remove;
@@ -33,48 +31,44 @@ const Service = props => {
       return () => setScaner(false);
     }, []),
   );
+  const {isHide} = useSelector(state => state.hideScanReducer);
 
   return (
     <>
-        <View style={{backgroundColor: 'rgb(0,0,0)', flex:1}}>
-          <Appbar
-            navigation={props.navigation}
-            arrow={true}
-            newScan={true}
-            goTo={'ServiceMenu'}
-            title={T.t('send_service')}
-            switch={true}
-            typeSwitchNFC={true}
-            search={true}
-            list={companyItemList}
-            listAction={searchMyCompanyItems}
-            pageToChosenItem="ServiceInfo"
-          />
-          <SafeAreaView />
-          <View>
-              <Text style={styles.textStyle}>{T.t('title_scan')}</Text>
-          </View>
-          {!isAvailableCamera &&
-          <View style={{ flex:1, justifyContent: 'center'}}>
-            <Text style={{textAlign: 'center', marginHorizontal:30, color:'rgb(255,255,255)'}}>{T.t('message_for_camera_permission')}</Text>
-            <View style={{width: Dimensions.get('window').height / 5,alignSelf:'center'}}>
-              <TransparentButton
-                  text={T.t('open_settings')}
-                  onPress={Linking.openSettings}
-              />
+      <View style={{backgroundColor: 'rgb(0,0,0)', flex: 1}}>
+        <Appbar
+          navigation={props.navigation}
+          arrow={true}
+          newScan={true}
+          goTo={'ServiceMenu'}
+          title={T.t('send_service')}
+          switch={true}
+          typeSwitchNFC={true}
+          search={true}
+          list={companyItemList}
+          listAction={searchMyCompanyItems}
+          pageToChosenItem="ServiceInfo"
+        />
+        <SafeAreaView />
+        <View>
+          <Text style={styles.textStyle}>{T.t('title_scan')}</Text>
+        </View>
+        {!isAvailableCamera && (
+          <View style={{flex: 1, justifyContent: 'center'}}>
+            <Text style={{textAlign: 'center', marginHorizontal: 30, color: 'rgb(255,255,255)'}}>
+              {T.t('message_for_camera_permission')}
+            </Text>
+            <View style={{width: Dimensions.get('window').height / 5, alignSelf: 'center'}}>
+              <TransparentButton text={T.t('open_settings')} onPress={Linking.openSettings} />
             </View>
           </View>
-          }
-          <View style={styles.body}>
-            {scaner && (
-              <Scanner
-                nav={props.navigation}
-                page={'ServiceInfo'}
-                saveItems={false}
-              />
-            )}
-          </View>
-    </View>
+        )}
+        <View style={styles.body}>
+          {!isHide && scaner && (
+            <Scanner nav={props.navigation} page={'ServiceInfo'} saveItems={false} />
+          )}
+        </View>
+      </View>
     </>
   );
 };
@@ -100,12 +94,12 @@ const styles = StyleSheet.create({
   },
   snackbar: {},
 
-  textStyle:{
-    color:'rgb(255,255,255)',
+  textStyle: {
+    color: 'rgb(255,255,255)',
     fontSize: 30,
-    position:'absolute',
+    position: 'absolute',
     width: Dimensions.get('window').width,
-    textAlign:'center',
+    textAlign: 'center',
   },
 });
 

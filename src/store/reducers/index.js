@@ -16,6 +16,7 @@ import companyItemsReducer from './CompanyItems/companyItems';
 import createItemReducer from './CreateItem/createItem';
 import moveToObjectReducer from "./MoveToObject/moveToObject";
 import filterReducer from "./Filters";
+import hideScanReducer from './Scan/hideScanReducer';
 
 export default combineReducers({
   filterReducer: filterReducer,
@@ -35,4 +36,5 @@ export default combineReducers({
   companyItems: companyItemsReducer,
   createItem: createItemReducer,
   moveToObject: moveToObjectReducer,
+  hideScanReducer,
 });

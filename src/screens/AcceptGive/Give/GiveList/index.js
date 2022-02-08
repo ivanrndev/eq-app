@@ -19,6 +19,7 @@ import {
   getUserList,
   clearGiveList,
 } from '../../../../actions/actions.js';
+import {showScanAction} from '../../../../actions/hideScanAction';
 
 const GiveList = props => {
   const dispatch = useDispatch();
@@ -82,6 +83,7 @@ const GiveList = props => {
                           settings.startPageGive,
                         ),
                       );
+                      dispatch(showScanAction())
                       dispatch(clearGiveList());
                     }}>
                     <Card.Content>

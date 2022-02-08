@@ -49,8 +49,9 @@ const GiveScaner = props => {
   const [error, setError] = useState('');
 
   const [list, setList] = useState([]);
-
   useEffect(() => {
+    console.log('GIVE_Scaner====>', list);
+    console.log('GIVE_Scaner_ companyItemList====>', companyItemList);
     if (role === 'root' || role === 'admin' || role === 'stockman') {
       setList(
         companyItemList.filter(item => !item.is_bun && !item.repair && item.transfer === null),
@@ -89,6 +90,7 @@ const GiveScaner = props => {
       }, 2000);
     }
   }, [isSnackBar]);
+  const {isHide} = useSelector(state => state.hideScanReducer);
 
   return (
     <>
@@ -123,7 +125,9 @@ const GiveScaner = props => {
           </View>
         )}
         <View style={styles.body}>
-          {scaner && <Scanner nav={props.navigation} page={'GiveListCheck'} saveItems={true} />}
+          {!isHide && scaner && (
+            <Scanner nav={props.navigation} page={'GiveListCheck'} saveItems={true} />
+          )}
         </View>
         <Portal>
           <Snackbar

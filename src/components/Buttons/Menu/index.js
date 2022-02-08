@@ -10,6 +10,7 @@ import {useDispatch} from 'react-redux';
 import {loader, getItemsOnMe, getUserList} from '../../../actions/actions.js';
 import {menuSvg} from '../../../utils/menuSvg.js';
 import {searchMyItem} from "../../../actions/actions";
+import {showScanAction} from '../../../actions/hideScanAction';
 
 const Button = props => {
   const dispatch = useDispatch();
@@ -42,7 +43,11 @@ const Button = props => {
       <TouchableHighlight
         activeOpacity={1}
         style={pressed ? styles.buttonPress : styles.button}
-        onPress={onPressButton}
+        onPress={() => {
+          onPressButton();
+          dispatch(showScanAction())
+
+        }}
         onHideUnderlay={() => setPressed(false)}
         onShowUnderlay={() => setPressed(true)}>
         <View

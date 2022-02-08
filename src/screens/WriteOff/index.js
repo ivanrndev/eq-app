@@ -31,7 +31,7 @@ const WriteOff = props => {
       };
     }, []),
   );
-
+  const {isHide} = useSelector(state => state.hideScanReducer);
   return (
     <>
       <View style={{backgroundColor: 'rgb(0,0,0)', flex: 1}}>
@@ -63,7 +63,9 @@ const WriteOff = props => {
           </View>
         )}
         <View style={styles.body}>
-          {scaner && <Scanner nav={props.navigation} page={'WriteOffInfo'} saveItems={false} />}
+          {!isHide && scaner && (
+            <Scanner nav={props.navigation} page={'WriteOffInfo'} saveItems={false} />
+          )}
         </View>
       </View>
     </>

@@ -1601,7 +1601,21 @@ export const makeAccept = (accept_id, reject, nav, object = '', location = '') =
   });
 };
 
-export const deleteItemAccept = items => dispatch => {
+export const deleteItemAccept = (items, id) => dispatch => {
+  // return axios
+  //   .patch(`${API_URL}/transfer/620105efd6f3e40309ff0750/edit`, {
+  //     item_ids: [
+  //       {
+  //         id: '61efce2e3ab65d01fb054ed7',
+  //         quantity: 1,
+  //       },
+  //
+  //     ],
+  //   })
+  //   .then(resp => {
+  //     console.log('RESPONSE', resp);
+  //   });
+
   dispatch({
     type: DELETE_ITEM_ACCEPR,
     payload: items,

@@ -7,6 +7,8 @@ import {
   View,
   Text,
 } from 'react-native';
+import {useDispatch} from 'react-redux';
+import {showScanAction} from '../../../actions/hideScanAction';
 
 const DarkButton = props => {
   const [pressed, setPressed] = useState(false);
@@ -18,11 +20,14 @@ const DarkButton = props => {
   const pressedText = pressed ? styles.textPress : styles.text;
   const disabledText = props.disabled ? styles.disabledText : styles.text;
 
+  const dispatch = useDispatch()
+
   const onPressButton = () => {
     if (props.onPress) {
       props.onPress();
     }
   };
+
 
   return (
     <View style={styles.container}>
@@ -30,7 +35,10 @@ const DarkButton = props => {
         disabled={props.disabled}
         activeOpacity={1}
         style={{...pressedStateClasses, ...disabledStateClasses}}
-        onPress={onPressButton}
+        onPress={()=> {
+          onPressButton();
+          dispatch(showScanAction())
+        }}
         onHideUnderlay={handleUnderlay}
         onShowUnderlay={handleUnderlay}>
         <View
