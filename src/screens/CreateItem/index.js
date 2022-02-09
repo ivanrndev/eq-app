@@ -207,12 +207,12 @@ const CreateItem = () => {
           <Text style={styles.itemText}>{T.t('item_location')}</Text>
           {location ? (
             <View style={styles.itemContent}>
-              {location.objects ? (
+              {location.location ? (
                 <Text style={styles.itemContentText}>
                   {T.t('object')}: {location.location}
                 </Text>
               ) : null}
-              {location.location ? (
+              {location.objects ? (
                 <Text style={styles.itemContentText}>
                   {T.t('location')}: {location.objects}
                 </Text>
