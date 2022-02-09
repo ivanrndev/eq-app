@@ -117,6 +117,7 @@ const Main = props => {
             <CopilotStep text={T.t('create_item_help')} order={2} name="Who_i">
               <CopilotText>
                 <Button
+                  getLocation={'getLocation'}
                   nav={props.navigation}
                   text={T.t('create_item')}
                   svg={'create'}

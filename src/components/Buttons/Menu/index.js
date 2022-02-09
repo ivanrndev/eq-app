@@ -9,7 +9,7 @@ import {
 import {useDispatch} from 'react-redux';
 import {loader, getItemsOnMe, getUserList} from '../../../actions/actions.js';
 import {menuSvg} from '../../../utils/menuSvg.js';
-import {searchMyItem} from "../../../actions/actions";
+import {getLocations, searchMyItem} from '../../../actions/actions';
 import {showScanAction} from '../../../actions/hideScanAction';
 
 const Button = props => {
@@ -17,6 +17,10 @@ const Button = props => {
   const [pressed, setPressed] = useState(false);
 
   const onPressButton = () => {
+    if (props.getLocation) {
+      dispatch(getLocations());
+    }
+
     if (props.getItemsOnMe) {
       dispatch(getItemsOnMe(props.nav));
     }
@@ -46,7 +50,6 @@ const Button = props => {
         onPress={() => {
           onPressButton();
           dispatch(showScanAction())
-
         }}
         onHideUnderlay={() => setPressed(false)}
         onShowUnderlay={() => setPressed(true)}>
