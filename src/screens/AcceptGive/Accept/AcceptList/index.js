@@ -22,7 +22,7 @@ import {
 import ItemListCard from '../../../../components/ItemListCard';
 import AsyncStorage from '@react-native-community/async-storage';
 import {SelectLocationModal} from '../../SelectLocationModal';
-import {deleteItemAccept, updateTransfer} from '../../../../actions/actions';
+import {deleteItemAccept, updateTransfer, unMountItemFromParent} from '../../../../actions/actions';
 
 const AcceptList = () => {
   const navigation = useNavigation();
@@ -120,13 +120,14 @@ const AcceptList = () => {
       setRejectIds([]);
     }
   };
-
   const deleteItem = item => {
     const item_ids = bidItems[0].items.filter(i => i._id !== item._id);
     bidItems[0].items = item_ids;
     dispatch(deleteItemAccept(bidItems));
+
     if (item?.parent) {
-      console.log('dispatch delete of kit');
+      // console.log('JJJJJ', item._id, item.parent,)
+      // dispatch(unMountItemFromParent(item.parent, [item._id]))
     }
   };
 
@@ -180,7 +181,12 @@ const AcceptList = () => {
                       lineWidth={1}
                       onValueChange={isChecked => handleSelectCheckbox(isChecked, item._id)}
                     />
-                    <IconButton icon="delete" size={35} onPress={() => deleteItem(item)} />
+                    <IconButton
+                      disabled={isItemSelected(item._id)}
+                      icon="delete"
+                      size={35}
+                      onPress={() => deleteItem(item)}
+                    />
                   </View>
                 ) : (
                   <IconButton
