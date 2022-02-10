@@ -38,7 +38,7 @@ const InventoryChooseMode = () => {
 
   const isAlreadyScaned = id => inventory.inventoryScanList.find(item => item._id === id);
   const renderedList = [...inventory.inventoryScanList, ...inventory.addedItems];
-
+  const reversedRenderList = renderedList.reverse();
   const itemsInventoriedQty = renderedList.length > 0 ? `(${renderedList.length})` : '';
 
   const isSetQtyBtnShown = item =>
@@ -167,8 +167,8 @@ const InventoryChooseMode = () => {
         isSearchForGiveItem={false}
       />
       <ScrollView contentContainerStyle={styles.cards}>
-        {renderedList.length > 0 &&
-          renderedList.map(item => (
+        {reversedRenderList.length > 0 &&
+          reversedRenderList.map(item => (
             <Card style={styles.card} key={item._id}>
               <ItemListCard item={item} isPriceShown={false} isStocktaking={true} />
               <View style={styles.setQtyBtn}>
