@@ -25,7 +25,7 @@ import {
   CLEAR_TRANSFERS_LIST,
   CLEAR_USER_LIST,
   DELETE_INVENTORY_ITEM,
-  DELETE_ITEM_ACCEPR,
+  DELETE_ITEM_ACCEPR, DELETE_ITEM_MOVE,
   DELETE_MOVE_ITEM,
   DIALOG_INPUT,
   ERROR_CURRENT_MOUNT_SCAN_INFO,
@@ -2257,3 +2257,10 @@ export const getEditItem = (idItem, data) => dispatch => {
       .catch(e => console.log('error', e));
   });
 };
+
+export const deleteMove = (items) => (dispatch) => {
+  dispatch({
+    type: DELETE_ITEM_MOVE,
+    payload: items,
+  });
+}

@@ -4,7 +4,12 @@ import {Card} from 'react-native-paper';
 import T from '../../i18n';
 import {getTotalLotPrice} from '../../utils/helpers';
 import {useQuantityUnitsAndCurrency} from '../../hooks/useQuantityUnitsAndCurrency';
-import {deleteItem, deleteItemInventory, getUserList} from '../../actions/actions';
+import {
+  deleteItem,
+  deleteItemInventory,
+  getUserList,
+  unMountItemFromParent,
+} from '../../actions/actions';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {deleteMoveItem} from '../../actions/moveToObjectsActions';
@@ -18,6 +23,8 @@ const ItemListCard = ({
   isBacket = false,
   isStocktaking = false,
   children,
+  itemsKit,
+  restoreObject,
 }) => {
   const {currency} = useQuantityUnitsAndCurrency();
   const navigation = useNavigation();
@@ -32,11 +39,21 @@ const ItemListCard = ({
     }
   }, []);
   useEffect(() => setUserInfo(userList.find(user => user._id === item.responsible)), [userList]);
+
   const deleteInventoryItem = id => {
     const uid = itemsUuid.filter(i => i.id === id);
     dispatch(deleteItemInventory(id));
     dispatch(deleteItem(inventoryId, uid));
   };
+
+  const deleteItem = () => {
+    dispatch(deleteMoveItem(item._id));
+    if (itemsKit) {
+      dispatch(unMountItemFromParent(item.parent, [item._id]));
+      restoreObject(item);
+    }
+  };
+
   return (
     <Card.Content icon={'delete'} style={{width}}>
       <View style={{flexDirection: 'row'}}>
@@ -58,30 +75,30 @@ const ItemListCard = ({
               {item.metadata?.title}
             </Text>
           </View>
-          {!!item.metadata.type ? (
+          {item.metadata?.type ? (
             <View style={{flexDirection: 'row'}}>
               <Text style={styles.titleText}>{T.t('detail_type')}:</Text>
               <Text style={styles.marginText}>
-                {item.metadata.type}
+                {item.metadata?.type}
                 {item.code && '/ ' + item.code}
               </Text>
             </View>
           ) : null}
-          {!!item.metadata.brand ? (
+          {item.metadata.brand ? (
             <View style={{flexDirection: 'row'}}>
               <Text style={styles.titleText}>{T.t('detail_brand')}:</Text>
               <Text style={styles.marginText}>{item.metadata.brand}</Text>
             </View>
           ) : null}
 
-          {!!item.metadata.model ? (
+          {item.metadata.model ? (
             <View style={{flexDirection: 'row'}}>
               <Text style={styles.titleText}>{T.t('detail_model')}:</Text>
               <Text style={styles.marginText}>{item.metadata.model}</Text>
             </View>
           ) : null}
 
-          {!!item.metadata.serial ? (
+          {item.metadata.serial ? (
             <View style={{flexDirection: 'row'}}>
               <Text style={styles.titleText}>{T.t('detail_serial')}:</Text>
               <Text style={styles.marginText}>{item.metadata.serial}</Text>
@@ -145,12 +162,7 @@ const ItemListCard = ({
         </View>
         {isBacket && (
           <View style={styles.iconWrap}>
-            <Icon
-              onPress={() => dispatch(deleteMoveItem(item._id))}
-              name="trash"
-              size={30}
-              color="rgb(0, 0, 0)"
-            />
+            <Icon onPress={deleteItem} name="trash" size={30} color="rgb(0, 0, 0)" />
           </View>
         )}
         {isStocktaking && (
@@ -164,6 +176,7 @@ const ItemListCard = ({
           </View>
         )}
       </View>
+      {item.items.length ? <Text>lksdfkldslkfjdfklj</Text> : null}
     </Card.Content>
   );
 };
@@ -179,7 +192,6 @@ const styles = StyleSheet.create({
     marginLeft: 45,
     width: Dimensions.get('window').width / 2.9,
     maxWidth: Dimensions.get('window').width / 3.4,
-
   },
   tinyLogo: {
     width: 100,

@@ -27,7 +27,7 @@ import {
 } from '../../../../actions/moveToObjectsActions';
 import Arrow from '../../../../assets/svg/arrow-down.svg';
 import {width} from '../../../../constants/dimentionsAndUnits';
-import {allowNewScan, getUserList} from '../../../../actions/actions';
+import {allowNewScan, deleteItemAccept, deleteMove, getUserList} from '../../../../actions/actions';
 
 const MoveStartPage = props => {
   const navigation = useNavigation();
@@ -157,6 +157,12 @@ const MoveStartPage = props => {
     navigation.navigate('ItemDetail', item);
   };
 
+  const restoreObject = element => {
+    const item_ids = renderedList[0].items.filter(i => i._id !== element._id);
+    renderedList[0].items = item_ids;
+    dispatch(deleteMove(renderedList))
+  };
+
   return (
     <View style={styles.body}>
       <Appbar
@@ -212,6 +218,19 @@ const MoveStartPage = props => {
                       </Button>
                     </View>
                   ) : null}
+                  {item.items.length
+                    ? item.items.map(item => {
+                        return (
+                          <ItemListCard
+                            item={item}
+                            isPriceShown={false}
+                            isBacket={true}
+                            itemsKit={true}
+                            restoreObject={restoreObject}
+                          />
+                        );
+                      })
+                    : null}
                 </TouchableOpacity>
               );
             })}

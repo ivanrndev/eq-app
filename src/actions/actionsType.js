@@ -62,6 +62,7 @@ export const MOVE_TO_OBJECT_ERROR = 'MOVE_TO_OBJECT_ERROR';
 export const IS_ROLE_ALLOW = 'IS_ROLE_ALLOW';
 export const DELETE_MOVE_ITEM = 'DELETE_MOVE_ITEM';
 export const CHANGE_QUANTITY = 'CHANGE_QUANTITY';
+export const DELETE_ITEM_MOVE = 'DELETE_ITEM_MOVE';
 
 
 // services

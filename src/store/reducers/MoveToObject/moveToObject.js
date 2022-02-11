@@ -2,6 +2,7 @@ import {
   CHANGE_QUANTITY,
   CHOOSED_MOVE_USER,
   CLEAN_MOVE_TO_OBJECT,
+  DELETE_ITEM_MOVE,
   DELETE_MOVE_ITEM,
   IS_ROLE_ALLOW,
   MOVE_TO_OBJECT_ERROR,
@@ -102,6 +103,12 @@ const moveToObjectReducer = (state = initialState, action) => {
               ),
             ]
           : [...state.scanedItemToMove, newGiveList],
+      };
+
+    case DELETE_ITEM_MOVE:
+      return {
+        ...state,
+        scanedItem: action.payload,
       };
 
     default:
