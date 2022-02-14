@@ -31,9 +31,16 @@ const AccountingAndValue = () => {
     e.preventDefault();
     setQtyMode(mode);
   };
+  const normalizedValues = {
+    batch: {
+      quantity: 1,
+      units: T.t('piece'),
+    },
+    pricePerPiece: sngPrice,
+  };
   const handleSave = () => {
     if (qtyMode === 'sng' && sngErr.length === 0 && sngPrice.length > 0) {
-      dispatch(saveAccountingAndValue({pricePerPiece: sngPrice}));
+      dispatch(saveAccountingAndValue(normalizedValues));
       navigation.navigate('CreateItem');
     }
   };

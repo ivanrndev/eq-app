@@ -66,10 +66,10 @@ export const QtyForm = () => {
   };
   const normalizedValues = {
     batch: {
-      quantity: formValues.quantity,
-      units: formValues.units,
+      quantity: formValues?.quantity,
+      units: formValues?.units,
     },
-    pricePerPiece: formValues.pricePerPiece,
+    pricePerPiece: formValues?.pricePerPiece,
   };
 
   const handleSave = () => {
