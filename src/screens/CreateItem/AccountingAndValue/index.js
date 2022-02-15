@@ -31,16 +31,9 @@ const AccountingAndValue = () => {
     e.preventDefault();
     setQtyMode(mode);
   };
-  const normalizedValues = {
-    batch: {
-      quantity: 1,
-      units: T.t('piece'),
-    },
-    pricePerPiece: sngPrice,
-  };
   const handleSave = () => {
     if (qtyMode === 'sng' && sngErr.length === 0 && sngPrice.length > 0) {
-      dispatch(saveAccountingAndValue(normalizedValues));
+      dispatch(saveAccountingAndValue({pricePerPiece: sngPrice}));
       navigation.navigate('CreateItem');
     }
   };
@@ -116,7 +109,7 @@ const AccountingAndValue = () => {
               <>
                 <TextInput
                   value={sngPrice.toString()}
-                  defaultValue={accountType.pricePerPiece}
+                  defaultValue={accountType?.pricePerPiece}
                   style={styles.input}
                   label={T.t('detail_price_per_item')}
                   keyboardType="numeric"

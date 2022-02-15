@@ -25,7 +25,7 @@ export const QtyForm = () => {
   const [error, setError] = useState('');
   const renderItem = item => <Menu.Item onPress={() => handleChoseMenu(item)} title={item.item} />;
   useEffect(() => {
-    if (+accountType.batch.quantity === 1 && +accountType.pricePerPiece === 1) {
+    if (+accountType?.batch?.quantity === 1 && +accountType?.pricePerPiece === 1) {
       setFormValues(initialValues);
     }
   }, [accountType]);
@@ -35,7 +35,7 @@ export const QtyForm = () => {
         ...formValues,
         pricePerPiece:
           formValues.quantity > 0
-            ? formValues.pricePerLot / formValues.quantity
+            ? formValues?.pricePerLot / formValues?.quantity
             : formValues.pricePerPiece,
       }),
     [formValues.pricePerLot, formValues.quantity],
@@ -82,7 +82,7 @@ export const QtyForm = () => {
       <View style={styles.qty}>
         <TextInput
           value={formValues.quantity.toString()}
-          defaultValue={accountType.batch.quantity}
+          defaultValue={accountType?.batch?.quantity}
           style={[styles.qtyInput]}
           label={T.t('detail_quantity')}
           keyboardType="numeric"

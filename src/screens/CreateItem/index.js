@@ -40,7 +40,7 @@ const CreateItem = () => {
     ...(accountType.batch &&
       accountType.batch.quantity && {
         batch: {
-          quantity: accountType.batch.quantity,
+          quantity: accountType?.batch.quantity,
           units: accountType.batch.units,
         },
       }),
@@ -165,7 +165,7 @@ const CreateItem = () => {
               <Text style={styles.itemContentText}>
                 {T.t('detail_type')}: {accountType.batch ? T.t('quantitative') : T.t('single')}
               </Text>
-              {accountType.batch && (
+              {accountType?.batch && (
                 <>
                   <Text style={styles.itemContentText}>
                     {T.t('detail_quantity')}: {accountType.batch.quantity}
