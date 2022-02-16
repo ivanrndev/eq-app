@@ -562,6 +562,7 @@ export const IdentInfo = props => {
         setChosenPhoto={setChosenPhoto}
         setPhotoDel={setPhotoDel}
         photoDel={photoDel}
+        isButtonMakePhotoAsMainVisible={true}
       />
     </ScrollView>
   );

@@ -7,6 +7,7 @@ import {
   DELETE_PHOTO_FROM_ITEM,
   DELETE_PHOTO_FROM_ITEM_ERROR,
   SET_GO_BACK_PAGE_GALLERY,
+  UPDATE_PHOTO_FROM_ITEM_ERROR,
 } from './actionsType';
 import {getProperError} from '../utils/helpers';
 import {getSearchItem, loader} from './actions';
@@ -72,3 +73,29 @@ export const deleteItemsPhoto = (id, photo, page, nav) => dispatch => {
       });
   });
 };
+
+export const updateItemsPhoto = (id, photo) => dispatch => {
+  dispatch(loader(true));
+  AsyncStorage.getItem('company').then(company => {
+    return axios
+        .patch(`${API_URL}/company/${company}/item/${id}/photos/${photo}/main`)
+        .then(resp => {
+          if (resp.status === 200) {
+            dispatch(getSearchItem(id));
+          }
+          dispatch(loader(false));
+        })
+        .catch(e => {
+          if (!e.response.data.success) {
+            let error = getProperError(e.response.data.message.name);
+            dispatch({
+              type: UPDATE_PHOTO_FROM_ITEM_ERROR,
+              payload: {
+                scanInfoError: error,
+              },
+            });
+            dispatch(loader(false));
+          }
+        });
+  });
+}

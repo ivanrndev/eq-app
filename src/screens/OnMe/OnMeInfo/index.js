@@ -326,6 +326,7 @@ export const OnMeInfo = props => {
         setChosenPhoto={setChosenPhoto}
         setPhotoDel={setPhotoDel}
         photoDel={photoDel}
+        isButtonMakePhotoAsMainVisible={false}
       />
     </>
   );

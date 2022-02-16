@@ -314,5 +314,6 @@
     "created": "Item has been successfully created",
     "choose_object": "Choose object",
     "choose_location": "Choose location",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "make_main": "Make main"
 }

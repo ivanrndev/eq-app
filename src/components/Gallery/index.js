@@ -13,13 +13,14 @@ import {
   ImageBackground,
   StyleSheet,
   View,
+  TouchableOpacity,
 } from 'react-native';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Carousel from 'react-native-snap-carousel';
 import T from '../../i18n';
 import {useDispatch, useSelector} from 'react-redux';
-import {deleteItemsPhoto} from '../../actions/addItemPhotoActions';
+import {deleteItemsPhoto, updateItemsPhoto} from '../../actions/addItemPhotoActions';
 import {useNavigation} from '@react-navigation/native';
 import {useUserData} from '../../hooks/useUserData';
 
@@ -34,6 +35,7 @@ const Gallery = ({
   setChosenPhoto,
   setPhotoDel,
   photoDel,
+  isButtonMakePhotoAsMainVisible,
 }) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -44,6 +46,10 @@ const Gallery = ({
   ]);
 
   const id = itemInfo._id ?? currentParent;
+  const [currentGalleryPhoto, setCurrentGalleryPhoto] = useState(null);
+  if(photoList.length === 1) {
+    isButtonMakePhotoAsMainVisible = false;
+  }
   const entries = photoList.map(photo => ({
     illustration: photo.url ?? photo.path,
   }));
@@ -55,6 +61,10 @@ const Gallery = ({
     (userId === itemInfo.person._id ||
       (role === 'root' || role === 'stockman' || role === 'admin'));
 
+  useEffect(() => {
+    if(chosenPhoto)
+      setCurrentGalleryPhoto(itemInfo.photos[chosenPhoto].name);
+  }, [chosenPhoto, setIsModalOpen]);
   const handleChose = (item, index) => {
     carouselRef.current.snapToItem(index, true, true);
     setChosenPhoto(index);
@@ -67,6 +77,17 @@ const Gallery = ({
     setIsModalOpen(false);
     handlePortalClose();
   };
+
+  const handleMakeMain = () => {
+    dispatch(updateItemsPhoto(id, currentGalleryPhoto));
+    setIsModalOpen(false);
+    handlePortalClose();
+  }
+
+  const onChangeSlidePhoto = (index) => {
+    setChosenPhoto(index);
+    setCurrentGalleryPhoto(itemInfo.photos[index].name);
+  }
 
   const renderItem = ({item, index}) => {
     return (
@@ -127,11 +148,14 @@ const Gallery = ({
                 itemWidth={width - 10}
                 inactiveSlideShift={0}
                 renderItem={renderItem}
-                onSnapToItem={slideIndex => setChosenPhoto(slideIndex)}
+                onSnapToItem={slideIndex => onChangeSlidePhoto(slideIndex)}
                 firstItem={chosenPhoto}
                 containerCustomStyle={{flex: 1}}
                 slideStyle={{flex: 1}}
               />
+              {isButtonMakePhotoAsMainVisible ? <TouchableOpacity onPress={handleMakeMain} style={styles.makeMainPhotoButton}>
+                <Text style={styles.makeMainPhotoText}>{T.t('make_main')}</Text>
+              </TouchableOpacity> : null}
             </View>
 
             <View style={styles.smallImgWrap}>
@@ -243,6 +267,12 @@ const styles = StyleSheet.create({
     bottom: -15,
     right: -20,
     zIndex: 10000,
+  },
+  makeMainPhotoButton: {
+    alignSelf: 'center',
+  },
+  makeMainPhotoText: {
+    color:'lightblue',
   },
 });
 

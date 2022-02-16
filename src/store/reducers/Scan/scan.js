@@ -28,7 +28,11 @@ import {
 } from '../../../actions/actionsType.js';
 import T from '../../../i18n';
 import {getMountTransferError} from '../../../utils/helpers';
-import {CLEAN_SCAN, CLEAN_SCAN_INFO} from '../../../actions/actionsType';
+import {
+  CLEAN_SCAN,
+  CLEAN_SCAN_INFO,
+  UPDATE_PHOTO_FROM_ITEM_ERROR,
+} from '../../../actions/actionsType';
 
 const initialState = {
   currentScan: '',
@@ -236,6 +240,11 @@ const scanReducer = (state = initialState, action) => {
         ...action.payload,
       };
     case DELETE_PHOTO_FROM_ITEM_ERROR:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case UPDATE_PHOTO_FROM_ITEM_ERROR:
       return {
         ...state,
         ...action.payload,
