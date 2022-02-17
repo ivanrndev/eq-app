@@ -96,6 +96,9 @@ const BaseInfo = () => {
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <Card style={styles.card}>
           <AutocompleteDropdown
+            onFocus={()=>{
+              dispatch(getTypes(type));
+            }}
             clearOnFocus={false}
             closeOnBlur={true}
             closeOnSubmit={true}
