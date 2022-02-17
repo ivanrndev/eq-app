@@ -176,7 +176,6 @@ const ItemListCard = ({
           </View>
         )}
       </View>
-      {item.items.length ? <Text>lksdfkldslkfjdfklj</Text> : null}
     </Card.Content>
   );
 };
