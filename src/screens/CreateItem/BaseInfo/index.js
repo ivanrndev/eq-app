@@ -123,6 +123,9 @@ const BaseInfo = () => {
           <Text style={styles.err}>{errors}</Text>
 
           <AutocompleteDropdown
+            onFocus={()=>{
+              dispatch(getTypes(title));
+            }}
             clearOnFocus={false}
             closeOnBlur={true}
             closeOnSubmit={true}
@@ -144,6 +147,9 @@ const BaseInfo = () => {
             suggestionsListContainerStyle={styles.dropdown}
           />
           <AutocompleteDropdown
+            onFocus={()=>{
+              dispatch(getTypes(brand));
+            }}
             clearOnFocus={false}
             closeOnBlur={true}
             closeOnSubmit={true}
