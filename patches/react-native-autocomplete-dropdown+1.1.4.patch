@@ -1,0 +1,17 @@
+diff --git a/node_modules/react-native-autocomplete-dropdown/src/index.js b/node_modules/react-native-autocomplete-dropdown/src/index.js
+index 475dbe7..d6de8cf 100644
+--- a/node_modules/react-native-autocomplete-dropdown/src/index.js
++++ b/node_modules/react-native-autocomplete-dropdown/src/index.js
+@@ -42,6 +42,12 @@ export const AutocompleteDropdown = memo(
+     const ScrollViewComponent = props.ScrollViewComponent ?? ScrollView
+     const InputComponent = props.InputComponent ?? TextInput
+ 
++    useEffect(() => {
++          if(!isOpened){
++              setSearchText('');
++          }
++    },[isOpened]);
++
+     useLayoutEffect(() => {
+       if (ref) {
+         if (typeof ref === 'function') {

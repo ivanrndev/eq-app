@@ -124,7 +124,7 @@ const BaseInfo = () => {
 
           <AutocompleteDropdown
             onFocus={()=>{
-              dispatch(getTypes(title));
+              dispatch(getTitle(title));
             }}
             clearOnFocus={false}
             closeOnBlur={true}
@@ -148,7 +148,7 @@ const BaseInfo = () => {
           />
           <AutocompleteDropdown
             onFocus={()=>{
-              dispatch(getTypes(brand));
+              dispatch(getBrands(brand));
             }}
             clearOnFocus={false}
             closeOnBlur={true}
