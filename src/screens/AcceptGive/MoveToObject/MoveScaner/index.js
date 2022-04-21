@@ -28,8 +28,6 @@ const MoveScaner = props => {
   }, []);
 
   useEffect(() => {
-    console.log('MOVE__SCANER__companyItemList======+++', companyItemList);
-    console.log('MOVE__SCANER__List======+++', list);
     if (role === 'root' || role === 'admin') {
       setList(
         companyItemList.filter(item => !item.is_bun && !item.repair && item.transfer === null),

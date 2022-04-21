@@ -4,23 +4,25 @@ import AsyncStorage from '@react-native-community/async-storage';
 // Import all locales
 import en from './locales/en.json';
 import ru from './locales/ru.json';
+import pl from './locales/pl.json';
+import uk from './locales/uk.json';
 
 // Should the app fallback to English if user locale doesn't exists
 I18n.fallbacks = true;
 
 // setup language
-I18n.translations = {en, ru};
+I18n.translations = {en, ru, pl, uk};
 let currentLocale = I18n.currentLocale();
 
 // if uk lang, set ru
-if (currentLocale === 'uk-UA' || currentLocale === 'uk') {
-  currentLocale = 'ru';
-}
+// if (currentLocale === 'uk-UA' || currentLocale === 'uk') {
+//   currentLocale = 'ru';
+// }
 
 AsyncStorage.getItem('language').then(language => {
-  if (language === 'uk-UA' || language === 'uk') {
-    language = 'ru';
-  }
+  // if (language === 'uk-UA' || language === 'uk') {
+  //   language = 'ru';
+  // }
   if (language) {
     I18n.defaultLocale = language;
     I18n.locale = language;
