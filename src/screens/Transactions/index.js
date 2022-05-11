@@ -1,19 +1,7 @@
 import React from 'react';
-import {
-  StyleSheet,
-  View,
-  Dimensions,
-  SafeAreaView,
-  ScrollView,
-} from 'react-native';
+import {StyleSheet, View, Dimensions, SafeAreaView, ScrollView} from 'react-native';
 import moment from 'moment';
-import {
-  Card,
-  Title,
-  Paragraph,
-  ActivityIndicator,
-  Button,
-} from 'react-native-paper';
+import {Card, Title, Paragraph, ActivityIndicator, Button} from 'react-native-paper';
 import T from '../../i18n';
 
 // components
@@ -25,8 +13,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import {loadMoreTransactions, getTransactions} from '../../actions/actions.js';
 import {isEmpty} from 'lodash';
 import {useUserData} from '../../hooks/useUserData';
-import {saveCurrenTransferId} from "../../actions/actions";
-import {getProperTransferStatus} from "../../utils/helpers";
+import {saveCurrenTransferId} from '../../actions/actions';
+import {getProperTransferStatus} from '../../utils/helpers';
 
 const Transactions = props => {
   const {role} = useUserData();
@@ -38,11 +26,7 @@ const Transactions = props => {
   const getMoreItems = () => {
     dispatch(loadMoreTransactions(true));
     dispatch(
-      getTransactions(
-        transactions.transactionItemId,
-        props.navigation,
-        transactions.offSet,
-      ),
+      getTransactions(transactions.transactionItemId, props.navigation, transactions.offSet),
     );
   };
 
@@ -63,54 +47,45 @@ const Transactions = props => {
             <>
               <ScrollView>
                 {showEmptyError && (
-                  <Paragraph style={styles.text}>
-                    {T.t('transaction_info')}
-                  </Paragraph>
+                  <Paragraph style={styles.text}>{T.t('transaction_info')}</Paragraph>
                 )}
                 {!error &&
                   transactions.transactionList.map((item, index) => (
-
                     <Card style={styles.card} key={index} onPress={() => {}}>
                       <Card.Content>
-                        {
-                          item.item.code &&
-                              <Paragraph style={styles.paragraph}>
-                                {T.t('detail_code')}: {item.item.code}
-                              </Paragraph>
-                        }
+                        {item.item.code && (
                           <Paragraph style={styles.paragraph}>
-                          {T.t('title_date')}:{' '}
-                          {moment(item.updatedAt).format('YYYY-MM-DD HH:mm')}
+                            {T.t('detail_code')}: {item.item.code}
                           </Paragraph>
+                        )}
+                        <Paragraph style={styles.paragraph}>
+                          {T.t('title_date')}: {moment(item.updatedAt).format('YYYY-MM-DD HH:mm')}
+                        </Paragraph>
 
+                        <Paragraph style={styles.paragraph}>
+                          {T.t('transfer_from')}: {item.user.firstName} {item.user.lastName}
+                        </Paragraph>
+                        {item.data?.recipient && (
                           <Paragraph style={styles.paragraph}>
-                          {T.t('transfer_from')}: {item.user.firstName}{' '}
-                          {item.user.lastName}
+                            {T.t('transfer_to')}: {item.data?.recipient?.firstName}{' '}
+                            {item.data?.recipient?.lastName}
                           </Paragraph>
-                        {item.data?.recipient &&
-                          <Paragraph style={styles.paragraph}>
-                          {T.t('transfer_to')}: {item.data?.recipient?.firstName}{' '}
-                          {item.data?.recipient?.lastName}
-                          </Paragraph>
-                        }
-                          <Paragraph style={styles.paragraph}>
+                        )}
+                        <Paragraph style={styles.paragraph}>
                           {T.t('info')}:{' '}
                           {getDescription(
-                              item,
-                              role,
-                              item.data.parent
-                                  ? item.data.parent.code
-                                  : !isEmpty(item.data.items)
-                                  ? item.data.items[0].code ||
-                                  item.data.items[0].title
-                                  : T.t('error_name_item'),
-                              item.data.parent ? !!item.data.parent : null,
+                            item,
+                            role,
+                            item.data.parent
+                              ? item.data.parent.code
+                              : !isEmpty(item.data.items)
+                              ? item.data.items[0].code || item.data.items[0].title
+                              : T.t('error_name_item'),
+                            item.data.parent ? !!item.data.parent : null,
                           )}
-                          </Paragraph>
+                        </Paragraph>
                       </Card.Content>
                     </Card>
-
-
                   ))}
               </ScrollView>
               {transactions.transactionList.length > 5 ? (

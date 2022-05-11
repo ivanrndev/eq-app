@@ -38,8 +38,7 @@ export const getDescription = (tx, role, id, parent) => {
         } ${T.t('transaction_gave_to')} ${tx.data.recipient.firstName}`;
       } else {
         return `${tx.data.recipient.firstName} ${T.t('transaction_accepted')} ${
-            T.t('item') 
-        } ${T.t('transaction_from')} ${tx.data.sender.firstName}`;
+            T.t('item')} ${T.t('transaction_from')} ${tx.data.sender.firstName}`;
       }
     case 3:
       return `${T.t('item')} ${tx.item.code} ${T.t('sent_to_services')} "${
@@ -57,15 +56,19 @@ export const getDescription = (tx, role, id, parent) => {
       return `${T.t('user')}  ${tx.user.firstName ||
         tx.user.email} изменил количество ТМЦ с ${tx.data.prevQuantity} ${
         tx.data.units
-      } на ${tx.data.newQuantity} ${tx.data.units}`;
+      } ${T.t('on')} ${tx.data.newQuantity} ${tx.data.units}`;
     case 9:
       return `${T.t('user')} ${tx.user.firstName ||
-        tx.user.email} изменил цену за единицу ТМЦ с ${tx.data.prevPrice} на ${
+        tx.user.email} ${T.t('changed_the_unit_price_of_item from')} ${
+        tx.data.prevPrice
+      } ${T.t('on')} ${
         tx.data.newPrice
       }`;
     case 10:
       return `${T.t('user')} ${tx.user.firstName ||
-        tx.user.email} изменил общую стоимость ТМЦ с ${tx.data.prevPrice} на ${
+        tx.user.email} ${T.t('changed_the_total_cost_of_item from')} ${
+        tx.data.prevPrice
+      } ${T.t('on')} ${
         tx.data.newPrice
       }`;
     case 11:
@@ -77,15 +80,15 @@ export const getDescription = (tx, role, id, parent) => {
 
     case 12:
       return `${T.t('user')} ${tx.user.firstName ||
-        tx.user.email} вернул ранее расформированное ТМЦ ${
+        tx.user.email} ${T.t('returned_the_previously_disbanded_inventory')} ${
         tx.data.batch
-          ? `в количестве ${tx.data.batch.quantity} ${tx.data.batch.units}`
+          ? `${T.t('in_quantity')} ${tx.data.batch.quantity} ${tx.data.batch.units}`
           : ''
-      }, в текущую родительскую ТМЦ.`;
+      },  ${T.t('to_the_current_parent_item')}`;
     case 13:
       return `${T.t('status_add_to_transfer')} ${getUserName(
         tx.data.sender,
-      )} к ${getUserName(tx.data.recipient)}`;
+      )} ${T.t('to')} ${getUserName(tx.data.recipient)}`;
     case 14:
       if (tx.data.complete) {
         return `${tx.user.firstName} ${tx.user.lastName} ${T.t(
@@ -233,12 +236,12 @@ export const getProperErrorMessage = (error, id) => {
     case 'QRCodeUnavailable':
       errorMessage = `${T.t(
         'error_code_incorrect',
-      )} ${id} использован, или не пренадлежит этой компании`;
+      )} ${id} ${T.t('used_or_not_owned_by_this_company')}`;
       break;
     case 'QRCodeUsed':
       errorMessage = `${T.t(
         'error_code_incorrect',
-      )} ${id} уже закреплен за другим ТМЦ`;
+      )} ${id} ${T.t('already_assigned_to_another_item')}`;
       break;
     case 'LinkIsUnavailable':
       errorMessage = T.t('error_link');
@@ -356,13 +359,13 @@ export const actionCheckError = (item, isOwner = false) => {
   }
 };
 export const getMountTransferError = item => {
-  if (!!item.is_ban) {
+  if (item.is_ban) {
     return `${T.t('item')} "${item._id}" ${T.t('error_write_off')}`;
   }
-  if (!!item.repair) {
+  if (item.repair) {
     return `${T.t('item')} "${item._id}" ${T.t('error_services')}`;
   }
-  if (!!item.transfer) {
+  if (item.transfer) {
     return `${T.t('item')} "${item._id}" ${T.t('error_another')}.`;
   }
 };

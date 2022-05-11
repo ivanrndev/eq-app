@@ -47,7 +47,7 @@ const Settings = props => {
             <Picker.Item label="English" value="en" />
             <Picker.Item label="Russian" value="ru" />
             <Picker.Item label="Polish" value="pl" />
-            <Picker.Item label="Ukrainian" value="uk" />
+            <Picker.Item label="Ukrainian" value="ua" />
           </Picker>
         </View>
       </View>

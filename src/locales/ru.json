@@ -307,7 +307,7 @@
     "choose_object": "Выбрать объект",
     "choose_location": "Выбрать локацию",
     "or_create_new_user": "или создать нового пользователя",
- "administrator": "Администратор",
+    "administrator": "Администратор",
     "stockman":"Кладовщик",
     "employee": "Сотрудник",
     "cancel": "Отменить",
@@ -319,5 +319,14 @@
     "error_user_not_exist": "Пользователь не найден",
     "value": "Значение",
     "created": "Новое ТМЦ успешно создано",
-    "make_main": "Сделать главной"
+    "make_main": "Сделать главной",
+    "already_assigned_to_another_item":"уже закреплен за другим ТМЦ",
+    "used_or_not_owned_by_this_company":"использован, или не пренадлежит этой компании",
+    "changed_quantity_of_goods_and_materials_from":"изменил количество ТМЦ с",
+    "changed_the_unit_price_of_item from":"изменил цену за единицу ТМЦ с",
+    "changed_the_total_cost_of_item from":"изменил общую стоимость ТМЦ с",
+    "returned_the_previously_disbanded_inventory":"вернул ранее расформированное ТМЦ",
+    "in_quantity":"в количестве",
+    "to_the_current_parent_item":"в текущую родительскую ТМЦ.",
+    "to":"к"
 }
